@@ -1,0 +1,23 @@
+[{  "name": "connectfour",
+    "connectionDetails": {
+        "feedUrl": "http://localhost:4567/cctray.xml"
+        },
+    "status": {
+        "buildResult": "failure",
+        "pipelineActivity": "building"
+        },
+    "statusSummary": "Started 20m ago\nETA: Today, 16:05",
+    "webUrl": "http://localhost:4567"
+},
+{  "name": "erikdoe/ccmenu",
+    "connectionDetails": {
+        "feedUrl": "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml"
+        },
+    "status": {
+        "buildResult": "success",
+        "pipelineActivity": "sleeping"
+        },
+    "statusSummary": "Built yesterday, 09:47\nLabel: 151",
+    "webUrl": "#broken"
+}]
+ 
