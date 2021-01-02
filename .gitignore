@@ -43,3 +43,8 @@ playground.xcworkspace
 # Carthage/Checkouts
 
 Carthage/Build/
+
+# General Mac files
+#
+
+.DS_Store

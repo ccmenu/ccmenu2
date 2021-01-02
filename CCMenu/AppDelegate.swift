@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         statusItemController = StatusItemController(modelData)
         pipelineWindowController = PipelineWindowController(modelData)
-//        pipelineWindowController!.window.makeKeyAndOrderFront(nil)
+        pipelineWindowController!.window.makeKeyAndOrderFront(nil)
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
