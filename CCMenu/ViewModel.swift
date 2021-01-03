@@ -10,7 +10,7 @@ import Combine
 
 final class ViewModel: ObservableObject {
     @Published var pipelines: [Pipeline] = []
-    @Published var selectionIds: Set<String> = Set()
+    @Published var selection: Set<String> = Set()
 
     
     init() {

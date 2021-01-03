@@ -49,6 +49,28 @@ class StatusItemBuilderTests: XCTestCase {
         XCTAssertEqual("connectfour", menu.items[0].title)
         XCTAssertEqual("erikdoe/ccmenu", menu.items[1].title)
     }
+    
+    func testOnlyCreatesNewItems() throws {
+        let builder = StatusItemBuilder()
+        let menu = NSMenu()
+        let p0 = Pipeline(
+                name: "connectfour",
+                feedUrl: "",
+                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
+        )
+        let p1 = Pipeline(
+                name: "erikdoe/ccmenu",
+                feedUrl: "",
+                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
+        )
+
+        builder.updateMenuWithPipelines(menu:menu, pipelines:[p1])
+        builder.updateMenuWithPipelines(menu:menu, pipelines:[p0, p1])
+
+        XCTAssertEqual(2, menu.items.count)
+        XCTAssertEqual("connectfour", menu.items[0].title)
+        XCTAssertEqual("erikdoe/ccmenu", menu.items[1].title)
+    }
 
 }
 

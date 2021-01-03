@@ -12,7 +12,7 @@ struct PipelineList: View {
 
     var body: some View {
         VStack {
-            List(viewModel.pipelines, selection: $viewModel.selectionIds) { p in
+            List(viewModel.pipelines, selection: $viewModel.selection) { p in
                 PipelineRow(pipeline: p)
             }
 //                    .listStyle(PlainListStyle()) // TODO: maybe as a preference?

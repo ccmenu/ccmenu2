@@ -52,6 +52,9 @@ class StatusItemBuilder {
     }
 
     func updateMenuWithPipelines(menu: NSMenu, pipelines pipelineList: [Pipeline]) {
+        while menu.items.count > 0 && isPipelineItem(menu.item(at: 0)) {
+            menu.removeItem(at: 0)
+        }
         for (index, pipeline) in pipelineList.enumerated() {
             let item = menu.insertItem(
                     withTitle: pipeline.name,
@@ -64,6 +67,11 @@ class StatusItemBuilder {
             item.representedObject = pipeline
             item.identifier = NSUserInterfaceItemIdentifier("OpenPipeline:\(pipeline.name)")
         }
+
+    }
+    
+    private func isPipelineItem(_ item: NSMenuItem?) -> Bool {
+        return item?.action == #selector(AppDelegate.openPipeline(_:))
     }
 
 }

@@ -20,17 +20,18 @@ class CCMenuUITests: XCTestCase {
         return fileUrl.path
     }
     
-    private func clickStatusItem(app: XCUIApplication) {
-        // It seems necessary to click on the status item to make the menu available,
-        // and I haven't found a better way to find the status item.
-        app.children(matching: .menuBar).element(boundBy: 1).children(matching: .statusItem).element(boundBy: 0).click()
-    }
-
-    func testStatusItemMenuOpenPipeline() throws {
+    private func launchApp() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-loadTestData", pathForBundleFile("TestData.json")]
         app.launch()
-        clickStatusItem(app: app)
+        // It seems necessary to click on the status item to make the menu available, and I haven't found a better way
+        // to find the status item.
+        app.children(matching: .menuBar).element(boundBy: 1).children(matching: .statusItem).element(boundBy: 0).click()
+        return app
+    }
+
+    func testStatusItemMenuOpenPipeline() throws {
+        let app = launchApp()
 
         // Sanity check for status item menu
         XCTAssert(app.menus["StatusItemMenu"].menuItems["OpenPipeline:connectfour"].exists)
@@ -44,9 +45,7 @@ class CCMenuUITests: XCTestCase {
     }
 
     func testStatusItemMenuOpenAboutPanel() throws {
-        let app = XCUIApplication()
-        app.launch()
-        clickStatusItem(app: app)
+        let app = launchApp()
 
         app.menus["StatusItemMenu"].menuItems["About CCMenu"].click()
         let versionText = app.dialogs.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Version'"))
@@ -59,8 +58,18 @@ class CCMenuUITests: XCTestCase {
         let n = regex.numberOfMatches(in: versionString, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, versionString.count))
         
         XCTAssertEqual(1, n)
-        XCUIApplication().children(matching: .menuBar).element(boundBy: 1).children(matching: .statusItem).element(boundBy: 0).click()
-        
+
+    }
+    
+    func testRemovesPipeline() throws {
+        let app = launchApp()
+
+        app.menus["StatusItemMenu"]/*@START_MENU_TOKEN@*/.menuItems["Show Pipeline Window"]/*[[".statusItems[\"1\"]",".menus[\"StatusItemMenu\"]",".menuItems[\"Show Pipeline Window\"]",".menuItems[\"orderFrontPipelineWindow:\"]"],[[[-1,3],[-1,2],[-1,1,2],[-1,0,1]],[[-1,3],[-1,2],[-1,1,2]],[[-1,3],[-1,2]]],[1]]@END_MENU_TOKEN@*/.click()
+        let pipelinewindowWindow = app/*@START_MENU_TOKEN@*/.windows["PipelineWindow"]/*[[".windows[\"CCMenu — Pipelines\"]",".windows[\"PipelineWindow\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        pipelinewindowWindow.tables.staticTexts["connectfour"].click()
+        pipelinewindowWindow.toolbars.buttons["Remove"].click()
+
+        XCTAssertFalse(pipelinewindowWindow.tables.staticTexts["connectfour"].exists)
     }
 
     func __testLaunchPerformance() throws {

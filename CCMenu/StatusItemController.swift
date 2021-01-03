@@ -7,7 +7,7 @@
 import AppKit
 
 
-class StatusItemController {
+class StatusItemController: NSObject, NSMenuDelegate {
     
     var viewModel: ViewModel
     var statusItem: NSStatusItem
@@ -16,10 +16,15 @@ class StatusItemController {
         viewModel = model
         let builder = StatusItemBuilder()
         statusItem = builder.makeStatusItem()
+        super.init()
         builder.addCommandMenuItems(menu: statusItem.menu!)
         builder.updateMenuWithPipelines(menu: statusItem.menu!, pipelines:viewModel.pipelines)
+        statusItem.menu?.delegate = self
     }
 
-
+    func menuNeedsUpdate(_ menu: NSMenu) {
+        let builder = StatusItemBuilder()
+        builder.updateMenuWithPipelines(menu: menu, pipelines: viewModel.pipelines)
+    }
     
 }

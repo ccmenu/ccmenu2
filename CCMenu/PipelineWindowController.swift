@@ -22,8 +22,7 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
         super.init()
 
         window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(
-                rootView: ContentView().environmentObject(viewModel))
+        window.contentView = NSHostingView(rootView: ContentView().environmentObject(viewModel))
         window.center()
         window.setFrameAutosaveName("PipelineWindow")
         window.identifier = NSUserInterfaceItemIdentifier("PipelineWindow")
@@ -31,7 +30,6 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
 
         let toolbar = NSToolbar()
         toolbar.displayMode = .iconOnly
-        toolbar.autosavesConfiguration = true
         toolbar.delegate = self
         window.toolbar = toolbar
     }
@@ -51,33 +49,35 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
             willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
         let item = NSToolbarItem(itemIdentifier: identifier)
+        item.isBordered = true
         switch identifier {
         case .addPipeline:
             item.image = NSImage(named: "toolbar-plus")
+            item.label = "Add"
             item.toolTip = "Add pipeline"
             item.target = self
             item.action = #selector(addPipeline(_:))
         case .removePipeline:
             item.image = NSImage(named: "toolbar-trash")
+            item.label = "Remove"
             item.toolTip = "Remove selected pipeline(s)"
             item.target = self
             item.action = #selector(removePipeline(_:))
         case .editPipeline:
             item.image = NSImage(named: "toolbar-gear")
+            item.label = "Edit"
             item.toolTip = "Edit selected pipeline"
             item.target = self
             item.action = #selector(editPipeline(_:))
         case .updatePipelineStatus:
             item.image = NSImage(named: "toolbar-arrow-clockwise")
+            item.label = "Update"
             item.toolTip = "Update status of all pipelines"
             item.target = nil
             item.action = #selector(AppDelegate.updatePipelineStatus(_:))
         default:
             return nil
         }
-        item.image?.isTemplate = true
-        item.isBordered = true
-
         return item
     }
 
@@ -92,11 +92,19 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
             Unfortunately, though, I have not found a way to wire the toolbar item's action to the pipeline view. My
             suspicion is that this would only work with the .toolbar construct, but that is not available in Catalina.
         */
-        NSLog("selection = \(viewModel.selectionIds)")
+        let selectedIds = viewModel.selection
+        var indexSet = IndexSet()
+        for (i, p) in viewModel.pipelines.enumerated() {
+            if selectedIds.contains(p.id) {
+                indexSet.insert(i)
+            }
+        }
+        viewModel.pipelines.remove(atOffsets: indexSet)
+        
     }
 
     @objc func editPipeline(_ sender: AnyObject?) {
-        NSLog("selection = \(viewModel.selectionIds)")
+        NSLog("selection = \(viewModel.selection)")
     }
 
 }
