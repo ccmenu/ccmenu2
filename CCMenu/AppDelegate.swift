@@ -13,13 +13,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItemController: StatusItemController?
     var pipelineWindowController: PipelineWindowController?
 
-    private var modelData = ModelData()
+    private var viewModel = ViewModel()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
 
 
-        statusItemController = StatusItemController(modelData)
-        pipelineWindowController = PipelineWindowController(modelData)
+        statusItemController = StatusItemController(viewModel)
+        pipelineWindowController = PipelineWindowController(viewModel)
         pipelineWindowController!.window.makeKeyAndOrderFront(nil)
     }
 
@@ -40,6 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {
+        viewModel.pipelines[1].statusSummary = "Built 03 Dec 2020, 13:14pm\nLabel: 152"
     }
 
     @IBAction func openPipeline(_ sender: AnyObject?) {

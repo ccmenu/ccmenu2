@@ -8,23 +8,23 @@ import SwiftUI
 
 
 struct PipelineList: View {
-    @EnvironmentObject var modelData: ModelData
-    
-    var body: some View {
-        List(modelData.pipelines, rowContent: { p in
-            PipelineRow(pipeline: p)
-        })
-        .listStyle(PlainListStyle())
-        
-            
+    @EnvironmentObject var viewModel: ViewModel
 
+    var body: some View {
+        VStack {
+            List(viewModel.pipelines, selection: $viewModel.selectionIds) { p in
+                PipelineRow(pipeline: p)
+            }
+//                    .listStyle(PlainListStyle()) // TODO: maybe as a preference?
+        }
     }
+
 }
 
 
 struct PipelineList_Previews: PreviewProvider {
     static var previews: some View {
         PipelineList()
-            .environmentObject(ModelData())
+                .environmentObject(ViewModel(withPreviewData: true))
     }
 }

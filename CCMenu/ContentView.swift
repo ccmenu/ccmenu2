@@ -10,10 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         PipelineList()
-            .frame(minWidth: 450, minHeight: 80)
-    }
-    
-    func doStuff() {
+                .frame(minWidth: 450, minHeight: 80)
     }
 }
 
@@ -22,7 +19,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ContentView()
-                .environmentObject(ModelData())
+                    .environmentObject(ViewModel())
         }
     }
 }

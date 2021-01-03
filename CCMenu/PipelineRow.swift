@@ -12,34 +12,35 @@ struct PipelineRow: View {
 
     var body: some View {
         VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
-            HStack(alignment: .center, spacing: nil, content: {
+            HStack(alignment: .top, spacing: nil, content: {
                 Image(nsImage: ImageManager().image(forPipeline: pipeline))
-                    .padding(.all, 8)
+                    .padding(.top, 6)
                 VStack(alignment: .leading) {
                     Text(pipeline.name)
-                        .font(Font.title)
+                        .font(Font.headline)
                     Text(pipeline.connectionDetails.feedUrl)
                         .font(Font.caption)
+                        .foregroundColor(.secondary)
                     }
                 Spacer(minLength: 8)
                 Text(pipeline.statusSummary)
-                    .frame(width: 200, height: 36, alignment: .bottomLeading)
+                    .frame(width:180, alignment: .topLeading)  // TODO: find best width based on user's date formatting
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
+                    .font(Font.callout)
+
             })
-            Divider()
         })
     }
 }
 
 
 struct PipelineRow_Previews: PreviewProvider {
-    static var pipelines = ModelData().pipelines
+    static var pipelines = ViewModel(withPreviewData: true).pipelines
     static var previews: some View {
         Group {
             PipelineRow(pipeline: pipelines[0])
             PipelineRow(pipeline: pipelines[1])
-            PipelineRow(pipeline: pipelines[2])
         }
     }
 }

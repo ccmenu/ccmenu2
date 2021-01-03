@@ -36,9 +36,14 @@ struct Pipeline: Hashable, Identifiable, Codable {
         self.init(name: name, feedUrl: feedUrl)
         self.status = status
     }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(connectionDetails.feedUrl)
+    }
 
     var id: String {
-        connectionDetails.feedUrl + " :: " + name   // TODO: use something like var id = UUID() isntead?
+        name + "|" + connectionDetails.feedUrl
     }
     
     var name: String

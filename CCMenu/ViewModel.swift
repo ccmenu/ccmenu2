@@ -8,12 +8,19 @@ import Foundation
 import Combine
 
 
-final class ModelData: ObservableObject {
+final class ViewModel: ObservableObject {
     @Published var pipelines: [Pipeline] = []
+    @Published var selectionIds: Set<String> = Set()
 
     
     init() {
         loadTestDataIfRequested()
+    }
+    
+    init(withPreviewData: Bool) {
+        if withPreviewData {
+            setupPreviewData()
+        }
     }
     
     private func loadTestDataIfRequested() {
@@ -24,6 +31,19 @@ final class ModelData: ObservableObject {
             }
             pipelines = load(argv[idx + 1])
         }
+    }
+    
+    private func setupPreviewData() {
+        let p0 = Pipeline(
+            name: "connectfour",
+            feedUrl: "http://localhost:4567/cc.xml",
+            status: Pipeline.Status(buildResult: .failure, pipelineActivity: .building))
+        pipelines.append(p0)
+        let p1 = Pipeline(
+            name: "erikdoe/ccmenu",
+            feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml",
+            status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping))
+        pipelines.append(p1)
     }
     
     private func load<T: Decodable>(_ filename: String) -> T {

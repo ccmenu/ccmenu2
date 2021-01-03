@@ -9,15 +9,15 @@ import AppKit
 
 class StatusItemController {
     
-    var modelData: ModelData
+    var viewModel: ViewModel
     var statusItem: NSStatusItem
     
-    init(_ data: ModelData) {
-        modelData = data
+    init(_ model: ViewModel) {
+        viewModel = model
         let builder = StatusItemBuilder()
         statusItem = builder.makeStatusItem()
         builder.addCommandMenuItems(menu: statusItem.menu!)
-        builder.updateMenuWithPipelines(menu: statusItem.menu!, pipelines:modelData.pipelines)
+        builder.updateMenuWithPipelines(menu: statusItem.menu!, pipelines:viewModel.pipelines)
     }
 
 

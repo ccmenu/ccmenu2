@@ -9,34 +9,31 @@ import SwiftUI
 
 class PipelineWindowController: NSObject, NSToolbarDelegate {
 
-    var modelData: ModelData // TODO: do I need to keep this around?
+    var viewModel: ViewModel
     var window: NSWindow
 
-    init(_ data: ModelData) {
-        modelData = data
+    init(_ model: ViewModel) {
+        viewModel = model
         window = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
                 styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
                 backing: .buffered, defer: false)
+
+        super.init()
+
         window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(
-                rootView: ContentView().environmentObject(modelData))
+                rootView: ContentView().environmentObject(viewModel))
         window.center()
         window.setFrameAutosaveName("PipelineWindow")
         window.identifier = NSUserInterfaceItemIdentifier("PipelineWindow")
         window.title = "CCMenu \u{2014} Pipelines"
-
-        super.init()
 
         let toolbar = NSToolbar()
         toolbar.displayMode = .iconOnly
         toolbar.autosavesConfiguration = true
         toolbar.delegate = self
         window.toolbar = toolbar
-
-        if #available(macOS 11, *) {
-            window.toolbarStyle = .unified
-        }
     }
 
 
@@ -68,6 +65,7 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
         case .editPipeline:
             item.image = NSImage(named: "toolbar-gear")
             item.toolTip = "Edit selected pipeline"
+            item.target = self
             item.action = #selector(editPipeline(_:))
         case .updatePipelineStatus:
             item.image = NSImage(named: "toolbar-arrow-clockwise")
@@ -82,20 +80,25 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
 
         return item
     }
-    
-    
+
+
     @objc func addPipeline(_ sender: AnyObject?) {
-        
     }
-    
+
     @objc func removePipeline(_ sender: AnyObject?) {
-        
+        /*  This method and the next one should actually be in the pipeline view. Then it would be unnecessary to have
+            the selection ids in the view model, where they don't really belong. It would also disable the item when
+            there is no selection.
+            Unfortunately, though, I have not found a way to wire the toolbar item's action to the pipeline view. My
+            suspicion is that this would only work with the .toolbar construct, but that is not available in Catalina.
+        */
+        NSLog("selection = \(viewModel.selectionIds)")
     }
-    
+
     @objc func editPipeline(_ sender: AnyObject?) {
-        
+        NSLog("selection = \(viewModel.selectionIds)")
     }
-    
+
 }
 
 extension NSToolbarItem.Identifier {

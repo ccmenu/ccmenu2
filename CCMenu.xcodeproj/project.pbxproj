@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
-		03825DE8259D005B00DEB003 /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ModelData.swift */; };
+		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineList.swift */; };
 		03825E64259DFDC400DEB003 /* PipelineWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E63259DFDC400DEB003 /* PipelineWindowController.swift */; };
@@ -48,7 +48,7 @@
 
 /* Begin PBXFileReference section */
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
-		03825DE7259D005B00DEB003 /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
+		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineList.swift; sourceTree = "<group>"; };
 		03825E63259DFDC400DEB003 /* PipelineWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowController.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
-				03825DE7259D005B00DEB003 /* ModelData.swift */,
+				03825DE7259D005B00DEB003 /* ViewModel.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -377,7 +377,7 @@
 				03825E64259DFDC400DEB003 /* PipelineWindowController.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
-				03825DE8259D005B00DEB003 /* ModelData.swift in Sources */,
+				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,7 +476,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -531,7 +531,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;

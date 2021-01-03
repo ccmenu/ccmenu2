@@ -4,7 +4,7 @@
  *  not use these files except in compliance with the License.
  */
 
-import SwiftUI
+import AppKit
 
 
 class StatusItemBuilder {
