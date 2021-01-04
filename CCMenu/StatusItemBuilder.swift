@@ -25,30 +25,31 @@ class StatusItemBuilder {
 
     func addCommandMenuItems(menu: NSMenu) {
         menu.addItem(
-                NSMenuItem.separator())
+            NSMenuItem.separator())
         menu.addItem(
-                withTitle: "Update Status of All Pipelines",
-                action: #selector(AppDelegate.updatePipelineStatus(_:)),
-                keyEquivalent: "")
+            withTitle: "Show Pipeline Window",
+            action: #selector(AppDelegate.orderFrontPipelineWindow(_:)),
+            keyEquivalent: "")
         menu.addItem(
-                withTitle: "Show Pipeline Window",
-                action: #selector(AppDelegate.orderFrontPipelineWindow(_:)),
-                keyEquivalent: "")
+            withTitle: "Update Status of All Pipelines",
+            action: #selector(AppDelegate.updatePipelineStatus(_:)),
+            keyEquivalent: "")
         menu.addItem(
-                NSMenuItem.separator())
+            NSMenuItem.separator())
         menu.addItem(
-                withTitle: "About CCMenu",
-                action: #selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)),
-                keyEquivalent: "")
-        menu.addItem(withTitle: "Preferences...",
-                action: #selector(AppDelegate.orderFrontSettingsPanel(_:)),
-                keyEquivalent: "")
+            withTitle: "About CCMenu",
+            action: #selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)),
+            keyEquivalent: "")
         menu.addItem(
-                NSMenuItem.separator())
+            withTitle: "Preferences...",
+            action: #selector(AppDelegate.orderFrontSettingsPanel(_:)),
+            keyEquivalent: "")
         menu.addItem(
-                withTitle: "Quit CCMenu",
-                action: #selector(NSApplication.terminate(_:)),
-                keyEquivalent: "")
+            NSMenuItem.separator())
+        menu.addItem(
+            withTitle: "Quit CCMenu",
+            action: #selector(NSApplication.terminate(_:)),
+            keyEquivalent: "")
     }
 
     func updateMenuWithPipelines(menu: NSMenu, pipelines pipelineList: [Pipeline]) {
@@ -57,21 +58,19 @@ class StatusItemBuilder {
         }
         for (index, pipeline) in pipelineList.enumerated() {
             let item = menu.insertItem(
-                    withTitle: pipeline.name,
-                    action: #selector(AppDelegate.openPipeline(_:)),
-                    keyEquivalent: "",
-                    at: index)
-            item.image = ImageManager().image(
-                    forPipeline: pipeline,
-                    asTemplate: false)
+                withTitle: pipeline.name,
+                action: #selector(AppDelegate.openPipeline(_:)),
+                keyEquivalent: "",
+                at: index)
+            item.image = ImageManager().image(forPipeline: pipeline, asTemplate: false)
             item.representedObject = pipeline
             item.identifier = NSUserInterfaceItemIdentifier("OpenPipeline:\(pipeline.name)")
         }
 
     }
-    
+
     private func isPipelineItem(_ item: NSMenuItem?) -> Bool {
-        return item?.action == #selector(AppDelegate.openPipeline(_:))
+        item?.action == #selector(AppDelegate.openPipeline(_:))
     }
 
 }

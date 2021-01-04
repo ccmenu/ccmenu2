@@ -16,19 +16,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var viewModel = ViewModel()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-
-
         statusItemController = StatusItemController(viewModel)
         pipelineWindowController = PipelineWindowController(viewModel)
-        pipelineWindowController!.window.makeKeyAndOrderFront(nil)
+        if UserDefaults.standard.bool(forKey: "OpenWindowOnLaunch") {
+            pipelineWindowController!.window.makeKeyAndOrderFront(nil)
+        }
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
-        let infoDictionary = Bundle.main.infoDictionary!
-        let sourceVersion = infoDictionary["CCMSourceVersion"] ?? "n/a"
-        NSApplication.shared.orderFrontStandardAboutPanel(
-                options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]
-        )
+        NSApp.activate(ignoringOtherApps: true)
+        AboutPanelController().openAboutPanelWithSourceVersion()
     }
 
     @IBAction func orderFrontSettingsPanel(_ sender: AnyObject?) {

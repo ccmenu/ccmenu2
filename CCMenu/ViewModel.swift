@@ -11,31 +11,11 @@ import Combine
 final class ViewModel: ObservableObject {
     @Published var pipelines: [Pipeline] = []
     @Published var selection: Set<String> = Set()
-
     
     init() {
         if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
             pipelines = load(filename)
         }
-    }
-    
-    init(withPreviewData: Bool) {
-        if withPreviewData {
-            setupPreviewData()
-        }
-    }
-    
-    private func setupPreviewData() {
-        let p0 = Pipeline(
-            name: "connectfour",
-            feedUrl: "http://localhost:4567/cc.xml",
-            status: Pipeline.Status(buildResult: .failure, pipelineActivity: .building))
-        pipelines.append(p0)
-        let p1 = Pipeline(
-            name: "erikdoe/ccmenu",
-            feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml",
-            status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping))
-        pipelines.append(p1)
     }
     
     private func load<T: Decodable>(_ filename: String) -> T {

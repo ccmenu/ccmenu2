@@ -33,11 +33,15 @@ struct PipelineRow: View {
 
 
 struct PipelineRow_Previews: PreviewProvider {
-    static var pipelines = ViewModel(withPreviewData: true).pipelines
     static var previews: some View {
-        Group {
-            PipelineRow(pipeline: pipelines[0])
-            PipelineRow(pipeline: pipelines[1])
-        }
+        PipelineRow(pipeline: makePipeline())
     }
+
+    static func makePipeline() -> Pipeline {
+        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml")
+        p.status = Pipeline.Status(buildResult: .success, pipelineActivity: .building)
+        p.statusSummary = "Built 27 Dec 2020, 09:47pm\nLabel: 151"
+        return p
+    }
+
 }
