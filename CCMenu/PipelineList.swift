@@ -11,13 +11,16 @@ struct PipelineList: View {
     @EnvironmentObject var viewModel: ViewModel
 
     var body: some View {
-        VStack {
-            List(viewModel.pipelines, selection: $viewModel.selection) { p in
+        List(selection: $viewModel.selection) {
+            ForEach(viewModel.pipelines) { p in
                 PipelineRow(pipeline: p)
-            }
-//                    .listStyle(PlainListStyle()) // TODO: maybe as a preference?
-        }
+            }.onMove(perform: { (itemsToMove, destination) in
+                viewModel.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
+            })
+        }.frame(minWidth: 440, minHeight: 56)
+         .listStyle(PlainListStyle()) // TODO: maybe as a preference?
     }
+
 
 }
 
@@ -25,6 +28,6 @@ struct PipelineList: View {
 struct PipelineList_Previews: PreviewProvider {
     static var previews: some View {
         PipelineList()
-                .environmentObject(ViewModel(withPreviewData: true))
+            .environmentObject(ViewModel(withPreviewData: true))
     }
 }

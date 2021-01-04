@@ -14,22 +14,14 @@ final class ViewModel: ObservableObject {
 
     
     init() {
-        loadTestDataIfRequested()
+        if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
+            pipelines = load(filename)
+        }
     }
     
     init(withPreviewData: Bool) {
         if withPreviewData {
             setupPreviewData()
-        }
-    }
-    
-    private func loadTestDataIfRequested() {
-        let argv = ProcessInfo.init().arguments
-        if let idx = argv.firstIndex(of: "-loadTestData") {
-            guard argv.count > idx + 1 else {
-                fatalError("Missing filename for -loadTestData")
-            }
-            pipelines = load(argv[idx + 1])
         }
     }
     

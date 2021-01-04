@@ -15,14 +15,14 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
     init(_ model: ViewModel) {
         viewModel = model
         window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
-                styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-                backing: .buffered, defer: false)
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            backing: .buffered, defer: false)
 
         super.init()
 
         window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(rootView: ContentView().environmentObject(viewModel))
+        window.contentView = NSHostingView(rootView: PipelineList().environmentObject(viewModel))
         window.center()
         window.setFrameAutosaveName("PipelineWindow")
         window.identifier = NSUserInterfaceItemIdentifier("PipelineWindow")
@@ -36,17 +36,17 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
 
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.addPipeline, .removePipeline, .editPipeline, .updatePipelineStatus]
+        [.addPipeline, .removePipeline, .editPipeline, .updatePipelineStatus]
     }
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.updatePipelineStatus, .space, .addPipeline, .removePipeline, .editPipeline]
+        [.updatePipelineStatus, .space, .addPipeline, .removePipeline, .editPipeline]
     }
 
     func toolbar(
-            _ toolbar: NSToolbar,
-            itemForItemIdentifier identifier: NSToolbarItem.Identifier,
-            willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        _ toolbar: NSToolbar,
+        itemForItemIdentifier identifier: NSToolbarItem.Identifier,
+        willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
         let item = NSToolbarItem(itemIdentifier: identifier)
         item.isBordered = true
@@ -83,6 +83,7 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
 
 
     @objc func addPipeline(_ sender: AnyObject?) {
+        viewModel.pipelines.move(fromOffsets: IndexSet(integer: 1), toOffset: 0)
     }
 
     @objc func removePipeline(_ sender: AnyObject?) {
@@ -100,7 +101,7 @@ class PipelineWindowController: NSObject, NSToolbarDelegate {
             }
         }
         viewModel.pipelines.remove(atOffsets: indexSet)
-        
+
     }
 
     @objc func editPipeline(_ sender: AnyObject?) {
