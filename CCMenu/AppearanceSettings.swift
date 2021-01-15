@@ -9,32 +9,24 @@ import SwiftUI
 
 struct AppearanceSettings: View {
 
-    @AppStorage("StatusItem.UseColorInMenuBar")
+    @AppStorage("UseColorInMenuBar")
     private var useColorInMenuBar: Bool = false
 
     var body: some View {
-
-            Toggle(isOn: $useColorInMenuBar) {
-                Text("Use color in menu bar")
-            }
-
-        .frame(width: 300)
-
-        .navigationTitle("Landmark Settings")
-
-        .padding(80)
-
+        Toggle(isOn: $useColorInMenuBar) {
+            Text("Use color in menu bar")
+        }
+            .frame(width: 300)
+            .navigationTitle("Appearance Settings")
+            .padding(80)
     }
 
 }
 
 
-struct LandmarkSettings_Previews: PreviewProvider {
-
+struct AppearanceSettings_Previews: PreviewProvider {
     static var previews: some View {
-
         AppearanceSettings()
-
     }
 
 }

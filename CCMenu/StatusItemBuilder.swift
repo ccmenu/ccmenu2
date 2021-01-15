@@ -9,19 +9,19 @@ import SwiftUI
 
 class StatusItemBuilder {
     
-    @AppStorage("StatusItem.UseColorInMenuBar")
+    @AppStorage("UseColorInMenuBar")
     private var useColorInMenuBar: Bool = false
 
-    func makeStatusItem() -> NSStatusItem {
+    func initializeItem() -> NSStatusItem {
         let item = NSStatusBar.system.statusItem(withLength: CGFloat(NSStatusItem.variableLength))
         guard let button = item.button else {
             fatalError("Expected NSStatusBar item to have a button object")
         }
-        button.title = "1"
-        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: !useColorInMenuBar)
+        button.image = ImageManager().image(forResult: .other, activity: .other, asTemplate: !useColorInMenuBar)
         button.imagePosition = NSControl.ImagePosition.imageLeft
         let menu = NSMenu()
         menu.identifier = NSUserInterfaceItemIdentifier("StatusItemMenu")
+        addCommandMenuItems(menu: menu)
         item.menu = menu
         return item
     }
@@ -54,8 +54,13 @@ class StatusItemBuilder {
             action: #selector(NSApplication.terminate(_:)),
             keyEquivalent: "")
     }
+    
+    func updateButton(button: NSStatusBarButton) {
+        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: !useColorInMenuBar)
+        button.title = "1"
+    }
 
-    func updateMenuWithPipelines(menu: NSMenu, pipelines pipelineList: [Pipeline]) {
+    func updateMenu(menu: NSMenu, pipelines pipelineList: [Pipeline]) {
         while menu.items.count > 0 && isPipelineItem(menu.item(at: 0)) {
             menu.removeItem(at: 0)
         }
@@ -69,7 +74,6 @@ class StatusItemBuilder {
             item.representedObject = pipeline
             item.identifier = NSUserInterfaceItemIdentifier("OpenPipeline:\(pipeline.name)")
         }
-
     }
 
     private func isPipelineItem(_ item: NSMenuItem?) -> Bool {

@@ -22,10 +22,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func orderFrontSettingsPanel(_ sender: AnyObject?) {
+        NSApp.activate(ignoringOtherApps: true)
+        // TODO: what to do here?
     }
 
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
+        // TODO: what to do here?
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {

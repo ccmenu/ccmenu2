@@ -6,7 +6,7 @@
         "buildResult": "failure",
         "pipelineActivity": "building"
         },
-    "statusSummary": "Started 20m ago\nETA: Today, 16:05",
+    "statusSummary": "Started: 20m ago, ETA: Today, 16:05",
     "webUrl": "http://localhost:4567"
 },
 {  "name": "erikdoe/ccmenu",
@@ -17,7 +17,7 @@
         "buildResult": "success",
         "pipelineActivity": "sleeping"
         },
-    "statusSummary": "Built 27 Dec 2020, 09:47pm\nLabel: 151",
+    "statusSummary": "Built: 27 Dec 2020 09:47pm, Label: 151",
     "webUrl": "#broken"
 }]
  

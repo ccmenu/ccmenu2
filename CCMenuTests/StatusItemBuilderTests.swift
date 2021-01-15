@@ -18,7 +18,7 @@ class StatusItemBuilderTests: XCTestCase {
                 status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
         )
 
-        builder.updateMenuWithPipelines(menu:menu, pipelines:[p0])
+        builder.updateMenu(menu:menu, pipelines:[p0])
 
         XCTAssertEqual(1, menu.items.count)
         let item = menu.items[0]
@@ -29,7 +29,7 @@ class StatusItemBuilderTests: XCTestCase {
         XCTAssertEqual(NSUserInterfaceItemIdentifier("OpenPipeline:connectfour"), item.identifier)
     }
 
-    func testCreatesItemInOrder() throws {
+    func testCreatesItemsInOrder() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
         let p0 = Pipeline(
@@ -43,7 +43,7 @@ class StatusItemBuilderTests: XCTestCase {
                 status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
         )
 
-        builder.updateMenuWithPipelines(menu:menu, pipelines:[p0, p1])
+        builder.updateMenu(menu:menu, pipelines:[p0, p1])
 
         XCTAssertEqual(2, menu.items.count)
         XCTAssertEqual("connectfour", menu.items[0].title)
@@ -64,8 +64,8 @@ class StatusItemBuilderTests: XCTestCase {
                 status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
         )
 
-        builder.updateMenuWithPipelines(menu:menu, pipelines:[p1])
-        builder.updateMenuWithPipelines(menu:menu, pipelines:[p0, p1])
+        builder.updateMenu(menu:menu, pipelines:[p1])
+        builder.updateMenu(menu:menu, pipelines:[p0, p1])
 
         XCTAssertEqual(2, menu.items.count)
         XCTAssertEqual("connectfour", menu.items[0].title)

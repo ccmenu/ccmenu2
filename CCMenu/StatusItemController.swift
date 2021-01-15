@@ -15,16 +15,22 @@ class StatusItemController: NSObject, NSMenuDelegate {
     init(_ model: ViewModel) {
         viewModel = model
         let builder = StatusItemBuilder()
-        statusItem = builder.makeStatusItem()
+        statusItem = builder.initializeItem()
         super.init()
-        builder.addCommandMenuItems(menu: statusItem.menu!)
-        builder.updateMenuWithPipelines(menu: statusItem.menu!, pipelines: viewModel.pipelines)
         statusItem.menu?.delegate = self
+        UserDefaults.standard.addObserver(self, forKeyPath: "UseColorInMenuBar", options: [], context: nil)
+        builder.updateButton(button: statusItem.button!)
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         let builder = StatusItemBuilder()
-        builder.updateMenuWithPipelines(menu: menu, pipelines: viewModel.pipelines)
+        builder.updateMenu(menu: menu, pipelines: viewModel.pipelines)
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        let builder = StatusItemBuilder()
+        builder.updateButton(button: statusItem.button!)
     }
 
 }
