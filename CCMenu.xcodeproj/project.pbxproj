@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
+		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
 		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
-		03825DFA259D0ACF00DEB003 /* PipelineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineList.swift */; };
-		03825E64259DFDC400DEB003 /* PipelineWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E63259DFDC400DEB003 /* PipelineWindowController.swift */; };
+		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
 		03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E80259E164500DEB003 /* WorkspaceController.swift */; };
 		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
 		03825EA925A0034200DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
@@ -19,7 +20,6 @@
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
-		03BD7E932598E57A000F9495 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E912598E57A000F9495 /* Main.storyboard */; };
 		03BD7EAA2598E57A000F9495 /* CCMenuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */; };
 		03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */; };
 		03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EC22598E676000F9495 /* StatusItemController.swift */; };
@@ -47,11 +47,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
+		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
 		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
-		03825DF9259D0ACF00DEB003 /* PipelineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineList.swift; sourceTree = "<group>"; };
-		03825E63259DFDC400DEB003 /* PipelineWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowController.swift; sourceTree = "<group>"; };
+		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
 		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
 		03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemBuilderTests.swift; sourceTree = "<group>"; };
@@ -59,7 +60,6 @@
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BD7E8C2598E57A000F9495 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		03BD7E922598E57A000F9495 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		03BD7E942598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7E952598E57A000F9495 /* CCMenu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenu.entitlements; sourceTree = "<group>"; };
 		03BD7E9A2598E57A000F9495 /* CCMenuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,8 +112,7 @@
 		03825E69259DFF9700DEB003 /* Pipeline Window */ = {
 			isa = PBXGroup;
 			children = (
-				03825E63259DFDC400DEB003 /* PipelineWindowController.swift */,
-				03825DF9259D0ACF00DEB003 /* PipelineList.swift */,
+				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 			);
 			name = "Pipeline Window";
@@ -151,14 +150,16 @@
 		03BD7E872598E579000F9495 /* CCMenu */ = {
 			isa = PBXGroup;
 			children = (
+				0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */,
 				03BD7E882598E579000F9495 /* AppDelegate.swift */,
 				03825E6A259DFFBD00DEB003 /* Model */,
 				03825E68259DFF8800DEB003 /* Status Item */,
 				03825E69259DFF9700DEB003 /* Pipeline Window */,
 				03CCDC8425A2902400FFE8B8 /* Other Controllers */,
+				0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */,
 				03BD7EF9259A180C000F9495 /* ImageManager.swift */,
-				03BD7FA2259A2B36000F9495 /* User Interface */,
 				03BD7FA0259A2ADE000F9495 /* Supporting Files */,
+				03BD7E8C2598E57A000F9495 /* Assets.xcassets */,
 				03BD7E8E2598E57A000F9495 /* Preview Content */,
 			);
 			path = CCMenu;
@@ -200,15 +201,6 @@
 				03BD7E952598E57A000F9495 /* CCMenu.entitlements */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		03BD7FA2259A2B36000F9495 /* User Interface */ = {
-			isa = PBXGroup;
-			children = (
-				03BD7E912598E57A000F9495 /* Main.storyboard */,
-				03BD7E8C2598E57A000F9495 /* Assets.xcassets */,
-			);
-			name = "User Interface";
 			sourceTree = "<group>";
 		};
 		03CCDC8425A2902400FFE8B8 /* Other Controllers */ = {
@@ -325,7 +317,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				03825EA925A0034200DEB003 /* TestData.json in Resources */,
-				03BD7E932598E57A000F9495 /* Main.storyboard in Resources */,
 				03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */,
 				03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */,
 				03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */,
@@ -375,17 +366,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */,
 				03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */,
 				03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */,
-				03825DFA259D0ACF00DEB003 /* PipelineList.swift in Sources */,
+				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */,
-				03825E64259DFDC400DEB003 /* PipelineWindowController.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 				2FA2824A8C632FC2756BA984 /* AboutPanelController.swift in Sources */,
+				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,17 +412,6 @@
 			targetProxy = 03BD7EA62598E57A000F9495 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		03BD7E912598E57A000F9495 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				03BD7E922598E57A000F9495 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		03BD7EAC2598E57A000F9495 /* Debug */ = {
@@ -484,7 +465,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -539,7 +520,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -566,7 +547,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -592,7 +573,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -615,7 +596,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -638,7 +618,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

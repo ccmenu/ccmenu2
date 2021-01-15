@@ -7,20 +7,13 @@
 import SwiftUI
 
 
-@main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var statusItemController: StatusItemController?
-    var pipelineWindowController: PipelineWindowController?
-
-    private var viewModel = ViewModel()
+    var viewModel: ViewModel!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItemController = StatusItemController(viewModel)
-        pipelineWindowController = PipelineWindowController(viewModel)
-        if UserDefaults.standard.bool(forKey: "OpenWindowOnLaunch") {
-            pipelineWindowController!.window.makeKeyAndOrderFront(nil)
-        }
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
@@ -33,7 +26,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        pipelineWindowController?.window.makeKeyAndOrderFront(nil)
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {

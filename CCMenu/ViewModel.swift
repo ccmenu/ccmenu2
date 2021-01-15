@@ -9,8 +9,8 @@ import Combine
 
 
 final class ViewModel: ObservableObject {
+    
     @Published var pipelines: [Pipeline] = []
-    @Published var selection: Set<String> = Set()
     
     init() {
         if let filename = UserDefaults.standard.string(forKey: "loadTestData") {

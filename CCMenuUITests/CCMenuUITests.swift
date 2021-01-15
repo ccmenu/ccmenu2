@@ -65,11 +65,14 @@ class CCMenuUITests: XCTestCase {
         let app = launchApp()
 
         app.menus["StatusItemMenu"]/*@START_MENU_TOKEN@*/.menuItems["Show Pipeline Window"]/*[[".statusItems[\"1\"]",".menus[\"StatusItemMenu\"]",".menuItems[\"Show Pipeline Window\"]",".menuItems[\"orderFrontPipelineWindow:\"]"],[[[-1,3],[-1,2],[-1,1,2],[-1,0,1]],[[-1,3],[-1,2],[-1,1,2]],[[-1,3],[-1,2]]],[1]]@END_MENU_TOKEN@*/.click()
-        let pipelinewindowWindow = app/*@START_MENU_TOKEN@*/.windows["PipelineWindow"]/*[[".windows[\"CCMenu — Pipelines\"]",".windows[\"PipelineWindow\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let pipelinewindowWindow = app.windows["Pipelines"]
         pipelinewindowWindow.tables.staticTexts["connectfour"].click()
-        pipelinewindowWindow.toolbars.buttons["Remove"].click()
+//        pipelinewindowWindow.toolbars.buttons["Remove Pipeline"].click()
+        pipelinewindowWindow.toolbars.children(matching: .group).element(boundBy: 2).children(matching: .button).element.click()
 
         XCTAssertFalse(pipelinewindowWindow.tables.staticTexts["connectfour"].exists)
+        
+        
     }
 
     func __testLaunchPerformance() throws {

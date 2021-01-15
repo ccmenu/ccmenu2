@@ -4,8 +4,6 @@
 <dict>
 	<key>CCMSourceVersion</key>
 	<string>#gitsha#</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020 ThoughtWorks Inc.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -21,14 +19,14 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>15</string>
+	<string>20</string>
 	<key>CFBundleVersion</key>
-	<string>2150.1</string>
+	<string>2200.1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
-	<key>NSMainStoryboardFile</key>
-	<string>Main</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2021 ThoughtWorks Inc.</string>
 </dict>
 </plist>

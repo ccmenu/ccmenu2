@@ -4,10 +4,13 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import SwiftUI
 
 
 class StatusItemBuilder {
+    
+    @AppStorage("StatusItem.UseColorInMenuBar")
+    private var useColorInMenuBar: Bool = false
 
     func makeStatusItem() -> NSStatusItem {
         let item = NSStatusBar.system.statusItem(withLength: CGFloat(NSStatusItem.variableLength))
@@ -15,7 +18,7 @@ class StatusItemBuilder {
             fatalError("Expected NSStatusBar item to have a button object")
         }
         button.title = "1"
-        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: true)
+        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: !useColorInMenuBar)
         button.imagePosition = NSControl.ImagePosition.imageLeft
         let menu = NSMenu()
         menu.identifier = NSUserInterfaceItemIdentifier("StatusItemMenu")
