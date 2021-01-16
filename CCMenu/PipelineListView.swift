@@ -36,32 +36,34 @@ struct PipelineListView: View {
         }
         .frame(minWidth: 440, minHeight: 56)
         .toolbar {
-            ToolbarItem {
-                Button(action: updatePipelines) {
-                    Label("Update", systemImage: "arrow.clockwise")
-                }
-                .help("Retrieve status for all pipelines from servers") // TODO: More help...
-            }
             ToolbarItem(placement: .principal) {
                 Picker("Details", selection: $details) {
                     Text("Status").tag(DetailMode.buildStatus)
                     Text("URL").tag(DetailMode.feedUrl)
                 }
                 .pickerStyle(MenuPickerStyle()) // TODO: How to show icons?
-                .help("Select which additional information to show")
+                .help("Select which details to show for the pipelines")
+                .accessibility(label: Text("Details picker"))
+            }
+            ToolbarItem {
+                Button(action: updatePipelines) {
+                    Label("Update", systemImage: "arrow.clockwise")
+                }
+                .help("Retrieve status for all pipelines from servers")
             }
             ToolbarItem {
                 Button(action: addPipeline) {
                     Label("Add", systemImage: "plus")
                 }
                 .help("Add pipeline")
+                .accessibility(label: Text("Add pipeline"))
             }
             ToolbarItem(placement: .destructiveAction) {
                 Button(action: removePipeline) {
                     Label("Remove", systemImage: "trash")
                 }
                 .help("Remove pipeline")
-                .accessibility(label: Text("Remove pipeline"))
+                .accessibility(label: Text("Remove pipeline(s)"))
                 .disabled(selection.isEmpty)
             }
             ToolbarItem {
@@ -69,7 +71,8 @@ struct PipelineListView: View {
                     Label("Edit", systemImage: "gearshape")
                 }
                 .help("Edit pipeline")
-                .disabled(selection.isEmpty)
+                .accessibility(label: Text("Edit pipeline"))
+                .disabled(selection.count != 1)
             }
 
         }

@@ -29,6 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
         // TODO: This will not work for users who have chosen a language other than English
+        // CCMenu.PipelineListView-1-AppWindow-1
         if let item = NSApp.menu?.item(withTitle: "Window")?.submenu?.item(withTitle: "Pipelines") {
             NSApp.sendAction(item.action!, to: item.target, from: item)
         } else if let item = NSApp.menu?.item(withTitle: "File")?.submenu?.item(withTitle: "New Pipelines Window") {

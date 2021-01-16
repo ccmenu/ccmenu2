@@ -58,18 +58,52 @@ class CCMenuUITests: XCTestCase {
         let n = regex.numberOfMatches(in: versionString, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, versionString.count))
         
         XCTAssertEqual(1, n)
-
     }
+    
+    
+    func testPipelineWindowToolbar() throws {
+        let app = launchApp()
+
+        app.menus["StatusItemMenu"].menuItems["orderFrontPipelineWindow:"].click()
+        let window = app.windows["Pipelines"]
+        let toolbars = window.toolbars
+        
+        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertFalse(toolbars.buttons["Remove pipeline"].isEnabled)
+        XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
+
+        window.tables.staticTexts["connectfour"].click()
+        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled)
+
+        XCUIElement.perform(withKeyModifiers: XCUIElement.KeyModifierFlags.shift) {
+            window.tables.staticTexts["erikdoe/ccmenu"].click()
+        }
+        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
+        XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
+
+        toolbars.popUpButtons["Details picker"].click()
+        toolbars.menuItems["Status"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
+
+        toolbars.popUpButtons["Details picker"].click()
+        toolbars.menuItems["URL"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+    }
+    
+    // onMove and onDelete are still untested
     
     func testRemovesPipeline() throws {
         let app = launchApp()
 
         app.menus["StatusItemMenu"].menuItems["orderFrontPipelineWindow:"].click()
-        let pipelinewindowWindow = app.windows["Pipelines"]
-        pipelinewindowWindow.tables.staticTexts["connectfour"].click()
-        pipelinewindowWindow.toolbars.buttons["Remove pipeline"].click()
+        let window = app.windows["Pipelines"]
+        window.tables.staticTexts["connectfour"].click()
+        window.toolbars.buttons["Remove pipeline"].click()
 
-        XCTAssertFalse(pipelinewindowWindow.tables.staticTexts["connectfour"].exists)
+        XCTAssertFalse(window.tables.staticTexts["connectfour"].exists)
     }
 
     func __testLaunchPerformance() throws {
