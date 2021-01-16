@@ -18,21 +18,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        AboutPanelController().openAboutPanelWithSourceVersion()
+        AboutPanelController().orderFrontAboutPanelWithSourceVersion()
     }
 
-    @IBAction func orderFrontSettingsPanel(_ sender: AnyObject?) {
+    @IBAction func orderFrontPreferencesWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        // TODO: what to do here?
+        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: self)
     }
 
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        // TODO: what to do here?
+        // TODO: This will not work for users who have chosen a language other than English
+        if let item = NSApp.menu?.item(withTitle: "Window")?.submenu?.item(withTitle: "Pipelines") {
+            NSApp.sendAction(item.action!, to: item.target, from: item)
+        } else if let item = NSApp.menu?.item(withTitle: "File")?.submenu?.item(withTitle: "New Pipelines Window") {
+            NSApp.sendAction(item.action!, to: item.target, from: item)
+        }
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {
-        viewModel.pipelines[1].statusSummary = "Built 03 Dec 2020, 13:14pm\nLabel: 152"
+        let timestamp = Date.init(timeIntervalSinceNow: -5).description  // TODO: figure out how to format descriptions
+        viewModel.pipelines[1].statusSummary = "Built: \(timestamp), Label: 152"
     }
 
     @IBAction func openPipeline(_ sender: AnyObject?) {

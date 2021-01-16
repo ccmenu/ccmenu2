@@ -17,12 +17,12 @@ struct CCMenuApp: App {
     }
 
     var body: some Scene {
-        WindowGroup("Pipelines") {
+        WindowGroup(Text("Pipelines")) {
             PipelineListView(viewModel: viewModel)
         }
-            .commands {
-                CCMenuCommands()
-            }
+        .commands {
+            AppCommands()
+        }
 
         Settings {
             AppearanceSettings()

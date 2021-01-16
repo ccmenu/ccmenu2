@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
-		0329F92725B21FE20043FAB1 /* CCMenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* CCMenuCommands.swift */; };
+		0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* AppCommands.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
 		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
@@ -50,7 +50,7 @@
 /* Begin PBXFileReference section */
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
-		0329F92625B21FE20043FAB1 /* CCMenuCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuCommands.swift; sourceTree = "<group>"; };
+		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
 		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 			children = (
 				0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */,
 				03BD7E882598E579000F9495 /* AppDelegate.swift */,
-				0329F92625B21FE20043FAB1 /* CCMenuCommands.swift */,
+				0329F92625B21FE20043FAB1 /* AppCommands.swift */,
 				03825E6A259DFFBD00DEB003 /* Model */,
 				03825E68259DFF8800DEB003 /* Status Item */,
 				03825E69259DFF9700DEB003 /* Pipeline Window */,
@@ -376,7 +376,7 @@
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */,
-				0329F92725B21FE20043FAB1 /* CCMenuCommands.swift in Sources */,
+				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,

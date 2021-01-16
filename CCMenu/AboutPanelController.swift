@@ -9,9 +9,8 @@ import AppKit
 
 class AboutPanelController {
 
-    func openAboutPanelWithSourceVersion() {
-        let infoDictionary = Bundle.main.infoDictionary!
-        let sourceVersion = infoDictionary["CCMSourceVersion"] ?? "n/a"
+    func orderFrontAboutPanelWithSourceVersion() {
+        let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
         NSApplication.shared.orderFrontStandardAboutPanel(
             options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]
         )

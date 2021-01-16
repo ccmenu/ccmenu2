@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PipelineRow: View {
     var pipeline: Pipeline
+    var details: DetailMode
 
     var body: some View {
         HStack(alignment: .center) {
@@ -16,19 +17,19 @@ struct PipelineRow: View {
             VStack(alignment: .leading) {
                 Text(pipeline.name)
                     .font(Font.headline)
-                Text(pipeline.statusSummary)
+                Text(details == .buildStatus ? pipeline.statusSummary : pipeline.connectionDetails.feedUrl)
                     .font(Font.body)
                     .foregroundColor(.secondary)
             }
         }
-            .frame(maxHeight: 36) // TODO: figure out why items want to grow when order changes
+        .frame(maxHeight: 36) // TODO: figure out why items want to grow when order changes
     }
 }
 
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline())
+        PipelineRow(pipeline: makePipeline(), details: .buildStatus)
     }
 
     static func makePipeline() -> Pipeline {

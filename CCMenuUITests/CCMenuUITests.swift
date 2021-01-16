@@ -64,15 +64,12 @@ class CCMenuUITests: XCTestCase {
     func testRemovesPipeline() throws {
         let app = launchApp()
 
-        app.menus["StatusItemMenu"]/*@START_MENU_TOKEN@*/.menuItems["Show Pipeline Window"]/*[[".statusItems[\"1\"]",".menus[\"StatusItemMenu\"]",".menuItems[\"Show Pipeline Window\"]",".menuItems[\"orderFrontPipelineWindow:\"]"],[[[-1,3],[-1,2],[-1,1,2],[-1,0,1]],[[-1,3],[-1,2],[-1,1,2]],[[-1,3],[-1,2]]],[1]]@END_MENU_TOKEN@*/.click()
+        app.menus["StatusItemMenu"].menuItems["orderFrontPipelineWindow:"].click()
         let pipelinewindowWindow = app.windows["Pipelines"]
         pipelinewindowWindow.tables.staticTexts["connectfour"].click()
-//        pipelinewindowWindow.toolbars.buttons["Remove Pipeline"].click()
-        pipelinewindowWindow.toolbars.children(matching: .group).element(boundBy: 2).children(matching: .button).element.click()
+        pipelinewindowWindow.toolbars.buttons["Remove pipeline"].click()
 
         XCTAssertFalse(pipelinewindowWindow.tables.staticTexts["connectfour"].exists)
-        
-        
     }
 
     func __testLaunchPerformance() throws {

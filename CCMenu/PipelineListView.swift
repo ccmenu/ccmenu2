@@ -7,62 +7,80 @@
 import SwiftUI
 
 
+enum DetailMode: Int {
+    case buildStatus
+    case feedUrl
+}
+
+
 struct PipelineListView: View {
     @ObservedObject var viewModel: ViewModel
+    @State var details: DetailMode = .buildStatus
     @State var selection: Set<String> = Set()
-
+    
     var body: some View {
         List(selection: $selection) {
             ForEach(viewModel.pipelines) { p in
-                PipelineRow(pipeline: p)
+                PipelineRow(pipeline: p, details: details)
             }
-                .onMove() { (itemsToMove, destination) in
-                    withAnimation() {
-                        viewModel.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
-                    }
+            .onMove { (itemsToMove, destination) in
+                withAnimation {
+                    viewModel.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
                 }
-                .onDelete(perform: { indexSet in
-                    withAnimation() {
-                        viewModel.pipelines.remove(atOffsets: indexSet)
-                    }
-                })
+            }
+            .onDelete { indexSet in
+                withAnimation {
+                    viewModel.pipelines.remove(atOffsets: indexSet)
+                }
+            }
         }
-            .frame(minWidth: 440, minHeight: 56)
-            .toolbar {
-                ToolbarItem {
-                    Button(action: updatePipelines) {
-                        Label("Update", systemImage: "arrow.clockwise")
-                    }
+        .frame(minWidth: 440, minHeight: 56)
+        .toolbar {
+            ToolbarItem {
+                Button(action: updatePipelines) {
+                    Label("Update", systemImage: "arrow.clockwise")
                 }
-                ToolbarItem {
-                    Spacer()
-                }
-                ToolbarItem {
-                    Button(action: addPipeline) {
-                        Label("Add", systemImage: "plus")
-                    }
-                }
-                ToolbarItem() {
-                    Button(action: removePipeline) {
-                        Label("Remove", systemImage: "trash")
-                    }
-                        .disabled(selection.isEmpty)
-                }
-                ToolbarItem {
-                    Button(action: editPipeline) {
-                        Label("Edit", systemImage: "gearshape")
-                    }
-                        .disabled(selection.isEmpty)
-                }
-
+                .help("Retrieve status for all pipelines from servers") // TODO: More help...
             }
+            ToolbarItem(placement: .principal) {
+                Picker("Details", selection: $details) {
+                    Text("Status").tag(DetailMode.buildStatus)
+                    Text("URL").tag(DetailMode.feedUrl)
+                }
+                .pickerStyle(MenuPickerStyle()) // TODO: How to show icons?
+                .help("Select which additional information to show")
+            }
+            ToolbarItem {
+                Button(action: addPipeline) {
+                    Label("Add", systemImage: "plus")
+                }
+                .help("Add pipeline")
+            }
+            ToolbarItem(placement: .destructiveAction) {
+                Button(action: removePipeline) {
+                    Label("Remove", systemImage: "trash")
+                }
+                .help("Remove pipeline")
+                .accessibility(label: Text("Remove pipeline"))
+                .disabled(selection.isEmpty)
+            }
+            ToolbarItem {
+                Button(action: editPipeline) {
+                    Label("Edit", systemImage: "gearshape")
+                }
+                .help("Edit pipeline")
+                .disabled(selection.isEmpty)
+            }
+
+        }
     }
 
     func updatePipelines() {
+        NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
     }
 
     func addPipeline() {
-            viewModel.pipelines.move(fromOffsets: IndexSet(integer: 1), toOffset: 0)
+        viewModel.pipelines.move(fromOffsets: IndexSet(integer: 1), toOffset: 0)
     }
 
     func removePipeline() {
@@ -73,11 +91,11 @@ struct PipelineListView: View {
             }
         }
         selection.removeAll()
-        withAnimation() {
+        withAnimation {
             viewModel.pipelines.remove(atOffsets: indexSet)
         }
     }
- 
+
     func editPipeline() {
         NSLog("selection = \(selection)")
     }
@@ -87,10 +105,10 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(viewModel: makeViewModel())
-                .preferredColorScheme(.light)
-            PipelineListView(viewModel: makeViewModel())
-                .preferredColorScheme(.dark)
+            PipelineListView(viewModel: makeViewModel(), details: .feedUrl)
+            .preferredColorScheme(.light)
+            PipelineListView(viewModel: makeViewModel(), details: .buildStatus)
+            .preferredColorScheme(.dark)
         }
     }
 

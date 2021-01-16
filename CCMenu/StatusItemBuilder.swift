@@ -45,7 +45,7 @@ class StatusItemBuilder {
             keyEquivalent: "")
         menu.addItem(
             withTitle: "Preferences...",
-            action: #selector(AppDelegate.orderFrontSettingsPanel(_:)),
+            action: #selector(AppDelegate.orderFrontPreferencesWindow(_:)),
             keyEquivalent: "")
         menu.addItem(
             NSMenuItem.separator())

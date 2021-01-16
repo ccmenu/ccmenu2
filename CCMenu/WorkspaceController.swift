@@ -6,6 +6,7 @@
 
 import AppKit
 
+
 class WorkspaceController {
 
     func openPipeline(_ pipeline: Pipeline) {
