@@ -8,17 +8,23 @@ import SwiftUI
 
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-
+    @Environment(\.openURL) var openURL
     var statusItemController: StatusItemController?
-    var viewModel: ViewModel!
+    var viewModel: ViewModel?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        guard let viewModel = viewModel else {
+            fatalError("View model unavailable when creating status item controller")
+        }
         statusItemController = StatusItemController(viewModel)
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        AboutPanelController().orderFrontAboutPanelWithSourceVersion()
+        let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
+        NSApplication.shared.orderFrontStandardAboutPanel(
+            options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]
+        )
     }
 
     @IBAction func orderFrontPreferencesWindow(_ sender: AnyObject?) {
@@ -28,18 +34,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        // TODO: This will not work for users who have chosen a language other than English
-        // CCMenu.PipelineListView-1-AppWindow-1
-        if let item = NSApp.menu?.item(withTitle: "Window")?.submenu?.item(withTitle: "Pipelines") {
-            NSApp.sendAction(item.action!, to: item.target, from: item)
-        } else if let item = NSApp.menu?.item(withTitle: "File")?.submenu?.item(withTitle: "New Pipelines Window") {
-            NSApp.sendAction(item.action!, to: item.target, from: item)
-        }
+        openURL(URL(string: "ccmenu://pipelines")!)
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {
+        NSLog("Pretending to update status from servers")
         let timestamp = Date.init(timeIntervalSinceNow: -5).description  // TODO: figure out how to format descriptions
-        viewModel.pipelines[1].statusSummary = "Built: \(timestamp), Label: 152"
+        viewModel!.pipelines[1].statusSummary = "Built: \(timestamp), Label: 152"
     }
 
     @IBAction func openPipeline(_ sender: AnyObject?) {

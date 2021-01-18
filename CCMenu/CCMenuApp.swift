@@ -17,13 +17,16 @@ struct CCMenuApp: App {
     }
 
     var body: some Scene {
-        WindowGroup(Text("Pipelines")) {
-            PipelineListView(viewModel: viewModel)
+
+        WindowGroup("Pipelines") {
+            PipelineListView(model: viewModel)
+                .handlesExternalEvents(preferring: ["pipelines"], allowing: ["pipelines"])
         }
         .commands {
             AppCommands()
         }
-
+        .handlesExternalEvents(matching: ["pipelines"])
+        
         Settings {
             AppearanceSettings()
         }

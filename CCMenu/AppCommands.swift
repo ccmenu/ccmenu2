@@ -9,15 +9,19 @@ import SwiftUI
 
 struct AppCommands: Commands {
 
-    private struct PipelineMenuContent: View {
+    private struct FileMenuItems: View {
         var body: some View {
-            Button("Update Status of All Pipelines") {
-                NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
+            Button("Import...") {
+                // TODO: how to use file selector
+                // TODO: how to access view model
             }
-            .disabled(false)
+            Button("Export...") {
+                // TODO: how to use file selector
+                // TODO: how to access view model
+            }
         }
     }
-
+    
     private struct ViewModeMenuItems: View {
         var body: some View {
             Button("Show Build Status") {
@@ -32,12 +36,41 @@ struct AppCommands: Commands {
         }
     }
     
+    private struct PipelineMenuContent: View {
+        var body: some View {
+            Button("Update Status of All Pipelines") {
+                NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
+            }
+            .keyboardShortcut("u")
+        }
+    }
+    
+    private struct WindowMenuItems: View {
+        var body: some View {
+            Button("Show Pipeline Window") {
+                NSApp.sendAction(#selector(AppDelegate.orderFrontPipelineWindow(_:)), to: nil, from: self)
+            }
+            .keyboardShortcut("0")
+            Divider()
+        }
+    }
+
     var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+        }
+        CommandGroup(replacing: .saveItem) {
+        }
+        CommandGroup(replacing: .importExport) {
+            FileMenuItems()
+        }
         CommandGroup(before: .toolbar) {
             ViewModeMenuItems()
         }
         CommandMenu("Pipeline") {
             PipelineMenuContent()
+        }
+        CommandGroup(before: .windowList) {
+            WindowMenuItems()
         }
     }
 

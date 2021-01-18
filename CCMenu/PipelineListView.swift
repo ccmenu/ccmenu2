@@ -14,23 +14,23 @@ enum DetailMode: Int {
 
 
 struct PipelineListView: View {
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var model: ViewModel
     @State var details: DetailMode = .buildStatus
     @State var selection: Set<String> = Set()
     
     var body: some View {
         List(selection: $selection) {
-            ForEach(viewModel.pipelines) { p in
+            ForEach(model.pipelines) { p in
                 PipelineRow(pipeline: p, details: details)
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {
-                    viewModel.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
+                    model.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
                 }
             }
             .onDelete { indexSet in
                 withAnimation {
-                    viewModel.pipelines.remove(atOffsets: indexSet)
+                    model.pipelines.remove(atOffsets: indexSet)
                 }
             }
         }
@@ -83,19 +83,19 @@ struct PipelineListView: View {
     }
 
     func addPipeline() {
-        viewModel.pipelines.move(fromOffsets: IndexSet(integer: 1), toOffset: 0)
+        NSLog("Should allow user to add a pipeline now.")
     }
 
     func removePipeline() {
         var indexSet = IndexSet()
-        for (i, p) in viewModel.pipelines.enumerated() {
+        for (i, p) in model.pipelines.enumerated() {
             if selection.contains(p.id) {
                 indexSet.insert(i)
             }
         }
         selection.removeAll()
         withAnimation {
-            viewModel.pipelines.remove(atOffsets: indexSet)
+            model.pipelines.remove(atOffsets: indexSet)
         }
     }
 
@@ -108,10 +108,10 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(viewModel: makeViewModel(), details: .feedUrl)
-            .preferredColorScheme(.light)
-            PipelineListView(viewModel: makeViewModel(), details: .buildStatus)
-            .preferredColorScheme(.dark)
+//            PipelineListView(viewModel: makeViewModel(), details: .feedUrl)
+//            .preferredColorScheme(.light)
+//            PipelineListView(viewModel: makeViewModel(), details: .buildStatus)
+//            .preferredColorScheme(.dark)
         }
     }
 
