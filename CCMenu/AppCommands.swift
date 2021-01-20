@@ -18,7 +18,7 @@ struct AppCommands: Commands {
             FileMenuItems()
         }
         CommandGroup(before: .toolbar) {
-            ViewModeMenuItems()
+            ViewMenuItems()
         }
         CommandMenu("Pipeline") {
             PipelineMenuContent()
@@ -41,19 +41,21 @@ struct AppCommands: Commands {
         }
     }
     
-    private struct ViewModeMenuItems: View {
-        @FocusedBinding(\.viewSettings) var viewSettings
+    private struct ViewMenuItems: View {
+        @FocusedBinding(\.pipelineDisplayStyle) var style
         
         var body: some View {
             Button("Show Build Status") {
-                viewSettings?.detailMode = .buildStatus
+                style?.detailMode = .buildStatus
             }
             .keyboardShortcut("1")
+            .disabled(style == nil) // TODO: how else...?
             
             Button("Show Feed URL") {
-                viewSettings?.detailMode = .feedUrl
+                style?.detailMode = .feedUrl
             }
             .keyboardShortcut("2")
+            .disabled(style == nil) // TODO: how else...?
         }
     }
     
@@ -79,14 +81,14 @@ struct AppCommands: Commands {
 }
 
 
-private struct ViewSettingsKey: FocusedValueKey {
-    typealias Value = Binding<ViewSettings>
+private struct PipelineDisplayStyleKey: FocusedValueKey {
+    typealias Value = Binding<PipelineDisplayStyle>
 }
 
 extension FocusedValues {
-    var viewSettings: Binding<ViewSettings>? {
-        get { self[ViewSettingsKey.self] }
-        set { self[ViewSettingsKey.self] = newValue }
+    var pipelineDisplayStyle: Binding<PipelineDisplayStyle>? {
+        get { self[PipelineDisplayStyleKey.self] }
+        set { self[PipelineDisplayStyleKey.self] = newValue }
     }
 }
 

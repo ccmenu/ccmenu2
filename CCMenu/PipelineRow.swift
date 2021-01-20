@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PipelineRow: View {
     var pipeline: Pipeline
-    var details: DetailMode
+    var style: PipelineDisplayStyle
 
     var body: some View {
         HStack(alignment: .center) {
@@ -17,7 +17,7 @@ struct PipelineRow: View {
             VStack(alignment: .leading) {
                 Text(pipeline.name)
                     .font(Font.headline)
-                Text(details == .buildStatus ? pipeline.statusSummary : pipeline.connectionDetails.feedUrl)
+                Text(style.detailMode == .buildStatus ? pipeline.statusSummary : pipeline.connectionDetails.feedUrl)
                     .font(Font.body)
                     .foregroundColor(.secondary)
             }
@@ -29,7 +29,7 @@ struct PipelineRow: View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline(), details: .buildStatus)
+        PipelineRow(pipeline: makePipeline(), style: PipelineDisplayStyle())
     }
 
     static func makePipeline() -> Pipeline {

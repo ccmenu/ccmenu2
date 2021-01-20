@@ -6,26 +6,26 @@
 
 import SwiftUI
 
-
-enum DetailMode: Int {
-    case buildStatus
-    case feedUrl
-}
-
-struct ViewSettings {
+struct PipelineDisplayStyle {
     var detailMode: DetailMode = .buildStatus
+
+    enum DetailMode: Int {
+        case buildStatus
+        case feedUrl
+    }
+    
 }
 
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
-    @State var viewSettings: ViewSettings = ViewSettings()
+    @State var style: PipelineDisplayStyle = PipelineDisplayStyle()
     @State var selection: Set<String> = Set()
     
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, details: viewSettings.detailMode)
+                PipelineRow(pipeline: p, style: style)
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {
@@ -39,12 +39,12 @@ struct PipelineListView: View {
             }
         }
         .frame(minWidth: 440, minHeight: 56)
-        .focusedValue(\.viewSettings, $viewSettings)
+        .focusedValue(\.pipelineDisplayStyle, $style)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Picker(selection: $viewSettings.detailMode, label: Text("Details")) {
-                    Label("Status", systemImage: "timer.square").tag(DetailMode.buildStatus)
-                    Label("URL", systemImage: "curlybraces.square").tag(DetailMode.feedUrl)
+                Picker(selection: $style.detailMode, label: Text("Details")) {
+                    Label("Status", systemImage: "timer.square").tag(PipelineDisplayStyle.DetailMode.buildStatus)
+                    Label("URL", systemImage: "curlybraces.square").tag(PipelineDisplayStyle.DetailMode.feedUrl)
                 }
                 .pickerStyle(MenuPickerStyle()) // TODO: How to show icons?
                 .help("Select which details to show for the pipelines")
@@ -117,9 +117,9 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(model: makeViewModel(), viewSettings: ViewSettings(detailMode: .feedUrl))
+            PipelineListView(model: makeViewModel(), style: PipelineDisplayStyle(detailMode: .feedUrl))
             .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel(), viewSettings: ViewSettings(detailMode: .buildStatus))
+            PipelineListView(model: makeViewModel(), style: PipelineDisplayStyle(detailMode: .buildStatus))
             .preferredColorScheme(.dark)
         }
     }
