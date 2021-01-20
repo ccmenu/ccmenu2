@@ -7,26 +7,24 @@
 import SwiftUI
 
 
-struct AppearanceSettings: View {
+struct NotificationSettings: View {
 
     @AppStorage("UseColorInMenuBar")
     private var useColorInMenuBar: Bool = false
 
     var body: some View {
-        Toggle(isOn: $useColorInMenuBar) {
-            Text("Use color in menu bar")
-        }
-            .frame(width: 300)
-            .navigationTitle("Appearance")
+            Text("missing")
+                .frame(width: 300, height: 400)
+            .navigationTitle("Notifications")
             .padding(80)
     }
 
 }
 
 
-struct AppearanceSettings_Previews: PreviewProvider {
+struct NotificationSettings_Previews: PreviewProvider {
     static var previews: some View {
-        AppearanceSettings()
+        NotificationSettings()
     }
 
 }

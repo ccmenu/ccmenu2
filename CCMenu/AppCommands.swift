@@ -9,6 +9,25 @@ import SwiftUI
 
 struct AppCommands: Commands {
 
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+        }
+        CommandGroup(replacing: .saveItem) {
+        }
+        CommandGroup(replacing: .importExport) {
+            FileMenuItems()
+        }
+        CommandGroup(before: .toolbar) {
+            ViewModeMenuItems()
+        }
+        CommandMenu("Pipeline") {
+            PipelineMenuContent()
+        }
+        CommandGroup(before: .windowList) {
+            WindowMenuItems()
+        }
+    }
+
     private struct FileMenuItems: View {
         var body: some View {
             Button("Import...") {
@@ -23,14 +42,16 @@ struct AppCommands: Commands {
     }
     
     private struct ViewModeMenuItems: View {
+        @FocusedBinding(\.viewSettings) var viewSettings
+        
         var body: some View {
             Button("Show Build Status") {
-                // TODO: how to wire this to the view?
+                viewSettings?.detailMode = .buildStatus
             }
             .keyboardShortcut("1")
             
             Button("Show Feed URL") {
-                // TODO: how to wire this to the view?
+                viewSettings?.detailMode = .feedUrl
             }
             .keyboardShortcut("2")
         }
@@ -55,23 +76,17 @@ struct AppCommands: Commands {
         }
     }
 
-    var body: some Commands {
-        CommandGroup(replacing: .newItem) {
-        }
-        CommandGroup(replacing: .saveItem) {
-        }
-        CommandGroup(replacing: .importExport) {
-            FileMenuItems()
-        }
-        CommandGroup(before: .toolbar) {
-            ViewModeMenuItems()
-        }
-        CommandMenu("Pipeline") {
-            PipelineMenuContent()
-        }
-        CommandGroup(before: .windowList) {
-            WindowMenuItems()
-        }
-    }
-
 }
+
+
+private struct ViewSettingsKey: FocusedValueKey {
+    typealias Value = Binding<ViewSettings>
+}
+
+extension FocusedValues {
+    var viewSettings: Binding<ViewSettings>? {
+        get { self[ViewSettingsKey.self] }
+        set { self[ViewSettingsKey.self] = newValue }
+    }
+}
+

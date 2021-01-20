@@ -64,6 +64,7 @@ class CCMenuUITests: XCTestCase {
     func testPipelineWindowToolbar() throws {
         let app = launchApp()
 
+        // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
         app.menus["StatusItemMenu"].menuItems["orderFrontPipelineWindow:"].click()
         let window = app.windows["Pipelines"]
         let toolbars = window.toolbars

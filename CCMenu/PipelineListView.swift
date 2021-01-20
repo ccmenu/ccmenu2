@@ -12,16 +12,20 @@ enum DetailMode: Int {
     case feedUrl
 }
 
+struct ViewSettings {
+    var detailMode: DetailMode = .buildStatus
+}
+
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
-    @State var details: DetailMode = .buildStatus
+    @State var viewSettings: ViewSettings = ViewSettings()
     @State var selection: Set<String> = Set()
     
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, details: details)
+                PipelineRow(pipeline: p, details: viewSettings.detailMode)
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {
@@ -35,23 +39,27 @@ struct PipelineListView: View {
             }
         }
         .frame(minWidth: 440, minHeight: 56)
+        .focusedValue(\.viewSettings, $viewSettings)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Picker("Details", selection: $details) {
-                    Text("Status").tag(DetailMode.buildStatus)
-                    Text("URL").tag(DetailMode.feedUrl)
+                Picker(selection: $viewSettings.detailMode, label: Text("Details")) {
+                    Label("Status", systemImage: "timer.square").tag(DetailMode.buildStatus)
+                    Label("URL", systemImage: "curlybraces.square").tag(DetailMode.feedUrl)
                 }
                 .pickerStyle(MenuPickerStyle()) // TODO: How to show icons?
                 .help("Select which details to show for the pipelines")
                 .accessibility(label: Text("Details picker"))
             }
-            ToolbarItem {
+            ToolbarItem() {
+                Spacer()
+            }
+            ToolbarItem() {
                 Button(action: updatePipelines) {
                     Label("Update", systemImage: "arrow.clockwise")
                 }
                 .help("Retrieve status for all pipelines from servers")
             }
-            ToolbarItem {
+            ToolbarItem(placement: .primaryAction) {
                 Button(action: addPipeline) {
                     Label("Add", systemImage: "plus")
                 }
@@ -63,7 +71,7 @@ struct PipelineListView: View {
                     Label("Remove", systemImage: "trash")
                 }
                 .help("Remove pipeline")
-                .accessibility(label: Text("Remove pipeline(s)"))
+                .accessibility(label: Text("Remove pipeline"))
                 .disabled(selection.isEmpty)
             }
             ToolbarItem {
@@ -77,6 +85,7 @@ struct PipelineListView: View {
 
         }
     }
+    
 
     func updatePipelines() {
         NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
@@ -108,10 +117,10 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-//            PipelineListView(viewModel: makeViewModel(), details: .feedUrl)
-//            .preferredColorScheme(.light)
-//            PipelineListView(viewModel: makeViewModel(), details: .buildStatus)
-//            .preferredColorScheme(.dark)
+            PipelineListView(model: makeViewModel(), viewSettings: ViewSettings(detailMode: .feedUrl))
+            .preferredColorScheme(.light)
+            PipelineListView(model: makeViewModel(), viewSettings: ViewSettings(detailMode: .buildStatus))
+            .preferredColorScheme(.dark)
         }
     }
 

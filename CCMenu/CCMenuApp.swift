@@ -28,7 +28,7 @@ struct CCMenuApp: App {
         .handlesExternalEvents(matching: ["pipelines"])
         
         Settings {
-            AppearanceSettings()
+            SettingsView()
         }
 
     }

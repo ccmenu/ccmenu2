@@ -26,6 +26,9 @@
 		03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EC22598E676000F9495 /* StatusItemController.swift */; };
 		03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EDA2598ED9B000F9495 /* Credits.rtf */; };
 		03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EF9259A180C000F9495 /* ImageManager.swift */; };
+		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
+		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
+		03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */; };
 		2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +75,9 @@
 		03BD7EC22598E676000F9495 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
+		03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -223,7 +229,10 @@
 		03F31CE725B64C48005299A8 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				03F31CF425B8D29E005299A8 /* SettingsView.swift */,
+				03F31CF925B8D52F005299A8 /* NotificationSettings.swift */,
 				0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */,
+				03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -388,12 +397,15 @@
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
+				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
+				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
+				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

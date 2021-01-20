@@ -27,6 +27,7 @@ class StatusItemBuilder {
     }
 
     func addCommandMenuItems(menu: NSMenu) {
+        // TODO: if I did this with SwiftUI, how would I get it into the menu?
         menu.addItem(
             NSMenuItem.separator())
         menu.addItem(
@@ -61,6 +62,7 @@ class StatusItemBuilder {
     }
 
     func updateMenu(menu: NSMenu, pipelines pipelineList: [Pipeline]) {
+        // TODO: if I did this with SwiftUI, how would I get it into the menu?
         while menu.items.count > 0 && isPipelineItem(menu.item(at: 0)) {
             menu.removeItem(at: 0)
         }
