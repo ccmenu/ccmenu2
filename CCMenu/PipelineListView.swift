@@ -21,7 +21,7 @@ struct PipelineListView: View {
     @ObservedObject var model: ViewModel
     @State var style: PipelineDisplayStyle = PipelineDisplayStyle()
     @State var selection: Set<String> = Set()
-    
+
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
@@ -41,17 +41,18 @@ struct PipelineListView: View {
         .frame(minWidth: 440, minHeight: 56)
         .focusedValue(\.pipelineDisplayStyle, $style)
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                Picker(selection: $style.detailMode, label: Text("Details")) {
-                    Label("Status", systemImage: "timer.square").tag(PipelineDisplayStyle.DetailMode.buildStatus)
-                    Label("URL", systemImage: "curlybraces.square").tag(PipelineDisplayStyle.DetailMode.feedUrl)
-                }
-                .pickerStyle(MenuPickerStyle()) // TODO: How to show icons?
-                .help("Select which details to show for the pipelines")
-                .accessibility(label: Text("Details picker"))
-            }
             ToolbarItem() {
-                Spacer()
+                Menu() {
+                    Picker(selection: $style.detailMode, label: Text("Details to show")) {
+                        Text("Build status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
+                        Text("Feed URL").tag(PipelineDisplayStyle.DetailMode.feedUrl)
+                    }
+                    .pickerStyle(InlinePickerStyle())
+                    .help("Select which details to show for the pipelines")
+                    .accessibility(label: Text("Details picker"))
+                } label: {
+                    Label("Details", systemImage: "captions.bubble")
+                }
             }
             ToolbarItem() {
                 Button(action: updatePipelines) {

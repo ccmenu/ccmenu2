@@ -84,14 +84,14 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
-
-        toolbars.popUpButtons["Details picker"].click()
-        toolbars.menuItems["Status"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
-
-        toolbars.popUpButtons["Details picker"].click()
-        toolbars.menuItems["URL"].click()
+        
+        toolbars.menuButtons["Details"].click()
+        toolbars.menuItems["Feed URL"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+
+        toolbars.menuButtons["Details"].click()
+        toolbars.menuItems["Build status"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
     }
     
     // onMove and onDelete are still untested
