@@ -13,7 +13,6 @@ struct PipelineDisplayStyle {
         case buildStatus
         case feedUrl
     }
-    
 }
 
 
@@ -21,6 +20,8 @@ struct PipelineListView: View {
     @ObservedObject var model: ViewModel
     @State var style: PipelineDisplayStyle = PipelineDisplayStyle()
     @State var selection: Set<String> = Set()
+    @State var isShowingSheet: Bool = false
+    @State var editIndex: Int?
 
     var body: some View {
         List(selection: $selection) {
@@ -40,78 +41,51 @@ struct PipelineListView: View {
         }
         .frame(minWidth: 440, minHeight: 56)
         .focusedValue(\.pipelineDisplayStyle, $style)
+        .sheet(isPresented: $isShowingSheet) {
+            if let index = editIndex {
+                EditPipelineSheet(model: model, editIndex: index)
+            } else {
+                AddPipelineSheet(model: model)
+            }
+        }
+        .onChange(of: editIndex) { value in
+            // TODO: without this empty onChange editIndex doesn't propogate for first sheet -- why?
+        }
         .toolbar {
-            ToolbarItem() {
-                Menu() {
-                    Picker(selection: $style.detailMode, label: Text("Details to show")) {
-                        Text("Build status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
-                        Text("Feed URL").tag(PipelineDisplayStyle.DetailMode.feedUrl)
+            PipelineListToolbar(
+                style: $style,
+                add: {
+                    editIndex = nil
+                    isShowingSheet = true
+                },
+                edit: {
+                    editIndex = model.pipelines.firstIndex(where: { selection.contains($0.id) })
+                    isShowingSheet = true
+                },
+                remove: {
+                    var indexSet = IndexSet()
+                    for (i, p) in model.pipelines.enumerated() {
+                        if selection.contains(p.id) {
+                            indexSet.insert(i)
+                        }
                     }
-                    .pickerStyle(InlinePickerStyle())
-                    .help("Select which details to show for the pipelines")
-                    .accessibility(label: Text("Details picker"))
-                } label: {
-                    Label("Details", systemImage: "captions.bubble")
-                }
-            }
-            ToolbarItem() {
-                Button(action: updatePipelines) {
-                    Label("Update", systemImage: "arrow.clockwise")
-                }
-                .help("Retrieve status for all pipelines from servers")
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button(action: addPipeline) {
-                    Label("Add", systemImage: "plus")
-                }
-                .help("Add pipeline")
-                .accessibility(label: Text("Add pipeline"))
-            }
-            ToolbarItem(placement: .destructiveAction) {
-                Button(action: removePipeline) {
-                    Label("Remove", systemImage: "trash")
-                }
-                .help("Remove pipeline")
-                .accessibility(label: Text("Remove pipeline"))
-                .disabled(selection.isEmpty)
-            }
-            ToolbarItem {
-                Button(action: editPipeline) {
-                    Label("Edit", systemImage: "gearshape")
-                }
-                .help("Edit pipeline")
-                .accessibility(label: Text("Edit pipeline"))
-                .disabled(selection.count != 1)
-            }
+                    selection.removeAll()
+                    withAnimation {
+                        model.pipelines.remove(atOffsets: indexSet)
+                    }
+                },
+                canEdit: {
+                    selection.count == 1
 
+                },
+                canRemove: {
+                    !selection.isEmpty
+                }
+
+            )
         }
     }
     
-
-    func updatePipelines() {
-        NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
-    }
-
-    func addPipeline() {
-        NSLog("Should allow user to add a pipeline now.")
-    }
-
-    func removePipeline() {
-        var indexSet = IndexSet()
-        for (i, p) in model.pipelines.enumerated() {
-            if selection.contains(p.id) {
-                indexSet.insert(i)
-            }
-        }
-        selection.removeAll()
-        withAnimation {
-            model.pipelines.remove(atOffsets: indexSet)
-        }
-    }
-
-    func editPipeline() {
-        NSLog("selection = \(selection)")
-    }
 }
 
 
