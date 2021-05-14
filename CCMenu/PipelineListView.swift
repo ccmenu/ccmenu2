@@ -29,14 +29,10 @@ struct PipelineListView: View {
                 PipelineRow(pipeline: p, style: style)
             }
             .onMove { (itemsToMove, destination) in
-                withAnimation {
-                    model.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
-                }
+                movePipelines(at: itemsToMove, to: destination)
             }
             .onDelete { indexSet in
-                withAnimation {
-                    model.pipelines.remove(atOffsets: indexSet)
-                }
+                removePipelines(at: indexSet)
             }
         }
         .frame(minWidth: 440, minHeight: 56)
@@ -55,34 +51,55 @@ struct PipelineListView: View {
             PipelineListToolbar(
                 style: $style,
                 add: {
-                    editIndex = nil
-                    isShowingSheet = true
+                    addPipeline()
                 },
                 edit: {
-                    editIndex = model.pipelines.firstIndex(where: { selection.contains($0.id) })
-                    isShowingSheet = true
+                    editPipeline(at: selectionIndexSet().first)
                 },
                 remove: {
-                    var indexSet = IndexSet()
-                    for (i, p) in model.pipelines.enumerated() {
-                        if selection.contains(p.id) {
-                            indexSet.insert(i)
-                        }
-                    }
-                    selection.removeAll()
-                    withAnimation {
-                        model.pipelines.remove(atOffsets: indexSet)
-                    }
+                    removePipelines(at: selectionIndexSet())
                 },
                 canEdit: {
                     selection.count == 1
-
                 },
                 canRemove: {
                     !selection.isEmpty
                 }
 
             )
+        }
+    }
+    
+    func selectionIndexSet() -> IndexSet {
+        var indexSet = IndexSet()
+        for (i, p) in model.pipelines.enumerated() {
+            if selection.contains(p.id) {
+                indexSet.insert(i)
+            }
+        }
+        return indexSet
+    }
+     
+    func addPipeline() {
+        editIndex = nil
+        isShowingSheet = true
+    }
+    
+    func editPipeline(at index: Int?) {
+        editIndex = index
+        isShowingSheet = true
+    }
+    
+    func removePipelines(at indexSet: IndexSet) {
+        withAnimation {
+            model.pipelines.remove(atOffsets: indexSet)
+            selection.removeAll()
+        }
+    }
+    
+    func movePipelines(at indexSet: IndexSet, to destination: Int) {
+        withAnimation {
+            model.pipelines.move(fromOffsets: indexSet, toOffset: destination)
         }
     }
     

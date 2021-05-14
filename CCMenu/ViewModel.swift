@@ -16,6 +16,14 @@ final class ViewModel: ObservableObject {
         if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
             pipelines = load(filename)
         }
+        
+//        if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
+//            for project in legacyProjects {
+//                if let name = project["projectName"], let feedUrl = project["serverUrl"] {
+//                    pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
+//                }
+//            }
+//        }
     }
     
     private func load<T: Decodable>(_ filename: String) -> T {
