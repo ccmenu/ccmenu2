@@ -112,36 +112,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03825E68259DFF8800DEB003 /* Status Item */ = {
-			isa = PBXGroup;
-			children = (
-				03BD7EC22598E676000F9495 /* StatusItemController.swift */,
-				03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */,
-			);
-			name = "Status Item";
-			sourceTree = "<group>";
-		};
-		03825E69259DFF9700DEB003 /* Pipeline Window */ = {
-			isa = PBXGroup;
-			children = (
-				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
-				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
-				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
-				03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */,
-				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
-			);
-			name = "Pipeline Window";
-			sourceTree = "<group>";
-		};
-		03825E6A259DFFBD00DEB003 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
-				03825DE7259D005B00DEB003 /* ViewModel.swift */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		03BD7E7C2598E578000F9495 = {
 			isa = PBXGroup;
 			children = (
@@ -165,13 +135,8 @@
 		03BD7E872598E579000F9495 /* CCMenu */ = {
 			isa = PBXGroup;
 			children = (
-				03F31CE625B64C30005299A8 /* App */,
-				03825E6A259DFFBD00DEB003 /* Model */,
-				03825E68259DFF8800DEB003 /* Status Item */,
-				03825E69259DFF9700DEB003 /* Pipeline Window */,
-				03F31CE725B64C48005299A8 /* Preferences */,
-				03CCDC8425A2902400FFE8B8 /* Miscellaneous */,
-				03BD7FA0259A2ADE000F9495 /* Supporting Files */,
+				03CC11E02652F06F00130833 /* Source */,
+				03CC11E72652F1B700130833 /* Resources */,
 				03BD7E8C2598E57A000F9495 /* Assets.xcassets */,
 				03BD7E8E2598E57A000F9495 /* Preview Content */,
 			);
@@ -206,36 +171,60 @@
 			path = CCMenuUITests;
 			sourceTree = "<group>";
 		};
-		03BD7FA0259A2ADE000F9495 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				03BD7E942598E57A000F9495 /* Info.plist */,
-				03BD7EDA2598ED9B000F9495 /* Credits.rtf */,
-				03BD7E952598E57A000F9495 /* CCMenu.entitlements */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		03CCDC8425A2902400FFE8B8 /* Miscellaneous */ = {
-			isa = PBXGroup;
-			children = (
-				03825E80259E164500DEB003 /* WorkspaceController.swift */,
-				03BD7EF9259A180C000F9495 /* ImageManager.swift */,
-			);
-			name = Miscellaneous;
-			sourceTree = "<group>";
-		};
-		03F31CE625B64C30005299A8 /* App */ = {
+		03CC11DF2652F02100130833 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */,
 				03BD7E882598E579000F9495 /* AppDelegate.swift */,
 				0329F92625B21FE20043FAB1 /* AppCommands.swift */,
 			);
-			name = App;
+			path = App;
 			sourceTree = "<group>";
 		};
-		03F31CE725B64C48005299A8 /* Preferences */ = {
+		03CC11E02652F06F00130833 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				03CC11DF2652F02100130833 /* App */,
+				03CC11E12652F08300130833 /* Model */,
+				03CC11E22652F09800130833 /* Status Item */,
+				03CC11E32652F0B100130833 /* Pipeline Window */,
+				03CC11E42652F0D800130833 /* Preferences */,
+				03CC11E52652F0F200130833 /* Miscellaneous */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		03CC11E12652F08300130833 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
+				03825DE7259D005B00DEB003 /* ViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		03CC11E22652F09800130833 /* Status Item */ = {
+			isa = PBXGroup;
+			children = (
+				03BD7EC22598E676000F9495 /* StatusItemController.swift */,
+				03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */,
+			);
+			path = "Status Item";
+			sourceTree = "<group>";
+		};
+		03CC11E32652F0B100130833 /* Pipeline Window */ = {
+			isa = PBXGroup;
+			children = (
+				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
+				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
+				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
+				03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */,
+				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
+			);
+			path = "Pipeline Window";
+			sourceTree = "<group>";
+		};
+		03CC11E42652F0D800130833 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
 				03F31CF425B8D29E005299A8 /* SettingsView.swift */,
@@ -243,7 +232,26 @@
 				0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */,
 				03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */,
 			);
-			name = Preferences;
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		03CC11E52652F0F200130833 /* Miscellaneous */ = {
+			isa = PBXGroup;
+			children = (
+				03825E80259E164500DEB003 /* WorkspaceController.swift */,
+				03BD7EF9259A180C000F9495 /* ImageManager.swift */,
+			);
+			path = Miscellaneous;
+			sourceTree = "<group>";
+		};
+		03CC11E72652F1B700130833 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				03BD7E942598E57A000F9495 /* Info.plist */,
+				03BD7E952598E57A000F9495 /* CCMenu.entitlements */,
+				03BD7EDA2598ED9B000F9495 /* Credits.rtf */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -574,7 +582,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CCMenu/CCMenu.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -582,7 +590,7 @@
 				DEVELOPMENT_TEAM = LL62P32G5C;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = CCMenu/Info.plist;
+				INFOPLIST_FILE = CCMenu/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -600,7 +608,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = CCMenu/CCMenu.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -608,7 +616,7 @@
 				DEVELOPMENT_TEAM = LL62P32G5C;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = CCMenu/Info.plist;
+				INFOPLIST_FILE = CCMenu/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
