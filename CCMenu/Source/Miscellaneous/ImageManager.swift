@@ -10,8 +10,8 @@ import AppKit
 class ImageManager {
 
     func image(forPipeline pipeline: Pipeline, asTemplate: Bool = false) -> NSImage {
-        let result = pipeline.status?.buildResult ?? BuildResult.other
-        let activity = pipeline.status?.pipelineActivity ?? PipelineActivity.other
+        let result = pipeline.lastBuild?.result ?? BuildResult.other
+        let activity = pipeline.activity
         return image(forResult: result, activity: activity)
     }
 

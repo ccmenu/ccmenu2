@@ -26,12 +26,18 @@
 		03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EC22598E676000F9495 /* StatusItemController.swift */; };
 		03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EDA2598ED9B000F9495 /* Credits.rtf */; };
 		03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EF9259A180C000F9495 /* ImageManager.swift */; };
+		03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11E92652F49100130833 /* ServerMonitor.swift */; };
+		03CC11EC2652F58B00130833 /* ServerMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */; };
+		03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11ED2652F6B900130833 /* FeedReader.swift */; };
+		03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */; };
+		03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11F1265467C200130833 /* CCTrayResponseParser.swift */; };
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
 		03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */; };
 		03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */; };
 		03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */; };
 		03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */; };
+		2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */; };
 		2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,12 +84,18 @@
 		03BD7EC22598E676000F9495 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		03CC11E92652F49100130833 /* ServerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMonitor.swift; sourceTree = "<group>"; };
+		03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMonitorTests.swift; sourceTree = "<group>"; };
+		03CC11ED2652F6B900130833 /* FeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReader.swift; sourceTree = "<group>"; };
+		03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReader.swift; sourceTree = "<group>"; };
+		03CC11F1265467C200130833 /* CCTrayResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParser.swift; sourceTree = "<group>"; };
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
 		03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPipelineSheet.swift; sourceTree = "<group>"; };
 		03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPipelineSheet.swift; sourceTree = "<group>"; };
 		03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListToolbar.swift; sourceTree = "<group>"; };
+		2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,8 +166,10 @@
 		03BD7E9D2598E57A000F9495 /* CCMenuTests */ = {
 			isa = PBXGroup;
 			children = (
-				2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */,
 				03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */,
+				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
+				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
+				2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */,
 				03BD7EA02598E57A000F9495 /* Info.plist */,
 			);
 			path = CCMenuTests;
@@ -189,6 +203,7 @@
 				03CC11E22652F09800130833 /* Status Item */,
 				03CC11E32652F0B100130833 /* Pipeline Window */,
 				03CC11E42652F0D800130833 /* Preferences */,
+				03CC11E82652F38A00130833 /* Server Monitor */,
 				03CC11E52652F0F200130833 /* Miscellaneous */,
 			);
 			path = Source;
@@ -252,6 +267,17 @@
 				03BD7EDA2598ED9B000F9495 /* Credits.rtf */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		03CC11E82652F38A00130833 /* Server Monitor */ = {
+			isa = PBXGroup;
+			children = (
+				03CC11E92652F49100130833 /* ServerMonitor.swift */,
+				03CC11ED2652F6B900130833 /* FeedReader.swift */,
+				03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */,
+				03CC11F1265467C200130833 /* CCTrayResponseParser.swift */,
+			);
+			path = "Server Monitor";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,11 +445,15 @@
 				03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
+				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
+				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
+				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
+				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 			);
@@ -434,7 +464,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				03825EC425A08A8900DEB003 /* StatusItemBuilderTests.swift in Sources */,
+				03CC11EC2652F58B00130833 /* ServerMonitorTests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */,
+				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

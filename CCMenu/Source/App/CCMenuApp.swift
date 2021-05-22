@@ -10,10 +10,15 @@ import SwiftUI
 struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @ObservedObject public var viewModel = ViewModel()
+    @ObservedObject public var viewModel: ViewModel
+    var serverMonitor: ServerMonitor
 
     init() {
-        appDelegate.viewModel = viewModel
+        let model = ViewModel()
+        viewModel = model
+        serverMonitor = ServerMonitor(model: model)
+        appDelegate.viewModel = model
+//        serverMonitor.start()
     }
 
     var body: some Scene {

@@ -21,8 +21,9 @@ struct AddPipelineSheet: View {
                 }
                 Button("Apply") {
                     var p = Pipeline(name: "erikdoe/ocmock", feedUrl: "http://localhost:4567/cc.xml")
-                    p.status = Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-                    p.statusSummary = "Built: 27 Dec 2020 09:47pm, Label: 151"
+                    p.activity = .sleeping
+                    p.lastBuild = Pipeline.Build(result: .success)
+                    p.status = "Built: 27 Dec 2020 09:47pm, Label: 151"
                     model.pipelines.append(p)
                     presentation.dismiss()
                 }
@@ -44,11 +45,10 @@ struct AddPipelineSheet_Previews: PreviewProvider {
     static func makeViewModel() -> ViewModel {
         let model = ViewModel()
 
-        var p0 = Pipeline(name: "connectfour",
-                          feedUrl: "http://localhost:4567/cctray.xml")
-        p0.status = Pipeline.Status(buildResult: .failure, pipelineActivity: .building)
-        p0.statusSummary = "Started: 5 minutes ago, ETA: 04 Jan 2021, 14:37"
-
+        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
+        p0.activity = .building
+        p0.lastBuild = Pipeline.Build(result: .failure)
+        p0.status = "Started: 5 minutes ago, ETA: 04 Jan 2021, 14:37"
         model.pipelines = [p0]
         return model
     }

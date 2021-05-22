@@ -10,12 +10,12 @@ import AppKit
 class WorkspaceController {
 
     func openPipeline(_ pipeline: Pipeline) {
-        if let url = URL(string: pipeline.webUrl), url.host != nil {
+        if let urlString = pipeline.webUrl, let url = URL(string: urlString), url.host != nil {
             NSWorkspace.shared.open(url)
-        } else if pipeline.webUrl.isEmpty {
+        } else if (pipeline.webUrl ?? "").isEmpty {
             alertCannotOpenPipeline("The continuous integration server did not provide a link for this pipeline.")
         } else {
-            alertCannotOpenPipeline("The continuous integration server provided a malformed link for this pipeline:\n\(pipeline.webUrl)")
+            alertCannotOpenPipeline("The continuous integration server provided a malformed link for this pipeline:\n\(pipeline.webUrl ?? "")")
         }
     }
 

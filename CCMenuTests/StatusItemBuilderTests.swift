@@ -12,11 +12,9 @@ class StatusItemBuilderTests: XCTestCase {
     func testCreatesItemForPipeline() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
-        let p0 = Pipeline(
-                name: "connectfour",
-                feedUrl: "",
-                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-        )
+        var p0 = Pipeline(name: "connectfour", feedUrl: "")
+        p0.activity = .sleeping
+        p0.lastBuild = Pipeline.Build(result: .success)
 
         builder.updateMenu(menu:menu, pipelines:[p0])
 
@@ -32,16 +30,8 @@ class StatusItemBuilderTests: XCTestCase {
     func testCreatesItemsInOrder() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
-        let p0 = Pipeline(
-                name: "connectfour",
-                feedUrl: "",
-                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-        )
-        let p1 = Pipeline(
-                name: "erikdoe/ccmenu",
-                feedUrl: "",
-                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-        )
+        var p0 = Pipeline(name: "connectfour", feedUrl: "")
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
 
         builder.updateMenu(menu:menu, pipelines:[p0, p1])
 
@@ -53,16 +43,8 @@ class StatusItemBuilderTests: XCTestCase {
     func testOnlyCreatesNewItems() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
-        let p0 = Pipeline(
-                name: "connectfour",
-                feedUrl: "",
-                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-        )
-        let p1 = Pipeline(
-                name: "erikdoe/ccmenu",
-                feedUrl: "",
-                status: Pipeline.Status(buildResult: .success, pipelineActivity: .sleeping)
-        )
+        var p0 = Pipeline(name: "connectfour", feedUrl: "")
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
 
         builder.updateMenu(menu:menu, pipelines:[p1])
         builder.updateMenu(menu:menu, pipelines:[p0, p1])

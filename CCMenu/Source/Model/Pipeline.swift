@@ -25,16 +25,19 @@ enum PipelineActivity: String, Codable {
 
 struct Pipeline: Hashable, Identifiable, Codable {
 
+    var name: String
+    var connectionDetails: ConnectionDetails
+    var activity: PipelineActivity
+    var lastBuild: Build?
+    var webUrl: String?
+    var status: String
+
     init(name: String, feedUrl: String) {
         self.name = name
-        self.connectionDetails = ConnectionDetails(feedUrl: feedUrl)
-        self.statusSummary = ""
-        self.webUrl = ""
-    }
+        connectionDetails = ConnectionDetails(feedUrl: feedUrl)
+        activity = .other
+        status = "unknown"
 
-    init(name: String, feedUrl: String, status: Status) {
-        self.init(name: name, feedUrl: feedUrl)
-        self.status = status
     }
     
     func hash(into hasher: inout Hasher) {
@@ -45,24 +48,14 @@ struct Pipeline: Hashable, Identifiable, Codable {
     var id: String {
         name + "|" + connectionDetails.feedUrl
     }
-    
-    var name: String
-    
-    var connectionDetails: ConnectionDetails
+
     
     struct ConnectionDetails: Hashable, Codable {
         var feedUrl: String
     }
-    
-    var status: Status?
-    
-    struct Status: Hashable, Codable {
-        var buildResult: BuildResult
-        var pipelineActivity: PipelineActivity
+
+    struct Build: Hashable, Codable {
+        var result: BuildResult
     }
-    
-    var statusSummary: String
-    
-    var webUrl: String 
-    
+  
 }

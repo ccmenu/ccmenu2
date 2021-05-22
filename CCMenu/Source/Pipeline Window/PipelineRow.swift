@@ -17,7 +17,7 @@ struct PipelineRow: View {
             VStack(alignment: .leading) {
                 Text(pipeline.name)
                     .font(Font.headline)
-                Text(style.detailMode == .buildStatus ? pipeline.statusSummary : pipeline.connectionDetails.feedUrl)
+                Text(style.detailMode == .buildStatus ? pipeline.status : pipeline.connectionDetails.feedUrl)
                     .font(Font.body)
                     .foregroundColor(.secondary)
             }
@@ -34,8 +34,9 @@ struct PipelineRow_Previews: PreviewProvider {
 
     static func makePipeline() -> Pipeline {
         var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml")
-        p.status = Pipeline.Status(buildResult: .success, pipelineActivity: .building)
-        p.statusSummary = "Built: 27 Dec 2020 09:47pm, Label: 151"
+        p.activity = .building
+        p.lastBuild = Pipeline.Build(result: .success)
+        p.status = "Built: 27 Dec 2020 09:47pm, Label: 151"
         return p
     }
 

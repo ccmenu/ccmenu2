@@ -26,6 +26,12 @@ final class ViewModel: ObservableObject {
 //        }
     }
     
+    func update(pipeline: Pipeline) {
+        if let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) {
+            pipelines[idx] = pipeline
+        }
+    }
+    
     private func load<T: Decodable>(_ filename: String) -> T {
         let data: Data
 
