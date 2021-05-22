@@ -18,9 +18,16 @@ struct CCMenuApp: App {
         viewModel = model
         serverMonitor = ServerMonitor(model: model)
         appDelegate.viewModel = model
-//        serverMonitor.start()
+        
+        if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
+            model.loadPipelinesFromFile(filename)
+        } else {
+            model.loadPipelinesFromUserDefaults()
+            serverMonitor.start()
+        }
     }
-
+    
+    
     var body: some Scene {
 
         WindowGroup("Pipelines") {

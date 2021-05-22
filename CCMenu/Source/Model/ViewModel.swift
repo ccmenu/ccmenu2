@@ -13,17 +13,6 @@ final class ViewModel: ObservableObject {
     @Published var pipelines: [Pipeline] = []
     
     init() {
-        if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
-            pipelines = load(filename)
-        }
-        
-//        if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
-//            for project in legacyProjects {
-//                if let name = project["projectName"], let feedUrl = project["serverUrl"] {
-//                    pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
-//                }
-//            }
-//        }
     }
     
     func update(pipeline: Pipeline) {
@@ -32,7 +21,19 @@ final class ViewModel: ObservableObject {
         }
     }
     
-    private func load<T: Decodable>(_ filename: String) -> T {
+    func loadPipelinesFromUserDefaults() {
+        if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
+            for project in legacyProjects {
+                if let name = project["projectName"], let feedUrl = project["serverUrl"] {
+                    if !name.hasPrefix("erikdoe/") {
+                        pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadPipelinesFromFile(_ filename: String) {
         let data: Data
 
         do {
@@ -43,9 +44,9 @@ final class ViewModel: ObservableObject {
 
         do {
             let decoder = JSONDecoder()
-            return try decoder.decode(T.self, from: data)
+            pipelines = try decoder.decode([Pipeline].self, from: data)
         } catch {
-            fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
+            fatalError("Couldn't parse \(filename) as [Pipeline]:\n\(error)")
         }
     }
 
