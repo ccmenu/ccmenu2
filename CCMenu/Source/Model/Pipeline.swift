@@ -56,6 +56,8 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     struct Build: Hashable, Codable {
         var result: BuildResult
+        var label: String?
+        var timestamp: Date?
     }
   
 }

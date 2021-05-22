@@ -35,9 +35,13 @@ class CCTrayResponseParser {
 
         var newPipeline = pipeline
         newPipeline.webUrl = project["webUrl"]
-
         newPipeline.activity = activityForString(project["activity"])
-        newPipeline.lastBuild = Pipeline.Build(result: resultForString(project["lastBuildStatus"]))
+        var build = Pipeline.Build(result: resultForString(project["lastBuildStatus"]))
+        build.label = project["lastBuildLabel"]
+        if let lastBuildTime = project["lastBuildTime"], let date = dateForString(lastBuildTime) {
+            build.timestamp = date
+        }
+        newPipeline.lastBuild = build
         newPipeline.status = "(not implemented yet)"
 
         return newPipeline
@@ -60,5 +64,26 @@ class CCTrayResponseParser {
             default: return BuildResult.unknown
         }
     }
+
+    func dateForString(_ string: String) -> Date? {
+        if string.count <= 19 {
+            // assume old-style CruiseControl timestamp without timezone, assume local time
+            var formatter = DateFormatter()
+            formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss"
+            return formatter.date(from: string)
+        } else {
+            // assume some kind of ISO8601 date format
+            var formatter = ISO8601DateFormatter()
+            // Apple's parser doesn't seem to like fractional components; so we remove them
+            var cleaned = string
+            if let range = string.range(of: "[.,][0-9]+", options: .regularExpression) {
+                cleaned.removeSubrange(range)
+            }
+            return formatter.date(from: cleaned)
+        }
+
+
+    }
+
 
 }

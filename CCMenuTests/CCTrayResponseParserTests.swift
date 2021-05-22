@@ -11,7 +11,7 @@ class CCTrayResponseParserTests: XCTestCase {
 
     func testParsesXML() throws {
         let parser = CCTrayResponseParser()
-        let xml = "<Projects><Project name='connectfour' activity='Sleeping' lastBuildStatus='Success' lastBuildLabel='build.1' lastBuildTime='2007-07-18T18:44:48' webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/></Projects>"
+        let xml = "<Projects><Project name='connectfour' activity='Sleeping'/></Projects>"
 
         try parser.parseResponse(xml.data(using: .ascii)!)
 
@@ -33,7 +33,7 @@ class CCTrayResponseParserTests: XCTestCase {
 
     func testDoesNotUpdatePipelineThatIsNotInResponse() throws {
         let parser = CCTrayResponseParser()
-        let xml = "<Projects><Project name='connectfour' activity='Sleeping' lastBuildStatus='Success' lastBuildLabel='build.1' lastBuildTime='2007-07-18T18:44:48' webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/></Projects>"
+        let xml = "<Projects><Project name='connectfour' activity='Sleeping'/></Projects>"
         try parser.parseResponse(xml.data(using: .ascii)!)
 
         let originalPipeline = Pipeline(name: "cosmos", feedUrl: "http://localhost:8080/cctray.xml")
@@ -44,7 +44,7 @@ class CCTrayResponseParserTests: XCTestCase {
 
     func testUpdatesPipeline() throws {
         let parser = CCTrayResponseParser()
-        let xml = "<Projects><Project name='connectfour' activity='Sleeping' lastBuildStatus='Success' lastBuildLabel='build.1' lastBuildTime='2007-07-18T18:44:48' webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/></Projects>"
+        let xml = "<Projects><Project name='connectfour' activity='Sleeping' lastBuildStatus='Success' lastBuildLabel='build.1' lastBuildTime='2007-07-18T18:44:48Z' webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/></Projects>"
         try parser.parseResponse(xml.data(using: .ascii)!)
 
         let originalPipeline = Pipeline(name: "connectfour", feedUrl: "http://localhost:8080/cctray.xml")
@@ -63,6 +63,42 @@ class CCTrayResponseParserTests: XCTestCase {
             return
         }
         XCTAssertEqual(BuildResult.success, build.result)
+        XCTAssertEqual("build.1", build.label)
+        let date = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
+                                  year: 2007, month: 7, day: 18, hour: 18, minute: 44, second: 48, nanosecond: 0).date
+        XCTAssertEqual(date, build.timestamp)
+    }
+
+    func testReadsDatesWithoutTimezoneAsLocal() throws {
+        let parser = CCTrayResponseParser()
+        let actual = parser.dateForString("2007-07-18T18:44:48")
+        let expected = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: nil,
+                                      year: 2007, month: 7, day: 18, hour: 18, minute: 44, second: 48, nanosecond: 0).date
+        XCTAssertEqual(expected, actual)
+    }
+
+    func testReadsISO8601FormattedDateWithZuluMarker() throws {
+        let parser = CCTrayResponseParser()
+        let actual = parser.dateForString("2007-07-18T18:44:48Z")
+        let expected = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
+                                      year: 2007, month: 7, day: 18, hour: 18, minute: 44, second: 48, nanosecond: 0).date
+        XCTAssertEqual(expected, actual)
+    }
+
+    func testReadsISO8601FormattedDateWithTimezone() throws {
+        let parser = CCTrayResponseParser()
+        let actual = parser.dateForString("2007-07-18T18:44:48+0800")
+        let expected = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
+                                      year: 2007, month: 7, day: 18, hour: 10, minute: 44, second: 48, nanosecond: 0).date
+        XCTAssertEqual(expected, actual)
+    }
+
+    func testReadsISO8601FormattedDateWithSubsecondsAndTimezoneInAlternateFormat() throws {
+        let parser = CCTrayResponseParser()
+        let actual = parser.dateForString("2007-07-18T18:44:48.888-05:00")
+        let expected = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
+                                      year: 2007, month: 7, day: 18, hour: 23, minute: 44, second: 48, nanosecond: 0).date
+        XCTAssertEqual(expected, actual)
     }
 
 }

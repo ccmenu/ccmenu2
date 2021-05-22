@@ -53,11 +53,8 @@ class CCMenuUITests: XCTestCase {
             XCTFail()
             return
         }
-        // Why is a simple regex match so painful in Swift?
-        let regex = try NSRegularExpression(pattern: "^Version [0-9]+ \\([A-Z0-9]+\\)$", options: NSRegularExpression.Options())
-        let n = regex.numberOfMatches(in: versionString, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, versionString.count))
-        
-        XCTAssertEqual(1, n)
+        let range = versionString.range(of: "^Version [0-9]+ \\([A-Z0-9]+\\)$", options: .regularExpression)
+        XCTAssertNotNil(range)
     }
     
     
