@@ -122,12 +122,13 @@ struct PipelineListView_Previews: PreviewProvider {
         var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
         p0.activity = .building
         p0.lastBuild = Pipeline.Build(result: .failure)
-        p0.status = "Started: 5 minutes ago, ETA: 04 Jan 2021, 14:37"
+        p0.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
         var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml")
         p1.activity = .sleeping
         p1.lastBuild = Pipeline.Build(result: .success)
-        p1.status = "Built: 27 Dec 2020 09:47, Label: 151"
+        p1.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        p1.lastBuild!.label = "build.151"
 
         model.pipelines = [p0, p1]
         return model

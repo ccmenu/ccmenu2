@@ -36,7 +36,7 @@ struct PipelineRow_Previews: PreviewProvider {
         var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml")
         p.activity = .building
         p.lastBuild = Pipeline.Build(result: .success)
-        p.status = "Built: 27 Dec 2020 09:47pm, Label: 151"
+        p.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         return p
     }
 

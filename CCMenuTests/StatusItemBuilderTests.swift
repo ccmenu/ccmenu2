@@ -30,8 +30,8 @@ class StatusItemBuilderTests: XCTestCase {
     func testCreatesItemsInOrder() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
-        var p0 = Pipeline(name: "connectfour", feedUrl: "")
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
+        let p0 = Pipeline(name: "connectfour", feedUrl: "")
+        let p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
 
         builder.updateMenu(menu:menu, pipelines:[p0, p1])
 
@@ -43,8 +43,8 @@ class StatusItemBuilderTests: XCTestCase {
     func testOnlyCreatesNewItems() throws {
         let builder = StatusItemBuilder()
         let menu = NSMenu()
-        var p0 = Pipeline(name: "connectfour", feedUrl: "")
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
+        let p0 = Pipeline(name: "connectfour", feedUrl: "")
+        let p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
 
         builder.updateMenu(menu:menu, pipelines:[p1])
         builder.updateMenu(menu:menu, pipelines:[p0, p1])

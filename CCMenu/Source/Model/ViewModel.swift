@@ -9,18 +9,18 @@ import Combine
 
 
 final class ViewModel: ObservableObject {
-    
+
     @Published var pipelines: [Pipeline] = []
-    
+
     init() {
     }
-    
+
     func update(pipeline: Pipeline) {
         if let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) {
             pipelines[idx] = pipeline
         }
     }
-    
+
     func loadPipelinesFromUserDefaults() {
         if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
             for project in legacyProjects {
@@ -32,7 +32,7 @@ final class ViewModel: ObservableObject {
             }
         }
     }
-    
+
     func loadPipelinesFromFile(_ filename: String) {
         let data: Data
 
@@ -44,6 +44,14 @@ final class ViewModel: ObservableObject {
 
         do {
             let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .custom { decoder in
+                let container = try decoder.singleValueContainer()
+                let string = try container.decode(String.self)
+                if let date = ISO8601DateFormatter().date(from: string) {
+                    return date
+                }
+                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date string \(string)")
+            }
             pipelines = try decoder.decode([Pipeline].self, from: data)
         } catch {
             fatalError("Couldn't parse \(filename) as [Pipeline]:\n\(error)")
@@ -51,3 +59,4 @@ final class ViewModel: ObservableObject {
     }
 
 }
+

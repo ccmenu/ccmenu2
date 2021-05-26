@@ -38,9 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {
-        NSLog("Pretending to update status from servers")
-        let timestamp = Date.init(timeIntervalSinceNow: -5).description  // TODO: figure out how to format descriptions
-        viewModel!.pipelines[1].status = "Built: \(timestamp), Label: 152"
+        NSLog("Should update status from servers")
     }
 
     @IBAction func openPipeline(_ sender: AnyObject?) {

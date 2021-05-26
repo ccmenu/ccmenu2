@@ -31,6 +31,7 @@
 		03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11ED2652F6B900130833 /* FeedReader.swift */; };
 		03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */; };
 		03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11F1265467C200130833 /* CCTrayResponseParser.swift */; };
+		03D4BB012659A1120023F4CB /* PipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB002659A1120023F4CB /* PipelineTests.swift */; };
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
 		03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */; };
@@ -89,6 +90,7 @@
 		03CC11ED2652F6B900130833 /* FeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReader.swift; sourceTree = "<group>"; };
 		03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReader.swift; sourceTree = "<group>"; };
 		03CC11F1265467C200130833 /* CCTrayResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParser.swift; sourceTree = "<group>"; };
+		03D4BB002659A1120023F4CB /* PipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineTests.swift; sourceTree = "<group>"; };
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
 		03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */,
+				03D4BB002659A1120023F4CB /* PipelineTests.swift */,
 				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */,
@@ -464,6 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03825EC425A08A8900DEB003 /* StatusItemBuilderTests.swift in Sources */,
+				03D4BB012659A1120023F4CB /* PipelineTests.swift in Sources */,
 				03CC11EC2652F58B00130833 /* ServerMonitorTests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,

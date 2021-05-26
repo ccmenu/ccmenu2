@@ -5,9 +5,10 @@
     "webUrl": "http://localhost:4567",
     "activity": "building",
     "lastBuild": {
-        "result": "failure"
+        "result": "failure",
+        "timestamp": "2020-12-27T21:47:00Z",
+        "label": "build.151"
     },
-    "status": "Started: 20m ago, ETA: Today, 16:05"
 },
 {  "name": "erikdoe/ccmenu",
     "connectionDetails": {
@@ -16,8 +17,7 @@
     "webUrl": "#broken",
     "activity": "sleeping",
     "lastBuild": {
-        "result": "success"
+        "result": "success",
+        "timestamp": "2020-12-27T21:47:00Z"
     },
-    "status": "Built: 27 Dec 2020 09:47pm, Label: 151"
 }]
- 
