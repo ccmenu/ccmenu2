@@ -22,13 +22,21 @@ class PipelineTests: XCTestCase {
         pipeline.lastBuild = Pipeline.Build(result: .success)
         pipeline.lastBuild!.label = "151"
         pipeline.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        pipeline.lastBuild!.duration = 80.8
 
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        let formattedTimestamp = formatter.string(from: pipeline.lastBuild!.timestamp!)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        let formattedTimestamp = dateFormatter.string(from: pipeline.lastBuild!.timestamp!)
 
-        XCTAssertEqual("Built: \(formattedTimestamp), Label: 151", pipeline.status)
+        let durationFormatter = DateComponentsFormatter()
+        durationFormatter.allowedUnits = [.day, .hour, .minute, .second]
+        durationFormatter.unitsStyle = .abbreviated
+        durationFormatter.collapsesLargestUnit = true
+        durationFormatter.maximumUnitCount = 2
+        let formattedDuration = durationFormatter.string(from: 80.8)!
+
+        XCTAssertEqual("Built: \(formattedTimestamp), Duration: \(formattedDuration), Label: 151", pipeline.status)
     }
     
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {

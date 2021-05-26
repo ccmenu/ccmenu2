@@ -22,6 +22,13 @@ enum PipelineActivity: String, Codable {
     other
 }
 
+enum FeedType: String, Codable {
+    case
+    cctray,
+    github
+    
+}
+
 
 struct Pipeline: Hashable, Identifiable, Codable {
 
@@ -33,7 +40,13 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     init(name: String, feedUrl: String) {
         self.name = name
-        connectionDetails = ConnectionDetails(feedUrl: feedUrl)
+        connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
+        activity = .other
+    }
+    
+    init(name: String, feedType: FeedType, feedUrl: String) {
+        self.name = name
+        connectionDetails = ConnectionDetails(feedType: feedType, feedUrl: feedUrl)
         activity = .other
     }
 
@@ -80,6 +93,16 @@ struct Pipeline: Hashable, Identifiable, Codable {
             let formattedTimestamp = formatter.string(from: timestamp)
             components.append("Built: \(formattedTimestamp)")
         }
+        if let duration = build.duration {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.day, .hour, .minute, .second]
+            formatter.unitsStyle = .abbreviated
+            formatter.collapsesLargestUnit = true
+            formatter.maximumUnitCount = 2
+            if let durationAsString = formatter.string(from: duration) {
+                components.append("Duration: \(durationAsString)")
+            }
+        }
         if let label = build.label {
             components.append("Label: \(label)")
         }
@@ -90,6 +113,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     struct ConnectionDetails: Hashable, Codable {
+        var feedType: FeedType
         var feedUrl: String
     }
 
@@ -97,6 +121,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
         var result: BuildResult
         var label: String?
         var timestamp: Date?
+        var duration: TimeInterval?
     }
 
 }

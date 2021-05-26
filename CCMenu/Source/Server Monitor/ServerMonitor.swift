@@ -18,12 +18,17 @@ class ServerMonitor: FeedReaderDelegate {
     public func start() {
         createReaders()
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: pollServers)
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: pollServers)
+//        Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: pollServers)
     }
 
     public func createReaders() {
         for p in model.pipelines {
-            let r = CCTrayFeedReader(for: p)
+            var r: FeedReader
+            switch(p.connectionDetails.feedType) {
+            case .cctray: r = CCTrayFeedReader(for: p)
+            case .github: r = GithubFeedReader(for: p)
+            }
+          
             r.delegate = self
             readerList.append(r)
         }
