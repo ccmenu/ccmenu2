@@ -10,7 +10,7 @@ on:
       - main
 jobs:
   Run_Unit_Tests:
-    runs-on: macOS-latest
+    runs-on: macOS-11
     steps:
     - uses: actions/checkout@v1
     - name: Run unit tests
