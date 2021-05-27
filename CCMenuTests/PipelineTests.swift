@@ -68,4 +68,14 @@ class PipelineTests: XCTestCase {
         XCTAssertEqual("Started: \(formattedTimestamp)", pipeline.status)
     }
 
+    func testStatusWhenErrorIsSet() throws {
+        var pipeline = Pipeline(name: "connectfour", feedUrl: "http://test.org/cctray.xml")
+        pipeline.activity = .sleeping
+        pipeline.lastBuild = Pipeline.Build(result: .success)
+        pipeline.connectionError = "404 Not Found"
+
+        XCTAssertEqual("404 Not Found", pipeline.status)
+
+    }
+
 }

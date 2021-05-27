@@ -18,7 +18,7 @@ class ServerMonitor: FeedReaderDelegate {
     public func start() {
         createReaders()
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: pollServers)
-//        Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: pollServers)
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: pollServers)
     }
 
     public func createReaders() {
@@ -41,7 +41,7 @@ class ServerMonitor: FeedReaderDelegate {
     }
     
     func feedReader(_ reader: FeedReader, didUpdate pipeline: Pipeline) {
-        NSLog("Received update for pipeline \(pipeline)")
+//        NSLog("Received update for pipeline \(pipeline)")
         model.update(pipeline: pipeline)
     }
     

@@ -26,7 +26,7 @@ enum FeedType: String, Codable {
     case
     cctray,
     github
-    
+
 }
 
 
@@ -34,6 +34,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
     var connectionDetails: ConnectionDetails
+    var connectionError: String?
     var activity: PipelineActivity
     var lastBuild: Build?
     var webUrl: String?
@@ -43,7 +44,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
         connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
         activity = .other
     }
-    
+
     init(name: String, feedType: FeedType, feedUrl: String) {
         self.name = name
         connectionDetails = ConnectionDetails(feedType: feedType, feedUrl: feedUrl)
@@ -60,7 +61,9 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     var status: String {
-        if activity == .building {
+        if let error = connectionError {
+            return error
+        } else if activity == .building {
             if let build = lastBuild, let timestamp = build.timestamp {
                 return statusForActiveBuild(build, timestamp)
             } else {

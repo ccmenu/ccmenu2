@@ -6,62 +6,68 @@
 
 import Foundation
 
+enum GithubResponseError: Error {
+    case unexpectedResponseType
+    case nonOkResponse(responseCode: Int)
+}
+
+
 class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSessionDelegate {
-    
+
     var pipeline: Pipeline
     var delegate: FeedReaderDelegate?
-    var receivedData: Data?
 
     private lazy var session: URLSession = {
         let configuration = URLSessionConfiguration.default
         configuration.waitsForConnectivity = true
-        return URLSession(configuration: configuration,
-                          delegate: self, delegateQueue: nil)
+        return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
     }()
-    
+
     public init(for pipeline: Pipeline) {
         self.pipeline = pipeline
     }
-    
+
     public func updatePipelineStatus() {
         let url = URL(string: pipeline.connectionDetails.feedUrl)!
-        receivedData = Data()
-        let task = session.dataTask(with: url)
+        let task = session.dataTask(with: url, completionHandler: sessionCallback(data:response:error:))
         task.resume()
     }
 
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
-                    completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-            completionHandler(.cancel)
-            return
-        }
-        completionHandler(.allow)
-    }
-
-
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        receivedData?.append(data)
-    }
-
-
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    func sessionCallback(data: Data?, response: URLResponse?, error: Error?) {
         DispatchQueue.main.async {
+            self.processRequestResult(data: data, response: response, error: error)
+        }
+    }
+
+    func processRequestResult(data: Data?, response: URLResponse?, error: Error?) {
+        do {
             if let error = error {
-//                handleClientError(error)
-            } else if let receivedData = self.receivedData {
+                throw error
+            }
+            guard let response = response as? HTTPURLResponse else {
+                throw GithubResponseError.unexpectedResponseType
+            }
+
+            let rlr = response.allHeaderFields["x-ratelimit-remaining"]
+            NSLog("received response from Github; rate limit remaining \(rlr)")
+
+            if !(200...299).contains(response.statusCode) {
+                throw GithubResponseError.nonOkResponse(responseCode: response.statusCode)
+            }
+
+            if let receivedData = data {
                 let parser = GithubResponseParser()
-                do {
-                    try parser.parseResponse(receivedData)
-                    if let p = parser.updatePipeline(self.pipeline) {
-                        self.delegate?.feedReader(self, didUpdate: p)
-                    }
-                } catch (let error) {
-//                  handleParserError(error)
+                try parser.parseResponse(receivedData)
+                if let p = parser.updatePipeline(pipeline) {
+                    delegate?.feedReader(self, didUpdate: p)
                 }
             }
+        } catch (let error) {
+            pipeline.connectionError = String(describing: error) // TODO: better description
+            delegate?.feedReader(self, didUpdate: pipeline)
+            // TODO: on 4xx errors we should probably stop polling to avoid rate limit issues
         }
     }
-    
-    
+
+
 }
