@@ -1,0 +1,17 @@
+name: CI
+
+on: 
+
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  Run_Unit_Tests:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run unit tests
+      run: xcodebuild test -scheme CCMenu  -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
