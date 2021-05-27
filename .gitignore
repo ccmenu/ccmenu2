@@ -16,6 +16,8 @@ xcuserdata/
 timeline.xctimeline
 playground.xcworkspace
 
+## Command line builds
+build/
 
 # AppCode
 #
