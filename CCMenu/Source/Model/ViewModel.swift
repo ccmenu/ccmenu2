@@ -31,7 +31,7 @@ final class ViewModel: ObservableObject {
                 }
             }
         }
-        pipelines.append(Pipeline(name: "erikdoe/quvyn:Rust", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/quvyn/actions/runs"))
+        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:CI", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/runs"))
     }
 
     func loadPipelinesFromFile(_ filename: String) {
