@@ -62,6 +62,7 @@ class GithubResponseParser {
     func resultForString(_ string: String?) -> BuildResult {
         switch string {
             case "success": return BuildResult.success
+            case "failure": return BuildResult.failure
             default: return BuildResult.unknown
         }
     }
