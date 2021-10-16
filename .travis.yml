@@ -1,6 +1,5 @@
 os: osx
 osx_image: xcode12.5
 language: swift
-xcode_project: CCMenu.xcodeproj # path to your xcodeproj folder
-xcode_scheme: CCMenu.AllTests
-xcode_destination: platform=macOS
+script:
+  - xcodebuild -project CCMenu.xcodeproj -scheme CCMenu.AllTests -destination platform\=macOS build test CODE_SIGNING_REQUIRED=NO

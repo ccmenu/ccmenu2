@@ -1,6 +1,6 @@
 name: CI
 
-on: 
+on:
 
   push:
     branches:
@@ -10,7 +10,7 @@ on:
       - main
 jobs:
   Run_Unit_Tests:
-    runs-on: macOS-11
+    runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
     - name: Run unit tests
