@@ -1,0 +1,6 @@
+os: osx
+osx_image: xcode12.5
+language: swift
+xcode_project: CCMenu.xcodeproj # path to your xcodeproj folder
+xcode_scheme: CCMenu.AllTests
+xcode_destination: platform=macOS
