@@ -18,14 +18,15 @@ struct PipelineListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem() {
             Menu() {
-                Picker(selection: $style.detailMode, label: Text("Details to show")) {
+                Picker(selection: $style.detailMode, label: EmptyView()) {
                     Text("Build status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
                     Text("Feed URL").tag(PipelineDisplayStyle.DetailMode.feedUrl)
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
             } label: {
-                Label("Details", systemImage: "captions.bubble")
+                Image(systemName: "ellipsis.rectangle")
+                Text(" ") // TODO: find better way to get spacing right
             }
             .help("Select which details to show for the pipelines")
         }
@@ -42,7 +43,7 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add pipeline")
             .accessibility(label: Text("Add pipeline"))
         }
-        ToolbarItem(placement: .destructiveAction) {
+        ToolbarItem() {
             Button(action: remove) {
                 Label("Remove", systemImage: "trash")
             }
@@ -52,7 +53,7 @@ struct PipelineListToolbar: ToolbarContent {
         }
         ToolbarItem {
             Button(action: edit) {
-                Label("Edit", systemImage: "gearshape")
+                Label("Edit", systemImage: "square.and.pencil")
             }
             .help("Edit pipeline")
             .accessibility(label: Text("Edit pipeline"))
