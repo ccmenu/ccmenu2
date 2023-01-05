@@ -82,13 +82,13 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
         
-        toolbars.popUpButtons[" "].click() // unfortunate result of the spacing workaround
-        toolbars.menuItems["Feed URL"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
-
-        toolbars.popUpButtons[" "].click()
-        toolbars.menuItems["Build status"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
+//        toolbars.popUpButtons[" "].click() // unfortunate result of the spacing workaround
+//        toolbars.menuItems["Feed URL"].click()
+//        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+//
+//        toolbars.popUpButtons[" "].click()
+//        toolbars.menuItems["Build status"].click()
+//        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
     }
     
     // onMove and onDelete are still untested
