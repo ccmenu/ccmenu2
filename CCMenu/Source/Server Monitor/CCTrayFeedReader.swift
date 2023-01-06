@@ -50,7 +50,7 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         DispatchQueue.main.async {
             if let error = error {
-//                handleClientError(error)
+                self.handleClientError(error)
             } else if let receivedData = self.receivedData {
                 let parser = CCTrayResponseParser()
                 do {
@@ -58,12 +58,19 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
                     if let p = parser.updatePipeline(self.pipeline) {
                         self.delegate?.feedReader(self, didUpdate: p)
                     }
-                } catch (let error) {
-//                  handleParserError(error)
+                } catch let error {
+                    self.handleParserError(error)
                 }
             }
         }
     }
-    
+
+    func handleClientError(_ error: Error) {
+        print("client error \(error.localizedDescription)")
+    }
+
+    func handleParserError(_ error: Error) {
+        print("parser error \(error.localizedDescription)")
+    }
     
 }

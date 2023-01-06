@@ -19,7 +19,7 @@ class PipelineTests: XCTestCase {
     func testStatusWhenSleepingAndLastBuildIsAvailable() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "")
         pipeline.activity = .sleeping
-        pipeline.lastBuild = Pipeline.Build(result: .success)
+        pipeline.lastBuild = Build(result: .success)
         pipeline.lastBuild!.label = "151"
         pipeline.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.lastBuild!.duration = 80.8
@@ -42,7 +42,7 @@ class PipelineTests: XCTestCase {
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "")
         pipeline.activity = .sleeping
-        pipeline.lastBuild = Pipeline.Build(result: .success)
+        pipeline.lastBuild = Build(result: .success)
 
         XCTAssertEqual("Build finished", pipeline.status)
     }
@@ -57,7 +57,7 @@ class PipelineTests: XCTestCase {
     func testStatusWhenBuildingAndLastBuildIsAvailable() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "")
         pipeline.activity = .building
-        pipeline.lastBuild = Pipeline.Build(result: .success)
+        pipeline.lastBuild = Build(result: .success)
         pipeline.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
         let formatter = DateFormatter()
@@ -71,7 +71,7 @@ class PipelineTests: XCTestCase {
     func testStatusWhenErrorIsSet() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "http://test.org/cctray.xml")
         pipeline.activity = .sleeping
-        pipeline.lastBuild = Pipeline.Build(result: .success)
+        pipeline.lastBuild = Build(result: .success)
         pipeline.connectionError = "404 Not Found"
 
         XCTAssertEqual("404 Not Found", pipeline.status)

@@ -48,8 +48,9 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
                 throw GithubResponseError.unexpectedResponseType
             }
 
-            let rlr = response.allHeaderFields["x-ratelimit-remaining"]
-            NSLog("received response from Github; rate limit remaining \(rlr)")
+            let rll = response.allHeaderFields["x-ratelimit-limit"] as! String
+            let rlu = response.allHeaderFields["x-ratelimit-used"] as! String
+            debugPrint("received response from Github; rate limit \(rlu)/\(rll)")
 
             if !(200...299).contains(response.statusCode) {
                 throw GithubResponseError.nonOkResponse(responseCode: response.statusCode)

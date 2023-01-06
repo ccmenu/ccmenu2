@@ -33,7 +33,21 @@ class GithubResponseParserTests: XCTestCase {
 
     func testUpdatesPipelineWithWorkflowRun() throws {
         let parser = GithubResponseParser()
-        let json = "{ \"workflow_runs\": [ { \"name\": \"Rust\", \"run_number\": 17, \"status\": \"completed\", \"conclusion\": \"success\", \"html_url\": \"https://github.com/erikdoe/quvyn/actions/runs/842089420\", \"created_at\": \"2021-05-14T12:04:23Z\", \"updated_at\": \"2021-05-14T12:06:57Z\" } ] }"
+        let json = """
+            { "workflow_runs": [{
+                "name": "Rust",
+                "run_number": 17,
+                "status": "completed",
+                "conclusion": "success",
+                "html_url": "https://github.com/erikdoe/quvyn/actions/runs/842089420",
+                "created_at": "2021-05-14T12:04:23Z",
+                "updated_at": "2021-05-14T12:06:57Z",
+                "actor": {
+                    "login": "erikdoe",
+                    "avatar_url": "https://test.org/avatar.jpg"
+                }
+            }]}
+        """
         try parser.parseResponse(json.data(using: .ascii)!)
 
         let originalPipeline = Pipeline(name: "erikdoe/quvyn:Rust", feedUrl: "http://test.org")
@@ -57,7 +71,10 @@ class GithubResponseParserTests: XCTestCase {
                                   year: 2021, month: 05, day: 14, hour: 12, minute: 04, second: 23, nanosecond: 0).date
         XCTAssertEqual(date, build.timestamp)
         XCTAssertEqual(154, build.duration)
+        XCTAssertEqual("erikdoe", build.user)
+        XCTAssertEqual("https://test.org/avatar.jpg", build.avatar?.absoluteString)
     }
+
 
 }
 

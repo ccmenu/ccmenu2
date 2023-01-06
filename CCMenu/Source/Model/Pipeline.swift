@@ -7,14 +7,6 @@
 import Foundation
 
 
-enum BuildResult: String, Codable {
-    case
-    success,
-    failure,
-    unknown,
-    other
-}
-
 enum PipelineActivity: String, Codable {
     case
     building,
@@ -26,7 +18,11 @@ enum FeedType: String, Codable {
     case
     cctray,
     github
+}
 
+struct ConnectionDetails: Hashable, Codable {
+    var feedType: FeedType
+    var feedUrl: String
 }
 
 
@@ -113,18 +109,6 @@ struct Pipeline: Hashable, Identifiable, Codable {
             return components.joined(separator: ", ")
         }
         return "Build finished"
-    }
-
-    struct ConnectionDetails: Hashable, Codable {
-        var feedType: FeedType
-        var feedUrl: String
-    }
-
-    struct Build: Hashable, Codable {
-        var result: BuildResult
-        var label: String?
-        var timestamp: Date?
-        var duration: TimeInterval?
     }
 
 }

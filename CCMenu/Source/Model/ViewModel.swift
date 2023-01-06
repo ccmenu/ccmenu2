@@ -4,22 +4,51 @@
  *  not use these files except in compliance with the License.
  */
 
-import Foundation
+import Cocoa
 import Combine
 
 
 final class ViewModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] = []
+    @Published var avatars: Dictionary<URL, NSImage>
 
     init() {
+        avatars = Dictionary()
     }
 
     func update(pipeline: Pipeline) {
-        if let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) {
-            pipelines[idx] = pipeline
+        guard let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) else {
+            debugPrint("trying to update unknown pipeline \(pipelines.debugDescription)")
+            return
+        }
+
+        pipelines[idx] = pipeline
+
+        if let avatarUrl = pipeline.lastBuild?.avatar {
+            if avatars[avatarUrl] == nil {
+                retrieveAvatar(url: avatarUrl)
+            }
         }
     }
+
+    private func retrieveAvatar(url avatarUrl: URL) {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try Data.init(contentsOf: avatarUrl)
+                DispatchQueue.main.async {
+                    let avatarImage: NSImage? = NSImage(data: data)
+                    debugPrint("did load avatar for \(avatarUrl)")
+                    self.avatars[avatarUrl] = avatarImage
+                    debugPrint("did set avatar for \(avatarUrl)")
+                }
+            }
+            catch let errorLog {
+                print(errorLog.localizedDescription)
+            }
+        }
+    }
+
 
     func loadPipelinesFromUserDefaults() {
         if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
@@ -32,6 +61,7 @@ final class ViewModel: ObservableObject {
             }
         }
         pipelines.append(Pipeline(name: "erikdoe/ccmenu2:CI", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/runs"))
+        pipelines.append(Pipeline(name: "thoughtworks/epirust:cargo-audit", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/runs"))
     }
 
     func loadPipelinesFromFile(_ filename: String) {

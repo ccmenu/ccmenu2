@@ -35,7 +35,7 @@ class GithubResponseParser {
             newPipeline.activity = activityForString(status)
         }
         if let conclusion = run["conclusion"] as? String {
-            var build = Pipeline.Build(result: resultForString(conclusion))
+            var build = Build(result: resultForString(conclusion))
             if let runNumber = run["run_number"] as? Int {
                 build.label = String(runNumber)
             }
@@ -43,6 +43,17 @@ class GithubResponseParser {
                 build.timestamp = createdAtDate
                 if let updatedAt = run["updated_at"] as? String, let updatedAtDate = dateForString(updatedAt) {
                     build.duration = updatedAtDate.timeIntervalSince(createdAtDate)
+                }
+            }
+            if let displayTitle = run["display_title"] as? String {
+                build.comment = displayTitle
+            }
+            if let actor = run["actor"] as? Dictionary<String, Any?> {
+                if let actorLogin = actor["login"] as? String   {
+                    build.user = actorLogin
+                }
+                if let actorAvatarUrl = actor["avatar_url"] as? String   {
+                    build.avatar = URL(string: actorAvatarUrl)
                 }
             }
             newPipeline.lastBuild = build

@@ -14,7 +14,7 @@ class StatusItemBuilderTests: XCTestCase {
         let menu = NSMenu()
         var p0 = Pipeline(name: "connectfour", feedUrl: "")
         p0.activity = .sleeping
-        p0.lastBuild = Pipeline.Build(result: .success)
+        p0.lastBuild = Build(result: .success)
 
         builder.updateMenu(menu:menu, pipelines:[p0])
 

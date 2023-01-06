@@ -38,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func updatePipelineStatus(_ sender: AnyObject?) {
-        NSLog("Should update status from servers")
+        print("Should update status from servers")
     }
 
     @IBAction func openPipeline(_ sender: AnyObject?) {

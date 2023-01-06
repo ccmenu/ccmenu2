@@ -18,6 +18,7 @@
 		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
 		03825EA925A0034200DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
 		03825EC425A08A8900DEB003 /* StatusItemBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */; };
+		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
@@ -73,6 +74,7 @@
 		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
 		03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemBuilderTests.swift; sourceTree = "<group>"; };
+		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BD7E8C2598E57A000F9495 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 		03CC11E12652F08300130833 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				039B524529676D0700994910 /* Build.swift */,
 				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
 				03825DE7259D005B00DEB003 /* ViewModel.swift */,
 			);
@@ -453,6 +456,7 @@
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
+				039B524629676D0700994910 /* Build.swift in Sources */,
 				03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */,
 				03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
@@ -561,7 +565,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -616,7 +620,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -644,7 +648,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.sourceforge.cruisecontrol.CCMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -671,7 +675,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.sourceforge.cruisecontrol.CCMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -695,6 +699,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -719,6 +724,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -742,6 +748,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -765,6 +772,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ccmenu.CCMenuUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -8,7 +8,8 @@
     "lastBuild": {
         "result": "failure",
         "timestamp": "2020-12-27T21:47:00Z",
-        "label": "build.151"
+        "label": "build.151",
+        "comment": "Testing"
     },
 },
 {  "name": "erikdoe/ccmenu",

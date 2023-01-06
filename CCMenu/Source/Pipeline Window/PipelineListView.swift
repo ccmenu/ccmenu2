@@ -8,6 +8,8 @@ import SwiftUI
 
 struct PipelineDisplayStyle {
     var detailMode: DetailMode = .buildStatus
+    var showComment: Bool = false
+    var showAvatar: Bool = false
 
     enum DetailMode: Int {
         case buildStatus
@@ -26,7 +28,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, style: style)
+                PipelineRow(pipeline: p, style: style, avatars: model.avatars)
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)
@@ -35,7 +37,8 @@ struct PipelineListView: View {
                 removePipelines(at: indexSet)
             }
         }
-        .frame(minWidth: 440, minHeight: 56)
+        .frame(minWidth: 400)
+        .listStyle(.inset(alternatesRowBackgrounds: true))
         .focusedValue(\.pipelineDisplayStyle, $style)
         .sheet(isPresented: $isShowingSheet) {
             if let index = editIndex {
@@ -121,12 +124,12 @@ struct PipelineListView_Previews: PreviewProvider {
 
         var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
         p0.activity = .building
-        p0.lastBuild = Pipeline.Build(result: .failure)
+        p0.lastBuild = Build(result: .failure)
         p0.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
         var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml")
         p1.activity = .sleeping
-        p1.lastBuild = Pipeline.Build(result: .success)
+        p1.lastBuild = Build(result: .success)
         p1.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p1.lastBuild!.label = "build.151"
 

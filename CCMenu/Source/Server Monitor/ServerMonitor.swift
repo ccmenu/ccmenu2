@@ -41,7 +41,7 @@ class ServerMonitor: FeedReaderDelegate {
     }
     
     func feedReader(_ reader: FeedReader, didUpdate pipeline: Pipeline) {
-//        NSLog("Received update for pipeline \(pipeline)")
+//        print("Received update for pipeline \(pipeline)")
         model.update(pipeline: pipeline)
     }
     

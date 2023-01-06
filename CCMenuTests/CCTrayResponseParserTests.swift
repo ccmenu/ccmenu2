@@ -44,7 +44,17 @@ class CCTrayResponseParserTests: XCTestCase {
 
     func testUpdatesPipeline() throws {
         let parser = CCTrayResponseParser()
-        let xml = "<Projects><Project name='connectfour' activity='Sleeping' lastBuildStatus='Success' lastBuildLabel='build.1' lastBuildTime='2007-07-18T18:44:48Z' webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/></Projects>"
+        let xml = """
+            <Projects>
+                <Project
+                    name='connectfour'
+                    activity='Sleeping'
+                    lastBuildStatus='Success'
+                    lastBuildLabel='build.1'
+                    lastBuildTime='2007-07-18T18:44:48Z'
+                    webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/>
+            </Projects>"
+        """
         try parser.parseResponse(xml.data(using: .ascii)!)
 
         let originalPipeline = Pipeline(name: "connectfour", feedUrl: "http://localhost:8080/cctray.xml")

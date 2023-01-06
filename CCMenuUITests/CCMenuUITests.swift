@@ -82,13 +82,19 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
         
-//        toolbars.popUpButtons[" "].click() // unfortunate result of the spacing workaround
-//        toolbars.menuItems["Feed URL"].click()
-//        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
-//
-//        toolbars.popUpButtons[" "].click()
-//        toolbars.menuItems["Build status"].click()
-//        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
+        toolbars.popUpButtons.firstMatch.click() // TODO: not ideal...
+        toolbars.menuItems["Pipeline"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+
+        toolbars.popUpButtons.firstMatch.click()
+        toolbars.menuItems["Build Status"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
+
+        XCTAssertFalse(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
+        toolbars.popUpButtons.firstMatch.click()
+        toolbars.menuItems["Status Comment"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
+
     }
     
     // onMove and onDelete are still untested

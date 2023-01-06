@@ -19,15 +19,18 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItem() {
             Menu() {
                 Picker(selection: $style.detailMode, label: EmptyView()) {
-                    Text("Build status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
-                    Text("Feed URL").tag(PipelineDisplayStyle.DetailMode.feedUrl)
+                    Text("Pipeline").tag(PipelineDisplayStyle.DetailMode.feedUrl)
+                    Text("Build Status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-            } label: {
-                Image(systemName: "ellipsis.rectangle")
-                Text(" ") // TODO: find better way to get spacing right
+                Toggle("Status Comment", isOn: $style.showComment)
+                Toggle("Status Avatar", isOn: $style.showAvatar)
             }
+            label: {
+                Image(systemName: "ellipsis.rectangle")
+            }
+            .menuStyle(.borderlessButton)
             .help("Select which details to show for the pipelines")
         }
         ToolbarItem() {

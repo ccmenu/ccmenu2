@@ -45,14 +45,14 @@ struct AppCommands: Commands {
         @FocusedBinding(\.pipelineDisplayStyle) var style
         
         var body: some View {
-            Button("Show Build Status") {
-                style?.detailMode = .buildStatus
+            Button("Show Pipeline") {
+                style?.detailMode = .feedUrl
             }
             .keyboardShortcut("1")
             .disabled(style == nil) // TODO: how else...?
             
-            Button("Show Feed URL") {
-                style?.detailMode = .feedUrl
+            Button("Show Build Status") {
+                style?.detailMode = .buildStatus
             }
             .keyboardShortcut("2")
             .disabled(style == nil) // TODO: how else...?

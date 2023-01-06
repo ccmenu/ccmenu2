@@ -36,7 +36,7 @@ class CCTrayResponseParser {
         var newPipeline = pipeline
         newPipeline.webUrl = project["webUrl"]
         newPipeline.activity = activityForString(project["activity"])
-        var build = Pipeline.Build(result: resultForString(project["lastBuildStatus"]))
+        var build = Build(result: resultForString(project["lastBuildStatus"]))
         build.label = project["lastBuildLabel"]
         if let lastBuildTime = project["lastBuildTime"], let date = dateForString(lastBuildTime) {
             build.timestamp = date
