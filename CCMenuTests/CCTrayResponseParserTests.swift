@@ -53,7 +53,7 @@ class CCTrayResponseParserTests: XCTestCase {
                     lastBuildLabel='build.1'
                     lastBuildTime='2007-07-18T18:44:48Z'
                     webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/>
-            </Projects>"
+            </Projects>
         """
         try parser.parseResponse(xml.data(using: .ascii)!)
 
