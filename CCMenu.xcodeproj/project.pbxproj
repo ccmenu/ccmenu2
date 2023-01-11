@@ -214,7 +214,7 @@
 				03CC11E12652F08300130833 /* Model */,
 				03CC11E22652F09800130833 /* Status Item */,
 				03CC11E32652F0B100130833 /* Pipeline Window */,
-				03CC11E42652F0D800130833 /* Preferences */,
+				03CC11E42652F0D800130833 /* Settings */,
 				03CC11E82652F38A00130833 /* Server Monitor */,
 				03CC11E52652F0F200130833 /* Miscellaneous */,
 			);
@@ -252,7 +252,7 @@
 			path = "Pipeline Window";
 			sourceTree = "<group>";
 		};
-		03CC11E42652F0D800130833 /* Preferences */ = {
+		03CC11E42652F0D800130833 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				03F31CF425B8D29E005299A8 /* SettingsView.swift */,
@@ -260,7 +260,7 @@
 				0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */,
 				03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */,
 			);
-			path = Preferences;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		03CC11E52652F0F200130833 /* Miscellaneous */ = {

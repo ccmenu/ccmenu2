@@ -46,6 +46,14 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add pipeline")
             .accessibility(label: Text("Add pipeline"))
         }
+        ToolbarItem {
+            Button(action: edit) {
+                Label("Info", systemImage: "info.circle")
+            }
+            .help("Edit pipeline")
+            .accessibility(label: Text("Edit pipeline"))
+            .disabled(!canEdit())
+        }
         ToolbarItem() {
             Button(action: remove) {
                 Label("Remove", systemImage: "trash")
@@ -53,14 +61,6 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Remove pipeline")
             .accessibility(label: Text("Remove pipeline"))
             .disabled(!canRemove())
-        }
-        ToolbarItem {
-            Button(action: edit) {
-                Label("Edit", systemImage: "square.and.pencil")
-            }
-            .help("Edit pipeline")
-            .accessibility(label: Text("Edit pipeline"))
-            .disabled(!canEdit())
         }
     }
     

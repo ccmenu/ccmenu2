@@ -9,9 +9,6 @@ import SwiftUI
 
 struct NotificationSettings: View {
 
-    @AppStorage("UseColorInMenuBar")
-    private var useColorInMenuBar: Bool = false
-
     var body: some View {
             Text("missing")
                 .frame(width: 300, height: 400)

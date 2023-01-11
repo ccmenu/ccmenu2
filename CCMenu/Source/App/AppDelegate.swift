@@ -27,9 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
 
-    @IBAction func orderFrontPreferencesWindow(_ sender: AnyObject?) {
+    @IBAction func orderFrontSettingsWindow(_ sender: AnyObject?) {
         NSApp.activate(ignoringOtherApps: true)
-        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: self)
+        if #available(macOS 13, *) { 
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        } else {
+            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+        }
     }
 
     @IBAction func orderFrontPipelineWindow(_ sender: AnyObject?) {
