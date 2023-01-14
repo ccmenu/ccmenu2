@@ -99,9 +99,9 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(model: makeViewModel(), settings: UserSettings(userDefaults: nil))
+            PipelineListView(model: makeViewModel(), settings: UserSettings())
             .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel(), settings: UserSettings(userDefaults: nil))
+            PipelineListView(model: makeViewModel(), settings: UserSettings())
             .preferredColorScheme(.dark)
         }
     }

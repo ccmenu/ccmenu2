@@ -53,7 +53,7 @@ struct PipelineRow: View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline(), avatars: Dictionary(), settings: UserSettings(userDefaults: nil))
+        PipelineRow(pipeline: makePipeline(), avatars: Dictionary(), settings: UserSettings())
     }
 
     static func makePipeline() -> Pipeline {
