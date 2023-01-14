@@ -72,7 +72,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-loadTestData ${BUILT_PRODUCTS_DIR}/CCMenu.app/Contents/Resources/TestData.json"
+            argument = "-loadPipelines ${BUILT_PRODUCTS_DIR}/CCMenu.app/Contents/Resources/TestData.json"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -22,7 +22,7 @@ class CCMenuUITests: XCTestCase {
     
     private func launchApp() -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-loadTestData", pathForBundleFile("TestData.json")]
+        app.launchArguments = ["-loadPipelines", pathForBundleFile("TestData.json"), "-ignoreDefaults", "1"]
         app.launch()
         // It seems necessary to click on the status item to make the menu available, and I haven't found a better way
         // to find the status item.
@@ -90,10 +90,10 @@ class CCMenuUITests: XCTestCase {
         toolbars.menuItems["Build Status"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
 
-        XCTAssertFalse(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
         toolbars.popUpButtons.firstMatch.click()
         toolbars.menuItems["Status Comment"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
+        XCTAssertFalse(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
 
     }
     

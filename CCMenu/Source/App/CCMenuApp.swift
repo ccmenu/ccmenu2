@@ -14,20 +14,25 @@ struct CCMenuApp: App {
     var serverMonitor: ServerMonitor
 
     init() {
+        if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
+            print("Ignoring persisted defaults")
+            UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+        }
+
         let model = ViewModel()
         viewModel = model
         serverMonitor = ServerMonitor(model: model)
         appDelegate.viewModel = model
-        
-        if let filename = UserDefaults.standard.string(forKey: "loadTestData") {
-            model.loadPipelinesFromFile(filename)
+
+        if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
+            print("Loading pipeline definitions from file \(filename)")
+           model.loadPipelinesFromFile(filename)
         } else {
             model.loadPipelinesFromUserDefaults()
             serverMonitor.start()
         }
     }
-    
-    
+
     var body: some Scene {
 
         WindowGroup("Pipelines") {

@@ -18,7 +18,6 @@ struct AppCommands: Commands {
             FileMenuItems()
         }
         CommandGroup(before: .toolbar) {
-            ViewMenuItems()
         }
         CommandMenu("Pipeline") {
             PipelineMenuContent()
@@ -38,24 +37,6 @@ struct AppCommands: Commands {
                 // TODO: how to use file selector
                 // TODO: how to access view model
             }
-        }
-    }
-    
-    private struct ViewMenuItems: View {
-        @FocusedBinding(\.pipelineDisplayStyle) var style
-        
-        var body: some View {
-            Button("Show Pipeline") {
-                style?.detailMode = .feedUrl
-            }
-            .keyboardShortcut("1")
-            .disabled(style == nil) // TODO: how else...?
-            
-            Button("Show Build Status") {
-                style?.detailMode = .buildStatus
-            }
-            .keyboardShortcut("2")
-            .disabled(style == nil) // TODO: how else...?
         }
     }
     
@@ -81,14 +62,4 @@ struct AppCommands: Commands {
 }
 
 
-private struct PipelineDisplayStyleKey: FocusedValueKey {
-    typealias Value = Binding<PipelineDisplayStyle>
-}
-
-extension FocusedValues {
-    var pipelineDisplayStyle: Binding<PipelineDisplayStyle>? {
-        get { self[PipelineDisplayStyleKey.self] }
-        set { self[PipelineDisplayStyleKey.self] = newValue }
-    }
-}
 

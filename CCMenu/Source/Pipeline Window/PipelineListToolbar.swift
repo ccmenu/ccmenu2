@@ -8,7 +8,12 @@ import SwiftUI
 
 
 struct PipelineListToolbar: ToolbarContent {
-    @Binding var style: PipelineDisplayStyle
+
+    // TODO: the default values are replicated here from PipelineRow
+    @AppStorage("pipelineDetailMode") var detailMode: DetailMode = .feedUrl
+    @AppStorage("pipelineShowComment") var showComment: Bool = true
+    @AppStorage("pipelineShowAvatar") var showAvatar: Bool = true
+
     let add: () -> Void
     let edit: () -> Void
     let remove: () -> Void
@@ -18,14 +23,14 @@ struct PipelineListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem() {
             Menu() {
-                Picker(selection: $style.detailMode, label: EmptyView()) {
-                    Text("Pipeline").tag(PipelineDisplayStyle.DetailMode.feedUrl)
-                    Text("Build Status").tag(PipelineDisplayStyle.DetailMode.buildStatus)
+                Picker(selection: $detailMode, label: EmptyView()) {
+                    Text("Pipeline").tag(DetailMode.feedUrl)
+                    Text("Build Status").tag(DetailMode.buildStatus)
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-                Toggle("Status Comment", isOn: $style.showComment)
-                Toggle("Status Avatar", isOn: $style.showAvatar)
+                Toggle("Status Comment", isOn: $showComment)
+                Toggle("Status Avatar", isOn: $showAvatar)
             }
             label: {
                 Image(systemName: "ellipsis.rectangle")

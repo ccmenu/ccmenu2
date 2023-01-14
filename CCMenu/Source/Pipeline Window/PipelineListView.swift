@@ -6,21 +6,9 @@
 
 import SwiftUI
 
-struct PipelineDisplayStyle {
-    var detailMode: DetailMode = .buildStatus
-    var showComment: Bool = false
-    var showAvatar: Bool = false
-
-    enum DetailMode: Int {
-        case buildStatus
-        case feedUrl
-    }
-}
-
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
-    @State var style: PipelineDisplayStyle = PipelineDisplayStyle()
     @State var selection: Set<String> = Set()
     @State var isShowingSheet: Bool = false
     @State var editIndex: Int?
@@ -28,7 +16,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, style: style, avatars: model.avatars)
+                PipelineRow(pipeline: p, avatars: model.avatars)
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)
@@ -39,7 +27,6 @@ struct PipelineListView: View {
         }
         .frame(minWidth: 400)
         .listStyle(.inset(alternatesRowBackgrounds: true))
-        .focusedValue(\.pipelineDisplayStyle, $style)
         .sheet(isPresented: $isShowingSheet) {
             if let index = editIndex {
                 EditPipelineSheet(model: model, editIndex: index)
@@ -52,7 +39,6 @@ struct PipelineListView: View {
         }
         .toolbar {
             PipelineListToolbar(
-            style: $style,
             add: {
                 addPipeline()
             },
@@ -112,9 +98,9 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(model: makeViewModel(), style: PipelineDisplayStyle(detailMode: .feedUrl))
+            PipelineListView(model: makeViewModel())
             .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel(), style: PipelineDisplayStyle(detailMode: .buildStatus))
+            PipelineListView(model: makeViewModel())
             .preferredColorScheme(.dark)
         }
     }

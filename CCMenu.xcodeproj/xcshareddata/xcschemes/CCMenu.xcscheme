@@ -64,10 +64,6 @@
             argument = "-OpenWindowOnLaunch YES"
             isEnabled = "YES">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-loadTestData ${BUILT_PRODUCTS_DIR}/CCMenu.app/Contents/Resources/TestData.json"
-            isEnabled = "NO">
-         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
