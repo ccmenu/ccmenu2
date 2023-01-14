@@ -11,24 +11,31 @@ struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject public var viewModel: ViewModel
+    @ObservedObject public var userSettings: UserSettings
     var serverMonitor: ServerMonitor
 
     init() {
+        var userDefaults: UserDefaults? = UserDefaults.standard
         if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
-            print("Ignoring persisted defaults")
-            UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+            print("Ignoring user defaults from system")
+            userDefaults = nil
         }
 
-        let model = ViewModel()
-        viewModel = model
-        serverMonitor = ServerMonitor(model: model)
-        appDelegate.viewModel = model
+        let viewModel = ViewModel()
+        let userSettings = UserSettings(userDefaults: userDefaults)
+        serverMonitor = ServerMonitor(model: viewModel)
+
+        self.viewModel = viewModel
+        self.userSettings = userSettings
+
+        appDelegate.viewModel = viewModel
+        appDelegate.userSettings = userSettings
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
             print("Loading pipeline definitions from file \(filename)")
-           model.loadPipelinesFromFile(filename)
+            viewModel.loadPipelinesFromFile(filename)
         } else {
-            model.loadPipelinesFromUserDefaults()
+            viewModel.loadPipelinesFromUserDefaults()
             serverMonitor.start()
         }
     }
@@ -36,7 +43,7 @@ struct CCMenuApp: App {
     var body: some Scene {
 
         WindowGroup("Pipelines") {
-            PipelineListView(model: viewModel)
+            PipelineListView(model: viewModel, settings: userSettings)
                 .handlesExternalEvents(preferring: ["pipelines"], allowing: ["pipelines"])
         }
         .commands {

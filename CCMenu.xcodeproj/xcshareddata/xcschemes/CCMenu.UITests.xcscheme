@@ -73,8 +73,12 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-loadPipelines ${BUILT_PRODUCTS_DIR}/CCMenu.app/Contents/Resources/TestData.json"
-            isEnabled = "YES">
+            argument = "-ignoreDefaults 1"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-loadPipelines ${PROJECT_DIR}/CCMenuUITests/TestData.json"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

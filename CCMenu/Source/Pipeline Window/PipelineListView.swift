@@ -9,9 +9,7 @@ import SwiftUI
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
-    @AppStorage("pipelineDetailMode") var detailMode: DetailMode = .feedUrl
-    @AppStorage("pipelineShowComments") var showComments: Bool = true
-    @AppStorage("pipelineShowAvatars") var showAvatars: Bool = true
+    @ObservedObject var settings: UserSettings
     @State var selection: Set<String> = Set()
     @State var isShowingSheet: Bool = false
     @State var editIndex: Int?
@@ -19,7 +17,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, detail: detailMode, showComment: showComments, showAvatar: showAvatars, avatars: model.avatars)
+                PipelineRow(pipeline: p, avatars: model.avatars, settings: settings)
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)
@@ -42,9 +40,7 @@ struct PipelineListView: View {
         }
         .toolbar {
             PipelineListToolbar(
-                detailMode: $detailMode,
-                showComments: $showComments,
-                showAvatars: $showAvatars,
+                settings: settings,
                 add: {
                     addPipeline()
                 },
@@ -103,9 +99,9 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(model: makeViewModel())
+            PipelineListView(model: makeViewModel(), settings: UserSettings(userDefaults: nil))
             .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel())
+            PipelineListView(model: makeViewModel(), settings: UserSettings(userDefaults: nil))
             .preferredColorScheme(.dark)
         }
     }

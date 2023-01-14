@@ -10,7 +10,8 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Environment(\.openURL) var openURL
     var statusItemController: StatusItemController?
-    var viewModel: ViewModel?
+    var viewModel: ViewModel? // TODO: get this from the app instead?
+    var userSettings: UserSettings? // TODO: get this from the app instead?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         guard let viewModel = viewModel else {

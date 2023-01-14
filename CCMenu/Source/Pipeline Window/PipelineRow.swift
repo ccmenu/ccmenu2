@@ -6,24 +6,15 @@
 
 import SwiftUI
 
-
-enum DetailMode: String, CaseIterable {
-    case buildStatus
-    case feedUrl
-}
-
-
 struct PipelineRow: View {
 
     var pipeline: Pipeline
-    var detail: DetailMode
-    var showComment: Bool
-    var showAvatar: Bool
     var avatars: Dictionary<URL, NSImage>
+    @ObservedObject var settings: UserSettings
 
     var body: some View {
         HStack(alignment: .center) {
-            if detail == .buildStatus && showAvatar {
+            if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
                 avatarImage()
                 .resizable()
                 .scaledToFill()
@@ -35,12 +26,12 @@ struct PipelineRow: View {
             VStack(alignment: .leading) {
                 Text(pipeline.name)
                 .font(.system(size: 16, weight: .bold))
-                if detail == .feedUrl {
+                if !settings.showStatusInPipelineWindow {
                     let connection = pipeline.connectionDetails
                     Text("\(connection.feedUrl) [\(connection.feedType.rawValue)]") // TODO: use icons for feed type
                 } else {
                     Text(pipeline.status)
-                    if showComment {
+                    if settings.showCommentsInPipelineWindow {
                         Text(pipeline.lastBuild?.comment ?? "–")
                     }
                 }
@@ -62,7 +53,7 @@ struct PipelineRow: View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline(), detail: .buildStatus, showComment: true, showAvatar: true, avatars: Dictionary())
+        PipelineRow(pipeline: makePipeline(), avatars: Dictionary(), settings: UserSettings(userDefaults: nil))
     }
 
     static func makePipeline() -> Pipeline {
