@@ -9,10 +9,9 @@ import SwiftUI
 
 struct PipelineListToolbar: ToolbarContent {
 
-    // TODO: the default values are replicated here from PipelineRow
-    @AppStorage("pipelineDetailMode") var detailMode: DetailMode = .feedUrl
-    @AppStorage("pipelineShowComment") var showComment: Bool = true
-    @AppStorage("pipelineShowAvatar") var showAvatar: Bool = true
+    @Binding var detailMode: DetailMode
+    @Binding var showComments: Bool
+    @Binding var showAvatars: Bool
 
     let add: () -> Void
     let edit: () -> Void
@@ -29,8 +28,8 @@ struct PipelineListToolbar: ToolbarContent {
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-                Toggle("Status Comment", isOn: $showComment)
-                Toggle("Status Avatar", isOn: $showAvatar)
+                Toggle("Status Comment", isOn: $showComments)
+                Toggle("Status Avatar", isOn: $showAvatars)
             }
             label: {
                 Image(systemName: "ellipsis.rectangle")

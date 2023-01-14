@@ -15,16 +15,15 @@ enum DetailMode: String, CaseIterable {
 
 struct PipelineRow: View {
 
-    @AppStorage("pipelineDetailMode") var detailMode: DetailMode = .feedUrl
-    @AppStorage("pipelineShowComment") var showComment: Bool = true
-    @AppStorage("pipelineShowAvatar") var showAvatar: Bool = true
-
     var pipeline: Pipeline
+    var detail: DetailMode
+    var showComment: Bool
+    var showAvatar: Bool
     var avatars: Dictionary<URL, NSImage>
 
     var body: some View {
         HStack(alignment: .center) {
-            if detailMode == .buildStatus && showAvatar {
+            if detail == .buildStatus && showAvatar {
                 avatarImage()
                 .resizable()
                 .scaledToFill()
@@ -36,7 +35,7 @@ struct PipelineRow: View {
             VStack(alignment: .leading) {
                 Text(pipeline.name)
                 .font(.system(size: 16, weight: .bold))
-                if detailMode == .feedUrl {
+                if detail == .feedUrl {
                     let connection = pipeline.connectionDetails
                     Text("\(connection.feedUrl) [\(connection.feedType.rawValue)]") // TODO: use icons for feed type
                 } else {
@@ -63,7 +62,7 @@ struct PipelineRow: View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline(), avatars: Dictionary())
+        PipelineRow(pipeline: makePipeline(), detail: .buildStatus, showComment: true, showAvatar: true, avatars: Dictionary())
     }
 
     static func makePipeline() -> Pipeline {

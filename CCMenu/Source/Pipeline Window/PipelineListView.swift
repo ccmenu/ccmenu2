@@ -9,6 +9,9 @@ import SwiftUI
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
+    @AppStorage("pipelineDetailMode") var detailMode: DetailMode = .feedUrl
+    @AppStorage("pipelineShowComments") var showComments: Bool = true
+    @AppStorage("pipelineShowAvatars") var showAvatars: Bool = true
     @State var selection: Set<String> = Set()
     @State var isShowingSheet: Bool = false
     @State var editIndex: Int?
@@ -16,7 +19,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, avatars: model.avatars)
+                PipelineRow(pipeline: p, detail: detailMode, showComment: showComments, showAvatar: showAvatars, avatars: model.avatars)
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)
@@ -39,22 +42,24 @@ struct PipelineListView: View {
         }
         .toolbar {
             PipelineListToolbar(
-            add: {
-                addPipeline()
-            },
-            edit: {
-                editPipeline(at: selectionIndexSet().first)
-            },
-            remove: {
-                removePipelines(at: selectionIndexSet())
-            },
-            canEdit: {
-                selection.count == 1
-            },
-            canRemove: {
-                !selection.isEmpty
-            }
-
+                detailMode: $detailMode,
+                showComments: $showComments,
+                showAvatars: $showAvatars,
+                add: {
+                    addPipeline()
+                },
+                edit: {
+                    editPipeline(at: selectionIndexSet().first)
+                },
+                remove: {
+                    removePipelines(at: selectionIndexSet())
+                },
+                canEdit: {
+                    selection.count == 1
+                },
+                canRemove: {
+                    !selection.isEmpty
+                }
             )
         }
     }
