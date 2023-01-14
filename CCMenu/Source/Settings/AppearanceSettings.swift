@@ -9,11 +9,10 @@ import SwiftUI
 
 struct AppearanceSettings: View {
 
-    @AppStorage("UseColorInMenuBar")
-    private var useColorInMenuBar: Bool = false
+    @ObservedObject var settings: UserSettings
 
     var body: some View {
-        Toggle(isOn: $useColorInMenuBar) {
+        Toggle(isOn: $settings.useColorInStatusItem) {
             Text("Use color in menu bar")
         }
             .frame(width: 300)
@@ -26,7 +25,13 @@ struct AppearanceSettings: View {
 
 struct AppearanceSettings_Previews: PreviewProvider {
     static var previews: some View {
-        AppearanceSettings()
+        AppearanceSettings(settings: settingsForPreview())
+    }
+
+    private static func settingsForPreview() -> UserSettings {
+        let s = UserSettings()
+        s.useColorInStatusItem = true
+        return s
     }
 
 }

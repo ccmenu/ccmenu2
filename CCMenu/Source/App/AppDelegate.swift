@@ -14,10 +14,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var userSettings: UserSettings? // TODO: get this from the app instead?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        guard let viewModel = viewModel else {
-            fatalError("View model unavailable when creating status item controller")
+        guard let viewModel = viewModel, let userSettings = userSettings else {
+            fatalError("View model and/or settings unavailable when creating status item controller")
         }
-        statusItemController = StatusItemController(viewModel)
+        statusItemController = StatusItemController(model: viewModel, settings: userSettings)
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {

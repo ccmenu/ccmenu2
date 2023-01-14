@@ -10,7 +10,7 @@ import XCTest
 class StatusItemBuilderTests: XCTestCase {
 
     func testCreatesItemForPipeline() throws {
-        let builder = StatusItemBuilder()
+        let builder = StatusItemBuilder(settings:UserSettings())
         let menu = NSMenu()
         var p0 = Pipeline(name: "connectfour", feedUrl: "")
         p0.activity = .sleeping
@@ -28,7 +28,7 @@ class StatusItemBuilderTests: XCTestCase {
     }
 
     func testCreatesItemsInOrder() throws {
-        let builder = StatusItemBuilder()
+        let builder = StatusItemBuilder(settings:UserSettings())
         let menu = NSMenu()
         let p0 = Pipeline(name: "connectfour", feedUrl: "")
         let p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")
@@ -41,7 +41,7 @@ class StatusItemBuilderTests: XCTestCase {
     }
     
     func testOnlyCreatesNewItems() throws {
-        let builder = StatusItemBuilder()
+        let builder = StatusItemBuilder(settings:UserSettings())
         let menu = NSMenu()
         let p0 = Pipeline(name: "connectfour", feedUrl: "")
         let p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "")

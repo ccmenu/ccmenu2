@@ -13,7 +13,8 @@ struct SettingsView: View {
         case appearance
         case advanced
     }
-    
+
+    @ObservedObject var settings: UserSettings
     @State private var selectedTab: Tab = .appearance
     
     var body: some View {
@@ -25,7 +26,7 @@ struct SettingsView: View {
                     Image(systemName: "bell.badge")
                     Text("Notifications")
                 }
-            AppearanceSettings()
+            AppearanceSettings(settings: settings)
                 .tag(Tab.appearance)
                 .tabItem {
                     Image(systemName: "filemenu.and.selection")

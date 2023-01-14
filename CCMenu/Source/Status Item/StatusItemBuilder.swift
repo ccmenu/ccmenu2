@@ -9,15 +9,18 @@ import SwiftUI
 
 class StatusItemBuilder {
     
-    @AppStorage("UseColorInMenuBar")
-    private var useColorInMenuBar: Bool = false
+    var settings: UserSettings
+
+    init(settings: UserSettings) {
+        self.settings = settings
+    }
 
     func initializeItem() -> NSStatusItem {
         let item = NSStatusBar.system.statusItem(withLength: CGFloat(NSStatusItem.variableLength))
         guard let button = item.button else {
             fatalError("Expected NSStatusBar item to have a button object")
         }
-        button.image = ImageManager().image(forResult: .other, activity: .other, asTemplate: !useColorInMenuBar)
+        button.image = ImageManager().image(forResult: .other, activity: .other, asTemplate: !settings.useColorInStatusItem)
         button.imagePosition = NSControl.ImagePosition.imageLeft
         let menu = NSMenu()
         menu.identifier = NSUserInterfaceItemIdentifier("StatusItemMenu")
@@ -57,7 +60,7 @@ class StatusItemBuilder {
     }
     
     func updateButton(button: NSStatusBarButton) {
-        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: !useColorInMenuBar)
+        button.image = ImageManager().image(forResult: .failure, activity: .building, asTemplate: !settings.useColorInStatusItem)
         button.title = "1"
     }
 

@@ -5,32 +5,39 @@
  */
 
 import AppKit
+import Combine
 
 
 class StatusItemController: NSObject, NSMenuDelegate {
 
     var viewModel: ViewModel
+    var userSettings: UserSettings
     var statusItem: NSStatusItem
+    var subscriber: AnyCancellable?
 
-    init(_ model: ViewModel) {
+    init(model: ViewModel, settings: UserSettings) {
         viewModel = model
-        let builder = StatusItemBuilder()
+        userSettings = settings
+        let builder = StatusItemBuilder(settings: userSettings)
         statusItem = builder.initializeItem()
         super.init()
         statusItem.menu?.delegate = self
-        UserDefaults.standard.addObserver(self, forKeyPath: "UseColorInMenuBar", options: [], context: nil)
+
+//        subscriber = userSettings.$useColorInStatusItem.receive(on: DispatchQueue.main).assign(to: \.useColor, on: ??? )
+        subscriber = userSettings.$useColorInStatusItem.receive(on: DispatchQueue.main).sink(receiveValue: { _ in self.updateButton() } )
+
         builder.updateButton(button: statusItem.button!)
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
-        let builder = StatusItemBuilder()
+        let builder = StatusItemBuilder(settings: userSettings)
         builder.updateMenu(menu: menu, pipelines: viewModel.pipelines)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        let builder = StatusItemBuilder()
+    private func updateButton() {
+        let builder = StatusItemBuilder(settings: userSettings)
         builder.updateButton(button: statusItem.button!)
     }
+
 
 }

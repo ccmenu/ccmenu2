@@ -15,18 +15,19 @@ struct CCMenuApp: App {
     var serverMonitor: ServerMonitor
 
     init() {
-        var userDefaults: UserDefaults? = UserDefaults.standard
+        var userDefaults: UserDefaults? = nil
         if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
             print("Ignoring user defaults from system")
-            userDefaults = nil
+        } else {
+            userDefaults = UserDefaults.standard
         }
 
         let viewModel = ViewModel()
         let userSettings = UserSettings(userDefaults: userDefaults)
-        serverMonitor = ServerMonitor(model: viewModel)
 
         self.viewModel = viewModel
         self.userSettings = userSettings
+        self.serverMonitor = ServerMonitor(model: viewModel)
 
         appDelegate.viewModel = viewModel
         appDelegate.userSettings = userSettings
@@ -52,7 +53,7 @@ struct CCMenuApp: App {
         .handlesExternalEvents(matching: ["pipelines"])
         
         Settings {
-            SettingsView()
+            SettingsView(settings: userSettings)
         }
 
     }
