@@ -10,7 +10,7 @@ struct PipelineRow: View {
 
     var pipeline: Pipeline
     var avatars: Dictionary<URL, NSImage>
-    @ObservedObject var settings: UserSettings
+    @EnvironmentObject var settings: UserSettings
 
     var body: some View {
         HStack(alignment: .center) {
@@ -53,16 +53,27 @@ struct PipelineRow: View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: makePipeline(), avatars: Dictionary(), settings: UserSettings())
+        PipelineRow(pipeline: pipelineForPreview(), avatars: Dictionary())
+            .environmentObject(settingsForPreview(status: false))
+        PipelineRow(pipeline: pipelineForPreview(), avatars: Dictionary())
+            .environmentObject(settingsForPreview(status: true))
     }
 
-    static func makePipeline() -> Pipeline {
+    static func pipelineForPreview() -> Pipeline {
         var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml")
         p.activity = .building
         p.lastBuild = Build(result: .success)
         p.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p.lastBuild!.comment = "Made an important change."
         return p
+    }
+
+    private static func settingsForPreview(status: Bool) -> UserSettings {
+        let s = UserSettings()
+        s.showStatusInPipelineWindow = status
+        s.showCommentsInPipelineWindow = true
+        s.showAvatarsInPipelineWindow = true
+        return s
     }
 
 }

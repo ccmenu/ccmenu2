@@ -17,7 +17,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p, avatars: model.avatars, settings: settings)
+                PipelineRow(pipeline: p, avatars: model.avatars)
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)
@@ -40,24 +40,14 @@ struct PipelineListView: View {
         }
         .toolbar {
             PipelineListToolbar(
-                settings: settings,
-                add: {
-                    addPipeline()
-                },
-                edit: {
-                    editPipeline(at: selectionIndexSet().first)
-                },
-                remove: {
-                    removePipelines(at: selectionIndexSet())
-                },
-                canEdit: {
-                    selection.count == 1
-                },
-                canRemove: {
-                    !selection.isEmpty
-                }
+                add:        { addPipeline() },
+                edit:       { editPipeline(at: selectionIndexSet().first) },
+                remove:     { removePipelines(at: selectionIndexSet()) },
+                canEdit:    { selection.count == 1 },
+                canRemove:  { !selection.isEmpty }
             )
         }
+        .environmentObject(settings)
     }
 
     func selectionIndexSet() -> IndexSet {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PipelineListToolbar: ToolbarContent {
 
-    @ObservedObject var settings: UserSettings
+    @EnvironmentObject var settings: UserSettings
 
     let add: () -> Void
     let edit: () -> Void
