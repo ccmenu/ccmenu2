@@ -83,16 +83,20 @@ class CCMenuUITests: XCTestCase {
         XCTAssertFalse(toolbars.buttons["Edit pipeline"].isEnabled)
         
         toolbars.popUpButtons.firstMatch.click() // TODO: not ideal...
-        toolbars.menuItems["Pipeline"].click()
+        toolbars.menuItems["Pipeline URL"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
 
         toolbars.popUpButtons.firstMatch.click()
+        XCTAssertFalse(toolbars.menuItems["Hide Comments"].isEnabled)
+        XCTAssertFalse(toolbars.menuItems["Hide Avatars"].isEnabled)
         toolbars.menuItems["Build Status"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
 
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
         toolbars.popUpButtons.firstMatch.click()
-        toolbars.menuItems["Status Comment"].click()
+        XCTAssertTrue(toolbars.menuItems["Hide Comments"].isEnabled)
+        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled)
+        toolbars.menuItems["Hide Comments"].click()
         XCTAssertFalse(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
 
     }

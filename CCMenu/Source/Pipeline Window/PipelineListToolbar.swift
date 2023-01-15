@@ -21,13 +21,19 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItem() {
             Menu() {
                 Picker(selection: $settings.showStatusInPipelineWindow, label: EmptyView()) {
-                    Text("Pipeline").tag(false)
+                    Text("Pipeline URL").tag(false)
                     Text("Build Status").tag(true)
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-                Toggle("Status Comment", isOn: $settings.showCommentsInPipelineWindow)
-                Toggle("Status Avatar", isOn: $settings.showAvatarsInPipelineWindow)
+                Button(settings.showCommentsInPipelineWindow ? "Hide Comments" : "Show Comments") {
+                    settings.showCommentsInPipelineWindow.toggle()
+                }
+                .disabled(!settings.showStatusInPipelineWindow)
+                Button(settings.showAvatarsInPipelineWindow ? "Hide Avatars" : "Show Avatars") {
+                    settings.showAvatarsInPipelineWindow.toggle()
+                }
+                .disabled(!settings.showStatusInPipelineWindow)
             }
             label: {
                 Image(systemName: "ellipsis.rectangle")
