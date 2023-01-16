@@ -40,6 +40,7 @@ struct PipelineListView: View {
         }
         .toolbar {
             PipelineListToolbar(
+                settings:   settings,
                 add:        { addPipeline() },
                 edit:       { editPipeline(at: selectionIndexSet().first) },
                 remove:     { removePipelines(at: selectionIndexSet()) },
