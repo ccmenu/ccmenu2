@@ -23,7 +23,6 @@ class StatusItemController: NSObject, NSMenuDelegate {
         super.init()
         statusItem.menu?.delegate = self
 
-//        subscriber = userSettings.$useColorInStatusItem.receive(on: DispatchQueue.main).assign(to: \.useColor, on: ??? )
         subscriber = userSettings.$useColorInStatusItem.receive(on: DispatchQueue.main).sink(receiveValue: { _ in self.updateButton() } )
 
         builder.updateButton(button: statusItem.button!)

@@ -14,6 +14,8 @@ struct CCMenuApp: App {
     @ObservedObject public var userSettings: UserSettings
     var serverMonitor: ServerMonitor
 
+    @State private var command: String = "a"
+
     init() {
         var userDefaults: UserDefaults? = nil
         if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
@@ -55,7 +57,21 @@ struct CCMenuApp: App {
         Settings {
             SettingsView(settings: userSettings)
         }
+        MenuBarExtra() {
+            StatusItemMenu(model: viewModel, settings: userSettings)
+        } label: {
+            Label(title: { Text(command) }, icon: { Image(nsImage: menuBarImage(useColor: userSettings.useColorInStatusItem)) })
+            .labelStyle(.titleAndIcon)
+            .accessibilityIdentifier("CCMenuStatusItem")
+        }
 
+    }
+
+    private func menuBarImage(useColor: Bool) -> NSImage {
+        guard let pipeline = viewModel.pipelineForItem else {
+            return ImageManager().image(forResult: .other, activity: .other)
+        }
+        return ImageManager().image(forPipeline: pipeline, asTemplate: !useColor)
     }
 
 }

@@ -4,12 +4,13 @@
  *  not use these files except in compliance with the License.
  */
 
-import Cocoa
+import AppKit
 import Combine
 
 
 final class ViewModel: ObservableObject {
 
+    @Published var pipelineForItem: Pipeline?
     @Published var pipelines: [Pipeline] = []
     @Published var avatars: Dictionary<URL, NSImage>
 
@@ -30,6 +31,8 @@ final class ViewModel: ObservableObject {
                 retrieveAvatar(url: avatarUrl)
             }
         }
+
+        pipelineForItem = pipelines[0] // TODO: choose most relevant pipeline
     }
 
     private func retrieveAvatar(url avatarUrl: URL) {
@@ -60,8 +63,8 @@ final class ViewModel: ObservableObject {
                 }
             }
         }
-        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:CI", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/runs"))
-        pipelines.append(Pipeline(name: "thoughtworks/epirust:cargo-audit", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/runs"))
+//        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:CI", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/runs"))
+//        pipelines.append(Pipeline(name: "thoughtworks/epirust:cargo-audit", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/runs"))
     }
 
     func loadPipelinesFromFile(_ filename: String) {

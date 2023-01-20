@@ -4,8 +4,9 @@
  *  not use these files except in compliance with the License.
  */
 
-import Cocoa
+import AppKit
 import Combine
+
 
 final class UserSettings: ObservableObject  {
 
