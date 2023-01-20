@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2021 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
@@ -32,7 +32,7 @@ final class ViewModel: ObservableObject {
     convenience init(settings: UserSettings) {
         self.init()
         self.settings = settings
-        settings.$useColorInStatusItem
+        settings.$useColorInMenuBar
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in self.updateMenuBar() } )
             .store(in: &subscribers)
@@ -58,7 +58,7 @@ final class ViewModel: ObservableObject {
 
     private func updateMenuBar() {
         if let pipeline = pipelineForMenuBar() {
-            imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInStatusItem)
+            imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
         } else {
             imageForMenuBar = ImageManager().defaultImage
         }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2021 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
@@ -12,7 +12,7 @@ struct AppearanceSettings: View {
     @ObservedObject var settings: UserSettings
 
     var body: some View {
-        Toggle(isOn: $settings.useColorInStatusItem) {
+        Toggle(isOn: $settings.useColorInMenuBar) {
             Text("Use color in menu bar")
         }
             .frame(width: 300)
@@ -30,7 +30,7 @@ struct AppearanceSettings_Previews: PreviewProvider {
 
     private static func settingsForPreview() -> UserSettings {
         let s = UserSettings()
-        s.useColorInStatusItem = true
+        s.useColorInMenuBar = true
         return s
     }
 

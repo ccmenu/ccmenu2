@@ -7,7 +7,7 @@
 import SwiftUI
 
 
-struct StatusItem: View {
+struct MenuBarExtraLabel: View {
     @ObservedObject var model: ViewModel
 
     var body: some View {
@@ -19,9 +19,9 @@ struct StatusItem: View {
 }
 
 
-struct StatusItem_Previews: PreviewProvider {
+struct MenuBarExtraLabel_Previews: PreviewProvider {
     static var previews: some View {
-        StatusItem(model: viewModelForPreview())
+        MenuBarExtraLabel(model: viewModelForPreview())
     }
 
     static func viewModelForPreview() -> ViewModel {
@@ -48,7 +48,7 @@ struct StatusItem_Previews: PreviewProvider {
 
     private static func settingsForPreview() -> UserSettings {
         let s = UserSettings()
-        s.useColorInStatusItem = true
+        s.useColorInMenuBar = true
         return s
     }
 

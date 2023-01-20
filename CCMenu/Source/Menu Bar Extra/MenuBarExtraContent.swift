@@ -7,7 +7,7 @@
 import SwiftUI
 
 
-struct StatusItemMenu: View {
+struct MenuBarExtraContent: View {
     @ObservedObject var model: ViewModel
 
     var body: some View {
@@ -45,10 +45,10 @@ struct StatusItemMenu: View {
 }
 
 
-struct StatusItemMenu_Previews: PreviewProvider {
+struct MenuBarExtraContent_Previews: PreviewProvider {
     static var previews: some View {
         VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
-            StatusItemMenu(model: viewModelForPreview())
+            MenuBarExtraContent(model: viewModelForPreview())
         }
         .buttonStyle(.borderless)
         .padding(4)

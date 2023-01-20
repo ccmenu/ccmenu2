@@ -12,8 +12,8 @@
 		0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* AppCommands.swift */; };
 		037AB215297334EE00C33589 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserSettings.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
-		037AB2182979E30300C33589 /* StatusItemMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* StatusItemMenu.swift */; };
-		037AB21A297B1DCD00C33589 /* StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* StatusItem.swift */; };
+		037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraContent.swift */; };
+		037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */; };
 		037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB21B297B4D5F00C33589 /* ViewModelTests.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
 		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
@@ -69,8 +69,8 @@
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		037AB2172979E30300C33589 /* StatusItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemMenu.swift; sourceTree = "<group>"; };
-		037AB219297B1DCD00C33589 /* StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItem.swift; sourceTree = "<group>"; };
+		037AB2172979E30300C33589 /* MenuBarExtraContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraContent.swift; sourceTree = "<group>"; };
+		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
 		037AB21B297B4D5F00C33589 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
 		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
@@ -214,7 +214,7 @@
 			children = (
 				03CC11DF2652F02100130833 /* App */,
 				03CC11E12652F08300130833 /* Model */,
-				03CC11E22652F09800130833 /* Status Item */,
+				03CC11E22652F09800130833 /* Menu Bar Extra */,
 				03CC11E32652F0B100130833 /* Pipeline Window */,
 				03CC11E42652F0D800130833 /* Settings */,
 				03CC11E82652F38A00130833 /* Server Monitor */,
@@ -234,13 +234,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		03CC11E22652F09800130833 /* Status Item */ = {
+		03CC11E22652F09800130833 /* Menu Bar Extra */ = {
 			isa = PBXGroup;
 			children = (
-				037AB2172979E30300C33589 /* StatusItemMenu.swift */,
-				037AB219297B1DCD00C33589 /* StatusItem.swift */,
+				037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */,
+				037AB2172979E30300C33589 /* MenuBarExtraContent.swift */,
 			);
-			path = "Status Item";
+			path = "Menu Bar Extra";
 			sourceTree = "<group>";
 		};
 		03CC11E32652F0B100130833 /* Pipeline Window */ = {
@@ -463,12 +463,12 @@
 				03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
-				037AB2182979E30300C33589 /* StatusItemMenu.swift in Sources */,
+				037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
-				037AB21A297B1DCD00C33589 /* StatusItem.swift in Sources */,
+				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,

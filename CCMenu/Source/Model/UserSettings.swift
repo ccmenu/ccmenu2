@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2023 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
@@ -14,7 +14,9 @@ final class UserSettings: ObservableObject  {
     private static let pipelineShowComments = "pipelineShowComments"
     private static let pipelineShowAvatars = "pipelineShowAvatars"
 
-    private static let statusItemUseColor = "statusItemUseColor"
+    private static let menuBarUseColor = "menuBarUseColor"
+
+    private static let menuShowLabels = "menuShowLabel"
 
     private var userDefaults: UserDefaults?
 
@@ -36,18 +38,24 @@ final class UserSettings: ObservableObject  {
         }
     }
 
-    @Published var useColorInStatusItem: Bool {
+    @Published var useColorInMenuBar: Bool {
         didSet {
-            userDefaults?.setValue(useColorInStatusItem, forKey: Self.statusItemUseColor)
+            userDefaults?.setValue(useColorInMenuBar, forKey: Self.menuBarUseColor)
         }
     }
 
+    @Published var showLabelsInMenu: Bool {
+        didSet {
+            userDefaults?.setValue(showLabelsInMenu, forKey: Self.menuShowLabels)
+        }
+    }
 
     init() {
         showStatusInPipelineWindow = false
         showCommentsInPipelineWindow = true
         showAvatarsInPipelineWindow = true
-        useColorInStatusItem = false
+        useColorInMenuBar = false
+        showLabelsInMenu = false
     }
 
     convenience init(userDefaults: UserDefaults?) {
@@ -56,7 +64,8 @@ final class UserSettings: ObservableObject  {
             showStatusInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowStatus)
             showCommentsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowComments)
             showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
-            useColorInStatusItem = userDefaults.bool(forKey: Self.statusItemUseColor)
+            useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
+            showLabelsInMenu = userDefaults.bool(forKey: Self.menuShowLabels)
             self.userDefaults = userDefaults
         }
     }
