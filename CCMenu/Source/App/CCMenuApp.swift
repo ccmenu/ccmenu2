@@ -7,6 +7,7 @@
 import SwiftUI
 import Combine
 
+@available(macOS 13.0, *)
 @main
 struct CCMenuApp: App {
 
