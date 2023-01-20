@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2021 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
@@ -9,10 +9,12 @@ import AppKit
 
 class ImageManager {
 
+    public lazy var defaultImage = image(forResult: .other, activity: .other)
+
     func image(forPipeline pipeline: Pipeline, asTemplate: Bool = false) -> NSImage {
         let result = pipeline.lastBuild?.result ?? BuildResult.other
         let activity = pipeline.activity
-        return image(forResult: result, activity: activity)
+        return image(forResult: result, activity: activity, asTemplate: asTemplate)
     }
 
     func image(forResult result: BuildResult, activity: PipelineActivity, asTemplate: Bool = false) -> NSImage {

@@ -13,20 +13,19 @@
 		037AB215297334EE00C33589 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserSettings.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* StatusItemMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* StatusItemMenu.swift */; };
+		037AB21A297B1DCD00C33589 /* StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* StatusItem.swift */; };
+		037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB21B297B4D5F00C33589 /* ViewModelTests.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
 		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
 		03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E80259E164500DEB003 /* WorkspaceController.swift */; };
 		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
-		03825EC425A08A8900DEB003 /* StatusItemBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
 		03BD7EAA2598E57A000F9495 /* CCMenuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */; };
-		03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */; };
-		03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EC22598E676000F9495 /* StatusItemController.swift */; };
 		03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EDA2598ED9B000F9495 /* Credits.rtf */; };
 		03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EF9259A180C000F9495 /* ImageManager.swift */; };
 		03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11E92652F49100130833 /* ServerMonitor.swift */; };
@@ -71,13 +70,14 @@
 		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* StatusItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemMenu.swift; sourceTree = "<group>"; };
+		037AB219297B1DCD00C33589 /* StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItem.swift; sourceTree = "<group>"; };
+		037AB21B297B4D5F00C33589 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
 		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
 		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
-		03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemBuilderTests.swift; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,8 +90,6 @@
 		03BD7EA52598E57A000F9495 /* CCMenuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuUITests.swift; sourceTree = "<group>"; };
 		03BD7EAB2598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemBuilder.swift; sourceTree = "<group>"; };
-		03BD7EC22598E676000F9495 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		03CC11E92652F49100130833 /* ServerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMonitor.swift; sourceTree = "<group>"; };
@@ -180,12 +178,12 @@
 		03BD7E9D2598E57A000F9495 /* CCMenuTests */ = {
 			isa = PBXGroup;
 			children = (
-				03825EB325A0877B00DEB003 /* StatusItemBuilderTests.swift */,
 				03D4BB002659A1120023F4CB /* PipelineTests.swift */,
 				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
 				2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */,
+				037AB21B297B4D5F00C33589 /* ViewModelTests.swift */,
 				03BD7EA02598E57A000F9495 /* Info.plist */,
 			);
 			path = CCMenuTests;
@@ -239,9 +237,8 @@
 		03CC11E22652F09800130833 /* Status Item */ = {
 			isa = PBXGroup;
 			children = (
-				03BD7EC22598E676000F9495 /* StatusItemController.swift */,
-				03BD7EBD2598E5D5000F9495 /* StatusItemBuilder.swift */,
 				037AB2172979E30300C33589 /* StatusItemMenu.swift */,
+				037AB219297B1DCD00C33589 /* StatusItem.swift */,
 			);
 			path = "Status Item";
 			sourceTree = "<group>";
@@ -456,7 +453,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */,
-				03BD7EC32598E676000F9495 /* StatusItemController.swift in Sources */,
 				037AB215297334EE00C33589 /* UserSettings.swift in Sources */,
 				03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
@@ -464,7 +460,6 @@
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				039B524629676D0700994910 /* Build.swift in Sources */,
-				03BD7EBE2598E5D5000F9495 /* StatusItemBuilder.swift in Sources */,
 				03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
@@ -473,6 +468,7 @@
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
+				037AB21A297B1DCD00C33589 /* StatusItem.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
@@ -489,9 +485,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03825EC425A08A8900DEB003 /* StatusItemBuilderTests.swift in Sources */,
 				03D4BB012659A1120023F4CB /* PipelineTests.swift in Sources */,
 				03CC11EC2652F58B00130833 /* ServerMonitorTests.swift in Sources */,
+				037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 				2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */,

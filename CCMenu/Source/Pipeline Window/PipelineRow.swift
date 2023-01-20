@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2021 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
@@ -32,12 +32,12 @@ struct PipelineRow: View {
                 } else {
                     Text(pipeline.status)
                     if settings.showCommentsInPipelineWindow {
-                        Text(pipeline.lastBuild?.comment ?? "–")
+                        Text(pipeline.message ?? "–")
                     }
                 }
             }
                 .frame(maxWidth: .infinity, alignment: .leading)
-            Image(nsImage: ImageManager().image(forPipeline: pipeline))
+            Image(nsImage: pipeline.statusImage)
         }
         .padding(4)
     }

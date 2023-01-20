@@ -9,14 +9,13 @@ import SwiftUI
 
 struct StatusItemMenu: View {
     @ObservedObject var model: ViewModel
-    @ObservedObject var settings: UserSettings
 
     var body: some View {
-        ForEach(model.pipelines) { p in
+        ForEach(model.pipelinesForMenu) { lp in
             Button() {
-                WorkspaceController().openPipeline(p)
+                WorkspaceController().openPipeline(lp.pipeline)
             } label: {
-                Label(title: { Text(p.name) }, icon: { Image(nsImage: pipelineImage(p)) } )
+                Label(title: { Text(lp.label) }, icon: { Image(nsImage: lp.pipeline.statusImage) } )
                 .labelStyle(.titleAndIcon)
 
             }
@@ -41,10 +40,46 @@ struct StatusItemMenu: View {
         Button("Quit CCMenu") {
             NSApp.sendAction(#selector(NSApplication.terminate(_:)), to: nil, from: self)
         }
-
     }
 
-    private func pipelineImage(_ pipeline: Pipeline) -> NSImage {
-        return ImageManager().image(forPipeline: pipeline, asTemplate: false)
+}
+
+
+struct StatusItemMenu_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
+            StatusItemMenu(model: viewModelForPreview())
+        }
+        .buttonStyle(.borderless)
+        .padding(4)
+        .frame(maxWidth: 300)
     }
+
+    static func viewModelForPreview() -> ViewModel {
+        let model = ViewModel(settings: settingsForPreview())
+
+        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
+        p0.activity = .building
+        p0.lastBuild = Build(result: .failure)
+        p0.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml")
+        p1.activity = .sleeping
+        p1.lastBuild = Build(result: .success)
+        p1.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        p1.lastBuild!.label = "build.151"
+
+        model.pipelines = [p0, p1]
+
+        model.update(pipeline: p0)
+        model.update(pipeline: p1)
+
+        return model
+    }
+
+    private static func settingsForPreview() -> UserSettings {
+        let s = UserSettings()
+        return s
+    }
+
 }

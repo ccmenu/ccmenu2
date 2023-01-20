@@ -5,16 +5,19 @@
  */
 
 import SwiftUI
+import Combine
 
 @main
 struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @ObservedObject public var viewModel: ViewModel
     @ObservedObject public var userSettings: UserSettings
-    var serverMonitor: ServerMonitor
+    @ObservedObject public var viewModel: ViewModel
+    private var serverMonitor: ServerMonitor
+    private var subscribers: [AnyCancellable] = []
 
-    @State private var command: String = "a"
+    @State private var menuLabel: String = ""
+    @State private var menuImage: NSImage = ImageManager().image(forResult: .other, activity: .other)
 
     init() {
         var userDefaults: UserDefaults? = nil
@@ -24,8 +27,8 @@ struct CCMenuApp: App {
             userDefaults = UserDefaults.standard
         }
 
-        let viewModel = ViewModel()
         let userSettings = UserSettings(userDefaults: userDefaults)
+        let viewModel = ViewModel(settings: userSettings)
 
         self.viewModel = viewModel
         self.userSettings = userSettings
@@ -41,6 +44,7 @@ struct CCMenuApp: App {
             viewModel.loadPipelinesFromUserDefaults()
             serverMonitor.start()
         }
+
     }
 
     var body: some Scene {
@@ -58,20 +62,12 @@ struct CCMenuApp: App {
             SettingsView(settings: userSettings)
         }
         MenuBarExtra() {
-            StatusItemMenu(model: viewModel, settings: userSettings)
+            StatusItemMenu(model: viewModel)
         } label: {
-            Label(title: { Text(command) }, icon: { Image(nsImage: menuBarImage(useColor: userSettings.useColorInStatusItem)) })
-            .labelStyle(.titleAndIcon)
-            .accessibilityIdentifier("CCMenuStatusItem")
+            StatusItem(model: viewModel)
         }
 
     }
 
-    private func menuBarImage(useColor: Bool) -> NSImage {
-        guard let pipeline = viewModel.pipelineForItem else {
-            return ImageManager().image(forResult: .other, activity: .other)
-        }
-        return ImageManager().image(forPipeline: pipeline, asTemplate: !useColor)
-    }
 
 }

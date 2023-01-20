@@ -10,12 +10,32 @@ import Combine
 
 final class ViewModel: ObservableObject {
 
-    @Published var pipelineForItem: Pipeline?
     @Published var pipelines: [Pipeline] = []
     @Published var avatars: Dictionary<URL, NSImage>
 
+    @Published var pipelinesForMenu: [LabeledPipeline] = []
+
+    @Published var imageForMenuBar: NSImage
+    @Published var textForMenuBar: String
+
+    private var settings: UserSettings
+
+    private var subscribers: [AnyCancellable] = []
+
     init() {
+        imageForMenuBar = ImageManager().defaultImage
+        textForMenuBar = ""
         avatars = Dictionary()
+        settings = UserSettings()
+    }
+
+    convenience init(settings: UserSettings) {
+        self.init()
+        self.settings = settings
+        settings.$useColorInStatusItem
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { _ in self.updateMenuBar() } )
+            .store(in: &subscribers)
     }
 
     func update(pipeline: Pipeline) {
@@ -32,8 +52,33 @@ final class ViewModel: ObservableObject {
             }
         }
 
-        pipelineForItem = pipelines[0] // TODO: choose most relevant pipeline
+        updateMenuBar()
+        updateMenu()
     }
+
+    private func updateMenuBar() {
+        if let pipeline = pipelineForMenuBar() {
+            imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInStatusItem)
+        } else {
+            imageForMenuBar = ImageManager().defaultImage
+        }
+        textForMenuBar = ""
+    }
+
+    private func pipelineForMenuBar() -> Pipeline? {
+        return pipelines[0] // TODO: choose most relevant pipeline
+    }
+
+
+    private func updateMenu() {
+        pipelinesForMenu = []
+        for p in pipelines {
+            let l = p.name
+            pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))
+        }
+    }
+
+
 
     private func retrieveAvatar(url avatarUrl: URL) {
         DispatchQueue.global(qos: .background).async {
@@ -87,6 +132,8 @@ final class ViewModel: ObservableObject {
                 throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date string \(string)")
             }
             pipelines = try decoder.decode([Pipeline].self, from: data)
+            updateMenuBar()
+            updateMenu()
         } catch {
             fatalError("Couldn't parse \(filename) as [Pipeline]:\n\(error)")
         }

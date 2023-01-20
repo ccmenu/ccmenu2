@@ -1,10 +1,10 @@
 /*
- *  Copyright (c) 2007-2021 ThoughtWorks Inc.
+ *  Copyright (c) ThoughtWorks Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use these files except in compliance with the License.
  */
 
-import Foundation
+import AppKit
 
 
 enum PipelineActivity: String, Codable {
@@ -109,6 +109,24 @@ struct Pipeline: Hashable, Identifiable, Codable {
             return components.joined(separator: ", ")
         }
         return "Build finished"
+    }
+
+    var statusImage: NSImage {
+        return ImageManager().image(forPipeline: self)
+    }
+
+    var message: String? {
+        return lastBuild?.comment
+    }
+
+}
+
+
+struct LabeledPipeline: Hashable, Identifiable {
+    var pipeline: Pipeline
+    var label: String
+    var id: String {
+        pipeline.id
     }
 
 }
