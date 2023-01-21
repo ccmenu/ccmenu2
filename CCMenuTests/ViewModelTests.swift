@@ -9,17 +9,18 @@ import XCTest
 
 class ViewModelTests: XCTestCase {
 
-    func testDisplaysNoTextAndDefaultImageWhenNoPipelinesAreMonitored() throws {
+    func testDisplaysDefaultImageAndNoTextWhenNoPipelinesAreMonitored() throws {
         let model = makeModel()
 
-        XCTAssertEqual("", model.textForMenuBar)
         XCTAssertEqual(ImageManager().defaultImage, model.imageForMenuBar)
+        XCTAssertEqual("", model.textForMenuBar)
     }
 
-    func testDisplaysNoTextAndDefaultImageWhenNoStatusIsKnown() throws {
+    func testDisplaysDefaultImageAndNoTextWhenNoStatusIsKnown() throws {
         let model = makeModel()
         model.pipelines = [makePipeline(name: "connectfour")]
 
+        XCTAssertEqual(ImageManager().defaultImage, model.imageForMenuBar)
         XCTAssertEqual("", model.textForMenuBar)
     }
 
@@ -29,8 +30,8 @@ class ViewModelTests: XCTestCase {
         let p1 = makePipeline(name: "p1", activity: .sleeping, lastBuildResult: .success)
         model.pipelines = [p0, p1]
 
-        XCTAssertEqual("", model.textForMenuBar)
         XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping), model.imageForMenuBar)
+        XCTAssertEqual("", model.textForMenuBar)
     }
 
     func testDisplaysFailureAndNumberOfFailuresWhenAllAreSleepingAndAtLeastOneIsFailed() throws {
@@ -40,9 +41,65 @@ class ViewModelTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
         model.pipelines = [p0, p1, p2]
 
-//        XCTAssertEqual("2", model.textForMenuBar)
         XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .sleeping), model.imageForMenuBar)
+        XCTAssertEqual("2", model.textForMenuBar)
+    }
 
+    func testDisplaysBuildingWhenAtLeastOneProjectIsBuilding() throws {
+        let model = makeModel()
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
+        let p1 = makePipeline(name: "p1", activity: .sleeping, lastBuildResult: .failure)
+        let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
+        model.pipelines = [p0, p1, p2]
+
+        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .building), model.imageForMenuBar)
+    }
+
+    func testDisplaysFixingWhenAtLeastOneProjectWithLastStatusFailedIsBuilding() throws {
+        let model = makeModel()
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
+        let p1 = makePipeline(name: "p1", activity: .sleeping, lastBuildResult: .failure)
+        let p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .failure)
+        model.pipelines = [p0, p1, p2]
+
+        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .building), model.imageForMenuBar)
+    }
+
+    func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {
+        let model = makeModel()
+        var p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
+        p0.lastBuild!.duration = 90
+        p0.lastBuild!.timestamp = Date.now
+        model.pipelines = [p0]
+
+        XCTAssertEqual("", model.textForMenuBar)
+    }
+
+    func testDisplaysShortestTimingForBuildingProjectsWithEstimatedCompleteTime() throws {
+        let model = makeModel()
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
+        var p1 = makePipeline(name: "p1", activity: .building, lastBuildResult: .success)
+        p1.lastBuild!.duration = 70
+        p1.lastBuild!.timestamp = Date.now
+        var p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .success)
+        p2.lastBuild!.duration = 30
+        p2.lastBuild!.timestamp = Date.now
+        model.pipelines = [p0, p1, p2]
+
+        XCTAssertEqual("-29s", model.textForMenuBar)
+    }
+
+    func testDisplaysTimingForFixingEvenIfItsLongerThanForBuilding() throws {
+        let model = makeModel()
+        var p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
+        p0.lastBuild!.duration = 30
+        p0.lastBuild!.timestamp = Date.now
+        var p1 = makePipeline(name: "p1", activity: .building, lastBuildResult: .failure)
+        p1.lastBuild!.duration = 90
+        p1.lastBuild!.timestamp = Date.now
+        model.pipelines = [p0, p1]
+
+        XCTAssertEqual("-01:29", model.textForMenuBar)
     }
 
     func testUsesPipelineNameInMenuAsDefault() throws {
@@ -66,7 +123,7 @@ class ViewModelTests: XCTestCase {
 
 
     private func makeModel() -> ViewModel {
-        var m = ViewModel(settings: UserSettings())
+        let m = ViewModel(settings: UserSettings())
         m.settings.useColorInMenuBar = true // otherwise we can't compare the images
         return m
     }

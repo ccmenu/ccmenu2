@@ -57,36 +57,58 @@ final class ViewModel: ObservableObject {
             }
         }
 
-        updateMenuBar()
+        updateMenuBar() // TODO: still needed now that we have a didSet on pipelines?
         updateMenu()
     }
 
     private func updateMenuBar() {
         if let pipeline = pipelineForMenuBar() {
             imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
+            if pipeline.activity == .building {
+                if let completionTime = pipeline.estimatedBuildComplete {
+                    textForMenuBar = Date.now.formatted(.compactRelative(reference: completionTime))
+                } else {
+                    textForMenuBar = ""
+                }
+            } else {
+                let failCount = pipelines.filter({ p in p.lastBuild?.result == .failure}).count
+                textForMenuBar = (failCount == 0) ? "" : "\(failCount)"
+            }
         } else {
             imageForMenuBar = ImageManager().defaultImage
+            textForMenuBar = ""
         }
-        textForMenuBar = ""
     }
 
     private func pipelineForMenuBar() -> Pipeline? {
-        let sorted = try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:))
-        return sorted.first
+        try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:)).first
     }
 
     private func compareMenuBarPriority(lhs: Pipeline, rhs: Pipeline) throws -> Bool {
-        if priority(hasBuild: lhs) != priority(hasBuild: rhs) {
-            return priority(hasBuild: lhs) > priority(hasBuild: rhs)
-        }
-        if priority(buildResult: lhs) != priority(buildResult: rhs) {
-            return priority(buildResult: lhs) > priority(buildResult: rhs)
+
+        let priorities = [
+            priority(hasBuild:),
+            priority(isBuilding:),
+            priority(buildResult:),
+            priority(estimatedComplete:)
+        ]
+        for p in priorities {
+            if p(lhs) > p(rhs) {
+                return true
+            }
+            if p(lhs) < p(rhs) {
+                return false
+            }
         }
         return false
     }
 
     private func priority(hasBuild pipeline: Pipeline) -> Int {
         return (pipeline.lastBuild != nil) ? 1 : 0
+    }
+
+    private func priority(isBuilding pipeline: Pipeline) -> Int {
+        return (pipeline.activity == .building) ? 1 : 0
     }
 
     private func priority(buildResult pipeline: Pipeline) -> Int {
@@ -100,6 +122,13 @@ final class ViewModel: ObservableObject {
         case nil:
             return 0
         }
+    }
+
+    private func priority(estimatedComplete pipeline: Pipeline) -> Int {
+        let date = pipeline.estimatedBuildComplete ?? Date.distantFuture
+        assert(Date.distantFuture.timeIntervalSinceReferenceDate < Double(Int.max))
+        // Multiplying all intervals with -1 makes shorter intervals higher priority.
+        return Int(date.timeIntervalSinceReferenceDate) * -1
     }
 
 

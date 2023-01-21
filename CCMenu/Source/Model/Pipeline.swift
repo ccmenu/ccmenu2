@@ -56,6 +56,13 @@ struct Pipeline: Hashable, Identifiable, Codable {
         name + "|" + connectionDetails.feedUrl
     }
 
+    var estimatedBuildComplete: Date? {
+        if activity == .building, let duration = lastBuild?.duration {
+            return lastBuild?.timestamp?.advanced(by: duration)
+        }
+        return nil;
+    }
+
     var status: String {
         if let error = connectionError {
             return error
