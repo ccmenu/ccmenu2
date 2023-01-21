@@ -13,7 +13,7 @@ struct MenuBarExtraLabel: View {
     var body: some View {
         Label(title: { Text(model.textForMenuBar) }, icon: { Image(nsImage: model.imageForMenuBar) })
         .labelStyle(.titleAndIcon)
-        .accessibilityIdentifier("CCMenuStatusItem")
+        .accessibilityIdentifier("CCMenuMenuExtra")
     }
 
 }

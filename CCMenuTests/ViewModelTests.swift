@@ -9,6 +9,12 @@ import XCTest
 
 class ViewModelTests: XCTestCase {
 
+    func testShowsNoTextAndDefaultImageWhenNoPipelinesAreMonitored() throws {
+        let model = makeModel()
+        XCTAssertEqual("", model.textForMenuBar)
+        XCTAssertEqual(ImageManager().defaultImage, model.imageForMenuBar)
+    }
+
     func testShowsNoTextInMenuBarByDefault() throws {
         let model = makeModelWithPipeline()
         let t = model.textForMenuBar
@@ -32,9 +38,12 @@ class ViewModelTests: XCTestCase {
         XCTAssertEqual("connectfour \u{2014} build.1", lp.label)
     }
 
+    private func makeModel() -> ViewModel {
+        return ViewModel(settings: UserSettings())
+    }
+
     private func makeModelWithPipeline() -> ViewModel {
-        let settings = UserSettings()
-        let model = ViewModel(settings: settings)
+        let model = makeModel()
         let pipeline = Pipeline(name: "connectfour", feedUrl: "")
         model.pipelines.append(pipeline)
         model.update(pipeline: pipeline)

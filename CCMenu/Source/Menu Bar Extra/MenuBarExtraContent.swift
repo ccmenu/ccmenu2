@@ -31,7 +31,6 @@ struct MenuBarExtraContent: View {
         Button("About CCMenu") {
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
-        .accessibilityIdentifier("AboutCCMenu")
         Button("Settings...") {
             NSApp.sendAction(#selector(AppDelegate.orderFrontSettingsWindow(_:)), to: nil, from: self)
         }

@@ -9,8 +9,8 @@ import SwiftUI
 struct SettingsView: View {
     
     private enum Tab: Hashable {
-        case notifications
         case appearance
+        case notifications
         case advanced
     }
 
@@ -20,17 +20,17 @@ struct SettingsView: View {
     var body: some View {
         // TODO: why does the animation not work?
         TabView(selection: $selectedTab.animation()) {
-            NotificationSettings()
-                .tag(Tab.notifications)
-                .tabItem {
-                    Image(systemName: "bell.badge")
-                    Text("Notifications")
-                }
             AppearanceSettings(settings: settings)
                 .tag(Tab.appearance)
                 .tabItem {
                     Image(systemName: "filemenu.and.selection")
                     Text("Appearance")
+                }
+            NotificationSettings()
+                .tag(Tab.notifications)
+                .tabItem {
+                    Image(systemName: "bell.badge")
+                    Text("Notifications")
                 }
             AdvancedSettings()
                 .tag(Tab.advanced)

@@ -27,6 +27,8 @@ final class ViewModel: ObservableObject {
         textForMenuBar = ""
         avatars = Dictionary()
         settings = UserSettings()
+        updateMenuBar()
+        updateMenu()
     }
 
     convenience init(settings: UserSettings) {
@@ -35,6 +37,10 @@ final class ViewModel: ObservableObject {
         settings.$useColorInMenuBar
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in self.updateMenuBar() } )
+            .store(in: &subscribers)
+        settings.$showLabelsInMenu
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { _ in self.updateMenu() } )
             .store(in: &subscribers)
     }
 
@@ -66,7 +72,7 @@ final class ViewModel: ObservableObject {
     }
 
     private func pipelineForMenuBar() -> Pipeline? {
-        return pipelines[0] // TODO: choose most relevant pipeline
+        return pipelines.first // TODO: choose most relevant pipeline
     }
 
 

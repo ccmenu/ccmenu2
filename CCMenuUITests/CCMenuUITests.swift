@@ -27,20 +27,19 @@ class CCMenuUITests: XCTestCase {
         return app
     }
 
-    private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
+    @discardableResult private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
         // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
-        app.menuBars.statusItems["CCMenuStatusItem"].click()
-        return app.menuBars.menus.containing(.menuItem, identifier:"connectfour") // TODO: improve
+        let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
+        statusItem.click()
+        return statusItem.children(matching: .menu)
     }
 
-    func testStatusItemMenuOpenPipeline() throws {
+    func testMenuOpenPipeline() throws {
         let app = launchApp()
         let menu = openMenu(app: app)
 
-        // Sanity check for status item menu
-        XCTAssert(menu.menuItems["connectfour"].exists)
+        // Make sure expected pipeline present
         XCTAssert(menu.menuItems["erikdoe/ccmenu"].exists)
-        XCTAssertEqual(10, menu.menuItems.count)
 
         // Make sure broken URLs are not opened
         menu.menuItems["erikdoe/ccmenu"].click()
@@ -48,19 +47,42 @@ class CCMenuUITests: XCTestCase {
         app.dialogs["alert"].buttons["Cancel"].click()
     }
 
-    func testStatusItemMenuOpenAboutPanel() throws {
+    func testMenuOpenAboutPanel() throws {
         let app = launchApp()
         let menu = openMenu(app: app)
 
+        // Open about panel
         menu.menuItems["About CCMenu"].click()
 
+        // Make sure version is displayed
         let versionText = app.dialogs.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Version'"))
         guard let versionString = versionText.value as? String else {
             XCTFail()
             return
         }
+        // TODO: Sometimes version check fails because the script that inserts it isn't run. Why?
         let range = versionString.range(of: "^Version [0-9]+ \\([A-Z0-9]+\\)$", options: .regularExpression)
         XCTAssertNotNil(range)
+    }
+
+    func testAppearanceSettings() throws {
+        let app = launchApp()
+        let menu = openMenu(app: app)
+
+        // Make sure expected menu items are present
+        XCTAssert(menu.menuItems["connectfour"].exists)
+
+        // Open settings, chose to display build labels, then close settings
+        menu.menuItems["Settings..."].click()
+        let window = app.windows["com_apple_SwiftUI_Settings_window"]
+        window.toolbars.buttons["Appearance"].click()
+        XCTAssert(window.checkBoxes["Show labels in menu"].isSelected == false)
+        window.checkBoxes["Show labels in menu"].click()
+        window.buttons[XCUIIdentifierCloseWindow].click()
+
+        // Make sure the pipeline menu item now displays the build label
+        openMenu(app: app)
+        XCTAssert(menu.menuItems["connectfour \u{2014} build.151"].exists)
     }
     
     

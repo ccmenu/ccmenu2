@@ -12,12 +12,17 @@ struct AppearanceSettings: View {
     @ObservedObject var settings: UserSettings
 
     var body: some View {
-        Toggle(isOn: $settings.useColorInMenuBar) {
-            Text("Use color in menu bar")
+        VStack {
+            Toggle(isOn: $settings.useColorInMenuBar) {
+                Text("Use color in menu bar")
+            }
+            Toggle(isOn: $settings.showLabelsInMenu) {
+                Text("Show labels in menu")
+            }
         }
-            .frame(width: 300)
-            .navigationTitle("Appearance")
-            .padding(80)
+        .frame(width: 300)
+        .navigationTitle("Appearance")
+        .padding(80)
     }
 
 }
