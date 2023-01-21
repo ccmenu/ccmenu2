@@ -21,6 +21,17 @@ class ViewModelTests: XCTestCase {
         XCTAssertEqual("connectfour", lp.label)
     }
 
+    func testAppendsBuildLabelToPipelineNameInMenuBasedOnSetting() throws {
+        let model = makeModelWithPipeline()
+        model.settings.showLabelsInMenu = true
+        var pipeline = Pipeline(name: "connectfour", feedUrl: "")
+        pipeline.lastBuild = Build(result: .success, label: "build.1")
+        model.update(pipeline: pipeline)
+
+        let lp = model.pipelinesForMenu[0]
+        XCTAssertEqual("connectfour \u{2014} build.1", lp.label)
+    }
+
     private func makeModelWithPipeline() -> ViewModel {
         let settings = UserSettings()
         let model = ViewModel(settings: settings)

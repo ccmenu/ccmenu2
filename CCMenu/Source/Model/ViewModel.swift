@@ -18,7 +18,7 @@ final class ViewModel: ObservableObject {
     @Published var imageForMenuBar: NSImage
     @Published var textForMenuBar: String
 
-    private var settings: UserSettings
+    var settings: UserSettings
 
     private var subscribers: [AnyCancellable] = []
 
@@ -73,7 +73,10 @@ final class ViewModel: ObservableObject {
     private func updateMenu() {
         pipelinesForMenu = []
         for p in pipelines {
-            let l = p.name
+            var l = p.name
+            if settings.showLabelsInMenu, let buildLabel = p.lastBuild?.label {
+                l.append(" \u{2014} \(buildLabel)")
+            }
             pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))
         }
     }
