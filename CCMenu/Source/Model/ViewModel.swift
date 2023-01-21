@@ -10,7 +10,7 @@ import Combine
 
 final class ViewModel: ObservableObject {
 
-    @Published var pipelines: [Pipeline] = []
+    @Published var pipelines: [Pipeline] { didSet { updateMenu(); updateMenuBar() } }
     @Published var avatars: Dictionary<URL, NSImage>
 
     @Published var pipelinesForMenu: [LabeledPipeline] = []
@@ -25,10 +25,9 @@ final class ViewModel: ObservableObject {
     init() {
         imageForMenuBar = ImageManager().defaultImage
         textForMenuBar = ""
+        pipelines = []
         avatars = Dictionary()
         settings = UserSettings()
-        updateMenuBar()
-        updateMenu()
     }
 
     convenience init(settings: UserSettings) {
@@ -72,7 +71,35 @@ final class ViewModel: ObservableObject {
     }
 
     private func pipelineForMenuBar() -> Pipeline? {
-        return pipelines.first // TODO: choose most relevant pipeline
+        let sorted = try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:))
+        return sorted.first
+    }
+
+    private func compareMenuBarPriority(lhs: Pipeline, rhs: Pipeline) throws -> Bool {
+        if priority(hasBuild: lhs) != priority(hasBuild: rhs) {
+            return priority(hasBuild: lhs) > priority(hasBuild: rhs)
+        }
+        if priority(buildResult: lhs) != priority(buildResult: rhs) {
+            return priority(buildResult: lhs) > priority(buildResult: rhs)
+        }
+        return false
+    }
+
+    private func priority(hasBuild pipeline: Pipeline) -> Int {
+        return (pipeline.lastBuild != nil) ? 1 : 0
+    }
+
+    private func priority(buildResult pipeline: Pipeline) -> Int {
+        switch pipeline.lastBuild?.result {
+        case .failure:
+            return 3
+        case .success:
+            return 2
+        case .unknown, .other:
+            return 1
+        case nil:
+            return 0
+        }
     }
 
 
@@ -86,7 +113,6 @@ final class ViewModel: ObservableObject {
             pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))
         }
     }
-
 
 
     private func retrieveAvatar(url avatarUrl: URL) {
