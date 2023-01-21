@@ -24,3 +24,5 @@ jobs:
 #   - name: Run UI tests
 #     run: xcodebuild test -scheme CCMenu.UITests  -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
 
+# Tests commented out until Github Actions have a runner for macOS 13
+# See https://github.com/orgs/github/projects/4247?pane=issue&itemId=16374161
