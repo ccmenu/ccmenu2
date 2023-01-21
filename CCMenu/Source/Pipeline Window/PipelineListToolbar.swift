@@ -26,8 +26,8 @@ struct PipelineListToolbar: ToolbarContent {
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-                Button(settings.showCommentsInPipelineWindow ? "Hide Comments" : "Show Comments") {
-                    settings.showCommentsInPipelineWindow.toggle()
+                Button(settings.showMessagesInPipelineWindow ? "Hide Messages" : "Show Messages") {
+                    settings.showMessagesInPipelineWindow.toggle()
                 }
                 .disabled(!settings.showStatusInPipelineWindow)
                 Button(settings.showAvatarsInPipelineWindow ? "Hide Avatars" : "Show Avatars") {

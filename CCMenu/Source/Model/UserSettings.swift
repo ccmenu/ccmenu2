@@ -11,7 +11,7 @@ import Combine
 final class UserSettings: ObservableObject  {
 
     private static let pipelineShowStatus = "pipelineShowStatus"
-    private static let pipelineShowComments = "pipelineShowComments"
+    private static let pipelineShowMessages = "pipelineShowMessages"
     private static let pipelineShowAvatars = "pipelineShowAvatars"
 
     private static let menuBarUseColor = "menuBarUseColor"
@@ -26,9 +26,9 @@ final class UserSettings: ObservableObject  {
         }
     }
 
-    @Published var showCommentsInPipelineWindow: Bool {
+    @Published var showMessagesInPipelineWindow: Bool {
         didSet {
-            userDefaults?.setValue(showCommentsInPipelineWindow, forKey: Self.pipelineShowComments)
+            userDefaults?.setValue(showMessagesInPipelineWindow, forKey: Self.pipelineShowMessages)
         }
     }
 
@@ -52,7 +52,7 @@ final class UserSettings: ObservableObject  {
 
     init() {
         showStatusInPipelineWindow = false
-        showCommentsInPipelineWindow = true
+        showMessagesInPipelineWindow = true
         showAvatarsInPipelineWindow = true
         useColorInMenuBar = false
         showLabelsInMenu = false
@@ -62,7 +62,7 @@ final class UserSettings: ObservableObject  {
         self.init()
         if let userDefaults = userDefaults {
             showStatusInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowStatus)
-            showCommentsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowComments)
+            showMessagesInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowMessages)
             showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
             useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
             showLabelsInMenu = userDefaults.bool(forKey: Self.menuShowLabels)

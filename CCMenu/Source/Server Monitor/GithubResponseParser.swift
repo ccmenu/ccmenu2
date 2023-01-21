@@ -48,7 +48,7 @@ class GithubResponseParser {
             }
         }
         if let displayTitle = run["display_title"] as? String {
-            build.comment = displayTitle
+            build.message = displayTitle
         }
         if let actor = run["actor"] as? Dictionary<String, Any?> {
             if let actorLogin = actor["login"] as? String   {

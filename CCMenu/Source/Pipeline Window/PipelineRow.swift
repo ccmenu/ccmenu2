@@ -31,7 +31,7 @@ struct PipelineRow: View {
                     Text("\(connection.feedUrl) [\(connection.feedType.rawValue)]") // TODO: use icons for feed type
                 } else {
                     Text(pipeline.status)
-                    if settings.showCommentsInPipelineWindow {
+                    if settings.showMessagesInPipelineWindow {
                         Text(pipeline.message ?? "–")
                     }
                 }
@@ -64,14 +64,14 @@ struct PipelineRow_Previews: PreviewProvider {
         p.activity = .building
         p.lastBuild = Build(result: .success)
         p.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        p.lastBuild!.comment = "Made an important change."
+        p.lastBuild!.message = "Made an important change."
         return p
     }
 
     private static func settingsForPreview(status: Bool) -> UserSettings {
         let s = UserSettings()
         s.showStatusInPipelineWindow = status
-        s.showCommentsInPipelineWindow = true
+        s.showMessagesInPipelineWindow = true
         s.showAvatarsInPipelineWindow = true
         return s
     }

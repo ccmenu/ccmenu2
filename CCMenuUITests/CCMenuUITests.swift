@@ -94,16 +94,16 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
 
         toolbars.popUpButtons.firstMatch.click()
-        XCTAssertTrue(toolbars.menuItems["Hide Comments"].isEnabled == false)
+        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == false)
         XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
         toolbars.menuItems["Build Status"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
 
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
         toolbars.popUpButtons.firstMatch.click()
-        XCTAssertTrue(toolbars.menuItems["Hide Comments"].isEnabled)
+        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled)
         XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled)
-        toolbars.menuItems["Hide Comments"].click()
+        toolbars.menuItems["Hide Messages"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists == false)
 
     }

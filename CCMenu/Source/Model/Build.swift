@@ -19,7 +19,7 @@ struct Build: Hashable, Codable {
     var label: String?
     var timestamp: Date?
     var duration: TimeInterval?
-    var comment: String?
+    var message: String?
     var user: String?
     var avatar: URL?
 }

@@ -116,7 +116,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     var message: String? {
-        return lastBuild?.comment
+        return lastBuild?.message
     }
 
 }
