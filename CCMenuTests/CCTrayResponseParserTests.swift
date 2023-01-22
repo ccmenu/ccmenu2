@@ -10,8 +10,8 @@ import XCTest
 class CCTrayResponseParserTests: XCTestCase {
 
     func testParsesXML() throws {
-        let parser = CCTrayResponseParser()
         let xml = "<Projects><Project name='connectfour' activity='Sleeping'/></Projects>"
+        let parser = CCTrayResponseParser()
 
         try parser.parseResponse(xml.data(using: .ascii)!)
 
@@ -53,10 +53,12 @@ class CCTrayResponseParserTests: XCTestCase {
         let status = parser.pipelineStatus(name: "connectfour")!
 
         XCTAssertEqual(.sleeping, status.activity)
+        XCTAssertEqual("http://localhost:8080/dashboard/build/detail/connectfour", status.webUrl)
         guard let build = status.lastBuild else { XCTFail(); return }
         XCTAssertEqual(.success, build.result)
         XCTAssertEqual("build.1", build.label)
         XCTAssertEqual(ISO8601DateFormatter().date(from: "2007-07-18T18:44:48Z"), build.timestamp)
+        XCTAssertNil(status.currentBuild)
     }
 
     func testPipelineStatusReflectsBuildingProjectEntry() throws {

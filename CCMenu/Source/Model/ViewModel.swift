@@ -172,8 +172,8 @@ final class ViewModel: ObservableObject {
                 }
             }
         }
-//        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:CI", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/runs"))
-//        pipelines.append(Pipeline(name: "thoughtworks/epirust:cargo-audit", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/runs"))
+        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:ci.yml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/ci.yml/runs"))
+        pipelines.append(Pipeline(name: "thoughtworks/epirust:scan.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/workflows/scan.yaml/runs"))
     }
 
     func loadPipelinesFromFile(_ filename: String) {

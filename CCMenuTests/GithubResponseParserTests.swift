@@ -10,33 +10,29 @@ import XCTest
 class GithubResponseParserTests: XCTestCase {
 
     func testParsesJSON() throws {
+        let json = "{ \"workflow_runs\": [ { \"name\": \"Rust\", \"conclusion\": \"success\" } ] }\n"
         let parser = GithubResponseParser()
-        let json = "{ \"workflow_runs\": [ { \"name\": \"Rust\", \"status\": \"completed\", \"conclusion\": \"success\" } ] }\n"
 
         try parser.parseResponse(json.data(using: .ascii)!)
 
-        guard let list = parser.runList else {
-            XCTFail("parser does not have a list of runs")
-            return
-        }
-        XCTAssertEqual(1, list.count)
-        let run = list[0]
+        XCTAssertEqual(1, parser.runList.count)
+        let run = parser.runList[0]
         XCTAssertEqual("Rust", run["name"] as? String)
     }
 
     func testThrowsForMalformedJSON() throws {
-        let parser = GithubResponseParser()
         let json = " \"workflow_runs\": [ { \"name\": \"Rust\" deliberately broken"
+        let parser = GithubResponseParser()
 
         XCTAssertThrowsError(try parser.parseResponse(json.data(using: .ascii)!))
     }
 
-    func testUpdatesPipelineWithWorkflowRun() throws {
-        let parser = GithubResponseParser()
+    func testPipelineStatusReflectsCompletedWorkflowRun() throws {
         let json = """
             { "workflow_runs": [{
-                "name": "Rust",
+                "display_title" : "Just testing",
                 "run_number": 17,
+                "event": "push",
                 "status": "completed",
                 "conclusion": "success",
                 "html_url": "https://github.com/erikdoe/quvyn/actions/runs/842089420",
@@ -48,33 +44,82 @@ class GithubResponseParserTests: XCTestCase {
                 }
             }]}
         """
+        let parser = GithubResponseParser()
         try parser.parseResponse(json.data(using: .ascii)!)
 
-        let originalPipeline = Pipeline(name: "erikdoe/quvyn:Rust", feedUrl: "http://test.org")
-        let updatedPipeline = parser.updatePipeline(originalPipeline)
+        let status = parser.pipelineStatus(name: "quvyn:rust.yml")!
 
-        guard let pipeline = updatedPipeline else {
-            XCTFail("parser did not update pipeline")
-            return
-        }
-        XCTAssertEqual("erikdoe/quvyn:Rust", pipeline.name)
-        XCTAssertEqual("https://github.com/erikdoe/quvyn/actions/runs/842089420", pipeline.status.webUrl)
-        XCTAssertEqual(.sleeping, pipeline.status.activity)
-
-        guard let build = pipeline.status.lastBuild else {
-            XCTFail("parser did not set lastBuild")
-            return
-        }
-        XCTAssertEqual(BuildResult.success, build.result)
+        XCTAssertEqual(.sleeping, status.activity)
+        XCTAssertEqual("https://github.com/erikdoe/quvyn/actions/runs/842089420", status.webUrl)
+        guard let build = status.lastBuild else { XCTFail(); return }
+        XCTAssertEqual(.success, build.result)
         XCTAssertEqual("17", build.label)
-        let date = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
-                                  year: 2021, month: 05, day: 14, hour: 12, minute: 04, second: 23, nanosecond: 0).date
-        XCTAssertEqual(date, build.timestamp)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), build.timestamp)
         XCTAssertEqual(154, build.duration)
+        XCTAssertEqual("Push \u{279E} Just testing", build.message)
         XCTAssertEqual("erikdoe", build.user)
         XCTAssertEqual("https://test.org/avatar.jpg", build.avatar?.absoluteString)
-    }
+        XCTAssertNil(status.currentBuild)
+   }
 
+    func testPipelineStatusReflectsInProgressWorkflowRunWithCompletedAlsoAvailable() throws {
+        let json = """
+            { "workflow_runs": [{
+                "display_title" : "Merge this",
+                "run_number": 18,
+                "event": "pull_request",
+                "status": "in_progress",
+                "conclusion": null,
+                "html_url": "https://github.com/erikdoe/quvyn/actions/runs/991157472",
+                "created_at": "2021-07-01T18:42:17Z",
+                "updated_at": "2021-07-01T18:44:54Z",
+                "actor": {
+                    "login": "erikdoe",
+                    "avatar_url": "https://test.org/avatar.jpg"
+                }
+              }, {
+                "name": "Rust",
+                "display_title" : "Just testing",
+                "run_number": 17,
+                "event": "push",
+                "status": "completed",
+                "conclusion": "success",
+                "html_url": "https://github.com/erikdoe/quvyn/actions/runs/842089420",
+                "created_at": "2021-05-14T12:04:23Z",
+                "updated_at": "2021-05-14T12:06:57Z",
+                "actor": {
+                    "login": "erikdoe",
+                    "avatar_url": "https://test.org/avatar.jpg"
+                }
+              }
+            ]}
+        """
+        let parser = GithubResponseParser()
+        try parser.parseResponse(json.data(using: .ascii)!)
+
+        let status = parser.pipelineStatus(name: "quvyn:Rust")!
+
+        XCTAssertEqual(.building, status.activity)
+        XCTAssertEqual("https://github.com/erikdoe/quvyn/actions/runs/991157472", status.webUrl)
+
+        guard let current = status.currentBuild else { XCTFail(); return }
+        XCTAssertEqual(.unknown, current.result)
+        XCTAssertEqual("18", current.label)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-07-01T18:42:17Z"), current.timestamp)
+        XCTAssertEqual(157, current.duration)
+        XCTAssertEqual("Pull Request \u{279E} Merge this", current.message)
+        XCTAssertEqual("erikdoe", current.user)
+        XCTAssertEqual("https://test.org/avatar.jpg", current.avatar?.absoluteString)
+
+        guard let last = status.lastBuild else { XCTFail(); return }
+        XCTAssertEqual(.success, last.result)
+        XCTAssertEqual("17", last.label)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), last.timestamp)
+        XCTAssertEqual(154, last.duration)
+        XCTAssertEqual("Push \u{279E} Just testing", last.message)
+        XCTAssertEqual("erikdoe", last.user)
+        XCTAssertEqual("https://test.org/avatar.jpg", last.avatar?.absoluteString)
+   }
 
 }
 

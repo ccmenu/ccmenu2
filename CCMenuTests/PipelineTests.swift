@@ -10,7 +10,7 @@ import XCTest
 class PipelineTests: XCTestCase {
 
     func testStatusWhenSleepingAndLastBuildNotAvailable() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
 
         XCTAssertEqual("Waiting for first build", pipeline.statusDescription)
     }
@@ -18,24 +18,17 @@ class PipelineTests: XCTestCase {
     func testStatusWhenSleepingAndLastBuildIsAvailable() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
-        pipeline.status.lastBuild!.label = "151"
+        pipeline.status.lastBuild!.label = "842"
         pipeline.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        pipeline.status.lastBuild!.duration = 80.8
+        pipeline.status.lastBuild!.duration = 53
 
-        // TODO: Basically duplicated from actual code...
-        let timestamp = pipeline.status.lastBuild!.timestamp!
-        let absolute = timestamp.formatted(date: .numeric, time: .shortened)
-        let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
-        let formattedTimestamp = "\(absolute) (\(relative))"
-
-        let durationFormatter = DateComponentsFormatter()
-        durationFormatter.allowedUnits = [.day, .hour, .minute, .second]
-        durationFormatter.unitsStyle = .abbreviated
-        durationFormatter.collapsesLargestUnit = true
-        durationFormatter.maximumUnitCount = 2
-        let formattedDuration = durationFormatter.string(from: 80.8)!
-
-        XCTAssertEqual("Last build: \(formattedTimestamp), Duration: \(formattedDuration), Label: 151", pipeline.statusDescription)
+        let description = pipeline.statusDescription
+        // Check some components that should definitely be there in this form
+        XCTAssertTrue(description.contains("2020")) // timestamp year
+        XCTAssertTrue(description.contains("27"))   // timestamp day
+        XCTAssertTrue(description.contains("47"))   // timestamp minute
+        XCTAssertTrue(description.contains("842"))  // label
+        XCTAssertTrue(description.contains("53"))   // duration
     }
     
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
@@ -56,13 +49,9 @@ class PipelineTests: XCTestCase {
         pipeline.status.currentBuild = Build(result: .unknown)
         pipeline.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        // TODO: Basically duplicated from actual code...
-        let timestamp = pipeline.status.currentBuild!.timestamp!
-        let absolute = timestamp.formatted(date: .omitted, time: .shortened)
-        let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named, unitsStyle: .narrow))
-        let expected = "Started: \(absolute) (\(relative))"
-
-        XCTAssertEqual(expected, pipeline.statusDescription)
+        let description = pipeline.statusDescription
+        // Check some components that should definitely be there in this form
+        XCTAssertTrue(description.contains("47"))   // timestamp minute
     }
 
     func testStatusWhenErrorIsSet() throws {

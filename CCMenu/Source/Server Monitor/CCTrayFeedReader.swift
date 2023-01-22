@@ -8,7 +8,7 @@ import Foundation
 
 class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSessionDelegate {
     
-    var pipeline: Pipeline
+    var pipelines: [Pipeline]
     var delegate: FeedReaderDelegate?
     var receivedData: Data?
 
@@ -20,11 +20,11 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     }()
     
     public init(for pipeline: Pipeline) {
-        self.pipeline = pipeline
+        self.pipelines = [pipeline]
     }
     
     public func updatePipelineStatus() {
-        let url = URL(string: pipeline.feed.url)!
+        let url = URL(string: pipelines[0].feed.url)! // All pipelines have the same URL.
         receivedData = Data()
         let task = session.dataTask(with: url)
         task.resume()
@@ -55,9 +55,10 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
                 let parser = CCTrayResponseParser()
                 do {
                     try parser.parseResponse(receivedData)
-//                    if let p = parser.updatePipeline(self.pipeline) {
-//                        self.delegate?.feedReader(self, didUpdate: p)
-//                    }
+                    for p in self.pipelines {
+                        let status = parser.pipelineStatus(name: p.name)
+                        self.updatePipeline(name: p.name, newStatus: status)
+                    }
                 } catch let error {
                     self.handleParserError(error)
                 }
@@ -72,5 +73,33 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     func handleParserError(_ error: Error) {
         print("parser error \(error.localizedDescription)")
     }
-    
+
+    func updatePipeline(name: String, newStatus: Pipeline.Status?) {
+        guard let idx = pipelines.firstIndex(where: { p in p.name == name }) else {
+            debugPrint("Attempt to update pipeline '\(name)', which reader for '\(pipelines[0].feed.url)' does not monitor.")
+            return
+        }
+        guard let newStatus = newStatus else {
+            pipelines[idx].connectionError = "The server did not provide a status for this pipeline."
+            return
+        }
+        pipelines[idx].connectionError = nil
+
+        let oldStatus = pipelines[idx].status
+        pipelines[idx].status = newStatus
+        pipelines[idx].status.currentBuild?.timestamp = oldStatus.currentBuild?.timestamp
+        pipelines[idx].status.lastBuild?.duration = oldStatus.lastBuild?.duration
+
+        if oldStatus.activity != .building && newStatus.activity == .building {
+            pipelines[idx].status.currentBuild?.timestamp = Date.now
+        }
+        if oldStatus.activity == .building && newStatus.activity != .building {
+            if let timestamp = oldStatus.currentBuild?.timestamp {
+                pipelines[idx].status.lastBuild?.duration = DateInterval(start: timestamp, end: Date.now).duration
+            }
+        }
+
+        self.delegate?.feedReader(self, didUpdate: pipelines[idx])
+    }
+
 }

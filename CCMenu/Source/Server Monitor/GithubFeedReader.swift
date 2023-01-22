@@ -28,7 +28,8 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     }
 
     public func updatePipelineStatus() {
-        let url = URL(string: pipeline.feed.url + "?per_page=3")!
+        // TODO: consider making page size configurable to make sure to get a completed/successful
+        let url = URL(string: pipeline.feed.url + "?per_page=5")!
         let task = session.dataTask(with: url, completionHandler: sessionCallback(data:response:error:))
         task.resume()
     }
@@ -59,9 +60,8 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
             if let receivedData = data {
                 let parser = GithubResponseParser()
                 try parser.parseResponse(receivedData)
-                if let p = parser.updatePipeline(pipeline) {
-                    delegate?.feedReader(self, didUpdate: p)
-                }
+                let status = parser.pipelineStatus(name: pipeline.name)
+                self.updatePipeline(name: pipeline.name, newStatus: status)
             }
         } catch (let error) {
             pipeline.connectionError = String(describing: error) // TODO: better description
@@ -70,5 +70,17 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
         }
     }
 
+    func updatePipeline(name: String, newStatus: Pipeline.Status?) {
+        guard let newStatus = newStatus else {
+            pipeline.connectionError = "The server did not provide a status for this pipeline."
+            return
+        }
+        pipeline.connectionError = nil
+
+        let oldStatus = pipeline.status
+        pipeline.status = newStatus
+
+        self.delegate?.feedReader(self, didUpdate: pipeline)
+    }
 
 }

@@ -25,7 +25,8 @@ struct PipelineRow: View {
             }
             VStack(alignment: .leading) {
                 Text(pipeline.name)
-                .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
+                    .padding(.bottom, settings.showStatusInPipelineWindow && settings.showMessagesInPipelineWindow ? 1 : 0)
                 if !settings.showStatusInPipelineWindow {
                     Text("\(pipeline.feed.url) [\(pipeline.feed.type.rawValue)]") // TODO: use icons for feed type
                 } else {

@@ -8,49 +8,68 @@ import Foundation
 
 class GithubResponseParser {
 
-    var runList: [Dictionary<String, Any>]?
+    var runList: [Dictionary<String, Any>] = []
 
     func parseResponse(_ data: Data) throws {
         if let response = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> {
-            runList = response["workflow_runs"] as? [Dictionary<String, Any>]
+            runList = response["workflow_runs"] as? [Dictionary<String, Any>] ?? []
         } else {
             runList = []
         }
     }
 
-    func updatePipeline(_ pipeline: Pipeline) -> Pipeline? {
-
-        let parts = pipeline.name.components(separatedBy: ":")
-        if parts.count != 2 {
-            return nil // TODO: or, in case count == 1, is there a default workflow name?
-        }
-        // TODO: is the latest build always first?
-        guard let run = runList?.first(where: { $0["name"] as? String == parts[1] }) else {
+    func pipelineStatus(name: String) -> Pipeline.Status? {
+        guard let latest = runList.first else {
             return nil
         }
 
-        var newPipeline = pipeline
-        newPipeline.status = Pipeline.Status(activity: .other)
-        newPipeline.status.webUrl = run["html_url"] as? String
-        if let status = run["status"] as? String {
-            newPipeline.status.activity = activityForString(status)
+        var status = Pipeline.Status(activity: .other)
+        status.webUrl = latest["html_url"] as? String
+        if let wfStatus = latest["status"] as? String {
+            status.activity = activityForString(wfStatus)
         }
 
+        if status.activity == .building {
+            status.currentBuild = build(run: latest)
+            if let completed = runList.first(where: isCompletedSuccessful(run:)) ??
+                                runList.first(where: isCompleted(run:)) {
+                status.lastBuild = build(run: completed)
+            }
+         } else {
+            status.lastBuild = build(run: latest)
+        }
+
+        return status
+    }
+
+    private func build(run: Dictionary<String, Any>) -> Build {
         let conclusion = run["conclusion"] as? String
         var build = Build(result: resultForString(conclusion))
 
         if let runNumber = run["run_number"] as? Int {
             build.label = String(runNumber)
         }
+
         if let createdAt = run["created_at"] as? String , let createdAtDate = dateForString(createdAt) {
             build.timestamp = createdAtDate
             if let updatedAt = run["updated_at"] as? String, let updatedAtDate = dateForString(updatedAt) {
                 build.duration = updatedAtDate.timeIntervalSince(createdAtDate)
             }
         }
-        if let displayTitle = run["display_title"] as? String {
-            build.message = displayTitle
+
+        var messageParts: [String] = []
+        if let event = run["event"] as? String {
+            let prettified = event.replacingOccurrences(of: "_", with: " ").capitalized
+            messageParts.append("\(prettified)")
+//            messageParts.append("\u{3014}\(event.uppercased())\u{3015}")
         }
+        if let displayTitle = run["display_title"] as? String {
+            messageParts.append(displayTitle)
+        }
+        if messageParts.count > 0 {
+            build.message = messageParts.joined(separator: " \u{279E} ")
+        }
+
         if let actor = run["actor"] as? Dictionary<String, Any?> {
             if let actorLogin = actor["login"] as? String   {
                 build.user = actorLogin
@@ -59,9 +78,16 @@ class GithubResponseParser {
                 build.avatar = URL(string: actorAvatarUrl)
             }
         }
-        newPipeline.status.lastBuild = build
 
-        return newPipeline
+        return build
+    }
+
+    private func isCompleted(run: Dictionary<String, Any>) -> Bool {
+        return activityForString(run["status"] as? String) == .sleeping
+    }
+
+    private func isCompletedSuccessful(run: Dictionary<String, Any>) -> Bool {
+        return isCompleted(run: run) && resultForString(run["conclusion"] as? String) == .success
     }
 
     func activityForString(_ string: String?) -> Pipeline.Activity {
