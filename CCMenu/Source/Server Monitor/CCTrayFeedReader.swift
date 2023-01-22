@@ -55,9 +55,9 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
                 let parser = CCTrayResponseParser()
                 do {
                     try parser.parseResponse(receivedData)
-                    if let p = parser.updatePipeline(self.pipeline) {
-                        self.delegate?.feedReader(self, didUpdate: p)
-                    }
+//                    if let p = parser.updatePipeline(self.pipeline) {
+//                        self.delegate?.feedReader(self, didUpdate: p)
+//                    }
                 } catch let error {
                     self.handleParserError(error)
                 }

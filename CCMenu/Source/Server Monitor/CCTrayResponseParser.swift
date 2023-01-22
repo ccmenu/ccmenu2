@@ -8,7 +8,7 @@ import Foundation
 
 class CCTrayResponseParser {
 
-    var projectList: [Dictionary<String, String>]?
+    var projectList: [Dictionary<String, String>] = []
 
     func parseResponse(_ data: Data) throws {
         projectList = []
@@ -23,28 +23,30 @@ class CCTrayResponseParser {
                         }
                     }
                 }
-                projectList!.append(info)
+                projectList.append(info)
             }
         }
     }
 
-    func updatePipeline(_ pipeline: Pipeline) -> Pipeline? {
-        guard let project = projectList?.first(where: { $0["name"] == pipeline.name }) else {
+    func pipelineStatus(name: String) -> Pipeline.Status? {
+        guard let project = projectList.first(where: { $0["name"] == name }) else {
             return nil
         }
-
-        var newPipeline = pipeline
         var status = Pipeline.Status(activity: activityForString(project["activity"]))
         status.webUrl = project["webUrl"]
+
         var build = Build(result: resultForString(project["lastBuildStatus"]))
         build.label = project["lastBuildLabel"]
         if let lastBuildTime = project["lastBuildTime"], let date = dateForString(lastBuildTime) {
             build.timestamp = date
         }
         status.lastBuild = build
-        newPipeline.status = status
 
-        return newPipeline
+        if status.activity == .building {
+            status.currentBuild = Build(result: .unknown)
+        }
+
+        return status
     }
 
     func activityForString(_ string: String?) -> Pipeline.Activity {
@@ -81,9 +83,6 @@ class CCTrayResponseParser {
             }
             return formatter.date(from: cleaned)
         }
-
-
     }
-
 
 }

@@ -15,35 +15,27 @@ class CCTrayResponseParserTests: XCTestCase {
 
         try parser.parseResponse(xml.data(using: .ascii)!)
 
-        guard let list = parser.projectList else {
-            XCTFail("parser has not project list")
-            return
-        }
-        XCTAssertEqual(1, list.count)
-        let project = list[0]
+        XCTAssertEqual(1, parser.projectList.count)
+        let project = parser.projectList[0]
         XCTAssertEqual("connectfour", project["name"])
     }
 
     func testThrowsForMalformedXML() throws {
-        let parser = CCTrayResponseParser()
         let xml = "<Projects><Project name='connectfour' deliberately broken"
+        let parser = CCTrayResponseParser()
 
         XCTAssertThrowsError(try parser.parseResponse(xml.data(using: .ascii)!))
     }
 
-    func testDoesNotUpdatePipelineThatIsNotInResponse() throws {
-        let parser = CCTrayResponseParser()
+    func testDoesNotReturnStatusWhenPipelineIsNotInResponse() throws {
         let xml = "<Projects><Project name='connectfour' activity='Sleeping'/></Projects>"
+        let parser = CCTrayResponseParser()
         try parser.parseResponse(xml.data(using: .ascii)!)
 
-        let originalPipeline = Pipeline(name: "cosmos", feedUrl: "http://localhost:8080/cctray.xml")
-        let updatedPipeline = parser.updatePipeline(originalPipeline)
-
-        XCTAssertNil(updatedPipeline)
+        XCTAssertNil(parser.pipelineStatus(name: "cosmos"))
     }
 
-    func testUpdatesPipeline() throws {
-        let parser = CCTrayResponseParser()
+    func testPipelineStatusReflectsSleepingProjectEntry() throws {
         let xml = """
             <Projects>
                 <Project
@@ -55,29 +47,40 @@ class CCTrayResponseParserTests: XCTestCase {
                     webUrl='http://localhost:8080/dashboard/build/detail/connectfour'/>
             </Projects>
         """
+        let parser = CCTrayResponseParser()
         try parser.parseResponse(xml.data(using: .ascii)!)
 
-        let originalPipeline = Pipeline(name: "connectfour", feedUrl: "http://localhost:8080/cctray.xml")
-        let updatedPipeline = parser.updatePipeline(originalPipeline)
+        let status = parser.pipelineStatus(name: "connectfour")!
 
-        guard let pipeline = updatedPipeline else {
-            XCTFail("parser did not update pipeline")
-            return
-        }
-        XCTAssertEqual("connectfour", pipeline.name)
-        XCTAssertEqual("http://localhost:8080/dashboard/build/detail/connectfour", pipeline.status.webUrl)
-        XCTAssertEqual(.sleeping, pipeline.status.activity)
-
-        guard let build = pipeline.status.lastBuild else {
-            XCTFail("parser did not set lastBuild")
-            return
-        }
-        XCTAssertEqual(BuildResult.success, build.result)
+        XCTAssertEqual(.sleeping, status.activity)
+        guard let build = status.lastBuild else { XCTFail(); return }
+        XCTAssertEqual(.success, build.result)
         XCTAssertEqual("build.1", build.label)
-        let date = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.init(abbreviation: "UTC"),
-                                  year: 2007, month: 7, day: 18, hour: 18, minute: 44, second: 48, nanosecond: 0).date
-        XCTAssertEqual(date, build.timestamp)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2007-07-18T18:44:48Z"), build.timestamp)
     }
+
+    func testPipelineStatusReflectsBuildingProjectEntry() throws {
+        let xml = """
+            <Projects>
+                <Project
+                    name='connectfour'
+                    activity='Building' />
+            </Projects>
+        """
+        let parser = CCTrayResponseParser()
+        try parser.parseResponse(xml.data(using: .ascii)!)
+
+        let status = parser.pipelineStatus(name: "connectfour")!
+
+        XCTAssertEqual(.building, status.activity)
+
+        guard let lastBuild = status.lastBuild else { XCTFail(); return }
+        XCTAssertEqual(.unknown, lastBuild.result)
+        guard let currentBuild = status.currentBuild else { XCTFail(); return }
+        XCTAssertEqual(.unknown, currentBuild.result)
+    }
+
+
 
     func testReadsDatesWithoutTimezoneAsLocal() throws {
         let parser = CCTrayResponseParser()
