@@ -80,10 +80,10 @@ class ViewModelTests: XCTestCase {
         let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
         var p1 = makePipeline(name: "p1", activity: .building, lastBuildResult: .success)
         p1.lastBuild!.duration = 70
-        p1.lastBuild!.timestamp = Date.now
+        p1.currentBuild!.timestamp = Date.now
         var p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .success)
         p2.lastBuild!.duration = 30
-        p2.lastBuild!.timestamp = Date.now
+        p2.currentBuild!.timestamp = Date.now
         model.pipelines = [p0, p1, p2]
 
         XCTAssertEqual("-29s", model.textForMenuBar)
@@ -93,10 +93,10 @@ class ViewModelTests: XCTestCase {
         let model = makeModel()
         var p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
         p0.lastBuild!.duration = 30
-        p0.lastBuild!.timestamp = Date.now
+        p0.currentBuild!.timestamp = Date.now
         var p1 = makePipeline(name: "p1", activity: .building, lastBuildResult: .failure)
         p1.lastBuild!.duration = 90
-        p1.lastBuild!.timestamp = Date.now
+        p1.currentBuild!.timestamp = Date.now
         model.pipelines = [p0, p1]
 
         XCTAssertEqual("-01:29", model.textForMenuBar)
@@ -131,6 +131,9 @@ class ViewModelTests: XCTestCase {
     private func makePipeline(name: String, activity: PipelineActivity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
         var p = Pipeline(name: name, feedUrl: "")
         p.activity = activity
+        if activity == .building {
+            p.currentBuild = Build(result: .unknown)
+        }
         if let lastBuildResult = lastBuildResult {
             p.lastBuild = Build(result: lastBuildResult)
         }

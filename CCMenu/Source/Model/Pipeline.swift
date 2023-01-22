@@ -29,11 +29,12 @@ struct ConnectionDetails: Hashable, Codable {
 struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
-    var connectionDetails: ConnectionDetails
+    var connectionDetails: ConnectionDetails // TODO: make optional (for parsers)
     var connectionError: String?
-    var activity: PipelineActivity
-    var lastBuild: Build?
     var webUrl: String?
+    var activity: PipelineActivity
+    var currentBuild: Build? // build if pipeline is currently building
+    var lastBuild: Build?    // last completed build
 
     init(name: String, feedUrl: String) {
         self.name = name
@@ -49,25 +50,18 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-        hasher.combine(connectionDetails.feedUrl)
+        hasher.combine(connectionDetails.feedUrl) // TODO: why? id already contains feedUrl...
     }
 
     var id: String {
         name + "|" + connectionDetails.feedUrl
     }
 
-    var estimatedBuildComplete: Date? {
-        if activity == .building, let duration = lastBuild?.duration {
-            return lastBuild?.timestamp?.advanced(by: duration)
-        }
-        return nil;
-    }
-
     var status: String {
         if let error = connectionError {
             return error
         } else if activity == .building {
-            if let build = lastBuild, let timestamp = build.timestamp {
+            if let build = currentBuild, let timestamp = build.timestamp {
                 return statusForActiveBuild(build, timestamp)
             } else {
                 return "Build started"
@@ -82,11 +76,11 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     private func statusForActiveBuild(_ build: Build, _ timestamp: Date) -> String {
-        let formatter = DateFormatter()
+        let formatter = DateFormatter() // TODO: check newer APIs
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         let formattedTimestamp = formatter.string(from: timestamp)
-        let status = "Started: \(formattedTimestamp)"
+        let status = "Started: \(formattedTimestamp)" // TODO: make relative? optional? both, absolute and relative?
         return status
     }
 
@@ -97,7 +91,7 @@ struct Pipeline: Hashable, Identifiable, Codable {
             formatter.dateStyle = .medium
             formatter.timeStyle = .short
             let formattedTimestamp = formatter.string(from: timestamp)
-            components.append("Built: \(formattedTimestamp)")
+            components.append("Built: \(formattedTimestamp)") // TODO: make relative? optional? both, absolute and relative?
         }
         if let duration = build.duration {
             let formatter = DateComponentsFormatter()
@@ -123,7 +117,18 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     var message: String? {
-        return lastBuild?.message
+        return activity == .building ? currentBuild?.message : lastBuild?.message
+    }
+
+    var avatar: URL? {
+        return activity == .building ? currentBuild?.avatar : lastBuild?.avatar
+    }
+
+    var estimatedBuildComplete: Date? {
+        if activity == .building, let duration = lastBuild?.duration {
+            return currentBuild?.timestamp?.advanced(by: duration)
+        }
+        return nil;
     }
 
 }

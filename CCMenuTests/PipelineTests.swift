@@ -47,23 +47,23 @@ class PipelineTests: XCTestCase {
         XCTAssertEqual("Build finished", pipeline.status)
     }
 
-    func testStatusWhenBuildingAndLastBuildNotAvailable() throws {
+    func testStatusWhenBuildingAndCurrentBuildNotAvailable() throws { // TODO: does this even make sense?
         var pipeline = Pipeline(name: "connectfour", feedUrl: "")
         pipeline.activity = .building
 
         XCTAssertEqual("Build started", pipeline.status)
     }
 
-    func testStatusWhenBuildingAndLastBuildIsAvailable() throws {
+    func testStatusWhenBuildingAndCurrentBuildIsAvailable() throws {
         var pipeline = Pipeline(name: "connectfour", feedUrl: "")
         pipeline.activity = .building
-        pipeline.lastBuild = Build(result: .success)
-        pipeline.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        pipeline.currentBuild = Build(result: .unknown)
+        pipeline.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        let formattedTimestamp = formatter.string(from: pipeline.lastBuild!.timestamp!)
+        let formattedTimestamp = formatter.string(from: pipeline.currentBuild!.timestamp!)
 
         XCTAssertEqual("Started: \(formattedTimestamp)", pipeline.status)
     }

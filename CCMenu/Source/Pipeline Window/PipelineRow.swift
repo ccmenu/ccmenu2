@@ -43,7 +43,7 @@ struct PipelineRow: View {
     }
 
     private func avatarImage() -> Image {
-        guard let avatarUrl = pipeline.lastBuild?.avatar, let avatar = avatars[avatarUrl] else {
+        guard let avatarUrl = pipeline.avatar, let avatar = avatars[avatarUrl] else {
             return Image(systemName: "person.circle.fill")
         }
         return Image(nsImage: avatar)

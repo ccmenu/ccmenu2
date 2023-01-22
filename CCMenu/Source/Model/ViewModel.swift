@@ -51,7 +51,7 @@ final class ViewModel: ObservableObject {
 
         pipelines[idx] = pipeline
 
-        if let avatarUrl = pipeline.lastBuild?.avatar {
+        if let avatarUrl = pipeline.avatar {
             if avatars[avatarUrl] == nil {
                 retrieveAvatar(url: avatarUrl)
             }

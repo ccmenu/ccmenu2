@@ -5,11 +5,15 @@
     },
     "webUrl": "http://localhost:4567",
     "activity": "building",
+    "currentBuild": {
+        "result": "unknown",
+        "timestamp": "2023-01-22T10:18:00Z",
+        "message": "Testing"
+    },
     "lastBuild": {
         "result": "failure",
         "timestamp": "2020-12-27T21:47:00Z",
         "label": "build.151",
-        "message": "Testing"
     },
 },
 {  "name": "erikdoe/ccmenu",
