@@ -24,7 +24,7 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     }
     
     public func updatePipelineStatus() {
-        let url = URL(string: pipeline.connectionDetails.feedUrl)!
+        let url = URL(string: pipeline.feed.url)!
         receivedData = Data()
         let task = session.dataTask(with: url)
         task.resume()

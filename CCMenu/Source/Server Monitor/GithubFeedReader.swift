@@ -28,7 +28,7 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
     }
 
     public func updatePipelineStatus() {
-        let url = URL(string: pipeline.connectionDetails.feedUrl + "?per_page=3")!
+        let url = URL(string: pipeline.feed.url + "?per_page=3")!
         let task = session.dataTask(with: url, completionHandler: sessionCallback(data:response:error:))
         task.resume()
     }

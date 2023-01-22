@@ -47,11 +47,11 @@ class CCTrayResponseParser {
         return newPipeline
     }
 
-    func activityForString(_ string: String?) -> PipelineActivity {
+    func activityForString(_ string: String?) -> Pipeline.Activity {
         switch string {
-            case "Sleeping": return PipelineActivity.sleeping
-            case "Building": return PipelineActivity.building
-            default: return PipelineActivity.other
+            case "Sleeping": return .sleeping
+            case "Building": return .building
+            default: return .other
         }
     }
 

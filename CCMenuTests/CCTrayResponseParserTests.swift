@@ -66,7 +66,7 @@ class CCTrayResponseParserTests: XCTestCase {
         }
         XCTAssertEqual("connectfour", pipeline.name)
         XCTAssertEqual("http://localhost:8080/dashboard/build/detail/connectfour", pipeline.status.webUrl)
-        XCTAssertEqual(PipelineActivity.sleeping, pipeline.status.activity)
+        XCTAssertEqual(.sleeping, pipeline.status.activity)
 
         guard let build = pipeline.status.lastBuild else {
             XCTFail("parser did not set lastBuild")

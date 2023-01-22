@@ -17,7 +17,7 @@ class ImageManager {
         return image(forResult: result, activity: activity, asTemplate: asTemplate)
     }
 
-    func image(forResult result: BuildResult, activity: PipelineActivity, asTemplate: Bool = false) -> NSImage {
+    func image(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool = false) -> NSImage {
         var name = "build"
         switch result {
         case .success:

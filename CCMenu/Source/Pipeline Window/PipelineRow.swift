@@ -27,8 +27,7 @@ struct PipelineRow: View {
                 Text(pipeline.name)
                 .font(.system(size: 16, weight: .bold))
                 if !settings.showStatusInPipelineWindow {
-                    let connection = pipeline.connectionDetails
-                    Text("\(connection.feedUrl) [\(connection.feedType.rawValue)]") // TODO: use icons for feed type
+                    Text("\(pipeline.feed.url) [\(pipeline.feed.type.rawValue)]") // TODO: use icons for feed type
                 } else {
                     Text(pipeline.statusDescription)
                     if settings.showMessagesInPipelineWindow {

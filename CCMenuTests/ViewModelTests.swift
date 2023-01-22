@@ -128,7 +128,7 @@ class ViewModelTests: XCTestCase {
         return m
     }
 
-    private func makePipeline(name: String, activity: PipelineActivity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
+    private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
         var p = Pipeline(name: name, feedUrl: "")
         p.status.activity = activity
         if activity == .building {

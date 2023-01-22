@@ -1,7 +1,7 @@
 [{  "name": "connectfour",
-    "connectionDetails": {
-        "feedType": "cctray",
-        "feedUrl": "http://localhost:4567/cctray.xml"
+    "feed": {
+        "type": "cctray",
+        "url": "http://localhost:4567/cctray.xml"
     },
     "status": {
         "webUrl": "http://localhost:4567",
@@ -19,9 +19,9 @@
     },
 },
 {  "name": "erikdoe/ccmenu",
-    "connectionDetails": {
-        "feedType": "cctray",
-        "feedUrl": "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml"
+    "feed": {
+        "type": "cctray",
+        "url": "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml"
     },
     "status": {
         "webUrl": "#broken",

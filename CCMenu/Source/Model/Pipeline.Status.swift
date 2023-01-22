@@ -8,8 +8,16 @@ import Foundation
 
 extension Pipeline {
 
+    // TODO: Should this be inside Status?
+    enum Activity: String, Codable {
+        case
+        building,
+        sleeping,
+        other
+    }
+
     struct Status: Hashable, Codable {
-        var activity: PipelineActivity
+        var activity: Activity
         var currentBuild: Build? // build if pipeline is currently building
         var lastBuild: Build?    // last completed build
         var webUrl: String?

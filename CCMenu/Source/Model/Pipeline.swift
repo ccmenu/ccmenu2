@@ -7,57 +7,38 @@
 import AppKit
 
 
-enum PipelineActivity: String, Codable {
-    case
-    building,
-    sleeping,
-    other
-}
-
-enum FeedType: String, Codable {
-    case
-    cctray,
-    github
-}
-
-struct ConnectionDetails: Hashable, Codable {
-    var feedType: FeedType
-    var feedUrl: String
-}
-
-
 struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
-    var connectionDetails: ConnectionDetails // TODO: make optional (for parsers)
+    var feed: Pipeline.Feed
     var status: Pipeline.Status
     var connectionError: String?
 
     init(name: String, feedUrl: String) {
         self.name = name
-        connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
+        feed = Feed(type: .cctray, url: feedUrl)
         status = Status(activity: .other)
     }
 
-    init(name: String, feedUrl: String, activity: PipelineActivity) {
+    init(name: String, feedUrl: String, activity: Activity) {
         self.name = name
-        connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
+        feed = Feed(type: .cctray, url: feedUrl)
         status = Status(activity: activity)
     }
 
     init(name: String, feedType: FeedType, feedUrl: String) {
         self.name = name
-        connectionDetails = ConnectionDetails(feedType: feedType, feedUrl: feedUrl)
+        feed = Feed(type: feedType, url: feedUrl)
         status = Status(activity: .other)
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-        hasher.combine(connectionDetails.feedUrl) // TODO: why? id already contains feedUrl...
+        hasher.combine(feed.url) // TODO: why? id already contains feedUrl...
     }
 
     var id: String {
-        name + "|" + connectionDetails.feedUrl
+        name + "|" + feed.url
     }
 
     var statusDescription: String {
@@ -132,16 +113,6 @@ struct Pipeline: Hashable, Identifiable, Codable {
             return status.currentBuild?.timestamp?.advanced(by: duration)
         }
         return nil;
-    }
-
-}
-
-
-struct LabeledPipeline: Hashable, Identifiable {
-    var pipeline: Pipeline
-    var label: String
-    var id: String {
-        pipeline.id
     }
 
 }

@@ -24,7 +24,7 @@ class ServerMonitor: FeedReaderDelegate {
     public func createReaders() {
         for p in model.pipelines {
             var r: FeedReader
-            switch(p.connectionDetails.feedType) {
+            switch(p.feed.type) {
             case .cctray: r = CCTrayFeedReader(for: p)
             case .github: r = GithubFeedReader(for: p)
             }

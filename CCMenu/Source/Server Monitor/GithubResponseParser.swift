@@ -64,19 +64,19 @@ class GithubResponseParser {
         return newPipeline
     }
 
-    func activityForString(_ string: String?) -> PipelineActivity {
+    func activityForString(_ string: String?) -> Pipeline.Activity {
         switch string {
-            case "completed": return PipelineActivity.sleeping
-            case "in_progress": return PipelineActivity.building
-            default: return PipelineActivity.other
+            case "completed": return .sleeping
+            case "in_progress": return .building
+            default: return .other
         }
     }
 
     func resultForString(_ string: String?) -> BuildResult {
         switch string {
-            case "success": return BuildResult.success
-            case "failure": return BuildResult.failure
-            default: return BuildResult.unknown
+            case "success": return .success
+            case "failure": return .failure
+            default: return .unknown
         }
     }
 
