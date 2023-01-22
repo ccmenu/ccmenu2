@@ -30,9 +30,10 @@ class GithubResponseParser {
         }
 
         var newPipeline = pipeline
-        newPipeline.webUrl = run["html_url"] as? String
+        newPipeline.status = Pipeline.Status(activity: .other)
+        newPipeline.status.webUrl = run["html_url"] as? String
         if let status = run["status"] as? String {
-            newPipeline.activity = activityForString(status)
+            newPipeline.status.activity = activityForString(status)
         }
 
         let conclusion = run["conclusion"] as? String
@@ -58,7 +59,7 @@ class GithubResponseParser {
                 build.avatar = URL(string: actorAvatarUrl)
             }
         }
-        newPipeline.lastBuild = build
+        newPipeline.status.lastBuild = build
 
         return newPipeline
     }

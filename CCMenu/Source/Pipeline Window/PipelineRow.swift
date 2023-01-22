@@ -30,7 +30,7 @@ struct PipelineRow: View {
                     let connection = pipeline.connectionDetails
                     Text("\(connection.feedUrl) [\(connection.feedType.rawValue)]") // TODO: use icons for feed type
                 } else {
-                    Text(pipeline.status)
+                    Text(pipeline.statusDescription)
                     if settings.showMessagesInPipelineWindow {
                         Text(pipeline.message ?? "–")
                     }
@@ -60,11 +60,10 @@ struct PipelineRow_Previews: PreviewProvider {
     }
 
     static func pipelineForPreview() -> Pipeline {
-        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml")
-        p.activity = .building
-        p.lastBuild = Build(result: .success)
-        p.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        p.lastBuild!.message = "Made an important change."
+        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml", activity: .building)
+        p.status.lastBuild = Build(result: .success)
+        p.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        p.status.lastBuild!.message = "Made an important change."
         return p
     }
 

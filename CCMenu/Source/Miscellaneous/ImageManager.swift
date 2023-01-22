@@ -12,8 +12,8 @@ class ImageManager {
     public lazy var defaultImage = image(forResult: .other, activity: .other)
 
     func image(forPipeline pipeline: Pipeline, asTemplate: Bool = false) -> NSImage {
-        let result = pipeline.lastBuild?.result ?? BuildResult.other
-        let activity = pipeline.activity
+        let result = pipeline.status.lastBuild?.result ?? BuildResult.other
+        let activity = pipeline.status.activity
         return image(forResult: result, activity: activity, asTemplate: asTemplate)
     }
 

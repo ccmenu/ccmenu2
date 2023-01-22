@@ -58,10 +58,10 @@ class GithubResponseParserTests: XCTestCase {
             return
         }
         XCTAssertEqual("erikdoe/quvyn:Rust", pipeline.name)
-        XCTAssertEqual("https://github.com/erikdoe/quvyn/actions/runs/842089420", pipeline.webUrl)
-        XCTAssertEqual(PipelineActivity.sleeping, pipeline.activity)
+        XCTAssertEqual("https://github.com/erikdoe/quvyn/actions/runs/842089420", pipeline.status.webUrl)
+        XCTAssertEqual(PipelineActivity.sleeping, pipeline.status.activity)
 
-        guard let build = pipeline.lastBuild else {
+        guard let build = pipeline.status.lastBuild else {
             XCTFail("parser did not set lastBuild")
             return
         }

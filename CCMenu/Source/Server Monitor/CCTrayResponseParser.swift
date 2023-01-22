@@ -34,14 +34,15 @@ class CCTrayResponseParser {
         }
 
         var newPipeline = pipeline
-        newPipeline.webUrl = project["webUrl"]
-        newPipeline.activity = activityForString(project["activity"])
+        var status = Pipeline.Status(activity: activityForString(project["activity"]))
+        status.webUrl = project["webUrl"]
         var build = Build(result: resultForString(project["lastBuildStatus"]))
         build.label = project["lastBuildLabel"]
         if let lastBuildTime = project["lastBuildTime"], let date = dateForString(lastBuildTime) {
             build.timestamp = date
         }
-        newPipeline.lastBuild = build
+        status.lastBuild = build
+        newPipeline.status = status
 
         return newPipeline
     }

@@ -64,14 +64,14 @@ final class ViewModel: ObservableObject {
     private func updateMenuBar() {
         if let pipeline = pipelineForMenuBar() {
             imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
-            if pipeline.activity == .building {
+            if pipeline.status.activity == .building {
                 if let completionTime = pipeline.estimatedBuildComplete {
                     textForMenuBar = Date.now.formatted(.compactRelative(reference: completionTime))
                 } else {
                     textForMenuBar = ""
                 }
             } else {
-                let failCount = pipelines.filter({ p in p.lastBuild?.result == .failure}).count
+                let failCount = pipelines.filter({ p in p.status.lastBuild?.result == .failure}).count
                 textForMenuBar = (failCount == 0) ? "" : "\(failCount)"
             }
         } else {
@@ -104,15 +104,15 @@ final class ViewModel: ObservableObject {
     }
 
     private func priority(hasBuild pipeline: Pipeline) -> Int {
-        return (pipeline.lastBuild != nil) ? 1 : 0
+        return (pipeline.status.lastBuild != nil) ? 1 : 0
     }
 
     private func priority(isBuilding pipeline: Pipeline) -> Int {
-        return (pipeline.activity == .building) ? 1 : 0
+        return (pipeline.status.activity == .building) ? 1 : 0
     }
 
     private func priority(buildResult pipeline: Pipeline) -> Int {
-        switch pipeline.lastBuild?.result {
+        switch pipeline.status.lastBuild?.result {
         case .failure:
             return 3
         case .success:
@@ -136,7 +136,7 @@ final class ViewModel: ObservableObject {
         pipelinesForMenu = []
         for p in pipelines {
             var l = p.name
-            if settings.showLabelsInMenu, let buildLabel = p.lastBuild?.label {
+            if settings.showLabelsInMenu, let buildLabel = p.status.lastBuild?.label {
                 l.append(" \u{2014} \(buildLabel)")
             }
             pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))

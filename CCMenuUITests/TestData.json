@@ -3,17 +3,19 @@
         "feedType": "cctray",
         "feedUrl": "http://localhost:4567/cctray.xml"
     },
-    "webUrl": "http://localhost:4567",
-    "activity": "building",
-    "currentBuild": {
-        "result": "unknown",
-        "timestamp": "2023-01-22T10:18:00Z",
-        "message": "Testing"
-    },
-    "lastBuild": {
-        "result": "failure",
-        "timestamp": "2020-12-27T21:47:00Z",
-        "label": "build.151",
+    "status": {
+        "webUrl": "http://localhost:4567",
+        "activity": "building",
+        "currentBuild": {
+            "result": "unknown",
+            "timestamp": "2023-01-22T10:18:00Z",
+            "message": "Testing"
+        },
+        "lastBuild": {
+            "result": "failure",
+            "timestamp": "2020-12-27T21:47:00Z",
+            "label": "build.151",
+        }
     },
 },
 {  "name": "erikdoe/ccmenu",
@@ -21,10 +23,12 @@
         "feedType": "cctray",
         "feedUrl": "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml"
     },
-    "webUrl": "#broken",
-    "activity": "sleeping",
-    "lastBuild": {
-        "result": "success",
-        "timestamp": "2020-12-27T21:47:00Z"
+    "status": {
+        "webUrl": "#broken",
+        "activity": "sleeping",
+        "lastBuild": {
+            "result": "success",
+            "timestamp": "2020-12-27T21:47:00Z"
+        }
     },
 }]

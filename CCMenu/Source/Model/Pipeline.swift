@@ -30,22 +30,25 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
     var connectionDetails: ConnectionDetails // TODO: make optional (for parsers)
+    var status: Pipeline.Status
     var connectionError: String?
-    var webUrl: String?
-    var activity: PipelineActivity
-    var currentBuild: Build? // build if pipeline is currently building
-    var lastBuild: Build?    // last completed build
 
     init(name: String, feedUrl: String) {
         self.name = name
         connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
-        activity = .other
+        status = Status(activity: .other)
+    }
+
+    init(name: String, feedUrl: String, activity: PipelineActivity) {
+        self.name = name
+        connectionDetails = ConnectionDetails(feedType: .cctray, feedUrl: feedUrl)
+        status = Status(activity: activity)
     }
 
     init(name: String, feedType: FeedType, feedUrl: String) {
         self.name = name
         connectionDetails = ConnectionDetails(feedType: feedType, feedUrl: feedUrl)
-        activity = .other
+        status = Status(activity: .other)
     }
 
     func hash(into hasher: inout Hasher) {
@@ -57,17 +60,17 @@ struct Pipeline: Hashable, Identifiable, Codable {
         name + "|" + connectionDetails.feedUrl
     }
 
-    var status: String {
+    var statusDescription: String {
         if let error = connectionError {
             return error
-        } else if activity == .building {
-            if let build = currentBuild, let timestamp = build.timestamp {
+        } else if status.activity == .building {
+            if let build = status.currentBuild, let timestamp = build.timestamp {
                 return statusForActiveBuild(build, timestamp)
             } else {
                 return "Build started"
             }
         } else {
-            if let build = lastBuild {
+            if let build = status.lastBuild {
                 return statusForFinishedBuild(build)
             } else {
                 return "Waiting for first build"
@@ -117,16 +120,16 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     var message: String? {
-        return activity == .building ? currentBuild?.message : lastBuild?.message
+        return status.activity == .building ? status.currentBuild?.message : status.lastBuild?.message
     }
 
     var avatar: URL? {
-        return activity == .building ? currentBuild?.avatar : lastBuild?.avatar
+        return status.activity == .building ? status.currentBuild?.avatar : status.lastBuild?.avatar
     }
 
     var estimatedBuildComplete: Date? {
-        if activity == .building, let duration = lastBuild?.duration {
-            return currentBuild?.timestamp?.advanced(by: duration)
+        if status.activity == .building, let duration = status.lastBuild?.duration {
+            return status.currentBuild?.timestamp?.advanced(by: duration)
         }
         return nil;
     }

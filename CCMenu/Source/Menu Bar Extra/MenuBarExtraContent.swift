@@ -57,16 +57,14 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
     static func viewModelForPreview() -> ViewModel {
         let model = ViewModel(settings: settingsForPreview())
 
-        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
-        p0.activity = .building
-        p0.lastBuild = Build(result: .failure)
-        p0.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml", activity: .building)
+        p0.status.lastBuild = Build(result: .failure)
+        p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml")
-        p1.activity = .sleeping
-        p1.lastBuild = Build(result: .success)
-        p1.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        p1.lastBuild!.label = "build.151"
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", activity: .sleeping)
+        p1.status.lastBuild = Build(result: .success)
+        p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        p1.status.lastBuild!.label = "build.151"
 
         model.pipelines = [p0, p1]
 

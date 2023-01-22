@@ -44,6 +44,7 @@
 		03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */; };
 		03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */; };
 		03F9B890297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */; };
+		03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B893297D38AA00FA866E /* Pipeline.Status.swift */; };
 		2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */; };
 		2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */; };
 		2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */; };
@@ -110,6 +111,7 @@
 		03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListToolbar.swift; sourceTree = "<group>"; };
 		03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactRelativeFormatStyle.swift; sourceTree = "<group>"; };
 		03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactRelativeFormatStyleTests.swift; sourceTree = "<group>"; };
+		03F9B893297D38AA00FA866E /* Pipeline.Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.Status.swift; sourceTree = "<group>"; };
 		2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 			children = (
 				039B524529676D0700994910 /* Build.swift */,
 				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
+				03F9B893297D38AA00FA866E /* Pipeline.Status.swift */,
 				03825DE7259D005B00DEB003 /* ViewModel.swift */,
 				037AB214297334EE00C33589 /* UserSettings.swift */,
 			);
@@ -474,6 +477,7 @@
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
+				03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,

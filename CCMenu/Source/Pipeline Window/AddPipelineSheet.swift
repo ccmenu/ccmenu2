@@ -21,8 +21,8 @@ struct AddPipelineSheet: View {
                 }
                 Button("Apply") {
                     var p = Pipeline(name: "erikdoe/ocmock", feedUrl: "http://localhost:4567/cc.xml")
-                    p.activity = .sleeping
-                    p.lastBuild = Build(result: .success)
+                    p.status = Pipeline.Status(activity: .sleeping)
+                    p.status.lastBuild = Build(result: .success)
                     model.pipelines.append(p)
                     presentation.dismiss()
                 }
@@ -45,8 +45,8 @@ struct AddPipelineSheet_Previews: PreviewProvider {
         let model = ViewModel()
 
         var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
-        p0.activity = .building
-        p0.lastBuild = Build(result: .failure)
+        p0.status = Pipeline.Status(activity: .building)
+        p0.status.lastBuild = Build(result: .failure)
         model.pipelines = [p0]
         return model
     }
