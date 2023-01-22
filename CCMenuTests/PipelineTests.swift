@@ -22,10 +22,11 @@ class PipelineTests: XCTestCase {
         pipeline.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.status.lastBuild!.duration = 80.8
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        let formattedTimestamp = dateFormatter.string(from: pipeline.status.lastBuild!.timestamp!)
+        // TODO: Basically duplicated from actual code...
+        let timestamp = pipeline.status.lastBuild!.timestamp!
+        let absolute = timestamp.formatted(date: .numeric, time: .shortened)
+        let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
+        let formattedTimestamp = "\(absolute) (\(relative))"
 
         let durationFormatter = DateComponentsFormatter()
         durationFormatter.allowedUnits = [.day, .hour, .minute, .second]
@@ -34,7 +35,7 @@ class PipelineTests: XCTestCase {
         durationFormatter.maximumUnitCount = 2
         let formattedDuration = durationFormatter.string(from: 80.8)!
 
-        XCTAssertEqual("Built: \(formattedTimestamp), Duration: \(formattedDuration), Label: 151", pipeline.statusDescription)
+        XCTAssertEqual("Last build: \(formattedTimestamp), Duration: \(formattedDuration), Label: 151", pipeline.statusDescription)
     }
     
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
@@ -45,7 +46,7 @@ class PipelineTests: XCTestCase {
     }
 
     func testStatusWhenBuildingAndCurrentBuildNotAvailable() throws { // TODO: does this even make sense?
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
 
         XCTAssertEqual("Build started", pipeline.statusDescription)
     }
@@ -55,12 +56,13 @@ class PipelineTests: XCTestCase {
         pipeline.status.currentBuild = Build(result: .unknown)
         pipeline.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        let formattedTimestamp = formatter.string(from: pipeline.status.currentBuild!.timestamp!)
+        // TODO: Basically duplicated from actual code...
+        let timestamp = pipeline.status.currentBuild!.timestamp!
+        let absolute = timestamp.formatted(date: .omitted, time: .shortened)
+        let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named, unitsStyle: .narrow))
+        let expected = "Started: \(absolute) (\(relative))"
 
-        XCTAssertEqual("Started: \(formattedTimestamp)", pipeline.statusDescription)
+        XCTAssertEqual(expected, pipeline.statusDescription)
     }
 
     func testStatusWhenErrorIsSet() throws {

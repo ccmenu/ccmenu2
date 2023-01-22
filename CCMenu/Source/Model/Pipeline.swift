@@ -60,22 +60,18 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
     private func statusForActiveBuild(_ build: Build, _ timestamp: Date) -> String {
-        let formatter = DateFormatter() // TODO: check newer APIs
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        let formattedTimestamp = formatter.string(from: timestamp)
-        let status = "Started: \(formattedTimestamp)" // TODO: make relative? optional? both, absolute and relative?
+        let absolute = timestamp.formatted(date: .omitted, time: .shortened)
+        let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named, unitsStyle: .narrow))
+        let status = "Started: \(absolute) (\(relative))"
         return status
     }
 
     private func statusForFinishedBuild(_ build: Build) -> String {
         var components: [String] = []
         if let timestamp = build.timestamp {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .short
-            let formattedTimestamp = formatter.string(from: timestamp)
-            components.append("Built: \(formattedTimestamp)") // TODO: make relative? optional? both, absolute and relative?
+            let absolute = timestamp.formatted(date: .numeric, time: .shortened)
+            let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
+            components.append("Last build: \(absolute) (\(relative))")
         }
         if let duration = build.duration {
             let formatter = DateComponentsFormatter()

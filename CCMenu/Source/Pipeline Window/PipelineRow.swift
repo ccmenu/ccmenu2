@@ -59,10 +59,13 @@ struct PipelineRow_Previews: PreviewProvider {
     }
 
     static func pipelineForPreview() -> Pipeline {
-        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml", activity: .building)
+        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml", activity: .sleeping)
         p.status.lastBuild = Build(result: .success)
-        p.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        p.status.lastBuild!.message = "Made an important change."
+        p.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:34Z")
+        p.status.lastBuild!.duration = 12*60 + 34
+        p.status.currentBuild = Build(result: .unknown)
+        p.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2023-01-22T14:24:16Z")
+        p.status.currentBuild!.message = "Made an important change."
         return p
     }
 
