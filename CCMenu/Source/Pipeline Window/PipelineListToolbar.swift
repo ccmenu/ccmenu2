@@ -36,16 +36,22 @@ struct PipelineListToolbar: ToolbarContent {
                 .disabled(!settings.showStatusInPipelineWindow)
             }
             label: {
-                Image(systemName: "ellipsis.rectangle")
+                Image(systemName: "list.dash.header.rectangle")
             }
             .menuStyle(.borderlessButton)
             .help("Select which details to show for the pipelines")
         }
         ToolbarItem() {
+            Spacer()
+        }
+        ToolbarItem() {
             Button(action: updatePipelines) {
                 Label("Update", systemImage: "arrow.clockwise")
             }
-            .help("Retrieve status for all pipelines from servers")
+            .help("Update status of all pipelines")
+        }
+        ToolbarItem() {
+            Spacer()
         }
         ToolbarItem(placement: .primaryAction) {
             Button(action: add) {
@@ -56,7 +62,7 @@ struct PipelineListToolbar: ToolbarContent {
         }
         ToolbarItem {
             Button(action: edit) {
-                Label("Info", systemImage: "info.circle")
+                Label("Edit", systemImage: "gearshape")
             }
             .help("Edit pipeline")
             .accessibility(label: Text("Edit pipeline"))
