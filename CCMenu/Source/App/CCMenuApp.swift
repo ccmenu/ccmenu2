@@ -27,12 +27,9 @@ struct CCMenuApp: App {
         let userSettings = UserSettings(userDefaults: userDefaults)
         let viewModel = ViewModel(settings: userSettings)
 
-        self.viewModel = viewModel
         self.userSettings = userSettings
+        self.viewModel = viewModel
         self.serverMonitor = ServerMonitor(model: viewModel)
-
-        appDelegate.viewModel = viewModel
-        appDelegate.userSettings = userSettings
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
             print("Loading pipeline definitions from file \(filename)")
