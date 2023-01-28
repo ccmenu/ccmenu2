@@ -6,10 +6,13 @@ This is work-in-progress of a complete rewrite of [CCMenu](https://github.com/er
 
 ## Roadmap
 
-- [ ] Alternative impl of app without MenuBarExtra dependency so that at least unit tests can run before Github supports Ventura
-- [ ] Add/edit pipelines in pipeline window
+- [X] Alternative impl of app without MenuBarExtra dependency so that at least unit tests can run before Github supports Ventura
+- [ ] Add pipelines 
+- [ ] Edit pipelines
 - [ ] Persistent sorting of pipelines
 - [ ] Remaining menu appearance options
 - [ ] Notifications (check out: UNNotificationContentExtension)
 - [ ] Basic auth login
 - [ ] SSO login
+- [ ] Discover project (pipeline) names for CCTray feeds
+- [ ] Discover workflow names for Github feeds
