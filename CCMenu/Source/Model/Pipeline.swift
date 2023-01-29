@@ -10,6 +10,7 @@ import AppKit
 struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
+    var assignedName: String?
     var feed: Pipeline.Feed
     var status: Pipeline.Status
     var connectionError: String?
@@ -30,6 +31,15 @@ struct Pipeline: Hashable, Identifiable, Codable {
         self.name = name
         feed = Feed(type: feedType, url: feedUrl)
         status = Status(activity: .other)
+    }
+
+    var displayName: String {
+        set {
+            assignedName = newValue.isEmpty ? nil : newValue
+        }
+        get {
+            assignedName ?? name
+        }
     }
 
     func hash(into hasher: inout Hasher) {

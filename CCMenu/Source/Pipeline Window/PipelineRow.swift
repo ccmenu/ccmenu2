@@ -24,7 +24,7 @@ struct PipelineRow: View {
                 .padding([.trailing], 4)
             }
             VStack(alignment: .leading) {
-                Text(pipeline.name)
+                Text(pipeline.displayName)
                     .font(.system(size: 16, weight: .bold))
                     .padding(.bottom, settings.showStatusInPipelineWindow && settings.showMessagesInPipelineWindow ? 1 : 0)
                 if !settings.showStatusInPipelineWindow {

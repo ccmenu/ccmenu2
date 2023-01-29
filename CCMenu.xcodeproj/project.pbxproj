@@ -10,6 +10,9 @@
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* AppCommands.swift */; };
+		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
+		0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */; };
+		0336DBAE2984903B00E5811C /* AddGithubPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */; };
 		037AB215297334EE00C33589 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserSettings.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraContent.swift */; };
@@ -39,7 +42,6 @@
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
 		03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */; };
-		03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */; };
 		03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */; };
 		03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */; };
 		03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */; };
@@ -74,6 +76,9 @@
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
+		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
+		0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGithubPipeline.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* MenuBarExtraContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraContent.swift; sourceTree = "<group>"; };
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
@@ -109,7 +114,6 @@
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
 		03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
-		03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPipelineSheet.swift; sourceTree = "<group>"; };
 		03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPipelineSheet.swift; sourceTree = "<group>"; };
 		03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListToolbar.swift; sourceTree = "<group>"; };
 		03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactRelativeFormatStyle.swift; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 		03BD7E7C2598E578000F9495 = {
 			isa = PBXGroup;
 			children = (
+				0336DBA929846EB800E5811C /* README.md */,
 				03BD7E872598E579000F9495 /* CCMenu */,
 				03BD7E9D2598E57A000F9495 /* CCMenuTests */,
 				03BD7EA82598E57A000F9495 /* CCMenuUITests */,
@@ -266,7 +271,8 @@
 				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
-				03F682E025C62A48005D56D9 /* AddPipelineSheet.swift */,
+				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
+				0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 			);
 			path = "Pipeline Window";
@@ -422,6 +428,7 @@
 			files = (
 				03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */,
 				03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */,
+				0336DBAA29846EB800E5811C /* README.md in Resources */,
 				03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +485,6 @@
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				039B524629676D0700994910 /* Build.swift in Sources */,
-				03F682E125C62A48005D56D9 /* AddPipelineSheet.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
 				037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */,
@@ -490,6 +496,7 @@
 				03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
+				0336DBAE2984903B00E5811C /* AddGithubPipeline.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
@@ -498,6 +505,7 @@
 				03F9B898297D4D8F00FA866E /* LabeledPipeline.swift in Sources */,
 				03D4BB05265EE6B50023F4CB /* GithubResponseParser.swift in Sources */,
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
+				0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 			);
@@ -601,6 +609,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				UNIT_TEST_BUILD = true;
 			};
 			name = Debug;
 		};
@@ -656,6 +665,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				UNIT_TEST_BUILD = true;
 			};
 			name = Release;
 		};

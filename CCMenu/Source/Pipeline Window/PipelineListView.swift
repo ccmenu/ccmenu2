@@ -12,6 +12,7 @@ struct PipelineListView: View {
     @ObservedObject var settings: UserSettings
     @State var selection: Set<String> = Set()
     @State var isShowingSheet: Bool = false
+    @State var sheetType: Pipeline.FeedType = .cctray
     @State var editIndex: Int?
 
     var body: some View {
@@ -32,7 +33,10 @@ struct PipelineListView: View {
             if let index = editIndex {
                 EditPipelineSheet(model: model, editIndex: index)
             } else {
-                AddPipelineSheet(model: model)
+                switch sheetType {
+                case .cctray: AddCCTrayPipelineSheet(model: model)
+                case .github: AddGithubPipelineSheet(model: model)
+                }
             }
         }
         .onChange(of: editIndex) { value in
@@ -41,7 +45,7 @@ struct PipelineListView: View {
         .toolbar {
             PipelineListToolbar(
                 settings:   settings,
-                add:        { addPipeline() },
+                add:        { type in addPipeline(type: type) },
                 edit:       { editPipeline(at: selectionIndexSet().first) },
                 remove:     { removePipelines(at: selectionIndexSet()) },
                 canEdit:    { selection.count == 1 },
@@ -61,8 +65,10 @@ struct PipelineListView: View {
         return indexSet
     }
 
-    func addPipeline() {
+    func addPipeline(type: Pipeline.FeedType) {
+        // TODO: for Github the CCTray sheet is shown for about a second; why?
         editIndex = nil
+        sheetType = type
         isShowingSheet = true
     }
 

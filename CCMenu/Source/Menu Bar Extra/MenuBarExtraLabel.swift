@@ -14,6 +14,7 @@ struct MenuBarExtraLabel: View {
         Label(title: { Text(model.textForMenuBar) }, icon: { Image(nsImage: model.imageForMenuBar) })
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("CCMenuMenuExtra")
+        .monospacedDigit() // TODO: this doesn't work; why not?
     }
 
 }

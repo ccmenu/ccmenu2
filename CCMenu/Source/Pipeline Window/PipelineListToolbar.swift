@@ -11,7 +11,7 @@ struct PipelineListToolbar: ToolbarContent {
 
     @ObservedObject var settings: UserSettings
 
-    let add: () -> Void
+    let add: (_: Pipeline.FeedType) -> Void
     let edit: () -> Void
     let remove: () -> Void
     let canEdit: () -> Bool
@@ -53,12 +53,20 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItem() {
             Spacer()
         }
-        ToolbarItem(placement: .primaryAction) {
-            Button(action: add) {
-                Label("Add", systemImage: "plus")
+        ToolbarItem() {
+            Menu() {
+                Button("Add project from CCTray feed...") {
+                    add(.cctray)
+                }
+                Button("Add Github workflow...") {
+                    add(.github)
+                }
             }
-            .help("Add pipeline")
-            .accessibility(label: Text("Add pipeline"))
+            label: {
+                Image(systemName: "plus.rectangle.on.folder")
+            }
+            .menuStyle(.borderlessButton)
+            .help("Add a pipeline")
         }
         ToolbarItem {
             Button(action: edit) {

@@ -45,7 +45,7 @@ struct EditPipelineSheet: View {
 struct EditPipelineSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddPipelineSheet(model: makeViewModel())
+//            AddPipelineSheet(model: makeViewModel())
         }
     }
     
