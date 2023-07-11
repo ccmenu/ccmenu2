@@ -13,18 +13,15 @@ final class ViewModel: ObservableObject {
     @Published var pipelines: [Pipeline] { didSet { updateMenu(); updateMenuBar() } }
     @Published var avatars: Dictionary<URL, NSImage>
 
+    @Published var menuBarInformation: MenuBarInformation
     @Published var pipelinesForMenu: [LabeledPipeline] = []
-
-    @Published var imageForMenuBar: NSImage
-    @Published var textForMenuBar: String
 
     var settings: UserSettings
 
     private var subscribers: [AnyCancellable] = []
 
     init() {
-        imageForMenuBar = ImageManager().defaultImage
-        textForMenuBar = ""
+        menuBarInformation = MenuBarInformation(pipelines: [], settings: UserSettings())
         pipelines = []
         avatars = Dictionary()
         settings = UserSettings()
@@ -56,81 +53,11 @@ final class ViewModel: ObservableObject {
                 retrieveAvatar(url: avatarUrl)
             }
         }
-
-        updateMenuBar() // TODO: still needed now that we have a didSet on pipelines?
-        updateMenu()
     }
 
     private func updateMenuBar() {
-        if let pipeline = pipelineForMenuBar() {
-            imageForMenuBar = ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
-            if pipeline.status.activity == .building {
-                if let completionTime = pipeline.estimatedBuildComplete {
-                    textForMenuBar = Date.now.formatted(.compactRelative(reference: completionTime))
-                } else {
-                    textForMenuBar = ""
-                }
-            } else {
-                let failCount = pipelines.filter({ p in p.status.lastBuild?.result == .failure}).count
-                textForMenuBar = (failCount == 0) ? "" : "\(failCount)"
-            }
-        } else {
-            imageForMenuBar = ImageManager().defaultImage
-            textForMenuBar = ""
-        }
+        menuBarInformation = MenuBarInformation.init(pipelines: pipelines, settings: settings)
     }
-
-    private func pipelineForMenuBar() -> Pipeline? {
-        try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:)).first
-    }
-
-    private func compareMenuBarPriority(lhs: Pipeline, rhs: Pipeline) throws -> Bool {
-
-        let priorities = [
-            priority(hasBuild:),
-            priority(isBuilding:),
-            priority(buildResult:),
-            priority(estimatedComplete:)
-        ]
-        for p in priorities {
-            if p(lhs) > p(rhs) {
-                return true
-            }
-            if p(lhs) < p(rhs) {
-                return false
-            }
-        }
-        return false
-    }
-
-    private func priority(hasBuild pipeline: Pipeline) -> Int {
-        return (pipeline.status.lastBuild != nil) ? 1 : 0
-    }
-
-    private func priority(isBuilding pipeline: Pipeline) -> Int {
-        return (pipeline.status.activity == .building) ? 1 : 0
-    }
-
-    private func priority(buildResult pipeline: Pipeline) -> Int {
-        switch pipeline.status.lastBuild?.result {
-        case .failure:
-            return 3
-        case .success:
-            return 2
-        case .unknown, .other:
-            return 1
-        case nil:
-            return 0
-        }
-    }
-
-    private func priority(estimatedComplete pipeline: Pipeline) -> Int {
-        let date = pipeline.estimatedBuildComplete ?? Date.distantFuture
-        assert(Date.distantFuture.timeIntervalSinceReferenceDate < Double(Int.max))
-        // Multiplying all intervals with -1 makes shorter intervals higher priority.
-        return Int(date.timeIntervalSinceReferenceDate) * -1
-    }
-
 
     private func updateMenu() {
         pipelinesForMenu = []

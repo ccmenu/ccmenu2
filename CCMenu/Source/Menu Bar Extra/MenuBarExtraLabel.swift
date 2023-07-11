@@ -11,7 +11,7 @@ struct MenuBarExtraLabel: View {
     @ObservedObject var model: ViewModel
 
     var body: some View {
-        Label(title: { Text(model.textForMenuBar) }, icon: { Image(nsImage: model.imageForMenuBar) })
+        Label(title: { Text(model.menuBarInformation.label) }, icon: { Image(nsImage: model.menuBarInformation.image) })
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("CCMenuMenuExtra")
         .monospacedDigit() // TODO: this doesn't work; why not?

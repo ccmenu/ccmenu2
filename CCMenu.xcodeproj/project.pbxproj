@@ -10,6 +10,7 @@
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* AppCommands.swift */; };
+		0331F39F29A8155000245956 /* MenuBarInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0331F39E29A8155000245956 /* MenuBarInformation.swift */; };
 		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
 		0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */; };
 		0336DBAE2984903B00E5811C /* AddGithubPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */; };
@@ -76,6 +77,7 @@
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
+		0331F39E29A8155000245956 /* MenuBarInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarInformation.swift; sourceTree = "<group>"; };
 		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
 		0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGithubPipeline.swift; sourceTree = "<group>"; };
@@ -249,8 +251,9 @@
 				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
 				03F9B895297D486C00FA866E /* Pipeline.Feed.swift */,
 				03F9B893297D38AA00FA866E /* Pipeline.Status.swift */,
-				03F9B897297D4D8F00FA866E /* LabeledPipeline.swift */,
 				03825DE7259D005B00DEB003 /* ViewModel.swift */,
+				0331F39E29A8155000245956 /* MenuBarInformation.swift */,
+				03F9B897297D4D8F00FA866E /* LabeledPipeline.swift */,
 				037AB214297334EE00C33589 /* UserSettings.swift */,
 			);
 			path = Model;
@@ -493,6 +496,7 @@
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
+				0331F39F29A8155000245956 /* MenuBarInformation.swift in Sources */,
 				03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
