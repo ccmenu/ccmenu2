@@ -26,6 +26,7 @@
 		03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E80259E164500DEB003 /* WorkspaceController.swift */; };
 		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
+		03B021252A5D9F9D00B889BE /* MenuBarInformationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuBarInformationTests.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
@@ -92,6 +93,7 @@
 		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
+		03B021242A5D9F9D00B889BE /* MenuBarInformationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarInformationTests.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BD7E8C2598E57A000F9495 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				03D4BB002659A1120023F4CB /* PipelineTests.swift */,
 				037AB21B297B4D5F00C33589 /* ViewModelTests.swift */,
+				03B021242A5D9F9D00B889BE /* MenuBarInformationTests.swift */,
 				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
 				03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
@@ -523,6 +526,7 @@
 				03CC11EC2652F58B00130833 /* ServerMonitorTests.swift in Sources */,
 				037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */,
+				03B021252A5D9F9D00B889BE /* MenuBarInformationTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 				2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */,
 				03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */,
