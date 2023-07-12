@@ -39,6 +39,7 @@ struct PipelineListToolbar: ToolbarContent {
                 Image(systemName: "list.dash.header.rectangle")
             }
             .menuStyle(.borderlessButton)
+            .accessibility(label: Text("Display detail menu"))
             .help("Select which details to show for the pipelines")
         }
         ToolbarItem() {
@@ -66,6 +67,7 @@ struct PipelineListToolbar: ToolbarContent {
                 Image(systemName: "plus.rectangle.on.folder")
             }
             .menuStyle(.borderlessButton)
+            .accessibility(label: Text("Add pipeline menu"))
             .help("Add a pipeline")
         }
         ToolbarItem {

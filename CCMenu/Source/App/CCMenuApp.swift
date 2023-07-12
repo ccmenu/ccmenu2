@@ -8,7 +8,7 @@ import SwiftUI
 import Combine
 
 
-@available(macOS 13.0, *)
+@main
 struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -63,32 +63,4 @@ struct CCMenuApp: App {
 
     }
 
-
-}
-
-
-/*
-    EmptyApp and the Main wrapper below make it possible to build a (non-functioning) app on
-    macOS 12. This in turn makes it possible to run the unit test suite on macOS 12. All of
-    this is needed because Github Actions doesn't yet support macOS 13 runners. More details
-    here: https://stackoverflow.com/questions/75263777
-*/
-
-struct EmptyApp: App {
-    var body: some Scene {
-        WindowGroup("Pipelines") {
-        }
-    }
-}
-
-
-@main
-struct Main {
-    static func main() {
-        if #available(macOS 13.0, *) {
-            CCMenuApp.main()
-        } else {
-            EmptyApp.main()
-        }
-    }
 }

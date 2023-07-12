@@ -29,7 +29,8 @@ class CCMenuUITests: XCTestCase {
 
     @discardableResult private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
         // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
-        let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
+        let statusItem = app.menuBars.statusItems.element // TODO: workaround because line below doesn't work anymore
+        // let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
         statusItem.click()
         return statusItem.children(matching: .menu)
     }
@@ -95,23 +96,23 @@ class CCMenuUITests: XCTestCase {
         let window = app.windows["Pipelines"]
         let toolbars = window.toolbars
         
-        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled == false)
         XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
 
         window.tables.staticTexts["connectfour"].click()
-        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled)
 
         XCUIElement.perform(withKeyModifiers: XCUIElement.KeyModifierFlags.shift) {
             window.tables.staticTexts["erikdoe/ccmenu"].click()
         }
-        XCTAssertTrue(toolbars.buttons["Add pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
         
-        toolbars.popUpButtons.firstMatch.click() // TODO: not ideal...
+        toolbars.popUpButtons["Display detail menu"].click()
         toolbars.menuItems["Pipeline URL"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
 

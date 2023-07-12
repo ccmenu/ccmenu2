@@ -9,20 +9,18 @@ on:
       - main
 jobs:
   build-and-run-unit-tests:
-    runs-on: macOS-12
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: xcodebuild build -scheme CCMenu  -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
     - name: Run unit tests
       run: xcodebuild test -scheme CCMenu  -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
-# run-uitests:
-#   needs: build-and-run-unit-tests
-#   runs-on: macOS-latest
-#   steps:
-#   - uses: actions/checkout@v3
-#   - name: Run UI tests
-#     run: xcodebuild test -scheme CCMenu.UITests  -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
+run-uitests:
+  needs: build-and-run-unit-tests
+  runs-on: macOS-latest
+  steps:
+  - uses: actions/checkout@v3
+  - name: Run UI tests
+    run: xcodebuild test -scheme CCMenu.UITests-destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
 
-# UI tests commented out until Github Actions have a runner for macOS 13
-# See https://github.com/orgs/github/projects/4247?pane=issue&itemId=16374161
