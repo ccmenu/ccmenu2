@@ -16,26 +16,18 @@ class ServerMonitor: FeedReaderDelegate {
     }
     
     public func start() {
-        createReaders()
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: pollServers)
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: pollServers)
     }
 
-    public func createReaders() {
+    func pollServers(t: Timer) {
         for p in model.pipelines {
             var r: FeedReader
             switch(p.feed.type) {
             case .cctray: r = CCTrayFeedReader(for: p)
             case .github: r = GithubFeedReader(for: p)
             }
-          
             r.delegate = self
-            readerList.append(r)
-        }
-    }
-    
-    func pollServers(t: Timer) {
-        for r in readerList {
             r.updatePipelineStatus()
         }
     }
