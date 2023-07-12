@@ -16,7 +16,7 @@
 		0336DBAE2984903B00E5811C /* AddGithubPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */; };
 		037AB215297334EE00C33589 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserSettings.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
-		037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraContent.swift */; };
+		037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */; };
 		037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */; };
 		037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB21B297B4D5F00C33589 /* ViewModelTests.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
@@ -83,7 +83,7 @@
 		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
 		0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGithubPipeline.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		037AB2172979E30300C33589 /* MenuBarExtraContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraContent.swift; sourceTree = "<group>"; };
+		037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraMenu.swift; sourceTree = "<group>"; };
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
 		037AB21B297B4D5F00C33589 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
@@ -266,7 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */,
-				037AB2172979E30300C33589 /* MenuBarExtraContent.swift */,
+				037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */,
 			);
 			path = "Menu Bar Extra";
 			sourceTree = "<group>";
@@ -493,7 +493,7 @@
 				039B524629676D0700994910 /* Build.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
 				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
-				037AB2182979E30300C33589 /* MenuBarExtraContent.swift in Sources */,
+				037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */,
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,

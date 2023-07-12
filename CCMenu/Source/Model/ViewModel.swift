@@ -40,6 +40,10 @@ final class ViewModel: ObservableObject {
             .store(in: &subscribers)
     }
 
+    func reloadPipelineStatus() {
+        print("Should reload status for all pipelines")
+    }
+
     func update(pipeline: Pipeline) {
         guard let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) else {
             debugPrint("trying to update unknown pipeline \(pipelines.debugDescription)")
@@ -99,7 +103,7 @@ final class ViewModel: ObservableObject {
                 }
             }
         }
-        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:ci.yml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/ci.yml/runs"))
+        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:build-and-test.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(Pipeline(name: "thoughtworks/epirust:scan.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/workflows/scan.yaml/runs"))
     }
 

@@ -16,6 +16,7 @@ struct PipelineListToolbar: ToolbarContent {
     let remove: () -> Void
     let canEdit: () -> Bool
     let canRemove: () -> Bool
+    let reload: () -> Void
 
     var body: some ToolbarContent {
         ToolbarItemGroup {
@@ -75,15 +76,11 @@ struct PipelineListToolbar: ToolbarContent {
             .disabled(!canRemove())
         }
         ToolbarItemGroup {
-            Button(action: updatePipelines) {
+            Button(action: reload) {
                 Label("Reload", systemImage: "arrow.clockwise")
             }
-            .help("Reload status of all pipelines")
+            .help("Update status of all pipelines")
         }
     }
-    
-    func updatePipelines() {
-        NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
-    }
-    
+
 }

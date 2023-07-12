@@ -27,7 +27,7 @@ struct PipelineListView: View {
                 removePipelines(at: indexSet)
             }
         }
-        .frame(minWidth: 400)
+        .frame(minWidth: 500)
         .listStyle(.inset(alternatesRowBackgrounds: true))
         .sheet(isPresented: $isShowingSheet) {
             if let index = editIndex {
@@ -49,7 +49,8 @@ struct PipelineListView: View {
                 edit:       { editPipeline(at: selectionIndexSet().first) },
                 remove:     { removePipelines(at: selectionIndexSet()) },
                 canEdit:    { selection.count == 1 },
-                canRemove:  { !selection.isEmpty }
+                canRemove:  { !selection.isEmpty },
+                reload:     { model.reloadPipelineStatus() }
             )
         }
         .environmentObject(settings)

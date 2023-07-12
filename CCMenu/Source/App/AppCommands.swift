@@ -8,7 +8,6 @@ import SwiftUI
 
 
 struct AppCommands: Commands {
-
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
         }
@@ -18,9 +17,6 @@ struct AppCommands: Commands {
             FileMenuItems()
         }
         CommandGroup(before: .toolbar) {
-        }
-        CommandMenu("Pipeline") {
-            PipelineMenuContent()
         }
         CommandGroup(before: .windowList) {
             WindowMenuItems()
@@ -39,20 +35,13 @@ struct AppCommands: Commands {
             }
         }
     }
-    
-    private struct PipelineMenuContent: View {
-        var body: some View {
-            Button("Update Status of All Pipelines") {
-                NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
-            }
-            .keyboardShortcut("u")
-        }
-    }
-    
+
     private struct WindowMenuItems: View {
+        @Environment(\.openWindow) var openWindow
+
         var body: some View {
             Button("Show Pipeline Window") {
-                NSApp.sendAction(#selector(AppDelegate.orderFrontPipelineWindow(_:)), to: nil, from: self)
+                openWindow(id: "pipeline-list")
             }
             .keyboardShortcut("0")
             Divider()

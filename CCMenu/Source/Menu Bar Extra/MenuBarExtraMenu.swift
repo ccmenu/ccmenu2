@@ -7,8 +7,9 @@
 import SwiftUI
 
 
-struct MenuBarExtraContent: View {
+struct MenuBarExtraMenu: View {
     @ObservedObject var model: ViewModel
+    @Environment(\.openWindow) var openWindow
 
     var body: some View {
         ForEach(model.pipelinesForMenu) { lp in
@@ -22,19 +23,22 @@ struct MenuBarExtraContent: View {
         }
         Divider()
         Button("Show Pipeline Window") {
-            NSApp.sendAction(#selector(AppDelegate.orderFrontPipelineWindow(_:)), to: nil, from: self)
+            NSApp.activate(ignoringOtherApps: true)
+            openWindow(id: "pipeline-list")
         }
         Button("Update Status of All Pipelines") {
-            NSApp.sendAction(#selector(AppDelegate.updatePipelineStatus(_:)), to: nil, from: self)
+            model.reloadPipelineStatus()
         }
         Divider()
         Button("About CCMenu") {
+            NSApp.activate(ignoringOtherApps: true)
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
         Button("Settings...") {
-            NSApp.sendAction(#selector(AppDelegate.orderFrontSettingsWindow(_:)), to: nil, from: self)
+            // If/when this stops working in Sonoma: https://stackoverflow.com/questions/65355696/how-to-programatically-open-settings-preferences-window-in-a-macos-swiftui-app
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         }
-//        .keyboardShortcut(",")
         Divider()
         Button("Quit CCMenu") {
             NSApp.sendAction(#selector(NSApplication.terminate(_:)), to: nil, from: self)
@@ -47,7 +51,7 @@ struct MenuBarExtraContent: View {
 struct MenuBarExtraContent_Previews: PreviewProvider {
     static var previews: some View {
         VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
-            MenuBarExtraContent(model: viewModelForPreview())
+            MenuBarExtraMenu(model: viewModelForPreview())
         }
         .buttonStyle(.borderless)
         .padding(4)

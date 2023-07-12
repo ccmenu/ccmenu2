@@ -43,20 +43,14 @@ struct CCMenuApp: App {
 
     var body: some Scene {
 
-        WindowGroup("Pipelines") {
+        Window("Pipelines", id:"pipeline-list") {
             PipelineListView(model: viewModel, settings: userSettings)
-                .handlesExternalEvents(preferring: ["pipelines"], allowing: ["pipelines"])
         }
-        .commands {
-            AppCommands()
-        }
-        .handlesExternalEvents(matching: ["pipelines"])
-
         Settings {
             SettingsView(settings: userSettings)
         }
         MenuBarExtra() {
-            MenuBarExtraContent(model: viewModel)
+            MenuBarExtraMenu(model: viewModel)
         } label: {
             MenuBarExtraLabel(model: viewModel)
         }

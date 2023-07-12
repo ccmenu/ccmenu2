@@ -20,12 +20,12 @@ struct PipelineRow: View {
                 .scaledToFill()
                 .clipShape(Circle())    // TODO: should be in avatarImage but I can't figure out the return type
                 .foregroundColor(.gray) // TODO: should be in avatarImage but I can't figure out the return type
-                .frame(width: 32, height: 32)
+                .frame(width: 40, height: 40)
                 .padding([.trailing], 4)
             }
             VStack(alignment: .leading) {
                 Text(pipeline.displayName)
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                     .padding(.bottom, settings.showStatusInPipelineWindow && settings.showMessagesInPipelineWindow ? 1 : 0)
                 if !settings.showStatusInPipelineWindow {
                     Text("\(pipeline.feed.url) [\(pipeline.feed.type.rawValue)]") // TODO: use icons for feed type
