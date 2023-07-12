@@ -14,37 +14,56 @@ struct PipelineRow: View {
     var body: some View {
         HStack(alignment: .center) {
             if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
-                AsyncImage(url: pipeline.avatar) { image in
-                    image
-                    .resizable()
-                    .clipShape(Circle())
-                } placeholder: {
-                    Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .foregroundColor(.gray)
-                }
-                .frame(width: 40, height: 40)
-                .scaledToFill()
-                .padding([.trailing], 4)
+                avatarImage()
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(pipeline.displayName)
-                    .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
-                    .padding(.bottom, settings.showStatusInPipelineWindow && settings.showMessagesInPipelineWindow ? 1 : 0)
-                if !settings.showStatusInPipelineWindow {
-                    Text("\(pipeline.feed.url) [\(pipeline.feed.type.rawValue)]") // TODO: use icons for feed type
+                .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
+                if settings.showStatusInPipelineWindow {
+                    statusDescription()
                 } else {
-                    Text(pipeline.statusDescription)
-                    if settings.showMessagesInPipelineWindow {
-                        Text(pipeline.message ?? "–")
-                    }
+                    pipelineUrl()
                 }
             }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
             Image(nsImage: pipeline.statusImage)
         }
         .padding(4)
     }
+
+    private func avatarImage() -> some View {
+        AsyncImage(url: pipeline.avatar) { image in
+            image
+            .resizable()
+            .clipShape(Circle())
+        } placeholder: {
+            Image(systemName: "person.circle.fill")
+            .resizable()
+            .foregroundColor(.gray)
+        }
+        .frame(width: 40, height: 40)
+        .scaledToFill()
+        .padding([.trailing], 4)
+    }
+
+    private func pipelineUrl() -> some View {
+        HStack(alignment: .bottom, spacing: 4) {
+            Image("feed-\(pipeline.feed.type)-template")
+            .resizable()
+            .frame(width: 16, height: 16)
+            Text(pipeline.feed.url)
+        }
+    }
+
+    private func statusDescription() -> some View {
+        VStack(alignment: .leading) {
+            Text(pipeline.statusDescription)
+            if settings.showMessagesInPipelineWindow {
+                Text(pipeline.message ?? "–")
+            }
+        }
+    }
+
 }
 
 
