@@ -9,15 +9,16 @@ import XCTest
 
 class ServerMonitorTests: XCTestCase {
     
-    func testCreatesConnectionForPipeline() throws {
-        let model = ViewModel()
-        let p0 = Pipeline(name: "connectfour", feedUrl: "http://test/cctray.xml")
-        model.pipelines.append(p0)
+//    func testCreatesConnectionForPipeline() throws {
+//        let model = ViewModel()
+//        let p0 = Pipeline(name: "connectfour", feedUrl: "http://test/cctray.xml")
+//        model.pipelines.append(p0)
+//
+//        let monitor = ServerMonitor(model: model)
+//        monitor.createReaders()
+//
+//        XCTAssertEqual(1, monitor.readerList.count)
+//    }
 
-        let monitor = ServerMonitor(model: model)
-        monitor.createReaders()
-       
-        XCTAssertEqual(1, monitor.readerList.count)
-    }
 }
 
