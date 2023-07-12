@@ -58,7 +58,7 @@ final class ViewModel: ObservableObject {
     private func updateMenu() {
         pipelinesForMenu = []
         for p in pipelines {
-            var l = p.name
+            var l = p.displayName
             if settings.showLabelsInMenu, let buildLabel = p.status.lastBuild?.label {
                 l.append(" \u{2014} \(buildLabel)")
             }
@@ -77,8 +77,9 @@ final class ViewModel: ObservableObject {
                 }
             }
         }
-        pipelines.append(Pipeline(name: "erikdoe/ccmenu2:build-and-test.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
-        pipelines.append(Pipeline(name: "thoughtworks/epirust:scan.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/thoughtworks/epirust/actions/workflows/scan.yaml/runs"))
+        var p0 = Pipeline(name: "build-and-test.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs")
+        p0.displayName = "erikdoe/ccmenu2/build-and-test"
+        pipelines.append(p0)
     }
 
     func loadPipelinesFromFile(_ filename: String) {

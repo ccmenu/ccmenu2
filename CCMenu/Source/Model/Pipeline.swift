@@ -35,11 +35,15 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
     var displayName: String {
         set {
-            assignedName = newValue.isEmpty ? nil : newValue
+            assignedName = newValue
         }
         get {
             assignedName ?? name
         }
+    }
+
+    mutating func resetDisplayName() {
+        assignedName = nil
     }
 
     func hash(into hasher: inout Hasher) {

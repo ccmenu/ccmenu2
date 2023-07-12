@@ -14,7 +14,7 @@ For now the roadmap is tracked in this readme file.
 - [X] Monitor hard-coded pipelines
 - [X] Read legacy config
 - [X] Support for GitHub Actions workflows
-- [ ] Add pipelines 
+- [X] Add pipelines 
 - [ ] Edit pipelines
 - [ ] Persistent sorting of pipelines
 
@@ -31,7 +31,6 @@ For now the roadmap is tracked in this readme file.
 ### Later
 
 - [ ] Sounds
-- [ ] Display names
 - [ ] Discover project (pipeline) names for CCTray feeds
 - [ ] Discover workflow names for Github feeds
 - [ ] Import and export of pipeline config

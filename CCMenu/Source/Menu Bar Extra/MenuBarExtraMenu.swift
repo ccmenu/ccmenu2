@@ -65,7 +65,8 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
         p0.status.lastBuild = Build(result: .failure)
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", activity: .sleeping)
+        var p1 = Pipeline(name: "build-and-run.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-run.yaml/runs")
+        p1.displayName = "erikdoe/ccmenu2/build-and-run"
         p1.status.lastBuild = Build(result: .success)
         p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p1.status.lastBuild!.label = "build.151"

@@ -17,6 +17,17 @@ class ViewModelTests: XCTestCase {
         XCTAssertEqual("connectfour", lp.label)
     }
 
+    func testUsesDisplayNameInMenu() throws {
+        let model = makeModel()
+        model.settings.showLabelsInMenu = true
+        var pipeline = makePipeline(name: "connectfour")
+        pipeline.displayName = "Connect4"
+        model.pipelines = [pipeline]
+
+        let lp = model.pipelinesForMenu[0]
+        XCTAssertEqual("Connect4", lp.label)
+    }
+
     func testAppendsBuildLabelToPipelineNameInMenuBasedOnSetting() throws {
         let model = makeModel()
         model.settings.showLabelsInMenu = true
@@ -27,7 +38,6 @@ class ViewModelTests: XCTestCase {
         let lp = model.pipelinesForMenu[0]
         XCTAssertEqual("connectfour \u{2014} build.1", lp.label)
     }
-
 
     private func makeModel() -> ViewModel {
         let m = ViewModel(settings: UserSettings())

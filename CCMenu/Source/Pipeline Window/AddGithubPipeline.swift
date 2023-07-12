@@ -47,7 +47,7 @@ struct AddGithubPipelineSheet: View {
                 HStack {
                     Text("Display name:")
                     TextField("", text: $pipeline.displayName)
-                    Button(action: { pipeline.displayName = "" }) {
+                    Button(action: { pipeline.resetDisplayName() }) {
                         Label("Reset", systemImage: "arrowshape.turn.up.backward")
                     }
                 }
@@ -58,6 +58,8 @@ struct AddGithubPipelineSheet: View {
                     presentation.dismiss()
                 }
                 Button("Apply") {
+                    // TODO: check for empty display name
+                    // TODO: check whether workflow exists
                     pipeline.feed.type = .github
                     pipeline.status = Pipeline.Status(activity: .sleeping)
                     pipeline.status.lastBuild = Build(result: .unknown)
@@ -72,7 +74,7 @@ struct AddGithubPipelineSheet: View {
 
     private func updatePipeline() {
         pipeline.feed.url = String(format: "https://api.github.com/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
-        pipeline.name = String(format:"%@/%@:%@", owner, repository, workflow)
+        pipeline.name = String(format:"%@", workflow)
     }
 
 }

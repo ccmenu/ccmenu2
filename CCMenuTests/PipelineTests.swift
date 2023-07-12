@@ -63,4 +63,25 @@ class PipelineTests: XCTestCase {
 
     }
 
+    func testDisplayNameIsPipelineNameByDefault() throws {
+        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+
+        XCTAssertEqual("connectfour", pipeline.displayName)
+    }
+
+    func testSettingDisplayNameOverwritesDefault() throws {
+        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        pipeline.displayName = "Connect4"
+
+        XCTAssertEqual("Connect4", pipeline.displayName)
+    }
+
+    func testResettingDisplayNameRestoresDefault() throws {
+        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        pipeline.displayName = "Connect4"
+        pipeline.resetDisplayName()
+
+        XCTAssertEqual("connectfour", pipeline.displayName)
+    }
+
 }
