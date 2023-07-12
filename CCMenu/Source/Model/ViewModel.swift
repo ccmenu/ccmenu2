@@ -11,7 +11,6 @@ import Combine
 final class ViewModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateMenu(); updateMenuBar() } }
-    @Published var avatars: Dictionary<URL, NSImage>
 
     @Published var menuBarInformation: MenuBarInformation
     @Published var pipelinesForMenu: [LabeledPipeline] = []
@@ -23,7 +22,6 @@ final class ViewModel: ObservableObject {
     init() {
         menuBarInformation = MenuBarInformation(pipelines: [], settings: UserSettings())
         pipelines = []
-        avatars = Dictionary()
         settings = UserSettings()
     }
 
@@ -51,12 +49,6 @@ final class ViewModel: ObservableObject {
         }
 
         pipelines[idx] = pipeline
-
-        if let avatarUrl = pipeline.avatar {
-            if avatars[avatarUrl] == nil {
-                retrieveAvatar(url: avatarUrl)
-            }
-        }
     }
 
     private func updateMenuBar() {
@@ -71,24 +63,6 @@ final class ViewModel: ObservableObject {
                 l.append(" \u{2014} \(buildLabel)")
             }
             pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))
-        }
-    }
-
-
-    private func retrieveAvatar(url avatarUrl: URL) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                let data = try Data.init(contentsOf: avatarUrl)
-                DispatchQueue.main.async {
-                    let avatarImage: NSImage? = NSImage(data: data)
-                    debugPrint("did load avatar for \(avatarUrl)")
-                    self.avatars[avatarUrl] = avatarImage
-                    debugPrint("did set avatar for \(avatarUrl)")
-                }
-            }
-            catch let errorLog {
-                print(errorLog.localizedDescription)
-            }
         }
     }
 

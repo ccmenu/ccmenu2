@@ -9,18 +9,22 @@ import SwiftUI
 struct PipelineRow: View {
 
     var pipeline: Pipeline
-    var avatars: Dictionary<URL, NSImage>
     @EnvironmentObject var settings: UserSettings
 
     var body: some View {
         HStack(alignment: .center) {
             if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
-                avatarImage()
-                .resizable()
-                .scaledToFill()
-                .clipShape(Circle())    // TODO: should be in avatarImage but I can't figure out the return type
-                .foregroundColor(.gray) // TODO: should be in avatarImage but I can't figure out the return type
+                AsyncImage(url: pipeline.avatar) { image in
+                    image
+                    .resizable()
+                    .clipShape(Circle())
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .foregroundColor(.gray)
+                }
                 .frame(width: 40, height: 40)
+                .scaledToFill()
                 .padding([.trailing], 4)
             }
             VStack(alignment: .leading) {
@@ -41,21 +45,14 @@ struct PipelineRow: View {
         }
         .padding(4)
     }
-
-    private func avatarImage() -> Image {
-        guard let avatarUrl = pipeline.avatar, let avatar = avatars[avatarUrl] else {
-            return Image(systemName: "person.circle.fill")
-        }
-        return Image(nsImage: avatar)
-    }
 }
 
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: pipelineForPreview(), avatars: Dictionary())
+        PipelineRow(pipeline: pipelineForPreview())
             .environmentObject(settingsForPreview(status: false))
-        PipelineRow(pipeline: pipelineForPreview(), avatars: Dictionary())
+        PipelineRow(pipeline: pipelineForPreview())
             .environmentObject(settingsForPreview(status: true))
     }
 
