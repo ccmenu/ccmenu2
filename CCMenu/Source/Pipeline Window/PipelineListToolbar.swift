@@ -18,7 +18,7 @@ struct PipelineListToolbar: ToolbarContent {
     let canRemove: () -> Bool
 
     var body: some ToolbarContent {
-        ToolbarItem() {
+        ToolbarItemGroup {
             Menu() {
                 Picker(selection: $settings.showStatusInPipelineWindow, label: EmptyView()) {
                     Text("Pipeline URL").tag(false)
@@ -41,20 +41,10 @@ struct PipelineListToolbar: ToolbarContent {
             .menuStyle(.borderlessButton)
             .accessibility(label: Text("Display detail menu"))
             .help("Select which details to show for the pipelines")
+
+            Spacer() // TODO: This shouldn't be necessary
         }
-        ToolbarItem() {
-            Spacer()
-        }
-        ToolbarItem() {
-            Button(action: updatePipelines) {
-                Label("Update", systemImage: "arrow.clockwise")
-            }
-            .help("Update status of all pipelines")
-        }
-        ToolbarItem() {
-            Spacer()
-        }
-        ToolbarItem() {
+        ToolbarItemGroup {
             Menu() {
                 Button("Add project from CCTray feed...") {
                     add(.cctray)
@@ -69,22 +59,26 @@ struct PipelineListToolbar: ToolbarContent {
             .menuStyle(.borderlessButton)
             .accessibility(label: Text("Add pipeline menu"))
             .help("Add a pipeline")
-        }
-        ToolbarItem {
+
             Button(action: edit) {
                 Label("Edit", systemImage: "gearshape")
             }
             .help("Edit pipeline")
             .accessibility(label: Text("Edit pipeline"))
             .disabled(!canEdit())
-        }
-        ToolbarItem() {
+
             Button(action: remove) {
                 Label("Remove", systemImage: "trash")
             }
             .help("Remove pipeline")
             .accessibility(label: Text("Remove pipeline"))
             .disabled(!canRemove())
+        }
+        ToolbarItemGroup {
+            Button(action: updatePipelines) {
+                Label("Reload", systemImage: "arrow.clockwise")
+            }
+            .help("Reload status of all pipelines")
         }
     }
     
