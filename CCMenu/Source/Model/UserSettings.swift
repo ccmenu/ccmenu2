@@ -10,15 +10,23 @@ import Combine
 
 final class UserSettings: ObservableObject  {
 
+    private static let pipelineList = "pipelines"
+
     private static let pipelineShowStatus = "pipelineShowStatus"
     private static let pipelineShowMessages = "pipelineShowMessages"
     private static let pipelineShowAvatars = "pipelineShowAvatars"
 
     private static let menuBarUseColor = "menuBarUseColor"
-
     private static let menuShowLabels = "menuShowLabel"
 
     private var userDefaults: UserDefaults?
+
+
+    @Published var pipelineList: Array<Dictionary<String, String>> {
+        didSet {
+            userDefaults?.setValue(pipelineList, forKey: Self.pipelineList)
+        }
+    }
 
     @Published var showStatusInPipelineWindow: Bool {
         didSet {
@@ -51,6 +59,7 @@ final class UserSettings: ObservableObject  {
     }
 
     init() {
+        pipelineList = []
         showStatusInPipelineWindow = false
         showMessagesInPipelineWindow = true
         showAvatarsInPipelineWindow = true
@@ -60,14 +69,19 @@ final class UserSettings: ObservableObject  {
 
     convenience init(userDefaults: UserDefaults?) {
         self.init()
-        if let userDefaults = userDefaults {
-            showStatusInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowStatus)
-            showMessagesInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowMessages)
-            showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
-            useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
-            showLabelsInMenu = userDefaults.bool(forKey: Self.menuShowLabels)
-            self.userDefaults = userDefaults
+        guard let userDefaults = userDefaults else {
+            return
         }
+        // TODO: better workaround/warning for unexpected list type
+        if let list = userDefaults.array(forKey: Self.pipelineList) as? Array<Dictionary<String, String>> {
+            pipelineList = list
+        }
+        showStatusInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowStatus)
+        showMessagesInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowMessages)
+        showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
+        useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
+        showLabelsInMenu = userDefaults.bool(forKey: Self.menuShowLabels)
+        self.userDefaults = userDefaults
     }
     
 }

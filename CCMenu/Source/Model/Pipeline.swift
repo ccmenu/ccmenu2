@@ -126,3 +126,32 @@ struct Pipeline: Hashable, Identifiable, Codable {
     }
 
 }
+
+
+extension Pipeline {
+
+    public static func fromPersistedDictionary(dict: Dictionary<String, String>) -> Pipeline? {
+        // TODO: this looks ugly and isn't helpful
+        if let name = dict["name"],
+           let feedTypeString = dict["feedType"],
+           let feedType = Pipeline.FeedType(rawValue: feedTypeString),
+           let feedUrlString = dict["feedUrl"] {
+
+            var p = Pipeline(name: name, feedType: feedType, feedUrl: feedUrlString)
+            if let displayName = dict["displayName"] {
+                p.displayName = displayName
+            }
+            return p
+        }
+        return nil
+    }
+
+    public func asDictionaryForPersisting() -> Dictionary<String, String> {
+        [ "name": self.name,
+          "displayName": self.displayName,
+          "feedType": String(describing: self.feed.type),
+          "feedUrl": self.feed.url
+        ]
+    }
+
+}

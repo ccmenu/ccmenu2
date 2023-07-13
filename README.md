@@ -16,7 +16,7 @@ For now the roadmap is tracked in this readme file.
 - [X] Support for GitHub Actions workflows
 - [X] Add pipelines 
 - [ ] Edit pipelines
-- [ ] Persistent sorting of pipelines
+- [X] Persistent sorting of pipelines
 
 ### Pre-release 2
 

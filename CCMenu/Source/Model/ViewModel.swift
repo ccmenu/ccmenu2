@@ -10,7 +10,7 @@ import Combine
 
 final class ViewModel: ObservableObject {
 
-    @Published var pipelines: [Pipeline] { didSet { updateMenu(); updateMenuBar() } }
+    @Published var pipelines: [Pipeline] { didSet { updateSettings(); updateMenu(); updateMenuBar() } }
 
     @Published var menuBarInformation: MenuBarInformation
     @Published var pipelinesForMenu: [LabeledPipeline] = []
@@ -51,6 +51,7 @@ final class ViewModel: ObservableObject {
         pipelines[idx] = pipeline
     }
 
+
     private func updateMenuBar() {
         menuBarInformation = MenuBarInformation.init(pipelines: pipelines, settings: settings)
     }
@@ -67,18 +68,36 @@ final class ViewModel: ObservableObject {
     }
 
 
+    private func updateSettings() {
+        // TODO: this is called, too, every time the status gets updated...
+        settings.pipelineList = pipelines.map({ $0.asDictionaryForPersisting() })
+    }
+
+
     func loadPipelinesFromUserDefaults() {
-        if let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> {
-            for project in legacyProjects {
-                if let name = project["projectName"], let feedUrl = project["serverUrl"] {
-                    if !name.hasPrefix("erikdoe/") {
-                        pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
-                    }
-                }
+        if settings.pipelineList.isEmpty {
+            loadPipelinesFromLegacyDefaults()
+            addCCMenu2Pipeline()
+        } else {
+            pipelines = settings.pipelineList.compactMap(Pipeline.fromPersistedDictionary)
+        }
+    }
+
+
+    private func loadPipelinesFromLegacyDefaults() {
+        guard  let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> else {
+            return
+        }
+        for project in legacyProjects {
+            if let name = project["projectName"], let feedUrl = project["serverUrl"] {
+                pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
             }
         }
+    }
+
+    private func addCCMenu2Pipeline() {
         var p0 = Pipeline(name: "build-and-test.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs")
-        p0.displayName = "erikdoe/ccmenu2/build-and-test"
+        p0.displayName = "ccmenu2 (build-and-test)"
         pipelines.append(p0)
     }
 
