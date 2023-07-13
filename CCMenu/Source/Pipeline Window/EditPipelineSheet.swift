@@ -29,9 +29,9 @@ struct EditPipelineSheet: View {
                     presentation.dismiss()
                 }
                 Button("Apply") {
-                    var p = Pipeline(name: "erikdoe/ocmock", feedUrl: "http://localhost:4567/cc.xml")
-                    p.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
-                    model.pipelines[editIndex] = p
+//                    var p = Pipeline(name: "erikdoe/ocmock", feedUrl: "http://localhost:4567/cc.xml")
+//                    p.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
+//                    model.pipelines[editIndex] = p
                     presentation.dismiss()
                 }
                 .buttonStyle(DefaultButtonStyle())
@@ -52,7 +52,7 @@ struct EditPipelineSheet_Previews: PreviewProvider {
     static func makeViewModel() -> ViewModel {
         let model = ViewModel()
 
-        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml")
+        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cctray.xml"))
         p0.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure))
         model.pipelines = [p0]
         return model

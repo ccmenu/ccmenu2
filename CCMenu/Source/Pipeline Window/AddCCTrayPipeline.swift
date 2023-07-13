@@ -9,7 +9,9 @@ import SwiftUI
 struct AddCCTrayPipelineSheet: View {
     @ObservedObject var model: ViewModel
     @Environment(\.presentationMode) @Binding var presentation
-    @State var pipeline: Pipeline = Pipeline(name: "", feedUrl: "")
+    @State var url: String = ""
+    @State var projectName: String = ""
+    @State var displayName: String = ""
 
     var body: some View {
         VStack {
@@ -24,12 +26,13 @@ struct AddCCTrayPipelineSheet: View {
             Form {
                 HStack {
                     Text("URL:")
-                    TextField("", text: $pipeline.feed.url)
+                    TextField("", text: $url)
                 }
                 HStack {
                     Text("Project name:")
-                    TextField("", text: $pipeline.name)
+                    TextField("", text: $projectName)
                 }
+                .onChange(of: projectName) { _ in displayName = projectName }
             }
             Divider()
                 .padding()
@@ -42,8 +45,8 @@ struct AddCCTrayPipelineSheet: View {
             Form {
                 HStack {
                     Text("Display name:")
-                    TextField("", text: $pipeline.displayName)
-                    Button(action: { pipeline.displayName = "" }) {
+                    TextField("", text: $displayName)
+                    Button(action: { displayName = projectName }) {
                         Label("Reset", systemImage: "arrowshape.turn.up.backward")
                     }
                 }
@@ -54,7 +57,7 @@ struct AddCCTrayPipelineSheet: View {
                     presentation.dismiss()
                 }
                 Button("Apply") {
-                    pipeline.feed.type = .cctray
+                    var pipeline: Pipeline = Pipeline(name: displayName, feed:Pipeline.Feed(type:.cctray, url: url, name: projectName))
                     pipeline.status = Pipeline.Status(activity: .sleeping)
                     pipeline.status.lastBuild = Build(result: .unknown)
                     model.pipelines.append(pipeline)

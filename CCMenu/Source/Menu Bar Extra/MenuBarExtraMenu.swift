@@ -12,13 +12,12 @@ struct MenuBarExtraMenu: View {
     @Environment(\.openWindow) var openWindow
 
     var body: some View {
-        ForEach(model.pipelinesForMenu) { lp in
+        ForEach(model.pipelinesForMenu) { pvm in
             Button() {
-                WorkspaceController().openPipeline(lp.pipeline)
+                WorkspaceController().openPipeline(pvm.pipeline)
             } label: {
-                Label(title: { Text(lp.label) }, icon: { Image(nsImage: lp.pipeline.statusImage) } )
+                Label(title: { Text(pvm.title) }, icon: { Image(nsImage: pvm.icon) } )
                 .labelStyle(.titleAndIcon)
-
             }
         }
         Divider()
@@ -61,12 +60,13 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
     static func viewModelForPreview() -> ViewModel {
         let model = ViewModel(settings: settingsForPreview())
 
-        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml", activity: .building)
+        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
+        p0.status.activity = .building
         p0.status.lastBuild = Build(result: .failure)
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        var p1 = Pipeline(name: "build-and-run.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-run.yaml/runs")
-        p1.displayName = "erikdoe/ccmenu2/build-and-run"
+        var p1 = Pipeline(name: "ccmenu2 (build-and-run)", feed: Pipeline.Feed(type: .github, url: "", name: ""))
+        p1.status.activity = .sleeping
         p1.status.lastBuild = Build(result: .success)
         p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p1.status.lastBuild!.label = "build.151"

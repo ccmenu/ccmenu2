@@ -7,20 +7,38 @@
 import XCTest
 @testable import CCMenu
 
-class MenuBarInformationTests: XCTestCase {
+class MenuExtraModelTests: XCTestCase {
 
+    private func makeModel(pipelines: [Pipeline]) -> MenuExtraModel {
+        let settings = UserSettings()
+        settings.useColorInMenuBar = true // otherwise we can't compare the images
+        return MenuExtraModel(pipelines: pipelines, settings: settings)
+    }
+
+    private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
+        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
+        p.status.activity = activity
+        if activity == .building {
+            p.status.currentBuild = Build(result: .unknown)
+        }
+        if let lastBuildResult = lastBuildResult {
+            p.status.lastBuild = Build(result: lastBuildResult)
+        }
+        return p
+    }
+    
     func testDisplaysDefaultImageAndNoTextWhenNoPipelinesAreMonitored() throws {
         let model = makeModel(pipelines: [])
 
-        XCTAssertEqual(ImageManager().defaultImage, model.image)
-        XCTAssertEqual("", model.label)
+        XCTAssertEqual(ImageManager().defaultImage, model.icon)
+        XCTAssertEqual("", model.title)
     }
 
     func testDisplaysDefaultImageAndNoTextWhenNoStatusIsKnown() throws {
         let model = makeModel(pipelines: [makePipeline(name: "connectfour")])
 
-        XCTAssertEqual(ImageManager().defaultImage, model.image)
-        XCTAssertEqual("", model.label)
+        XCTAssertEqual(ImageManager().defaultImage, model.icon)
+        XCTAssertEqual("", model.title)
     }
 
     func testDisplaysSuccessAndNoTextWhenAllProjectsWithStatusAreSleepingAndSuccessful() throws {
@@ -28,8 +46,8 @@ class MenuBarInformationTests: XCTestCase {
         let p1 = makePipeline(name: "p1", activity: .sleeping, lastBuildResult: .success)
         let model = makeModel(pipelines: [p0, p1])
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping), model.image)
-        XCTAssertEqual("", model.label)
+        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping), model.icon)
+        XCTAssertEqual("", model.title)
     }
 
     func testDisplaysFailureAndNumberOfFailuresWhenAllAreSleepingAndAtLeastOneIsFailed() throws {
@@ -38,8 +56,8 @@ class MenuBarInformationTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .sleeping), model.image)
-        XCTAssertEqual("2", model.label)
+        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .sleeping), model.icon)
+        XCTAssertEqual("2", model.title)
     }
 
     func testDisplaysBuildingWhenAtLeastOneProjectIsBuilding() throws {
@@ -48,7 +66,7 @@ class MenuBarInformationTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .building), model.image)
+        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .building), model.icon)
     }
 
     func testDisplaysFixingWhenAtLeastOneProjectWithLastStatusFailedIsBuilding() throws {
@@ -57,7 +75,7 @@ class MenuBarInformationTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .building), model.image)
+        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .building), model.icon)
     }
 
     func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {
@@ -66,7 +84,7 @@ class MenuBarInformationTests: XCTestCase {
         p0.status.lastBuild!.timestamp = Date.now
         let model = makeModel(pipelines: [p0])
 
-        XCTAssertEqual("", model.label)
+        XCTAssertEqual("", model.title)
     }
 
     func testDisplaysShortestTimingForBuildingProjectsWithEstimatedCompleteTime() throws {
@@ -79,7 +97,7 @@ class MenuBarInformationTests: XCTestCase {
         p2.status.currentBuild!.timestamp = Date.now
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual("-29s", model.label)
+        XCTAssertEqual("-29s", model.title)
     }
 
     func testDisplaysTimingForFixingEvenIfItsLongerThanForBuilding() throws {
@@ -91,26 +109,7 @@ class MenuBarInformationTests: XCTestCase {
         p1.status.currentBuild!.timestamp = Date.now
         let model = makeModel(pipelines: [p0, p1])
 
-        XCTAssertEqual("-01:29", model.label)
-    }
-
-
-    private func makeModel(pipelines: [Pipeline]) -> MenuBarInformation {
-        let settings = UserSettings()
-        settings.useColorInMenuBar = true // otherwise we can't compare the images
-        return MenuBarInformation(pipelines: pipelines, settings: settings)
-    }
-
-    private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
-        var p = Pipeline(name: name, feedUrl: "")
-        p.status.activity = activity
-        if activity == .building {
-            p.status.currentBuild = Build(result: .unknown)
-        }
-        if let lastBuildResult = lastBuildResult {
-            p.status.lastBuild = Build(result: lastBuildResult)
-        }
-        return p
+        XCTAssertEqual("-01:29", model.title)
     }
 
 }

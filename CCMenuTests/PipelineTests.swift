@@ -9,14 +9,20 @@ import XCTest
 
 class PipelineTests: XCTestCase {
 
+    private func makePipeline(name: String = "connectfour", activity: Pipeline.Activity = .other) -> Pipeline {
+        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "", name: name))
+        p.status.activity = activity
+        return p
+    }
+
     func testStatusWhenSleepingAndLastBuildNotAvailable() throws {
-        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        let pipeline = makePipeline(activity: .sleeping)
 
         XCTAssertEqual("Waiting for first build", pipeline.statusDescription)
     }
 
     func testStatusWhenSleepingAndLastBuildIsAvailable() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.status.lastBuild!.label = "842"
         pipeline.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
@@ -32,20 +38,20 @@ class PipelineTests: XCTestCase {
     }
     
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
 
         XCTAssertEqual("Build finished", pipeline.statusDescription)
     }
 
     func testStatusWhenBuildingAndCurrentBuildNotAvailable() throws { // TODO: does this even make sense?
-        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        var pipeline = makePipeline(activity: .building)
 
         XCTAssertEqual("Build started", pipeline.statusDescription)
     }
 
     func testStatusWhenBuildingAndCurrentBuildIsAvailable() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        var pipeline = makePipeline(activity: .building)
         pipeline.status.currentBuild = Build(result: .unknown)
         pipeline.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
@@ -55,33 +61,12 @@ class PipelineTests: XCTestCase {
     }
 
     func testStatusWhenErrorIsSet() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "http://test.org/cctray.xml", activity: .sleeping)
+        var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.connectionError = "404 Not Found"
 
         XCTAssertEqual("404 Not Found", pipeline.statusDescription)
 
-    }
-
-    func testDisplayNameIsPipelineNameByDefault() throws {
-        let pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
-
-        XCTAssertEqual("connectfour", pipeline.displayName)
-    }
-
-    func testSettingDisplayNameOverwritesDefault() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
-        pipeline.displayName = "Connect4"
-
-        XCTAssertEqual("Connect4", pipeline.displayName)
-    }
-
-    func testResettingDisplayNameRestoresDefault() throws {
-        var pipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
-        pipeline.displayName = "Connect4"
-        pipeline.resetDisplayName()
-
-        XCTAssertEqual("connectfour", pipeline.displayName)
     }
 
 }

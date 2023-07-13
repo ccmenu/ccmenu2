@@ -9,7 +9,7 @@ import SwiftUI
 struct AddGithubPipelineSheet: View {
     @ObservedObject var model: ViewModel
     @Environment(\.presentationMode) @Binding var presentation
-    @State var pipeline: Pipeline = Pipeline(name: "", feedUrl: "")
+    @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
     @State var owner: String = ""
     @State var repository: String = ""
     @State var workflow: String = ""
@@ -46,8 +46,8 @@ struct AddGithubPipelineSheet: View {
             Form {
                 HStack {
                     Text("Display name:")
-                    TextField("", text: $pipeline.displayName)
-                    Button(action: { pipeline.resetDisplayName() }) {
+                    TextField("", text: $pipeline.name)
+                    Button(action: { pipeline.name = "\(repository) (\(workflow))" }) {
                         Label("Reset", systemImage: "arrowshape.turn.up.backward")
                     }
                 }
@@ -74,7 +74,7 @@ struct AddGithubPipelineSheet: View {
 
     private func updatePipeline() {
         pipeline.feed.url = String(format: "https://api.github.com/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
-        pipeline.name = String(format:"%@", workflow)
+        pipeline.name = "\(repository) (\(workflow))"
     }
 
 }

@@ -106,11 +106,13 @@ struct PipelineListView_Previews: PreviewProvider {
     static func makeViewModel() -> ViewModel {
         let model = ViewModel()
 
-        var p0 = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cctray.xml", activity: .building)
+        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
+        p0.status.activity = .building
         p0.status.lastBuild = Build(result: .failure)
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feedUrl: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", activity: .sleeping)
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: Pipeline.Feed(type: .cctray, url: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", name: "connectfour"))
+        p1.status.activity = .sleeping
         p1.status.lastBuild = Build(result: .success)
         p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p1.status.lastBuild!.label = "build.151"

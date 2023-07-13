@@ -9,8 +9,14 @@ import XCTest
 
 class CCTrayFeedReaderTests: XCTestCase {
 
+    private func makePipeline(name: String, activity: Pipeline.Activity = .other) -> Pipeline {
+        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "", name: name))
+        p.status.activity = activity
+        return p
+    }
+
     func testUpdatesAllRelevantFieldsOnPipelineWithNoBuildsWhenSleeping() throws {
-        let basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         let reader = CCTrayFeedReader(for: basePipeline)
 
         var status = Pipeline.Status(activity: .sleeping)
@@ -31,7 +37,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testUpdatesAllRelevantFieldsOnPipelineWithNoBuildsWhenBuilding() throws {
-        let basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        let basePipeline = makePipeline(name: "connectfour", activity: .building)
         let reader = CCTrayFeedReader(for: basePipeline)
 
         var status = Pipeline.Status(activity: .building)
@@ -54,7 +60,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testSetsBuildTimestampOnCurrentBuildWhenTransitioningToBuilding() throws {
-        let basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         let reader = CCTrayFeedReader(for: basePipeline)
 
         var status = Pipeline.Status(activity: .building)
@@ -68,7 +74,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testBuildTimestampOnCurrentBuild() throws {
-        var basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        var basePipeline = makePipeline(name: "connectfour", activity: .building)
         basePipeline.status.lastBuild = Build(result: .unknown)
         basePipeline.status.currentBuild = Build(result: .unknown)
         basePipeline.status.currentBuild!.timestamp = Date.now
@@ -86,7 +92,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testSetsBuildDurationOnLastBuildWhenTransitioningFromBuildingAndCurrentBuildTimestampAvailable() throws {
-        var basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .building)
+        var basePipeline = makePipeline(name: "connectfour", activity: .building)
         basePipeline.status.currentBuild = Build(result: .unknown)
         basePipeline.status.currentBuild!.timestamp = Date.now
         let reader = CCTrayFeedReader(for: basePipeline)
@@ -102,7 +108,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testKeepsDurationOnLastBuild() throws {
-        var basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        var basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         basePipeline.status.lastBuild = Build(result: .success)
         basePipeline.status.lastBuild!.label = "label.1"
         basePipeline.status.lastBuild!.duration = 90
@@ -121,7 +127,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testSetsErrorWhenNoStatusIsProvided() throws {
-        let basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         let reader = CCTrayFeedReader(for: basePipeline)
 
         reader.updatePipeline(name: basePipeline.name, newStatus: nil)
@@ -131,7 +137,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     }
 
     func testClearsErrorWhenUpdatedWithStatus() throws {
-        var basePipeline = Pipeline(name: "connectfour", feedUrl: "", activity: .sleeping)
+        var basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         basePipeline.connectionError = "error message for testing"
         let reader = CCTrayFeedReader(for: basePipeline)
 
@@ -142,7 +148,6 @@ class CCTrayFeedReaderTests: XCTestCase {
 
         XCTAssertNil(pipeline.connectionError)
     }
-
 
 
 }

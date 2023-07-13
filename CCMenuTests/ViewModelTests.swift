@@ -9,52 +9,11 @@ import XCTest
 
 class ViewModelTests: XCTestCase {
 
-    func testUsesPipelineNameInMenuAsDefault() throws {
-        let model = makeModel()
-        model.pipelines = [makePipeline(name: "connectfour")]
-
-        let lp = model.pipelinesForMenu[0]
-        XCTAssertEqual("connectfour", lp.label)
-    }
-
-    func testUsesDisplayNameInMenu() throws {
-        let model = makeModel()
-        model.settings.showLabelsInMenu = true
-        var pipeline = makePipeline(name: "connectfour")
-        pipeline.displayName = "Connect4"
-        model.pipelines = [pipeline]
-
-        let lp = model.pipelinesForMenu[0]
-        XCTAssertEqual("Connect4", lp.label)
-    }
-
-    func testAppendsBuildLabelToPipelineNameInMenuBasedOnSetting() throws {
-        let model = makeModel()
-        model.settings.showLabelsInMenu = true
-        var pipeline = makePipeline(name: "connectfour")
-        pipeline.status.lastBuild = Build(result: .success, label: "build.1")
-        model.pipelines = [pipeline]
-
-        let lp = model.pipelinesForMenu[0]
-        XCTAssertEqual("connectfour \u{2014} build.1", lp.label)
-    }
-
     private func makeModel() -> ViewModel {
         let m = ViewModel(settings: UserSettings())
         return m
     }
 
-    private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
-        var p = Pipeline(name: name, feedUrl: "")
-        p.status.activity = activity
-        if activity == .building {
-            p.status.currentBuild = Build(result: .unknown)
-        }
-        if let lastBuildResult = lastBuildResult {
-            p.status.lastBuild = Build(result: lastBuildResult)
-        }
-        return p
-    }
 
 }
 

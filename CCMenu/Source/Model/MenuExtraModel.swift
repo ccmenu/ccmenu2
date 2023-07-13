@@ -6,16 +6,13 @@
 
 import AppKit
 
-
-// Used for the menu bar / menu extra.
-
-struct MenuBarInformation {
-    var label: String
-    var image: NSImage
+struct MenuExtraModel {
+    var title: String
+    var icon: NSImage
 
     init(pipelines: [Pipeline], settings: UserSettings) {
-        self.image = MenuBarInformation.chooseImage(pipelines, settings)
-        self.label = MenuBarInformation.makeLabel(pipelines)
+        self.icon = MenuExtraModel.chooseImage(pipelines, settings)
+        self.title = MenuExtraModel.makeLabel(pipelines)
     }
 
 

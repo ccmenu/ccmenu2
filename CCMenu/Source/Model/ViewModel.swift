@@ -10,17 +10,17 @@ import Combine
 
 final class ViewModel: ObservableObject {
 
-    @Published var pipelines: [Pipeline] { didSet { updateSettings(); updateMenu(); updateMenuBar() } }
+    @Published var pipelines: [Pipeline] { didSet { updateSettings(); updateMenu(); updateMenuBar(); } }
 
-    @Published var menuBarInformation: MenuBarInformation
-    @Published var pipelinesForMenu: [LabeledPipeline] = []
+    @Published var informationForMenuBar: MenuExtraModel
+    @Published var pipelinesForMenu: [MenuItemModel] = []
 
     var settings: UserSettings
 
     private var subscribers: [AnyCancellable] = []
 
     init() {
-        menuBarInformation = MenuBarInformation(pipelines: [], settings: UserSettings())
+        informationForMenuBar = MenuExtraModel(pipelines: [], settings: UserSettings())
         pipelines = []
         settings = UserSettings()
     }
@@ -53,20 +53,12 @@ final class ViewModel: ObservableObject {
 
 
     private func updateMenuBar() {
-        menuBarInformation = MenuBarInformation.init(pipelines: pipelines, settings: settings)
+        informationForMenuBar = MenuExtraModel.init(pipelines: pipelines, settings: settings)
     }
 
     private func updateMenu() {
-        pipelinesForMenu = []
-        for p in pipelines {
-            var l = p.displayName
-            if settings.showLabelsInMenu, let buildLabel = p.status.lastBuild?.label {
-                l.append(" \u{2014} \(buildLabel)")
-            }
-            pipelinesForMenu.append(LabeledPipeline(pipeline: p, label: l))
-        }
+        pipelinesForMenu = pipelines.map({ MenuItemModel(pipeline: $0, settings: settings) })
     }
-
 
     private func updateSettings() {
         // TODO: this is called, too, every time the status gets updated...
@@ -89,15 +81,15 @@ final class ViewModel: ObservableObject {
             return
         }
         for project in legacyProjects {
-            if let name = project["projectName"], let feedUrl = project["serverUrl"] {
-                pipelines.append(Pipeline(name: name, feedUrl: feedUrl))
+            if let projectName = project["projectName"], let serverUrl = project["serverUrl"] {
+                let name = project["displayName"] ?? projectName
+                pipelines.append(Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: serverUrl, name: projectName)))
             }
         }
     }
 
     private func addCCMenu2Pipeline() {
-        var p0 = Pipeline(name: "build-and-test.yaml", feedType: .github, feedUrl: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs")
-        p0.displayName = "ccmenu2 (build-and-test)"
+        var p0 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(p0)
     }
 

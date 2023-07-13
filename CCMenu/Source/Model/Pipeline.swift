@@ -10,40 +10,14 @@ import AppKit
 struct Pipeline: Hashable, Identifiable, Codable {
 
     var name: String
-    var assignedName: String?
     var feed: Pipeline.Feed
     var status: Pipeline.Status
     var connectionError: String?
 
-    init(name: String, feedUrl: String) {
+    init(name: String, feed: Feed) {
         self.name = name
-        feed = Feed(type: .cctray, url: feedUrl)
+        self.feed = feed
         status = Status(activity: .other)
-    }
-
-    init(name: String, feedUrl: String, activity: Activity) {
-        self.name = name
-        feed = Feed(type: .cctray, url: feedUrl)
-        status = Status(activity: activity)
-    }
-
-    init(name: String, feedType: FeedType, feedUrl: String) {
-        self.name = name
-        feed = Feed(type: feedType, url: feedUrl)
-        status = Status(activity: .other)
-    }
-
-    var displayName: String {
-        set {
-            assignedName = newValue
-        }
-        get {
-            assignedName ?? name
-        }
-    }
-
-    mutating func resetDisplayName() {
-        assignedName = nil
     }
 
     func hash(into hasher: inout Hasher) {
@@ -54,6 +28,32 @@ struct Pipeline: Hashable, Identifiable, Codable {
     var id: String {
         name + "|" + feed.url
     }
+
+    var statusImage: NSImage {
+        return ImageManager().image(forPipeline: self)
+    }
+
+    var message: String? {
+        return status.activity == .building ? status.currentBuild?.message : status.lastBuild?.message
+    }
+
+    var avatar: URL? {
+        return status.activity == .building ? status.currentBuild?.avatar : status.lastBuild?.avatar
+    }
+
+    var estimatedBuildComplete: Date? {
+        if status.activity == .building, let duration = status.lastBuild?.duration {
+            return status.currentBuild?.timestamp?.advanced(by: duration)
+        }
+        return nil;
+    }
+
+}
+
+
+extension Pipeline {
+
+    // This could've gone in a wrapper (like MenuItemModel) but the window needs the underlying list of real pipelines.
 
     var statusDescription: String {
         if let error = connectionError {
@@ -106,25 +106,6 @@ struct Pipeline: Hashable, Identifiable, Codable {
         return "Build finished"
     }
 
-    var statusImage: NSImage {
-        return ImageManager().image(forPipeline: self)
-    }
-
-    var message: String? {
-        return status.activity == .building ? status.currentBuild?.message : status.lastBuild?.message
-    }
-
-    var avatar: URL? {
-        return status.activity == .building ? status.currentBuild?.avatar : status.lastBuild?.avatar
-    }
-
-    var estimatedBuildComplete: Date? {
-        if status.activity == .building, let duration = status.lastBuild?.duration {
-            return status.currentBuild?.timestamp?.advanced(by: duration)
-        }
-        return nil;
-    }
-
 }
 
 
@@ -132,25 +113,22 @@ extension Pipeline {
 
     public static func fromPersistedDictionary(dict: Dictionary<String, String>) -> Pipeline? {
         // TODO: this looks ugly and isn't helpful
-        if let name = dict["name"],
-           let feedTypeString = dict["feedType"],
-           let feedType = Pipeline.FeedType(rawValue: feedTypeString),
-           let feedUrlString = dict["feedUrl"] {
-
-            var p = Pipeline(name: name, feedType: feedType, feedUrl: feedUrlString)
-            if let displayName = dict["displayName"] {
-                p.displayName = displayName
-            }
-            return p
+        guard
+            let name = dict["name"],
+            let feedTypeString = dict["feedType"],
+            let feedType = Pipeline.FeedType(rawValue: feedTypeString),
+            let feedUrl = dict["feedUrl"],
+            let feedName = dict["feedName"] else {
+            return nil
         }
-        return nil
+        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName))
     }
 
     public func asDictionaryForPersisting() -> Dictionary<String, String> {
         [ "name": self.name,
-          "displayName": self.displayName,
           "feedType": String(describing: self.feed.type),
-          "feedUrl": self.feed.url
+          "feedUrl": self.feed.url,
+          "feedName": self.feed.name ?? ""
         ]
     }
 

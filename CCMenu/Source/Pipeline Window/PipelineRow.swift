@@ -17,7 +17,7 @@ struct PipelineRow: View {
                 avatarImage()
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(pipeline.displayName)
+                Text(pipeline.name)
                 .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                 if settings.showStatusInPipelineWindow {
                     statusDescription()
@@ -52,6 +52,9 @@ struct PipelineRow: View {
             .resizable()
             .frame(width: 16, height: 16)
             Text(pipeline.feed.url)
+            if pipeline.feed.type == .cctray, let name = pipeline.feed.name, name != pipeline.name {
+                Text(String(format: "(%@)", name))
+            }
         }
     }
 
@@ -76,7 +79,7 @@ struct PipelineRow_Previews: PreviewProvider {
     }
 
     static func pipelineForPreview() -> Pipeline {
-        var p = Pipeline(name: "connectfour", feedUrl: "http://localhost:4567/cc.xml", activity: .sleeping)
+        var p = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
         p.status.lastBuild = Build(result: .success)
         p.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:34Z")
         p.status.lastBuild!.duration = 12*60 + 34
