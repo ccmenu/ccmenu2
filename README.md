@@ -15,18 +15,21 @@ For now the roadmap is tracked in this readme file.
 - [X] Read legacy config
 - [X] Support for GitHub Actions workflows
 - [X] Add pipelines 
-- [ ] Edit pipelines
 - [X] Persistent sorting of pipelines
+- [ ] Remaining menu appearance options
 
 ### Pre-release 2
 
-- [ ] Remaining menu appearance options
+- [ ] SSO login
+
+### Pre-release 3
+
 - [ ] Notifications (check out: UNNotificationContentExtension)
 
 ### Pre-release 3
 
 - [ ] Basic auth login
-- [ ] SSO login
+- [ ] Edit pipelines
 
 ### Later
 
