@@ -18,7 +18,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(pipeline: p)
+                PipelineRow(pvm: ListRowModel(pipeline: p, settings: settings))
             }
             .onMove { (itemsToMove, destination) in
                 movePipelines(at: itemsToMove, to: destination)

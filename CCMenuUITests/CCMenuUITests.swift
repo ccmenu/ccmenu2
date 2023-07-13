@@ -122,12 +122,12 @@ class CCMenuUITests: XCTestCase {
         toolbars.menuItems["Build Status"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
 
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists)
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists)
         toolbars.popUpButtons.firstMatch.click()
         XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled)
         XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled)
         toolbars.menuItems["Hide Messages"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Testing'")).exists == false)
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists == false)
 
     }
     

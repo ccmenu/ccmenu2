@@ -8,7 +8,7 @@ import SwiftUI
 
 struct PipelineRow: View {
 
-    var pipeline: Pipeline
+    var pvm: ListRowModel
     @EnvironmentObject var settings: UserSettings
 
     var body: some View {
@@ -17,22 +17,27 @@ struct PipelineRow: View {
                 avatarImage()
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(pipeline.name)
+                Text(pvm.title)
                 .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                 if settings.showStatusInPipelineWindow {
-                    statusDescription()
+                    Text(pvm.statusDescription)
                 } else {
-                    pipelineUrl()
+                    HStack(alignment: .bottom, spacing: 4) {
+                        Image(pvm.feedTypeIconName)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                        Text(pvm.feedUrl)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            Image(nsImage: pipeline.statusImage)
+            Image(nsImage: pvm.statusIcon)
         }
         .padding(4)
     }
 
     private func avatarImage() -> some View {
-        AsyncImage(url: pipeline.avatar) { image in
+        AsyncImage(url: pvm.pipeline.avatar) { image in
             image
             .resizable()
             .clipShape(Circle())
@@ -46,35 +51,24 @@ struct PipelineRow: View {
         .padding([.trailing], 4)
     }
 
-    private func pipelineUrl() -> some View {
-        HStack(alignment: .bottom, spacing: 4) {
-            Image("feed-\(pipeline.feed.type)-template")
-            .resizable()
-            .frame(width: 16, height: 16)
-            Text(pipeline.feed.url)
-            if pipeline.feed.type == .cctray, let name = pipeline.feed.name, name != pipeline.name {
-                Text(String(format: "(%@)", name))
-            }
-        }
-    }
 
-    private func statusDescription() -> some View {
-        VStack(alignment: .leading) {
-            Text(pipeline.statusDescription)
-            if settings.showMessagesInPipelineWindow {
-                Text(pipeline.message ?? "–")
-            }
-        }
-    }
+//    private func statusDescription() -> some View {
+//        VStack(alignment: .leading) {
+//            Text(pvm.statusDescription)
+//            if settings.showMessagesInPipelineWindow {
+//                Text(pipeline.message ?? "–")
+//            }
+//        }
+//    }
 
 }
 
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pipeline: pipelineForPreview())
+        PipelineRow(pvm: ListRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
             .environmentObject(settingsForPreview(status: false))
-        PipelineRow(pipeline: pipelineForPreview())
+        PipelineRow(pvm: ListRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
             .environmentObject(settingsForPreview(status: true))
     }
 

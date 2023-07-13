@@ -11,13 +11,10 @@ struct MenuItemModel: Hashable, Identifiable {
 
     var pipeline: Pipeline
     var title: String
+    var icon: NSImage
 
     var id: String {
         pipeline.id
-    }
-
-    var icon: NSImage {
-        pipeline.statusImage
     }
 
     init(pipeline: Pipeline, settings: UserSettings) {
@@ -26,7 +23,7 @@ struct MenuItemModel: Hashable, Identifiable {
         if settings.showLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
             title.append(" \u{2014} \(buildLabel)")
         }
-
+        self.icon = ImageManager().image(forPipeline: pipeline)
     }
 
 }

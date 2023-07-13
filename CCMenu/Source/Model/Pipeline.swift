@@ -29,10 +29,6 @@ struct Pipeline: Hashable, Identifiable, Codable {
         name + "|" + feed.url
     }
 
-    var statusImage: NSImage {
-        return ImageManager().image(forPipeline: self)
-    }
-
     var message: String? {
         return status.activity == .building ? status.currentBuild?.message : status.lastBuild?.message
     }
@@ -46,64 +42,6 @@ struct Pipeline: Hashable, Identifiable, Codable {
             return status.currentBuild?.timestamp?.advanced(by: duration)
         }
         return nil;
-    }
-
-}
-
-
-extension Pipeline {
-
-    // This could've gone in a wrapper (like MenuItemModel) but the window needs the underlying list of real pipelines.
-
-    var statusDescription: String {
-        if let error = connectionError {
-            return error
-        } else if status.activity == .building {
-            if let build = status.currentBuild, let timestamp = build.timestamp {
-                return statusForActiveBuild(build, timestamp)
-            } else {
-                return "Build started"
-            }
-        } else {
-            if let build = status.lastBuild {
-                return statusForFinishedBuild(build)
-            } else {
-                return "Waiting for first build"
-            }
-        }
-    }
-
-    private func statusForActiveBuild(_ build: Build, _ timestamp: Date) -> String {
-        let absolute = timestamp.formatted(date: .omitted, time: .shortened)
-        let status = "Started: \(absolute)"
-        return status
-    }
-
-    private func statusForFinishedBuild(_ build: Build) -> String {
-        var components: [String] = []
-        if let timestamp = build.timestamp {
-            // TODO: figure out how to use "today" and "yesterday"
-            let absolute = timestamp.formatted(date: .numeric, time: .shortened)
-//            let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
-            components.append("Last build: \(absolute)")
-        }
-        if let duration = build.duration {
-            let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.day, .hour, .minute, .second]
-            formatter.unitsStyle = .abbreviated
-            formatter.collapsesLargestUnit = true
-            formatter.maximumUnitCount = 2
-            if let durationAsString = formatter.string(from: duration) {
-                components.append("Duration: \(durationAsString)")
-            }
-        }
-        if let label = build.label {
-            components.append("Label: \(label)")
-        }
-        if components.count > 0 {
-            return components.joined(separator: ", ")
-        }
-        return "Build finished"
     }
 
 }
