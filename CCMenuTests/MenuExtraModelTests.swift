@@ -11,7 +11,7 @@ class MenuExtraModelTests: XCTestCase {
 
     private func makeModel(pipelines: [Pipeline]) -> MenuExtraModel {
         let settings = UserSettings()
-        settings.useColorInMenuBar = true // otherwise we can't compare the images
+        settings.useColorInMenuBar = true
         return MenuExtraModel(pipelines: pipelines, settings: settings)
     }
 
@@ -76,6 +76,28 @@ class MenuExtraModelTests: XCTestCase {
         let model = makeModel(pipelines: [p0, p1, p2])
 
         XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .building), model.icon)
+    }
+
+    func testUseTemplateImageWhenUseColorIsOff() throws {
+        let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
+
+        let settings: UserSettings = UserSettings()
+        settings.useColorInMenuBar = false
+        settings.useColorInMenuBarFailedOnly = false
+        let model = MenuExtraModel(pipelines: [p0], settings: settings)
+
+        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
+    }
+
+    func testUseTemplateImageWhenSucessAndUseColorAndUseColorFailedOnly() throws {
+        let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
+
+        let settings: UserSettings = UserSettings()
+        settings.useColorInMenuBar = true
+        settings.useColorInMenuBarFailedOnly = true
+        let model = MenuExtraModel(pipelines: [p0], settings: settings)
+
+        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
     }
 
     func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {

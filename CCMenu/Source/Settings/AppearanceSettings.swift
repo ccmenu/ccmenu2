@@ -19,6 +19,9 @@ struct AppearanceSettings: View {
             Toggle(isOn: $settings.useColorInMenuBar) {
                 Text("Use color in menu bar")
             }
+            Toggle(isOn: $settings.useColorInMenuBarFailedOnly) {
+                Text("Use color for failed builds only ")
+            }
             Toggle(isOn: $settings.showBuildLabelsInMenu) {
                 Text("Show build labels in menu")
             }

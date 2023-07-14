@@ -20,7 +20,8 @@ struct MenuExtraModel {
         guard let pipeline = pipelineForMenuBar(pipelines: pipelines) else {
             return ImageManager().defaultImage
         }
-        return ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
+        let useColor = settings.useColorInMenuBar && (!settings.useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
+        return ImageManager().image(forPipeline: pipeline, asTemplate: !useColor)
     }
 
     private static func makeLabel(_ pipelines: [Pipeline], _ settings: UserSettings) -> String {
