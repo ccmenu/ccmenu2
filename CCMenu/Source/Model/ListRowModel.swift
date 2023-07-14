@@ -61,9 +61,7 @@ struct ListRowModel {
     private static func statusForFinishedBuild(_ build: Build) -> String {
         var components: [String] = []
         if let timestamp = build.timestamp {
-            // TODO: figure out how to use "today" and "yesterday"
             let absolute = timestamp.formatted(date: .numeric, time: .shortened)
-//            let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
             components.append("Last build: \(absolute)")
         }
         if let duration = build.duration {

@@ -20,8 +20,17 @@ struct MenuItemModel: Hashable, Identifiable {
     init(pipeline: Pipeline, settings: UserSettings) {
         self.pipeline = pipeline
         self.title = pipeline.name
-        if settings.showLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
-            title.append(" \u{2014} \(buildLabel)")
+        var details: [String] = []
+        if settings.showBuildLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
+            details.append(buildLabel)
+        }
+        if settings.showBuildTimesInMenu, let buildTime = pipeline.status.lastBuild?.timestamp {
+            let relative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
+            details.append(relative)
+        }
+        if details.count > 0 {
+            let detailsJoined = details.joined(separator: ", ")
+            title.append(" \u{2014} \(detailsJoined)")
         }
         self.icon = ImageManager().image(forPipeline: pipeline)
     }

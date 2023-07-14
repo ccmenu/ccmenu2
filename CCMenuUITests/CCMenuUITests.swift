@@ -77,13 +77,17 @@ class CCMenuUITests: XCTestCase {
         menu.menuItems["Settings..."].click()
         let window = app.windows["com_apple_SwiftUI_Settings_window"]
         window.toolbars.buttons["Appearance"].click()
-        XCTAssert(window.checkBoxes["Show labels in menu"].isSelected == false)
-        window.checkBoxes["Show labels in menu"].click()
+        XCTAssert(window.checkBoxes["Show build labels in menu"].isSelected == false)
+        window.checkBoxes["Show build labels in menu"].click()
+        XCTAssert(window.checkBoxes["Show build times in menu"].isSelected == false)
+        window.checkBoxes["Show build times in menu"].click()
         window.buttons[XCUIIdentifierCloseWindow].click()
 
-        // Make sure the pipeline menu item now displays the build label
+        // Make sure the pipeline menu item now displays the build label and relative time
+        let buildTime = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")!
+        let buildTimeRelative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
         openMenu(app: app)
-        XCTAssert(menu.menuItems["connectfour \u{2014} build.151"].exists)
+        XCTAssert(menu.menuItems["connectfour \u{2014} build.151, \(buildTimeRelative)"].exists)
     }
     
     

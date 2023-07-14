@@ -28,11 +28,16 @@ final class ViewModel: ObservableObject {
     convenience init(settings: UserSettings) {
         self.init()
         self.settings = settings
+        // TODO: there must be a better way then listening to them individually
         settings.$useColorInMenuBar
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in self.updateMenuBar() } )
             .store(in: &subscribers)
-        settings.$showLabelsInMenu
+        settings.$showBuildLabelsInMenu
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { _ in self.updateMenu() } )
+            .store(in: &subscribers)
+        settings.$showBuildTimesInMenu
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { _ in self.updateMenu() } )
             .store(in: &subscribers)

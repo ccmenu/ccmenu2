@@ -30,12 +30,42 @@ final class MenuItemModelTests: XCTestCase {
     func testAppendsBuildLabelToPipelineNameInMenuBasedOnSetting() throws {
         var pipeline = makePipeline(name: "connectfour")
         pipeline.status.lastBuild = Build(result: .success, label: "build.1")
-        var settings = UserSettings()
-        settings.showLabelsInMenu = true
+        let settings = UserSettings()
+        settings.showBuildLabelsInMenu = true
         let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
 
         XCTAssertEqual("connectfour \u{2014} build.1", pvm.title)
     }
 
+    func testAppendsBuildTimeToPipelineNameInMenuBasedOnSetting() throws {
+        var pipeline = makePipeline(name: "connectfour")
+        pipeline.status.lastBuild = Build(result: .success, label: "build.1", timestamp: Date.now)
+        let settings = UserSettings()
+        settings.showBuildTimesInMenu = true
+        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+
+        XCTAssertEqual("connectfour \u{2014} now", pvm.title) // TODO: can this become flaky?
+    }
+
+    func testDoesNotAppendsBuildTimeToPipelineNameInMenuWhenNoBuildAvailable() throws {
+        var pipeline = makePipeline(name: "connectfour")
+        pipeline.status.lastBuild = Build(result: .success, label: "build.1")
+        let settings = UserSettings()
+        settings.showBuildTimesInMenu = true
+        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+
+        XCTAssertEqual("connectfour", pvm.title)
+    }
+
+    func testAppendsBuildLabelAndTimeToPipelineNameInMenuBasedOnSetting() throws {
+        var pipeline = makePipeline(name: "connectfour")
+        pipeline.status.lastBuild = Build(result: .success, label: "build.1", timestamp: Date.now)
+        let settings = UserSettings()
+        settings.showBuildLabelsInMenu = true
+        settings.showBuildTimesInMenu = true
+        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+
+        XCTAssertEqual("connectfour \u{2014} build.1, now", pvm.title)
+    }
 
 }

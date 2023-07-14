@@ -16,8 +16,9 @@ final class UserSettings: ObservableObject  {
     private static let pipelineShowMessages = "pipelineShowMessages"
     private static let pipelineShowAvatars = "pipelineShowAvatars"
 
-    private static let menuBarUseColor = "menuBarUseColor"
-    private static let menuShowLabels = "menuShowLabel"
+    private static let menuBarUseColor = "UseColorInMenuBar"
+    private static let menuShowBuildLabels = "ShowLastBuildLabel"
+    private static let menuShowBuildTimes = "ShowLastBuildTimes"
 
     private var userDefaults: UserDefaults?
 
@@ -52,9 +53,15 @@ final class UserSettings: ObservableObject  {
         }
     }
 
-    @Published var showLabelsInMenu: Bool {
+    @Published var showBuildLabelsInMenu: Bool {
         didSet {
-            userDefaults?.setValue(showLabelsInMenu, forKey: Self.menuShowLabels)
+            userDefaults?.setValue(showBuildLabelsInMenu, forKey: Self.menuShowBuildLabels)
+        }
+    }
+
+    @Published var showBuildTimesInMenu: Bool {
+        didSet {
+            userDefaults?.setValue(showBuildTimesInMenu, forKey: Self.menuShowBuildTimes)
         }
     }
 
@@ -64,7 +71,8 @@ final class UserSettings: ObservableObject  {
         showMessagesInPipelineWindow = true
         showAvatarsInPipelineWindow = true
         useColorInMenuBar = false
-        showLabelsInMenu = false
+        showBuildLabelsInMenu = false
+        showBuildTimesInMenu = false
     }
 
     convenience init(userDefaults: UserDefaults?) {
@@ -80,7 +88,8 @@ final class UserSettings: ObservableObject  {
         showMessagesInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowMessages)
         showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
         useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
-        showLabelsInMenu = userDefaults.bool(forKey: Self.menuShowLabels)
+        showBuildLabelsInMenu = userDefaults.bool(forKey: Self.menuShowBuildLabels)
+        showBuildTimesInMenu = userDefaults.bool(forKey: Self.menuShowBuildTimes)
         self.userDefaults = userDefaults
     }
     
