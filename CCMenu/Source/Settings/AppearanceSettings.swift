@@ -13,6 +13,9 @@ struct AppearanceSettings: View {
 
     var body: some View {
         VStack {
+            Toggle(isOn: $settings.showBuildTimerInMenuBar) {
+                Text("Show build timer in menu bar")
+            }
             Toggle(isOn: $settings.useColorInMenuBar) {
                 Text("Use color in menu bar")
             }

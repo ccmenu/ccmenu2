@@ -79,10 +79,13 @@ class MenuExtraModelTests: XCTestCase {
     }
 
     func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {
-        var p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
+        var p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
         p0.status.lastBuild!.duration = 90
-        p0.status.lastBuild!.timestamp = Date.now
-        let model = makeModel(pipelines: [p0])
+        p0.status.currentBuild!.timestamp = Date.now
+
+        let settings: UserSettings = UserSettings()
+        settings.showBuildTimerInMenuBar = false
+        let model = MenuExtraModel(pipelines: [p0], settings: settings)
 
         XCTAssertEqual("", model.title)
     }
@@ -95,7 +98,9 @@ class MenuExtraModelTests: XCTestCase {
         var p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .success)
         p2.status.lastBuild!.duration = 30
         p2.status.currentBuild!.timestamp = Date.now
-        let model = makeModel(pipelines: [p0, p1, p2])
+
+        let settings: UserSettings = UserSettings()
+        let model = MenuExtraModel(pipelines: [p0, p1, p2], settings: settings)
 
         XCTAssertEqual("-29s", model.title)
     }
@@ -107,7 +112,9 @@ class MenuExtraModelTests: XCTestCase {
         var p1 = makePipeline(name: "p1", activity: .building, lastBuildResult: .failure)
         p1.status.lastBuild!.duration = 90
         p1.status.currentBuild!.timestamp = Date.now
-        let model = makeModel(pipelines: [p0, p1])
+
+        let settings: UserSettings = UserSettings()
+        let model = MenuExtraModel(pipelines: [p0, p1], settings: settings)
 
         XCTAssertEqual("-01:29", model.title)
     }

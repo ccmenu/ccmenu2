@@ -16,6 +16,7 @@ final class UserSettings: ObservableObject  {
     private static let pipelineShowMessages = "pipelineShowMessages"
     private static let pipelineShowAvatars = "pipelineShowAvatars"
 
+    private static let menuBarShowBuildTimer = "ShowTimerInMenu"
     private static let menuBarUseColor = "UseColorInMenuBar"
     private static let menuShowBuildLabels = "ShowLastBuildLabel"
     private static let menuShowBuildTimes = "ShowLastBuildTimes"
@@ -47,6 +48,12 @@ final class UserSettings: ObservableObject  {
         }
     }
 
+    @Published var showBuildTimerInMenuBar: Bool {
+        didSet {
+            userDefaults?.setValue(showBuildTimerInMenuBar, forKey: Self.menuBarShowBuildTimer)
+        }
+    }
+
     @Published var useColorInMenuBar: Bool {
         didSet {
             userDefaults?.setValue(useColorInMenuBar, forKey: Self.menuBarUseColor)
@@ -70,6 +77,7 @@ final class UserSettings: ObservableObject  {
         showStatusInPipelineWindow = false
         showMessagesInPipelineWindow = true
         showAvatarsInPipelineWindow = true
+        showBuildTimerInMenuBar = true
         useColorInMenuBar = false
         showBuildLabelsInMenu = false
         showBuildTimesInMenu = false
@@ -87,6 +95,7 @@ final class UserSettings: ObservableObject  {
         showStatusInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowStatus)
         showMessagesInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowMessages)
         showAvatarsInPipelineWindow = userDefaults.bool(forKey: Self.pipelineShowAvatars)
+        showBuildTimerInMenuBar = userDefaults.bool(forKey: Self.menuBarShowBuildTimer)
         useColorInMenuBar = userDefaults.bool(forKey: Self.menuBarUseColor)
         showBuildLabelsInMenu = userDefaults.bool(forKey: Self.menuShowBuildLabels)
         showBuildTimesInMenu = userDefaults.bool(forKey: Self.menuShowBuildTimes)

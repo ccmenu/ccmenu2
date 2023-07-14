@@ -12,7 +12,7 @@ struct MenuExtraModel {
 
     init(pipelines: [Pipeline], settings: UserSettings) {
         self.icon = MenuExtraModel.chooseImage(pipelines, settings)
-        self.title = MenuExtraModel.makeLabel(pipelines)
+        self.title = MenuExtraModel.makeLabel(pipelines, settings)
     }
 
 
@@ -23,14 +23,14 @@ struct MenuExtraModel {
         return ImageManager().image(forPipeline: pipeline, asTemplate: !settings.useColorInMenuBar)
     }
 
-    private static func makeLabel(_ pipelines: [Pipeline]) -> String {
+    private static func makeLabel(_ pipelines: [Pipeline], _ settings: UserSettings) -> String {
         guard let pipeline = pipelineForMenuBar(pipelines: pipelines) else {
             return ""
         }
 
         var newText = ""
         if pipeline.status.activity == .building {
-            if let completionTime = pipeline.estimatedBuildComplete {
+            if settings.showBuildTimerInMenuBar, let completionTime = pipeline.estimatedBuildComplete {
                 newText = Date.now.formatted(.compactRelative(reference: completionTime))
             }
         } else {
