@@ -36,7 +36,7 @@ struct ListRowModel {
 
     private static func describeStatus(pipeline: Pipeline) -> String {
         if let error = pipeline.connectionError {
-            return error
+            return "\u{1F53A} " + error
         } else if pipeline.status.activity == .building {
             if let build = pipeline.status.currentBuild, let timestamp = build.timestamp {
                 return statusForActiveBuild(build, timestamp)

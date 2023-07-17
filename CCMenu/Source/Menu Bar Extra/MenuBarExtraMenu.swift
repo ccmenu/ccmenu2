@@ -14,7 +14,7 @@ struct MenuBarExtraMenu: View {
     var body: some View {
         ForEach(model.pipelinesForMenu) { pvm in
             Button() {
-                WorkspaceController().openPipeline(pvm.pipeline)
+                openPipeline(pipeline: pvm.pipeline)
             } label: {
                 Label(title: { Text(pvm.title) }, icon: { Image(nsImage: pvm.icon) } )
                 .labelStyle(.titleAndIcon)
@@ -38,6 +38,20 @@ struct MenuBarExtraMenu: View {
         Divider()
         Button("Quit CCMenu") {
             NSApp.sendAction(#selector(NSApplication.terminate(_:)), to: nil, from: self)
+        }
+    }
+
+    private func openPipeline(pipeline: Pipeline) {
+        if let error = pipeline.connectionError {
+            // TODO: Consider adding a UI test for this case
+            let alert = NSAlert()
+            alert.messageText = "Error loading pipeline satus"
+            alert.informativeText = error + "\n\nPlease check the URL, make sure you're logged in if neccessary. Otherwise contact the server administrator."
+            alert.alertStyle = .critical
+            alert.addButton(withTitle: "Cancel")
+            alert.runModal()
+        } else {
+            WorkspaceController().openPipeline(pipeline)
         }
     }
 

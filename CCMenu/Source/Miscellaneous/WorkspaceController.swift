@@ -23,7 +23,7 @@ class WorkspaceController {
         let alert = NSAlert()
         alert.messageText = "Cannot open pipeline"
         alert.informativeText = informativeText + "\n\nPlease contact the server administrator."
-        alert.alertStyle = .informational
+        alert.alertStyle = .warning
         alert.addButton(withTitle: "Cancel")
         alert.runModal()
     }
