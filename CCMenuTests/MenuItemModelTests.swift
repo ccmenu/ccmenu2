@@ -65,7 +65,7 @@ final class MenuItemModelTests: XCTestCase {
         settings.showBuildTimesInMenu = true
         let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
 
-        XCTAssertEqual("connectfour \u{2014} build.1, now", pvm.title)
+        XCTAssertEqual("connectfour \u{2014} now, build.1", pvm.title)
     }
 
 }

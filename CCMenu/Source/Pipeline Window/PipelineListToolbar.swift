@@ -55,7 +55,7 @@ struct PipelineListToolbar: ToolbarContent {
                 }
             }
             label: {
-                Image(systemName: "plus.rectangle.on.folder")
+                Image(systemName: "plus.square")
             }
             .menuStyle(.borderlessButton)
             .accessibility(label: Text("Add pipeline menu"))

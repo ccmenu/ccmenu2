@@ -10,6 +10,7 @@ struct PipelineRow: View {
 
     var pvm: ListRowModel
     @EnvironmentObject var settings: UserSettings
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         HStack(alignment: .center) {
@@ -21,18 +22,24 @@ struct PipelineRow: View {
                 .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                 if settings.showStatusInPipelineWindow {
                     Text(pvm.statusDescription)
+                    .adjustedColor(colorScheme: colorScheme)
                 } else {
-                    HStack(alignment: .bottom, spacing: 4) {
+                    HStack(alignment: .top, spacing: 4) {
                         Image(pvm.feedTypeIconName)
                         .resizable()
                         .frame(width: 16, height: 16)
+                        .adjustedColor(colorScheme: colorScheme)
                         Text(pvm.feedUrl)
+                        .adjustedColor(colorScheme: colorScheme)
                     }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Image(nsImage: pvm.statusIcon)
         }
+        .contextMenu(menuItems: {
+            Text("Copy URL") // TODO: add functionality
+        })
         .padding(4)
     }
 
@@ -51,18 +58,14 @@ struct PipelineRow: View {
         .padding([.trailing], 4)
     }
 
-
-//    private func statusDescription() -> some View {
-//        VStack(alignment: .leading) {
-//            Text(pvm.statusDescription)
-//            if settings.showMessagesInPipelineWindow {
-//                Text(pipeline.message ?? "–")
-//            }
-//        }
-//    }
-
 }
 
+extension View {
+    func adjustedColor(colorScheme: ColorScheme) -> some View {
+        let factor = colorScheme == .dark ? 0.8 : 1
+        return self.foregroundColor(.primary).colorMultiply(Color(white: factor))
+    }
+}
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {

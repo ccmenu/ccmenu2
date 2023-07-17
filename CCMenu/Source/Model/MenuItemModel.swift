@@ -21,12 +21,12 @@ struct MenuItemModel: Hashable, Identifiable {
         self.pipeline = pipeline
         self.title = pipeline.name
         var details: [String] = []
-        if settings.showBuildLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
-            details.append(buildLabel)
-        }
         if settings.showBuildTimesInMenu, let buildTime = pipeline.status.lastBuild?.timestamp {
             let relative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
             details.append(relative)
+        }
+        if settings.showBuildLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
+            details.append(buildLabel)
         }
         if details.count > 0 {
             let detailsJoined = details.joined(separator: ", ")

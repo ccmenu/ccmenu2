@@ -21,12 +21,9 @@ struct MenuBarExtraMenu: View {
             }
         }
         Divider()
-        Button("Show Pipeline Window") {
+        Button("Pipelines") {
             NSApp.activate(ignoringOtherApps: true)
             openWindow(id: "pipeline-list")
-        }
-        Button("Update Status of All Pipelines") {
-            model.reloadPipelineStatus()
         }
         Divider()
         Button("About CCMenu") {

@@ -40,7 +40,7 @@ struct AppCommands: Commands {
         @Environment(\.openWindow) var openWindow
 
         var body: some View {
-            Button("Show Pipeline Window") {
+            Button("Pipelines") {
                 openWindow(id: "pipeline-list")
             }
             .keyboardShortcut("0")

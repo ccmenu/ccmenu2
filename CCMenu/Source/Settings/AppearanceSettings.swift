@@ -22,11 +22,11 @@ struct AppearanceSettings: View {
             Toggle(isOn: $settings.useColorInMenuBarFailedOnly) {
                 Text("Use color for failed builds only ")
             }
-            Toggle(isOn: $settings.showBuildLabelsInMenu) {
-                Text("Show build labels in menu")
-            }
             Toggle(isOn: $settings.showBuildTimesInMenu) {
                 Text("Show build times in menu")
+            }
+            Toggle(isOn: $settings.showBuildLabelsInMenu) {
+                Text("Show build labels in menu")
             }
         }
         .frame(width: 300)

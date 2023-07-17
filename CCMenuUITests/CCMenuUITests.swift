@@ -45,7 +45,7 @@ class CCMenuUITests: XCTestCase {
         // Make sure broken URLs are not opened
         menu.menuItems["erikdoe/ccmenu"].click()
         XCTAssert(app.dialogs["alert"].staticTexts["Cannot open pipeline"].exists)
-//        app.dialogs["alert"].buttons["Cancel"].click()
+        app.dialogs["alert"].buttons["Cancel"].click()
     }
 
     func testMenuOpenAboutPanel() throws {
@@ -87,15 +87,15 @@ class CCMenuUITests: XCTestCase {
         let buildTime = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")!
         let buildTimeRelative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
         openMenu(app: app)
-        XCTAssert(menu.menuItems["connectfour \u{2014} build.151, \(buildTimeRelative)"].exists)
+        XCTAssert(menu.menuItems["connectfour \u{2014} \(buildTimeRelative), build.151"].exists)
     }
     
     
     func testPipelineWindowToolbar() throws {
         let app = launchApp()
-//        let menu = openMenu(app: app)
+        let menu = openMenu(app: app)
 
-//        menu.menuItems["Show Pipeline Window"].click()
+        menu.menuItems["Pipelines"].click()
 
         let window = app.windows["Pipelines"]
         let toolbars = window.toolbars
@@ -139,9 +139,9 @@ class CCMenuUITests: XCTestCase {
     
     func testRemovesPipeline() throws {
         let app = launchApp()
-//        let menu = openMenu(app: app)
+        let menu = openMenu(app: app)
 
-//        menu.menuItems["Show Pipeline Window"].click()
+        menu.menuItems["Pipelines"].click()
 
         let window = app.windows["Pipelines"]
         window.tables.staticTexts["connectfour"].click()
