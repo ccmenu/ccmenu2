@@ -55,18 +55,21 @@ extension Pipeline {
             let name = dict["name"],
             let feedTypeString = dict["feedType"],
             let feedType = Pipeline.FeedType(rawValue: feedTypeString),
-            let feedUrl = dict["feedUrl"],
-            let feedName = dict["feedName"] else {
+            let feedUrl = dict["feedUrl"]
+        else {
             return nil
         }
-        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName))
+        let feedName = dict["feedName"] ?? ""
+        let authToken = dict["authToken"] ?? ""
+        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName, authToken: authToken.isEmpty ? nil : authToken))
     }
 
     public func asDictionaryForPersisting() -> Dictionary<String, String> {
         [ "name": self.name,
           "feedType": String(describing: self.feed.type),
           "feedUrl": self.feed.url,
-          "feedName": self.feed.name ?? ""
+          "feedName": self.feed.name ?? "",
+          "authToken": self.feed.authToken ?? ""
         ]
     }
 

@@ -5,14 +5,17 @@
  */
 
 import SwiftUI
+import AuthenticationServices
 
 struct AddGithubPipelineSheet: View {
     @ObservedObject var model: ViewModel
     @Environment(\.presentationMode) @Binding var presentation
+    @State var authController = GithubAuthController()
     @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
     @State var owner: String = ""
     @State var repository: String = ""
     @State var workflow: String = ""
+    @State var permanentlyFalse: Bool = false
 
     var body: some View {
         VStack {
@@ -40,6 +43,17 @@ struct AddGithubPipelineSheet: View {
                     TextField("", text: $workflow)
                 }
                 .onChange(of: workflow) { _ in updatePipeline() }
+                HStack {
+                    Text("Authentication:")
+                    TextField("", text: Binding(
+                        get: { tokenText },
+                        set: { _ in }
+                    ))
+                    .disabled(true)
+                    Button(authController.accessToken == nil ? "Sign in..." : "Refresh") {
+                        authController.signInAtGitHub()
+                    }
+                }
             }
             Divider()
                 .padding()
@@ -61,6 +75,7 @@ struct AddGithubPipelineSheet: View {
                     // TODO: check for empty display name
                     // TODO: check whether workflow exists
                     pipeline.feed.type = .github
+                    pipeline.feed.authToken = authController.accessToken
                     pipeline.status = Pipeline.Status(activity: .sleeping)
                     pipeline.status.lastBuild = Build(result: .unknown)
                     model.pipelines.append(pipeline)
@@ -71,6 +86,11 @@ struct AddGithubPipelineSheet: View {
         .frame(width: 500)
         .padding()
     }
+
+    private var tokenText: String {
+        authController.accessToken != nil ? "(access token)" : ""
+    }
+
 
     private func updatePipeline() {
         pipeline.feed.url = String(format: "https://api.github.com/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)

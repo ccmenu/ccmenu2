@@ -29,8 +29,11 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
 
     public func updatePipelineStatus() {
         // TODO: consider making page size configurable to make sure to get a completed/successful
-        let url = URL(string: pipeline.feed.url + "?per_page=5")!
-        let task = session.dataTask(with: url, completionHandler: sessionCallback(data:response:error:))
+        var request = URLRequest(url: URL(string: pipeline.feed.url + "?per_page=5")!)
+        if let token = pipeline.feed.authToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        let task = session.dataTask(with: request, completionHandler: sessionCallback(data:response:error:))
         task.resume()
     }
 
