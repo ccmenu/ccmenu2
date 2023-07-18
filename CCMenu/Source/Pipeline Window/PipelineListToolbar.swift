@@ -9,14 +9,10 @@ import SwiftUI
 
 struct PipelineListToolbar: ToolbarContent {
 
+    @ObservedObject var model: ViewModel
+    @ObservedObject var viewState: PipelineListViewModel
+    @Binding var selection: Set<String>
     @EnvironmentObject var settings: UserSettings
-
-    let add: (_: Pipeline.FeedType) -> Void
-    let edit: () -> Void
-    let remove: () -> Void
-    let canEdit: () -> Bool
-    let canRemove: () -> Bool
-    let reload: () -> Void
 
     var body: some ToolbarContent {
         ToolbarItemGroup {
@@ -35,8 +31,7 @@ struct PipelineListToolbar: ToolbarContent {
                     settings.showAvatarsInPipelineWindow.toggle()
                 }
                 .disabled(!settings.showStatusInPipelineWindow)
-            }
-            label: {
+            } label: {
                 Image(systemName: "list.dash.header.rectangle")
             }
             .menuStyle(.borderlessButton)
@@ -45,42 +40,67 @@ struct PipelineListToolbar: ToolbarContent {
 
             Spacer() // TODO: This shouldn't be necessary
         }
+
         ToolbarItemGroup {
             Menu() {
                 Button("Add project from CCTray feed...") {
-                    add(.cctray)
+                    viewState.editIndex = nil
+                    viewState.sheetType = .cctray
+                    viewState.isShowingSheet = true
                 }
                 Button("Add Github workflow...") {
-                    add(.github)
+                    viewState.editIndex = nil
+                    viewState.sheetType = .github
+                    viewState.isShowingSheet = true
                 }
-            }
-            label: {
+            } label: {
                 Image(systemName: "plus.square")
             }
             .menuStyle(.borderlessButton)
             .accessibility(label: Text("Add pipeline menu"))
             .help("Add a pipeline")
 
-            Button(action: edit) {
+            Button() {
+                viewState.editIndex = selectionIndexSet().first
+                viewState.isShowingSheet = true
+            } label: {
                 Label("Edit", systemImage: "gearshape")
             }
             .help("Edit pipeline")
             .accessibility(label: Text("Edit pipeline"))
-            .disabled(!canEdit())
+            .disabled(selection.count != 1)
 
-            Button(action: remove) {
+            Button() {
+                withAnimation {
+                    model.pipelines.remove(atOffsets: selectionIndexSet())
+                    selection.removeAll()
+                }
+            } label: {
                 Label("Remove", systemImage: "trash")
             }
             .help("Remove pipeline")
             .accessibility(label: Text("Remove pipeline"))
-            .disabled(!canRemove())
+            .disabled(selection.isEmpty)
         }
+
         ToolbarItemGroup {
-            Button(action: reload) {
+            Button() {
+                model.reloadPipelineStatus()
+            } label: {
                 Label("Reload", systemImage: "arrow.clockwise")
             }
             .help("Update status of all pipelines")
         }
+    }
+
+    private func selectionIndexSet() -> IndexSet {
+        var indexSet = IndexSet()
+        for (i, p) in model.pipelines.enumerated() {
+            if selection.contains(p.id) {
+                indexSet.insert(i)
+            }
+        }
+        return indexSet
     }
 
 }

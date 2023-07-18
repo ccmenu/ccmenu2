@@ -6,14 +6,17 @@
 
 import SwiftUI
 
+final class PipelineListViewModel: ObservableObject {
+    @Published var isShowingSheet: Bool = false
+    @Published var sheetType: Pipeline.FeedType = .cctray
+    @Published var editIndex: Int?
+}
 
 struct PipelineListView: View {
     @ObservedObject var model: ViewModel
     @ObservedObject var settings: UserSettings
-    @State var selection: Set<String> = Set()
-    @State var isShowingSheet: Bool = false
-    @State var sheetType: Pipeline.FeedType = .cctray
-    @State var editIndex: Int?
+    @ObservedObject var viewState: PipelineListViewModel = PipelineListViewModel()
+    @State var selection: Set<String> = Set() // TODO: figure out how to move into viewState
 
     var body: some View {
         List(selection: $selection) {
@@ -21,75 +24,33 @@ struct PipelineListView: View {
                 PipelineRow(pvm: ListRowModel(pipeline: p, settings: settings))
             }
             .onMove { (itemsToMove, destination) in
-                movePipelines(at: itemsToMove, to: destination)
+                withAnimation {
+                    model.pipelines.move(fromOffsets: itemsToMove, toOffset: destination)
+                }
             }
             .onDelete { indexSet in
-                removePipelines(at: indexSet)
+                withAnimation {
+                    model.pipelines.remove(atOffsets: indexSet)
+                    selection.removeAll()
+                }
             }
         }
         .frame(minWidth: 500)
         .listStyle(.inset(alternatesRowBackgrounds: true))
-        .sheet(isPresented: $isShowingSheet) {
-            if let index = editIndex {
+        .sheet(isPresented: $viewState.isShowingSheet) {
+            if let index = viewState.editIndex {
                 EditPipelineSheet(model: model, editIndex: index)
             } else {
-                switch sheetType {
+                switch viewState.sheetType {
                 case .cctray: AddCCTrayPipelineSheet(model: model)
                 case .github: AddGithubPipelineSheet(model: model)
                 }
             }
         }
-        .onChange(of: editIndex) { value in
-            // TODO: without this empty onChange editIndex isn't updated -- why?
-        }
-        .onChange(of: sheetType) { value in
-            // TODO: without this empty onChange sheetType isn't updated -- why?
-        }
         .toolbar {
-            PipelineListToolbar(
-                add:        { type in addPipeline(type: type) },
-                edit:       { editPipeline(at: selectionIndexSet().first) },
-                remove:     { removePipelines(at: selectionIndexSet()) },
-                canEdit:    { selection.count == 1 },
-                canRemove:  { !selection.isEmpty },
-                reload:     { model.reloadPipelineStatus() }
-            )
+            PipelineListToolbar(model: model, viewState: viewState, selection: $selection)
         }
         .environmentObject(settings)
-    }
-
-    func selectionIndexSet() -> IndexSet {
-        var indexSet = IndexSet()
-        for (i, p) in model.pipelines.enumerated() {
-            if selection.contains(p.id) {
-                indexSet.insert(i)
-            }
-        }
-        return indexSet
-    }
-
-    func addPipeline(type: Pipeline.FeedType) {
-        editIndex = nil
-        sheetType = type
-        isShowingSheet = true
-    }
-
-    func editPipeline(at index: Int?) {
-        editIndex = index
-        isShowingSheet = true
-    }
-
-    func removePipelines(at indexSet: IndexSet) {
-        withAnimation {
-            model.pipelines.remove(atOffsets: indexSet)
-            selection.removeAll()
-        }
-    }
-
-    func movePipelines(at indexSet: IndexSet, to destination: Int) {
-        withAnimation {
-            model.pipelines.move(fromOffsets: indexSet, toOffset: destination)
-        }
     }
 
 }
