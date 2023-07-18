@@ -116,11 +116,9 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
         
-        toolbars.popUpButtons["Display detail menu"].click()
-        toolbars.menuItems["Pipeline URL"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
 
-        toolbars.popUpButtons.firstMatch.click()
+        toolbars.popUpButtons["Display detail menu"].click()
         XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == false)
         XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
         toolbars.menuItems["Build Status"].click()
