@@ -69,7 +69,7 @@ final class ListRowModelTests: XCTestCase {
         pipeline.connectionError = "404 Not Found"
         let pvm = ListRowModel(pipeline: pipeline, settings: UserSettings())
 
-        XCTAssertEqual("404 Not Found", pvm.statusDescription)
+        XCTAssertEqual("\u{1F53A} 404 Not Found", pvm.statusDescription)
     }
 
     func testUrlWhenCCTrayHasUserAssignedName() throws {
