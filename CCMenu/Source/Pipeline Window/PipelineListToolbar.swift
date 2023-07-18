@@ -47,7 +47,7 @@ struct PipelineListToolbar: ToolbarContent {
                     viewState.sheetType = .cctray
                     viewState.isShowingSheet = true
                 }
-                Button("Add Github workflow...") {
+                Button("Add GitHub Actions workflow...") {
                     viewState.editIndex = nil
                     viewState.sheetType = .github
                     viewState.isShowingSheet = true

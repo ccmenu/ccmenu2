@@ -20,33 +20,23 @@ struct AddGithubPipelineSheet: View {
 
     var body: some View {
         VStack {
-            Text("Add Github Actions workflow")
+            Text("Add GitHub Actions workflow")
             .font(.headline)
             Spacer()
             HStack {
-                Text("Please enter the owner (user or organisation), the name of the repository, and the workflow. The workflow is given as the name of the file in the .github/workflows directory.")
+                Text("Please enter the owner (user or organisation), the name of the repository, and the workflow. The workflow is the name of the file in the .github/workflows directory. Sign into GitHub to access private repositories.")
                 .lineLimit(nil)
                 .multilineTextAlignment(.leading)
             }
             Form {
-                HStack {
-                    Text("Owner:")
-                    TextField("", text: $owner)
-                }
+                TextField("Owner:", text: $owner)
                 .onChange(of: owner) { _ in updatePipeline() }
-                HStack {
-                    Text("Repository:")
-                    TextField("", text: $repository)
-                }
+                TextField("Repository:", text: $repository)
                 .onChange(of: repository) { _ in updatePipeline() }
-                HStack {
-                    Text("Workflow:")
-                    TextField("", text: $workflow)
-                }
+                TextField("Workflow:", text: $workflow)
                 .onChange(of: workflow) { _ in updatePipeline() }
                 HStack {
-                    Text("Authentication:")
-                    TextField("", text: $viewState.accessTokenDescription)
+                    TextField("Authentication:", text: $viewState.accessTokenDescription)
                     .disabled(true)
                     // TODO: Find out why state change doesn't trigger redraw
                     if viewState.isWaitingForToken {
@@ -54,7 +44,7 @@ struct AddGithubPipelineSheet: View {
                             authController.stopWaitingForToken()
                         }
                     } else {
-                        Button(viewState.accessToken == nil ? "Sign in..." : "Refresh...") {
+                        Button(viewState.accessToken == nil ? "Sign in" : "Refresh") {
                             authController.signInAtGitHub()
                         }
                     }
@@ -62,19 +52,15 @@ struct AddGithubPipelineSheet: View {
                         authController.openReviewAccessPage()
                     }
                 }
-            }
-            Divider()
-            .padding()
-            Form {
+                .padding([.bottom])
                 HStack {
-                    Text("Display name:")
-                    TextField("", text: $pipeline.name)
+                    TextField("Display name:", text: $pipeline.name)
                     Button(action: { pipeline.name = "\(repository) (\(workflow))" }) {
                         Label("Reset", systemImage: "arrowshape.turn.up.backward")
                     }
                 }
+                .padding([.bottom])
             }
-            Spacer()
             HStack {
                 Button("Cancel") {
                     presentation.dismiss()
