@@ -10,7 +10,7 @@ import AuthenticationServices
 struct AddGithubPipelineSheet: View {
     @ObservedObject var model: ViewModel
     @Environment(\.presentationMode) @Binding var presentation
-    @State var authController = GithubAuthController()
+    @ObservedObject var authController = GithubAuthController()
     @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
     @State var owner: String = ""
     @State var repository: String = ""
@@ -45,15 +45,23 @@ struct AddGithubPipelineSheet: View {
                 .onChange(of: workflow) { _ in updatePipeline() }
                 HStack {
                     Text("Authentication:")
-                    TextField("", text: Binding(
-                        get: { tokenText },
-                        set: { _ in }
-                    ))
+                    TextField("", text: $authController.accessTokenDescription)
                     .disabled(true)
-                    Button(authController.accessToken == nil ? "Sign in..." : "Refresh") {
-                        authController.signInAtGitHub()
+                    // TODO: Find out why state change doesn't trigger redraw
+                    if authController.isWaitingForToken {
+                        Button("Cancel") {
+                            authController.stopWaitingForToken()
+                        }
+                    } else {
+                        Button(authController.accessToken == nil ? "Sign in..." : "Refresh...") {
+                            authController.signInAtGitHub()
+                        }
+                    }
+                    Button("Review") {
+                        authController.openReviewAccessPage()
                     }
                 }
+
             }
             Divider()
                 .padding()
