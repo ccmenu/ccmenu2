@@ -40,7 +40,10 @@ struct PipelineListView: View {
             }
         }
         .onChange(of: editIndex) { value in
-            // TODO: without this empty onChange editIndex doesn't propogate for first sheet -- why?
+            // TODO: without this empty onChange editIndex isn't updated -- why?
+        }
+        .onChange(of: sheetType) { value in
+            // TODO: without this empty onChange sheetType isn't updated -- why?
         }
         .toolbar {
             PipelineListToolbar(
@@ -66,7 +69,6 @@ struct PipelineListView: View {
     }
 
     func addPipeline(type: Pipeline.FeedType) {
-        // TODO: for Github the CCTray sheet is shown for about a second; why?
         editIndex = nil
         sheetType = type
         isShowingSheet = true
