@@ -8,10 +8,10 @@ import Foundation
 
 class ServerMonitor: FeedReaderDelegate {
     
-    var model: ViewModel
+    var model: PipelineModel
     var readerList: [FeedReader] = []
 
-    init(model: ViewModel) {
+    init(model: PipelineModel) {
         self.model = model
     }
     

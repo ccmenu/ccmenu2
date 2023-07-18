@@ -4,14 +4,11 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
-
+import SwiftUI
 
 class GithubAuthController: ObservableObject {
 
-    @Published var accessToken: String?
-    @Published var accessTokenDescription: String = ""
-    @Published var isWaitingForToken: Bool = false
+    @ObservedObject var viewState: ListViewState
 
     private let clientId: String
     private var task: URLSessionDataTask?
@@ -19,22 +16,19 @@ class GithubAuthController: ObservableObject {
     private var pollInterval: Int = 0
 
 
-    init() {
-        clientId = "4eafcf49451c588fbeac"
+    init(viewState: ListViewState) {
+        self.clientId = "4eafcf49451c588fbeac"
+        self.viewState = viewState
     }
 
     func signInAtGitHub() {
-        // TODO: remove when update issue with buttons in AddGithubPipelineSheet is fixed
-        if isWaitingForToken {
-            return
-        }
-        accessToken = nil
-        accessTokenDescription = ""
-        isWaitingForToken = true
+        viewState.accessToken = nil
+        viewState.accessTokenDescription = ""
+        viewState.isWaitingForToken = true
         task = URLSession.shared.dataTask(with: makeStageOneRequest(), completionHandler: stageOneCallback)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.task?.resume()
-        }
+//        }
     }
 
     func makeStageOneRequest() -> URLRequest {
@@ -100,8 +94,8 @@ class GithubAuthController: ObservableObject {
 
         NSWorkspace.shared.open(URL(string: url)!)
 
-        accessTokenDescription = "Pending"
-        isWaitingForToken = true
+        viewState.accessTokenDescription = "Pending"
+        viewState.isWaitingForToken = true
         stageTwoRequest = makeStageTwoRequest(code: deviceCode)
         task = URLSession.shared.dataTask(with: stageTwoRequest!, completionHandler: stageTwoCallback)
         task?.resume()
@@ -150,7 +144,7 @@ class GithubAuthController: ObservableObject {
             if error == "authorization_pending" && pollInterval > 0 {
                 // TODO: Implement slow down: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#error-codes-for-the-device-flow
                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(pollInterval)) {
-                    if self.isWaitingForToken {
+                    if self.viewState.isWaitingForToken {
                         self.task = URLSession.shared.dataTask(with: self.stageTwoRequest!, completionHandler: self.stageTwoCallback)
                         self.task?.resume()
                     }
@@ -161,11 +155,11 @@ class GithubAuthController: ObservableObject {
                     // TODO: Consider handling GitHub API change
                     return
                 }
-                accessTokenDescription = description
-                isWaitingForToken = false
+                viewState.accessTokenDescription = description
+                viewState.isWaitingForToken = false
             }
         }
-        isWaitingForToken = false
+        viewState.isWaitingForToken = false
 
         if response["token_type"] as? String != "bearer" {
             // TODO: Consider handling GitHub API change
@@ -177,16 +171,16 @@ class GithubAuthController: ObservableObject {
         }
         // TODO: Consider handling scope changes
         print("** \(token) **")
-        accessToken = token
-        accessTokenDescription = "(access token)"
+        viewState.accessToken = token
+        viewState.accessTokenDescription = "(access token)"
     }
 
 
     public func stopWaitingForToken() {
         task?.cancel()
         task = nil
-        accessTokenDescription = ""
-        isWaitingForToken = false
+        viewState.accessTokenDescription = ""
+        viewState.isWaitingForToken = false
     }
 
 

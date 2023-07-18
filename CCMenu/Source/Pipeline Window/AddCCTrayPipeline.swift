@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct AddCCTrayPipelineSheet: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
     @State var url: String = ""
     @State var projectName: String = ""
@@ -74,7 +74,7 @@ struct AddCCTrayPipelineSheet: View {
 struct AddCCTrayPipelineSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddCCTrayPipelineSheet(model: ViewModel())
+            AddCCTrayPipelineSheet(model: PipelineModel())
         }
     }
 }

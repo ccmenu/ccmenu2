@@ -8,12 +8,12 @@ import SwiftUI
 
 
 struct EditPipelineSheet: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
     let editIndex: Int
     var pipeline: Pipeline
 
-    init(model: ViewModel, editIndex: Int) {
+    init(model: PipelineModel, editIndex: Int) {
         self.model = model
         self.editIndex = editIndex
         self.pipeline = model.pipelines[editIndex]
@@ -49,8 +49,8 @@ struct EditPipelineSheet_Previews: PreviewProvider {
         }
     }
     
-    static func makeViewModel() -> ViewModel {
-        let model = ViewModel()
+    static func makeViewModel() -> PipelineModel {
+        let model = PipelineModel()
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cctray.xml"))
         p0.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure))

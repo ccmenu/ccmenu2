@@ -8,7 +8,7 @@ import AppKit
 import Combine
 
 
-final class ViewModel: ObservableObject { // TODO: This class needs a better name
+final class PipelineModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateSettings(); updateMenu(); updateMenuBar(); } }
 

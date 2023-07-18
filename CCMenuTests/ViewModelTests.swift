@@ -9,8 +9,8 @@ import XCTest
 
 class ViewModelTests: XCTestCase {
 
-    private func makeModel() -> ViewModel {
-        let m = ViewModel(settings: UserSettings())
+    private func makeModel() -> PipelineModel {
+        let m = PipelineModel(settings: UserSettings())
         return m
     }
 

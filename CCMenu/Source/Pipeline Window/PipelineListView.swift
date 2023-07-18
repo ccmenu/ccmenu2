@@ -6,20 +6,25 @@
 
 import SwiftUI
 
-final class PipelineListViewModel: ObservableObject {
+final class ListViewState: ObservableObject {
     @Published var isShowingSheet: Bool = false
     @Published var sheetType: Pipeline.FeedType = .cctray
     @Published var editIndex: Int?
+    @Published var selection: Set<String> = Set()
+
+    // TODO: figure out how to move into its own model object
+    @Published var accessToken: String?
+    @Published var accessTokenDescription: String = ""
+    @Published var isWaitingForToken: Bool = false
 }
 
 struct PipelineListView: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
     @ObservedObject var settings: UserSettings
-    @ObservedObject var viewState: PipelineListViewModel = PipelineListViewModel()
-    @State var selection: Set<String> = Set() // TODO: figure out how to move into viewState
+    @ObservedObject var viewState: ListViewState
 
     var body: some View {
-        List(selection: $selection) {
+        List(selection: $viewState.selection) {
             ForEach(model.pipelines) { p in
                 PipelineRow(pvm: ListRowModel(pipeline: p, settings: settings))
             }
@@ -31,7 +36,7 @@ struct PipelineListView: View {
             .onDelete { indexSet in
                 withAnimation {
                     model.pipelines.remove(atOffsets: indexSet)
-                    selection.removeAll()
+                    viewState.selection.removeAll()
                 }
             }
         }
@@ -42,13 +47,16 @@ struct PipelineListView: View {
                 EditPipelineSheet(model: model, editIndex: index)
             } else {
                 switch viewState.sheetType {
-                case .cctray: AddCCTrayPipelineSheet(model: model)
-                case .github: AddGithubPipelineSheet(model: model)
+                case .cctray:
+                    AddCCTrayPipelineSheet(model: model)
+                case .github:
+                    let controller = GithubAuthController(viewState: viewState)
+                    AddGithubPipelineSheet(model: model, viewState: viewState, authController: controller)
                 }
             }
         }
         .toolbar {
-            PipelineListToolbar(model: model, viewState: viewState, selection: $selection)
+            PipelineListToolbar(model: model, viewState: viewState)
         }
         .environmentObject(settings)
     }
@@ -59,15 +67,15 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PipelineListView(model: makeViewModel(), settings: UserSettings())
+            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
             .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel(), settings: UserSettings())
+            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
             .preferredColorScheme(.dark)
         }
     }
 
-    static func makeViewModel() -> ViewModel {
-        let model = ViewModel()
+    static func makeViewModel() -> PipelineModel {
+        let model = PipelineModel()
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
         p0.status.activity = .building

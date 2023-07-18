@@ -9,9 +9,8 @@ import SwiftUI
 
 struct PipelineListToolbar: ToolbarContent {
 
-    @ObservedObject var model: ViewModel
-    @ObservedObject var viewState: PipelineListViewModel
-    @Binding var selection: Set<String>
+    @ObservedObject var model: PipelineModel
+    @ObservedObject var viewState: ListViewState
     @EnvironmentObject var settings: UserSettings
 
     var body: some ToolbarContent {
@@ -68,19 +67,19 @@ struct PipelineListToolbar: ToolbarContent {
             }
             .help("Edit pipeline")
             .accessibility(label: Text("Edit pipeline"))
-            .disabled(selection.count != 1)
+            .disabled(viewState.selection.count != 1)
 
             Button() {
                 withAnimation {
                     model.pipelines.remove(atOffsets: selectionIndexSet())
-                    selection.removeAll()
+                    viewState.selection.removeAll()
                 }
             } label: {
                 Label("Remove", systemImage: "trash")
             }
             .help("Remove pipeline")
             .accessibility(label: Text("Remove pipeline"))
-            .disabled(selection.isEmpty)
+            .disabled(viewState.selection.isEmpty)
         }
 
         ToolbarItemGroup {
@@ -96,7 +95,7 @@ struct PipelineListToolbar: ToolbarContent {
     private func selectionIndexSet() -> IndexSet {
         var indexSet = IndexSet()
         for (i, p) in model.pipelines.enumerated() {
-            if selection.contains(p.id) {
+            if viewState.selection.contains(p.id) {
                 indexSet.insert(i)
             }
         }

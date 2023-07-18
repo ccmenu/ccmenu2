@@ -21,7 +21,7 @@
 		037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */; };
 		037AB21C297B4D5F00C33589 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB21B297B4D5F00C33589 /* ViewModelTests.swift */; };
 		03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE2259CFF0A00DEB003 /* Pipeline.swift */; };
-		03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* ViewModel.swift */; };
+		03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* PipelineModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
 		03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E80259E164500DEB003 /* WorkspaceController.swift */; };
@@ -92,7 +92,7 @@
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
 		037AB21B297B4D5F00C33589 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 		03825DE2259CFF0A00DEB003 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
-		03825DE7259D005B00DEB003 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		03825DE7259D005B00DEB003 /* PipelineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
 		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
@@ -264,7 +264,7 @@
 				03F9B895297D486C00FA866E /* Pipeline.Feed.swift */,
 				03F9B893297D38AA00FA866E /* Pipeline.Status.swift */,
 				039B524529676D0700994910 /* Build.swift */,
-				03825DE7259D005B00DEB003 /* ViewModel.swift */,
+				03825DE7259D005B00DEB003 /* PipelineModel.swift */,
 				0331F39E29A8155000245956 /* MenuExtraModel.swift */,
 				03F9B897297D4D8F00FA866E /* MenuItemModel.swift */,
 				03B1D7602A607DD0007BCB8A /* ListRowModel.swift */,
@@ -517,7 +517,7 @@
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				0336DBAE2984903B00E5811C /* AddGithubPipeline.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
-				03825DE8259D005B00DEB003 /* ViewModel.swift in Sources */,
+				03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
 				03D4BB03265EE5840023F4CB /* GithubFeedReader.swift in Sources */,

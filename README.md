@@ -16,19 +16,16 @@ For now the roadmap is tracked in this readme file.
 - [X] Support for GitHub Actions workflows
 - [X] Add pipelines 
 - [X] Persistent sorting of pipelines
-- [ ] Remaining menu appearance options
+- [X] Sign in at Github
 
 ### Pre-release 2
 
-- [ ] SSO login
-
-### Pre-release 3
-
 - [ ] Notifications (check out: UNNotificationContentExtension)
+- [ ] Remaining menu appearance options
 
 ### Pre-release 3
 
-- [ ] Basic auth login
+- [ ] Basic auth login for CCTray feeds
 - [ ] Edit pipelines
 
 ### Later

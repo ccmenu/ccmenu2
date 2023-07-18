@@ -5,12 +5,13 @@
  */
 
 import SwiftUI
-import AuthenticationServices
+
 
 struct AddGithubPipelineSheet: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
+    @ObservedObject var viewState: ListViewState
     @Environment(\.presentationMode) @Binding var presentation
-    @ObservedObject var authController = GithubAuthController()
+    var authController: GithubAuthController
     @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
     @State var owner: String = ""
     @State var repository: String = ""
@@ -20,12 +21,12 @@ struct AddGithubPipelineSheet: View {
     var body: some View {
         VStack {
             Text("Add Github Actions workflow")
-                .font(.headline)
+            .font(.headline)
             Spacer()
             HStack {
                 Text("Please enter the owner (user or organisation), the name of the repository, and the workflow. The workflow is given as the name of the file in the .github/workflows directory.")
-                    .lineLimit(nil)
-                    .multilineTextAlignment(.leading)
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
             }
             Form {
                 HStack {
@@ -45,15 +46,15 @@ struct AddGithubPipelineSheet: View {
                 .onChange(of: workflow) { _ in updatePipeline() }
                 HStack {
                     Text("Authentication:")
-                    TextField("", text: $authController.accessTokenDescription)
+                    TextField("", text: $viewState.accessTokenDescription)
                     .disabled(true)
                     // TODO: Find out why state change doesn't trigger redraw
-                    if authController.isWaitingForToken {
+                    if viewState.isWaitingForToken {
                         Button("Cancel") {
                             authController.stopWaitingForToken()
                         }
                     } else {
-                        Button(authController.accessToken == nil ? "Sign in..." : "Refresh...") {
+                        Button(viewState.accessToken == nil ? "Sign in..." : "Refresh...") {
                             authController.signInAtGitHub()
                         }
                     }
@@ -61,10 +62,9 @@ struct AddGithubPipelineSheet: View {
                         authController.openReviewAccessPage()
                     }
                 }
-
             }
             Divider()
-                .padding()
+            .padding()
             Form {
                 HStack {
                     Text("Display name:")
@@ -83,9 +83,10 @@ struct AddGithubPipelineSheet: View {
                     // TODO: check for empty display name
                     // TODO: check whether workflow exists
                     pipeline.feed.type = .github
-                    pipeline.feed.authToken = authController.accessToken
-                    pipeline.status = Pipeline.Status(activity: .sleeping)
+                    pipeline.feed.authToken = viewState.accessToken
+                    pipeline.status = Pipeline.Status(activity: .other)
                     pipeline.status.lastBuild = Build(result: .unknown)
+                    // TODO: should trigger first poll of status
                     model.pipelines.append(pipeline)
                     presentation.dismiss()
                 }
@@ -93,10 +94,6 @@ struct AddGithubPipelineSheet: View {
         }
         .frame(width: 500)
         .padding()
-    }
-
-    private var tokenText: String {
-        authController.accessToken != nil ? "(access token)" : ""
     }
 
 
@@ -111,7 +108,7 @@ struct AddGithubPipelineSheet: View {
 struct AddGithubPipelineSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddGithubPipelineSheet(model: ViewModel())
+//            AddGithubPipelineSheet(model: ViewModel())
         }
     }
 }

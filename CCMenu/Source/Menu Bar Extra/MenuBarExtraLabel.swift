@@ -8,7 +8,7 @@ import SwiftUI
 
 
 struct MenuBarExtraLabel: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
 
     var body: some View {
         Label(title: { Text(model.informationForMenuBar.title) }, icon: { Image(nsImage: model.informationForMenuBar.icon) })
@@ -25,8 +25,8 @@ struct MenuBarExtraLabel_Previews: PreviewProvider {
         MenuBarExtraLabel(model: viewModelForPreview())
     }
 
-    static func viewModelForPreview() -> ViewModel {
-        let model = ViewModel(settings: settingsForPreview())
+    static func viewModelForPreview() -> PipelineModel {
+        let model = PipelineModel(settings: settingsForPreview())
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
         p0.status.activity = .building

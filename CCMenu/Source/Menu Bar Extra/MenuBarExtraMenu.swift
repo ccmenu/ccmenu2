@@ -8,7 +8,7 @@ import SwiftUI
 
 
 struct MenuBarExtraMenu: View {
-    @ObservedObject var model: ViewModel
+    @ObservedObject var model: PipelineModel
     @Environment(\.openWindow) var openWindow
 
     var body: some View {
@@ -68,8 +68,8 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
         .frame(maxWidth: 300)
     }
 
-    static func viewModelForPreview() -> ViewModel {
-        let model = ViewModel(settings: settingsForPreview())
+    static func viewModelForPreview() -> PipelineModel {
+        let model = PipelineModel(settings: settingsForPreview())
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
         p0.status.activity = .building
