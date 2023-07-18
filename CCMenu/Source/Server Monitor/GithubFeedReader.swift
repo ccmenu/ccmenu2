@@ -12,16 +12,10 @@ enum GithubResponseError: Error {
 }
 
 
-class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSessionDelegate {
+class GithubFeedReader: NSObject, FeedReader {
 
     var pipeline: Pipeline
     var delegate: FeedReaderDelegate?
-
-    private lazy var session: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        configuration.waitsForConnectivity = true
-        return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-    }()
 
     public init(for pipeline: Pipeline) {
         self.pipeline = pipeline
@@ -33,7 +27,7 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
         if let token = pipeline.feed.authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        let task = session.dataTask(with: request, completionHandler: sessionCallback(data:response:error:))
+        let task = URLSession.shared.dataTask(with: request, completionHandler: sessionCallback(data:response:error:))
         task.resume()
     }
 
@@ -80,7 +74,7 @@ class GithubFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
         }
         pipeline.connectionError = nil
 
-        let oldStatus = pipeline.status
+//        let oldStatus = pipeline.status
         pipeline.status = newStatus
 
         self.delegate?.feedReader(self, didUpdate: pipeline)
