@@ -289,6 +289,7 @@
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
 				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
 				0336DBAD2984903A00E5811C /* AddGithubPipeline.swift */,
+				032FE8E32A654D96003244D7 /* GithubAuthController.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 			);
 			path = "Pipeline Window";
@@ -335,7 +336,6 @@
 				03CC11F1265467C200130833 /* CCTrayResponseParser.swift */,
 				03D4BB02265EE5840023F4CB /* GithubFeedReader.swift */,
 				03D4BB04265EE6B50023F4CB /* GithubResponseParser.swift */,
-				032FE8E32A654D96003244D7 /* GithubAuthController.swift */,
 			);
 			path = "Server Monitor";
 			sourceTree = "<group>";

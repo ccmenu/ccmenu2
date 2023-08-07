@@ -1,6 +1,8 @@
 # CCMenu 2
 
-This is work-in-progress of a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu) in Swift/SwiftUI. It is not usable at this stage.
+This is a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu).
+
+There will be a number of pre-releases via Github before it replaces the old version in the AppStore.
 
 Significant known issues are filed as bugs.
 
@@ -9,7 +11,7 @@ For now the roadmap is tracked in this readme file.
 
 ## Roadmap
 
-### Pre-release 1
+### Version 20.0 (CCMenu2 pre-release 1)
 
 - [X] Monitor hard-coded pipelines
 - [X] Read legacy config

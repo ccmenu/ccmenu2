@@ -86,7 +86,7 @@ class GithubAuthController: ObservableObject {
         }
 
         let alert = NSAlert()
-        alert.messageText = "Github sign in"
+        alert.messageText = "GitHub sign in"
         alert.informativeText = "CCMenu will open a page on GitHub. Please copy the code below. You will have to enter it on the web page.\n\n" + userCode + "\n\nWhen you return to CCMenu please wait until a token has arrived."
         alert.alertStyle = .informational
         alert.addButton(withTitle: "Continue")

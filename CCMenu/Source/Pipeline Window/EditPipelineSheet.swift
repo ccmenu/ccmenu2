@@ -23,7 +23,7 @@ struct EditPipelineSheet: View {
         VStack {
             Text("Edit Pipeline")
                 .font(.headline)
-            Text("\(pipeline.name)")
+            Text("missing")
             HStack {
                 Button("Cancel") {
                     presentation.dismiss()

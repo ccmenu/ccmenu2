@@ -17,7 +17,7 @@ class ServerMonitor: FeedReaderDelegate {
     
     public func start() {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: pollServers)
-        Timer.scheduledTimer(withTimeInterval: 15, repeats: true, block: pollServers)
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: pollServers)
     }
 
     func pollServers(t: Timer) {
