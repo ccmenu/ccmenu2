@@ -23,7 +23,12 @@ class GithubFeedReader: NSObject, FeedReader {
 
     public func updatePipelineStatus() {
         // TODO: consider making page size configurable to make sure to get a completed/successful
-        var request = URLRequest(url: URL(string: pipeline.feed.url + "?per_page=5")!)
+        guard let url = URL(string: pipeline.feed.url + "?per_page=5") else {
+            pipeline.connectionError = "Invalid URL: " + pipeline.feed.url
+            delegate?.feedReader(self, didUpdate: pipeline)
+            return
+        }
+        var request = URLRequest(url: url)
         if let token = pipeline.feed.authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }

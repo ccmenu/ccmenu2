@@ -84,7 +84,11 @@ struct AddGithubPipelineSheet: View {
 
 
     private func updatePipeline() {
-        pipeline.feed.url = String(format: "https://api.github.com/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.github.com"
+        components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+        pipeline.feed.url = components.url!.absoluteString
         pipeline.name = "\(repository) (\(workflow))"
     }
 
