@@ -87,11 +87,17 @@ class GithubAuthController: ObservableObject {
 
         let alert = NSAlert()
         alert.messageText = "GitHub sign in"
-        alert.informativeText = "CCMenu will open a page on GitHub. Please copy the code below. You will have to enter it on the web page.\n\n" + userCode + "\n\nWhen you return to CCMenu please wait until a token has arrived."
+        alert.informativeText = "The process will continue on the GitHub website in your default web browser. You will have to enter the code shown below.\n\n" + userCode + "\n\nWhen you return to CCMenu please wait for a token. The authentication field should show the text \"(access token)\"."
         alert.alertStyle = .informational
-        alert.addButton(withTitle: "Continue")
-        alert.runModal()
+        alert.addButton(withTitle: "Copy code and continue")
+        alert.addButton(withTitle: "Cancel")
+        if alert.runModal() == .alertSecondButtonReturn {
+            return
+        }
 
+        debugPrint("Putting \"\(userCode)\" onto pasteboard")
+        NSPasteboard.general.prepareForNewContents()
+        NSPasteboard.general.setString(userCode, forType: .string)
         NSWorkspace.shared.open(URL(string: url)!)
 
         viewState.accessTokenDescription = "Pending"
