@@ -29,12 +29,31 @@ struct AddGithubPipelineSheet: View {
                 .font(.headline)
             Spacer()
             HStack {
-                Text("Please enter the owner (user or organisation). Press return in the owner field to fetch the repositories and workflows. If there are more than 100 entries only the 100 most recently updated will be shown. Sign into GitHub to access private repositories.")
+                Text("Please enter the owner (user or organisation). Press return in the owner field to fetch the repositories and workflows. If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
                     .lineLimit(nil)
                     .multilineTextAlignment(.leading)
             }
 
             Form {
+                HStack {
+                    TextField("Authentication:", text: $viewState.accessTokenDescription)
+                        .disabled(true)
+                    // TODO: Find out why state change doesn't trigger redraw
+                    if viewState.isWaitingForToken {
+                        Button("Cancel") {
+                            authController.stopWaitingForToken()
+                        }
+                    } else {
+                        Button(viewState.accessToken == nil ? "Sign in" : "Refresh") {
+                            authController.signInAtGitHub()
+                        }
+                    }
+                    Button("Review") {
+                        authController.openReviewAccessPage()
+                    }
+                }
+                .padding([.top, .bottom])
+
                 TextField("Owner:", text: $owner, onEditingChanged: { flag in
                     if flag == false && !owner.isEmpty {
                         repositoryList = [Repository(message: "updating list")]
@@ -86,24 +105,6 @@ struct AddGithubPipelineSheet: View {
                 }
 
                 HStack {
-                    TextField("Authentication:", text: $viewState.accessTokenDescription)
-                        .disabled(true)
-                    // TODO: Find out why state change doesn't trigger redraw
-                    if viewState.isWaitingForToken {
-                        Button("Cancel") {
-                            authController.stopWaitingForToken()
-                        }
-                    } else {
-                        Button(viewState.accessToken == nil ? "Sign in" : "Refresh") {
-                            authController.signInAtGitHub()
-                        }
-                    }
-                    Button("Review") {
-                        authController.openReviewAccessPage()
-                    }
-                }
-                .padding([.bottom])
-                HStack {
                     TextField("Display name:", text: $pipeline.name)
                     Button(action: { pipeline.name = "\(selectedRepository.name) (\(selectedWorkflow.name))" }) {
                         Label("Reset", systemImage: "arrowshape.turn.up.backward")
@@ -129,7 +130,7 @@ struct AddGithubPipelineSheet: View {
                 }
             }
         }
-        .frame(width: 500)
+        .frame(width: 500, height: 300)
         .padding()
     }
     
