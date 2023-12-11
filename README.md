@@ -18,10 +18,12 @@ For now the roadmap is tracked in this readme file.
 - [X] Support for GitHub Actions workflows
 - [X] Add pipelines 
 - [X] Persistent sorting of pipelines
-- [X] Sign in at Github
+- [X] Sign in at GitHub
 
 ### Pre-release 2
 
+- [X] GitHub repository and workflow selection
+- [ ] Caching of last-used authentication token
 - [ ] Notifications (check out: UNNotificationContentExtension)
 - [ ] Remaining menu appearance options
 
