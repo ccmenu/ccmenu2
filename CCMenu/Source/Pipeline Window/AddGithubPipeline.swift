@@ -14,6 +14,7 @@ typealias Workflow = GitHubAPI.Workflow
 struct AddGithubPipelineSheet: View {
     @ObservedObject var model: PipelineModel
     @ObservedObject var viewState: ListViewState
+    @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
     var authController: GithubAuthController
     @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
@@ -37,8 +38,8 @@ struct AddGithubPipelineSheet: View {
             Form {
                 HStack {
                     TextField("Authentication:", text: $viewState.accessTokenDescription)
+                        .truncationMode(.tail)
                         .disabled(true)
-                    // TODO: Find out why state change doesn't trigger redraw
                     if viewState.isWaitingForToken {
                         Button("Cancel") {
                             authController.stopWaitingForToken()
@@ -59,7 +60,7 @@ struct AddGithubPipelineSheet: View {
                         repositoryList = [Repository(message: "updating list")]
                         GitHubAPI.fetchRepositories(owner: owner, token: viewState.accessToken) { newList in
                             // TODO: so much logic, this needs a test
-                           let filteredNewList = newList.filter({ $0.owner?.login == owner })
+                            let filteredNewList = newList.filter({ $0.owner?.login == owner || $0.isMessage })
                             if repositoryList.count == 1 && repositoryList[0].isMessage {
                                 repositoryList = []
                             }
@@ -132,6 +133,17 @@ struct AddGithubPipelineSheet: View {
         }
         .frame(width: 500, height: 300)
         .padding()
+        .onAppear() {
+            if let token = settings.cachedGitHubToken {
+                viewState.accessToken = token
+                viewState.accessTokenDescription = token
+            }
+        }
+        .onDisappear() {
+            if let token = viewState.accessToken {
+                settings.cachedGitHubToken = token
+            }
+        }
     }
     
     private func updatePipeline() {

@@ -18,7 +18,8 @@ class GithubAuthController: ObservableObject {
     }
 
     func signInAtGitHub() {
-        updateViewState(token: nil, description: "", isWaiting: true)
+        viewState.isWaitingForToken = true
+        viewState.accessTokenDescription = "Preparing sign in..."
         GitHubAPI.deviceFlowLogin() { response in
             self.handleLoginResponse(response: response)
         }
@@ -32,32 +33,36 @@ class GithubAuthController: ObservableObject {
         alert.addButton(withTitle: "Copy code and continue")
         alert.addButton(withTitle: "Cancel")
         if alert.runModal() == .alertSecondButtonReturn {
+            viewState.isWaitingForToken = false
+            viewState.accessTokenDescription = viewState.accessToken ?? ""
             return
         }
         NSPasteboard.general.prepareForNewContents()
         NSPasteboard.general.setString(response.userCode, forType: .string)
         NSWorkspace.shared.open(URL(string: response.verificationUri)!)
 
-        self.updateViewState(token: nil, description: "Pending", isWaiting: true)
+        viewState.accessTokenDescription = "Waiting for token..."
 
         GitHubAPI.deviceFlowGetAccessToken(loginResponse: response) { token in
-            self.updateViewState(token: token, description: "(access token)", isWaiting: false)
+            if self.viewState.isWaitingForToken {
+                self.viewState.isWaitingForToken = false
+                self.viewState.accessToken = token
+                self.viewState.accessTokenDescription = token
+            }
         } onError: { message in
-            self.updateViewState(token: nil, description: message, isWaiting: false)
+            if self.viewState.isWaitingForToken {
+                self.viewState.isWaitingForToken = false
+                self.viewState.accessToken = nil
+                self.viewState.accessTokenDescription = message
+            }
         };
     }
 
 
     public func stopWaitingForToken() {
+        viewState.isWaitingForToken = false
+        viewState.accessTokenDescription = viewState.accessToken ?? ""
         GitHubAPI.cancelDeviceFlow()
-        updateViewState(token: nil, description: "", isWaiting: false)
-    }
-
-
-    private func updateViewState(token: String?, description: String, isWaiting: Bool) {
-        viewState.accessToken = token
-        viewState.accessTokenDescription = description
-        viewState.isWaitingForToken = isWaiting
     }
 
 

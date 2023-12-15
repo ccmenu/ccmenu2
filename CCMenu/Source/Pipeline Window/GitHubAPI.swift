@@ -74,11 +74,11 @@ class GitHubAPI {
         URLSession.shared.dataTaskPublisher(for: request)
             .tryMap(responseOkData(element:))
             .decode(type: Array<Repository>.self, decoder: Self.snakeCaseDecoder())
+            .receive(on: RunLoop.main)
             .catch({ (error) in
-                Just([Repository(message: "unknown owner or network error")])
+                Just([Repository(message: messageForError(error: error))])
             })
             // .replaceError(with: [Repository(message: "unknown owner or network error")])
-            .receive(on: RunLoop.main)
             .sink(receiveValue: callback)
             .store(in: &cancellables)
 
@@ -97,11 +97,11 @@ class GitHubAPI {
         URLSession.shared.dataTaskPublisher(for: request2)
             .tryMap(responseOkData(element:))
             .decode(type: Array<Repository>.self, decoder: Self.snakeCaseDecoder())
+            .receive(on: RunLoop.main)
             .catch({ (error) in
-                Just([Repository(message: "unknown owner or network error")])
+                Just([Repository(message: messageForError(error: error))])
             })
             // .replaceError(with: [Repository(message: "unknown owner or network error")])
-            .receive(on: RunLoop.main)
             .sink(receiveValue: callback)
             .store(in: &cancellables)
     }
@@ -166,8 +166,8 @@ class GitHubAPI {
             .tryMap(responseOkData(element:))
             .decode(type: WorflowResponse.self, decoder: JSONDecoder())
             .map(\.workflows)
-            .replaceError(with: [Workflow(message: "network error")])
             .receive(on: RunLoop.main)
+            .replaceError(with: [Workflow(message: "network error")])
             .sink(receiveValue: callback)
             .store(in: &cancellables)
     }
@@ -214,11 +214,11 @@ class GitHubAPI {
             .decode(type: Dictionary<String, String>.self, decoder: JSONDecoder())
             .replaceError(with: [:])
             .receive(on: RunLoop.main)
-            .sink(receiveValue: { response in pollAccessToken(response: response, loginResponse: loginResponse, onSuccess: onSuccess, onError: onError) })
+            .sink(receiveValue: { response in handleGetAccessTokenResponse(response: response, loginResponse: loginResponse, onSuccess: onSuccess, onError: onError) })
             .store(in: &deviceFlowTasks)
     }
 
-    private static func pollAccessToken(response: Dictionary<String, String>, loginResponse: LoginResponse, onSuccess: @escaping (String) -> (), onError: @escaping (String) -> ()) {
+    private static func handleGetAccessTokenResponse(response: Dictionary<String, String>, loginResponse: LoginResponse, onSuccess: @escaping (String) -> (), onError: @escaping (String) -> ()) {
         if let error = response["error"] {
             if error == "authorization_pending" && loginResponse.interval > 0 {
                 // TODO: Implement slow down: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#error-codes-for-the-device-flow
@@ -238,7 +238,6 @@ class GitHubAPI {
             onError("unexpected token type")
             return
         }
-        // TODO: Consider handling scope changes
         onSuccess(token)
     }
 
@@ -266,15 +265,29 @@ class GitHubAPI {
 
 
     private static func responseOkData(element: URLSession.DataTaskPublisher.Output) throws -> Data {
-        guard let response = element.response as? HTTPURLResponse, response.statusCode == 200 else {
+        guard let response = element.response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
+        }
+        if response.statusCode != 200 {
+            throw URLError(.badServerResponse, userInfo: ["responseDescription" : HTTPURLResponse.localizedString(forStatusCode: response.statusCode)])
         }
         return element.data
     }
     
+    private static func messageForError(error: Error) -> String {
+        guard let error = error as? URLError else {
+            return error.localizedDescription
+        }
+        guard error.code == .badServerResponse, let description = error.errorUserInfo["responseDescription"] as? String else {
+            return error.localizedDescription
+        }
+        return description
+    }
+
     private static func snakeCaseDecoder() -> JSONDecoder {
-        var decoder = JSONDecoder()
+        let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }
+
 }

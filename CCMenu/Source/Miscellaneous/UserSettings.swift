@@ -22,6 +22,8 @@ final class UserSettings: ObservableObject  {
     private static let menuShowBuildLabels = "ShowLastBuildLabel"
     private static let menuShowBuildTimes = "ShowLastBuildTimes"
 
+    private static let cachedGitHubToken = "GitHubToken"
+
     private var userDefaults: UserDefaults?
 
 
@@ -79,6 +81,12 @@ final class UserSettings: ObservableObject  {
         }
     }
 
+    @Published var cachedGitHubToken: String? {
+        didSet {
+            userDefaults?.setValue(cachedGitHubToken, forKey: Self.cachedGitHubToken)
+        }
+    }
+
     init() {
         pipelineList = []
         showStatusInPipelineWindow = false
@@ -89,6 +97,7 @@ final class UserSettings: ObservableObject  {
         useColorInMenuBarFailedOnly = false
         showBuildLabelsInMenu = false
         showBuildTimesInMenu = false
+        cachedGitHubToken = nil
     }
 
     convenience init(userDefaults: UserDefaults?) {
@@ -108,6 +117,7 @@ final class UserSettings: ObservableObject  {
         useColorInMenuBarFailedOnly = userDefaults.bool(forKey: Self.menuBarUseColorFailedOnly)
         showBuildLabelsInMenu = userDefaults.bool(forKey: Self.menuShowBuildLabels)
         showBuildTimesInMenu = userDefaults.bool(forKey: Self.menuShowBuildTimes)
+        cachedGitHubToken = userDefaults.string(forKey: Self.cachedGitHubToken)
         self.userDefaults = userDefaults
     }
     
