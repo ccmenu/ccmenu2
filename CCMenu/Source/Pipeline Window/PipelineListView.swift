@@ -11,17 +11,13 @@ final class ListViewState: ObservableObject {
     @Published var sheetType: Pipeline.FeedType = .cctray
     @Published var editIndex: Int?
     @Published var selection: Set<String> = Set()
-
-    // TODO: figure out how to move into its own model object
-    @Published var accessToken: String?
-    @Published var accessTokenDescription: String = ""
-    @Published var isWaitingForToken: Bool = false
 }
 
 struct PipelineListView: View {
+    var controller: PipelineWindowController
     @ObservedObject var model: PipelineModel
-    @ObservedObject var settings: UserSettings
-    @ObservedObject var viewState: ListViewState
+    @ObservedObject var viewState: ListViewState = ListViewState()
+    @EnvironmentObject var settings: UserSettings
 
     var body: some View {
         List(selection: $viewState.selection) {
@@ -50,45 +46,43 @@ struct PipelineListView: View {
                 case .cctray:
                     AddCCTrayPipelineSheet(model: model)
                 case .github:
-                    let controller = GithubAuthController(viewState: viewState)
-                    AddGithubPipelineSheet(model: model, viewState: viewState, authController: controller)
+                    AddGithubPipelineSheet(controller: controller.ghSheetController, model: model, authState: controller.ghSheetController.authState)
                 }
             }
         }
         .toolbar {
             PipelineListToolbar(model: model, viewState: viewState)
         }
-        .environmentObject(settings)
     }
 
 }
 
 
-struct PipelineListView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
-            .preferredColorScheme(.light)
-            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
-            .preferredColorScheme(.dark)
-        }
-    }
-
-    static func makeViewModel() -> PipelineModel {
-        let model = PipelineModel()
-
-        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
-        p0.status.activity = .building
-        p0.status.lastBuild = Build(result: .failure)
-        p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: Pipeline.Feed(type: .cctray, url: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", name: "connectfour"))
-        p1.status.activity = .sleeping
-        p1.status.lastBuild = Build(result: .success)
-        p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        p1.status.lastBuild!.label = "build.151"
-
-        model.pipelines = [p0, p1]
-        return model
-    }
-}
+//struct PipelineListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
+//            .preferredColorScheme(.light)
+//            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
+//            .preferredColorScheme(.dark)
+//        }
+//    }
+//
+//    static func makeViewModel() -> PipelineModel {
+//        let model = PipelineModel()
+//
+//        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
+//        p0.status.activity = .building
+//        p0.status.lastBuild = Build(result: .failure)
+//        p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+//
+//        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: Pipeline.Feed(type: .cctray, url: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", name: "connectfour"))
+//        p1.status.activity = .sleeping
+//        p1.status.lastBuild = Build(result: .success)
+//        p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+//        p1.status.lastBuild!.label = "build.151"
+//
+//        model.pipelines = [p0, p1]
+//        return model
+//    }
+//}

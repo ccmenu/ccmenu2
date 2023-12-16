@@ -9,17 +9,17 @@ import SwiftUI
 typealias LoginResponse = GitHubAPI.LoginResponse
 
 
-class GithubAuthController: ObservableObject {
+class GitHubSheetController: ObservableObject {
 
-    @ObservedObject var viewState: ListViewState
+    @ObservedObject var authState: GitHubAuthState
 
-    init(viewState: ListViewState) {
-        self.viewState = viewState
+    init() {
+        authState = GitHubAuthState()
     }
 
     func signInAtGitHub() {
-        viewState.isWaitingForToken = true
-        viewState.accessTokenDescription = "Preparing sign in..."
+        authState.isWaitingForToken = true
+        authState.accessTokenDescription = "Preparing to sign in..."
         GitHubAPI.deviceFlowLogin() { response in
             self.handleLoginResponse(response: response)
         }
@@ -33,35 +33,35 @@ class GithubAuthController: ObservableObject {
         alert.addButton(withTitle: "Copy code and continue")
         alert.addButton(withTitle: "Cancel")
         if alert.runModal() == .alertSecondButtonReturn {
-            viewState.isWaitingForToken = false
-            viewState.accessTokenDescription = viewState.accessToken ?? ""
+            authState.isWaitingForToken = false
+            authState.accessTokenDescription = authState.accessToken ?? ""
             return
         }
         NSPasteboard.general.prepareForNewContents()
         NSPasteboard.general.setString(response.userCode, forType: .string)
         NSWorkspace.shared.open(URL(string: response.verificationUri)!)
 
-        viewState.accessTokenDescription = "Waiting for token..."
+        authState.accessTokenDescription = "Waiting for token..."
 
         GitHubAPI.deviceFlowGetAccessToken(loginResponse: response) { token in
-            if self.viewState.isWaitingForToken {
-                self.viewState.isWaitingForToken = false
-                self.viewState.accessToken = token
-                self.viewState.accessTokenDescription = token
+            if self.authState.isWaitingForToken {
+                self.authState.isWaitingForToken = false
+                self.authState.accessToken = token
+                self.authState.accessTokenDescription = token
             }
         } onError: { message in
-            if self.viewState.isWaitingForToken {
-                self.viewState.isWaitingForToken = false
-                self.viewState.accessToken = nil
-                self.viewState.accessTokenDescription = message
+            if self.authState.isWaitingForToken {
+                self.authState.isWaitingForToken = false
+                self.authState.accessToken = nil
+                self.authState.accessTokenDescription = message
             }
         };
     }
 
 
     public func stopWaitingForToken() {
-        viewState.isWaitingForToken = false
-        viewState.accessTokenDescription = viewState.accessToken ?? ""
+        authState.isWaitingForToken = false
+        authState.accessTokenDescription = authState.accessToken ?? ""
         GitHubAPI.cancelDeviceFlow()
     }
 

@@ -14,7 +14,7 @@ struct CCMenuApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var userSettings: UserSettings
     @ObservedObject private var viewModel: PipelineModel
-    @ObservedObject private var listViewState: ListViewState
+    private var pipelineWindowController: PipelineWindowController
     private var serverMonitor: ServerMonitor
 
     init() {
@@ -27,11 +27,10 @@ struct CCMenuApp: App {
 
         let userSettings = UserSettings(userDefaults: userDefaults)
         let viewModel = PipelineModel(settings: userSettings)
-        let pipelineListViewState = ListViewState()
 
         self.userSettings = userSettings
         self.viewModel = viewModel
-        self.listViewState = pipelineListViewState
+        self.pipelineWindowController = PipelineWindowController()
         self.serverMonitor = ServerMonitor(model: viewModel)
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
@@ -47,8 +46,8 @@ struct CCMenuApp: App {
     var body: some Scene {
 
         Window("Pipelines", id:"pipeline-list") {
-            // TODO: check why it's not possible to create the view state here
-            PipelineListView(model: viewModel, settings: userSettings, viewState: listViewState)
+            PipelineListView(controller: pipelineWindowController, model: viewModel, viewState: pipelineWindowController.listViewState)
+                .environmentObject(userSettings)
         }
         Settings {
             SettingsView(settings: userSettings)

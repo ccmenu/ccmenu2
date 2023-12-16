@@ -17,52 +17,7 @@ class GitHubAPI {
 
     // MARK: - repository list
 
-    struct Repository: Identifiable, Hashable, Decodable {
-
-        var id: Int
-        var name: String
-        var owner: Owner?
-
-        init(id: Int, name: String) {
-            self.id = id
-            self.name = name
-        }
-        
-        init(message: String) {
-            self.id = message.hashValue
-            self.name = "(" + message + ")"
-        }
-        
-        init() {
-            self.id = 0
-            self.name = ""
-        }
-        
-        static func == (lhs: GitHubAPI.Repository, rhs: GitHubAPI.Repository) -> Bool {
-            return lhs.id == rhs.id
-        }
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-        }
-        
-        var isMessage: Bool {
-            return name.isEmpty || name.starts(with: "(")
-        }
-
-    }
-
-    struct Owner: Decodable {
-
-        var login: String
-
-        init() {
-            self.login = ""
-        }
-
-    }
-
-    static func fetchRepositories(owner: String, token: String?, callback: @escaping ([Repository]) -> ()) {
+    static func fetchRepositories(owner: String, token: String?, callback: @escaping ([GitHubRepository]) -> ()) {
         let path = String(format: "/users/%@/repos", owner)
         let queryParams = [
             "type": "all",
@@ -73,10 +28,10 @@ class GitHubAPI {
 
         URLSession.shared.dataTaskPublisher(for: request)
             .tryMap(responseOkData(element:))
-            .decode(type: Array<Repository>.self, decoder: Self.snakeCaseDecoder())
+            .decode(type: Array<GitHubRepository>.self, decoder: Self.snakeCaseDecoder())
             .receive(on: RunLoop.main)
             .catch({ (error) in
-                Just([Repository(message: messageForError(error: error))])
+                Just([GitHubRepository(message: messageForError(error: error))])
             })
             // .replaceError(with: [Repository(message: "unknown owner or network error")])
             .sink(receiveValue: callback)
@@ -96,64 +51,24 @@ class GitHubAPI {
 
         URLSession.shared.dataTaskPublisher(for: request2)
             .tryMap(responseOkData(element:))
-            .decode(type: Array<Repository>.self, decoder: Self.snakeCaseDecoder())
+            .decode(type: Array<GitHubRepository>.self, decoder: Self.snakeCaseDecoder())
             .receive(on: RunLoop.main)
             .catch({ (error) in
-                Just([Repository(message: messageForError(error: error))])
+                Just([GitHubRepository(message: messageForError(error: error))])
             })
             // .replaceError(with: [Repository(message: "unknown owner or network error")])
             .sink(receiveValue: callback)
             .store(in: &cancellables)
     }
-    
-
 
 
     // MARK: - workflow list
 
-    struct Workflow: Identifiable, Hashable, Decodable {
-        var id: Int
-        var name: String
-        var path: String?
-        
-        init(id: Int, name: String, path: String) {
-            self.id = id
-            self.name = name
-            self.path = path
-        }
-        
-        init(message: String) {
-            self.id = message.hashValue
-            self.name = "(" + message + ")"
-        }
-        
-        init() {
-            self.id = 0
-            self.name = ""
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-        }
-        
-        var isMessage: Bool {
-            return name.isEmpty || name.starts(with: "(")
-        }
-        
-        var filename: String {
-            guard let path = path else {
-                return ""
-            }
-            return (path as NSString).lastPathComponent // TODO: is this the way to do it, really?
-        }
-        
-    }
-    
     struct WorflowResponse: Decodable {
-        var workflows: [Workflow]
+        var workflows: [GitHubWorkflow]
     }
     
-    static func fetchWorkflows(owner: String, repo: String, token: String?, callback: @escaping ([Workflow]) -> ()) {
+    static func fetchWorkflows(owner: String, repo: String, token: String?, callback: @escaping ([GitHubWorkflow]) -> ()) {
         let path = String(format: "/repos/%@/%@/actions/workflows", owner, repo)
         let queryParams = [
             // "client_id": clientId,
@@ -167,7 +82,7 @@ class GitHubAPI {
             .decode(type: WorflowResponse.self, decoder: JSONDecoder())
             .map(\.workflows)
             .receive(on: RunLoop.main)
-            .replaceError(with: [Workflow(message: "network error")])
+            .replaceError(with: [GitHubWorkflow(message: "network error")])
             .sink(receiveValue: callback)
             .store(in: &cancellables)
     }
@@ -181,7 +96,6 @@ class GitHubAPI {
         var verificationUri: String
         var interval: Int
     }
-
 
     static func deviceFlowLogin(callback: @escaping (LoginResponse) -> ()) {
         let path = "/login/device/code"

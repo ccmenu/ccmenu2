@@ -7,16 +7,23 @@
 import SwiftUI
 import Combine
 
-typealias Repository = GitHubAPI.Repository
-typealias Workflow = GitHubAPI.Workflow
+
+final class GitHubAuthState: ObservableObject {
+    @Published var accessToken: String?
+    @Published var accessTokenDescription: String = ""
+    @Published var isWaitingForToken: Bool = false
+}
 
 
 struct AddGithubPipelineSheet: View {
+    typealias Repository = GitHubRepository
+    typealias Workflow = GitHubWorkflow
+
+    var controller: GitHubSheetController
     @ObservedObject var model: PipelineModel
-    @ObservedObject var viewState: ListViewState
+    @ObservedObject var authState: GitHubAuthState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
-    var authController: GithubAuthController
     @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
     @State var owner: String = ""
     @State var repositoryList = [Repository()]
@@ -37,20 +44,20 @@ struct AddGithubPipelineSheet: View {
 
             Form {
                 HStack {
-                    TextField("Authentication:", text: $viewState.accessTokenDescription)
+                    TextField("Authentication:", text: $authState.accessTokenDescription)
                         .truncationMode(.tail)
                         .disabled(true)
-                    if viewState.isWaitingForToken {
+                    if authState.isWaitingForToken {
                         Button("Cancel") {
-                            authController.stopWaitingForToken()
+                            controller.stopWaitingForToken()
                         }
                     } else {
-                        Button(viewState.accessToken == nil ? "Sign in" : "Refresh") {
-                            authController.signInAtGitHub()
+                        Button(authState.accessToken == nil ? "Sign in" : "Refresh") {
+                            controller.signInAtGitHub()
                         }
                     }
                     Button("Review") {
-                        authController.openReviewAccessPage()
+                        controller.openReviewAccessPage()
                     }
                 }
                 .padding([.top, .bottom])
@@ -58,7 +65,7 @@ struct AddGithubPipelineSheet: View {
                 TextField("Owner:", text: $owner, onEditingChanged: { flag in
                     if flag == false && !owner.isEmpty {
                         repositoryList = [Repository(message: "updating list")]
-                        GitHubAPI.fetchRepositories(owner: owner, token: viewState.accessToken) { newList in
+                        GitHubAPI.fetchRepositories(owner: owner, token: authState.accessToken) { newList in
                             // TODO: so much logic, this needs a test
                             let filteredNewList = newList.filter({ $0.owner?.login == owner || $0.isMessage })
                             if repositoryList.count == 1 && repositoryList[0].isMessage {
@@ -87,7 +94,7 @@ struct AddGithubPipelineSheet: View {
                     updatePipeline()
                     if !selectedRepository.isMessage {
                         workflowList = [Workflow(message: "updating list")]
-                        GitHubAPI.fetchWorkflows(owner: owner, repo:selectedRepository.name, token: viewState.accessToken) { newList in
+                        GitHubAPI.fetchWorkflows(owner: owner, repo:selectedRepository.name, token: authState.accessToken) { newList in
                             workflowList = newList.count > 0 ? newList : [Workflow()]
                             workflowList.sort(by: { w1, w2 in w1.name.lowercased().compare(w2.name.lowercased()) == .orderedAscending })
                             selectedWorkflow = workflowList[0]
@@ -122,7 +129,7 @@ struct AddGithubPipelineSheet: View {
                     // TODO: check for empty display name
                     // TODO: check whether workflow exists
                     pipeline.feed.type = .github
-                    pipeline.feed.authToken = viewState.accessToken
+                    pipeline.feed.authToken = authState.accessToken
                     pipeline.status = Pipeline.Status(activity: .other)
                     pipeline.status.lastBuild = Build(result: .unknown)
                     // TODO: should trigger first poll of status
@@ -135,12 +142,12 @@ struct AddGithubPipelineSheet: View {
         .padding()
         .onAppear() {
             if let token = settings.cachedGitHubToken {
-                viewState.accessToken = token
-                viewState.accessTokenDescription = token
+                authState.accessToken = token
+                authState.accessTokenDescription = token
             }
         }
         .onDisappear() {
-            if let token = viewState.accessToken {
+            if let token = authState.accessToken {
                 settings.cachedGitHubToken = token
             }
         }
