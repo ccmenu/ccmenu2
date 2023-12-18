@@ -23,7 +23,7 @@ For now the roadmap is tracked in this readme file.
 ### Pre-release 2
 
 - [X] GitHub repository and workflow selection
-- [ ] Caching of last-used authentication token
+- [X] Caching of last-used authentication token
 - [ ] Notifications (check out: UNNotificationContentExtension)
 - [ ] Remaining menu appearance options
 
@@ -36,5 +36,4 @@ For now the roadmap is tracked in this readme file.
 
 - [ ] Sounds
 - [ ] Discover project (pipeline) names for CCTray feeds
-- [ ] Discover workflow names for Github feeds
 - [ ] Import and export of pipeline config
