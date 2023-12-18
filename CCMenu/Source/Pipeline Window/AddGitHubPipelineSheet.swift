@@ -63,7 +63,7 @@ struct AddGithubPipelineSheet: View {
                 .padding([.top, .bottom])
 
                 TextField("Owner:", text: $selectionState.owner)
-                .disableAutocorrection(true)
+                .autocorrectionDisabled(true)
                 .onChange(of: selectionState.owner) { foo in
                     pipelineName = controller.defaultPipelineName()
                 }

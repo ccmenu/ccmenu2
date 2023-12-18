@@ -12,6 +12,8 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
+    - name: Setup
+      run: xcode-select /Applications/Xcode_15.0.1.app
     - name: Build
       run: xcodebuild build -scheme CCMenu -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
     - name: Run unit tests
@@ -21,6 +23,8 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
+    - name: Setup
+      run: xcode-select /Applications/Xcode_15.0.1.app
     - name: Run UI tests
       run: xcodebuild test -scheme CCMenu.UITests -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
 
