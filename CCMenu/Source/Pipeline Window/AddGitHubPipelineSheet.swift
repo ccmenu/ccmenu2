@@ -37,7 +37,7 @@ struct AddGithubPipelineSheet: View {
                 .font(.headline)
             Spacer()
             HStack {
-                Text("Please enter the owner (user or organisation). Press return in the owner field to fetch the repositories and workflows. If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
+                Text("Press return in the owner field to fetch the repositories and workflows for that owner (a user or an organisation). If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
                     .lineLimit(nil)
                     .multilineTextAlignment(.leading)
             }
@@ -62,13 +62,15 @@ struct AddGithubPipelineSheet: View {
                 }
                 .padding([.top, .bottom])
 
-                TextField("Owner:", text: $selectionState.owner, onEditingChanged: { flag in
-                    if flag == false && !selectionState.owner.isEmpty {
-                        controller.fetchRepositories()
-                    }
-                })
+                TextField("Owner:", text: $selectionState.owner)
+                .disableAutocorrection(true)
                 .onChange(of: selectionState.owner) { foo in
                     pipelineName = controller.defaultPipelineName()
+                }
+                .onSubmit {
+                    if !selectionState.owner.isEmpty {
+                        controller.fetchRepositories()
+                    }
                 }
 
                 Picker("Repository", selection: $selectionState.repository) {

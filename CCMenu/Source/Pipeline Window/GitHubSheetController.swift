@@ -23,7 +23,7 @@ class GitHubSheetController: ObservableObject {
 
 
     func fetchRepositories() {
-        selectionState.repositoryList = [ GitHubRepository(message: "(updating)") ]
+        selectionState.repositoryList = [ GitHubRepository(message: "updating") ]
         GitHubAPI.fetchRepositories(owner: selectionState.owner, token: authState.accessToken) { newList in
             self.updateRepositoryList(newList: newList)
         }
@@ -44,7 +44,7 @@ class GitHubSheetController: ObservableObject {
     }
 
     func fetchWorkflows() {
-        selectionState.workflowList = [ GitHubWorkflow(message: "(updating)") ]
+        selectionState.workflowList = [ GitHubWorkflow(message: "updating") ]
         GitHubAPI.fetchWorkflows(owner: selectionState.owner, repository:selectionState.repository.name, token: authState.accessToken) { newList in
             self.updateWorkflowList(newList: newList)
         }
