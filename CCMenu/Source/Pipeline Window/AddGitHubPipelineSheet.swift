@@ -8,6 +8,14 @@ import SwiftUI
 import Combine
 
 
+final class GitHubWorkflowSelectionState: ObservableObject {
+    @Published var owner: String = ""
+    @Published var repositoryList = [GitHubRepository()] { didSet { repository = repositoryList[0] }}
+    @Published var repository = GitHubRepository()
+    @Published var workflowList = [GitHubWorkflow()] { didSet { workflow = workflowList[0] }}
+    @Published var workflow = GitHubWorkflow()
+}
+
 final class GitHubAuthState: ObservableObject {
     @Published var accessToken: String?
     @Published var accessTokenDescription: String = ""
@@ -16,21 +24,13 @@ final class GitHubAuthState: ObservableObject {
 
 
 struct AddGithubPipelineSheet: View {
-    typealias Repository = GitHubRepository
-    typealias Workflow = GitHubWorkflow
-
     var controller: GitHubSheetController
-    @ObservedObject var model: PipelineModel
+    @ObservedObject var selectionState: GitHubWorkflowSelectionState
     @ObservedObject var authState: GitHubAuthState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
-    @State var pipeline: Pipeline = Pipeline(name: "", feed:Pipeline.Feed(type:.github, url: ""))
-    @State var owner: String = ""
-    @State var repositoryList = [Repository()]
-    @State var selectedRepository = Repository()
-    @State var workflowList = [Workflow()]
-    @State var selectedWorkflow = Workflow()
-    
+    @State var pipelineName: String = ""
+
     var body: some View {
         VStack {
             Text("Add GitHub Actions workflow")
@@ -62,60 +62,44 @@ struct AddGithubPipelineSheet: View {
                 }
                 .padding([.top, .bottom])
 
-                TextField("Owner:", text: $owner, onEditingChanged: { flag in
-                    if flag == false && !owner.isEmpty {
-                        repositoryList = [Repository(message: "updating list")]
-                        GitHubAPI.fetchRepositories(owner: owner, token: authState.accessToken) { newList in
-                            // TODO: so much logic, this needs a test
-                            let filteredNewList = newList.filter({ $0.owner?.login == owner || $0.isMessage })
-                            if repositoryList.count == 1 && repositoryList[0].isMessage {
-                                repositoryList = []
-                            }
-                            repositoryList.append(contentsOf: filteredNewList)
-                            repositoryList.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
-                            if repositoryList.count == 0 {
-                                repositoryList = [Repository()]
-                            }
-                            selectedRepository = repositoryList[0] // TODO: consider showing first response instead, i.e. newList[0]
-                        }
+                TextField("Owner:", text: $selectionState.owner, onEditingChanged: { flag in
+                    if flag == false && !selectionState.owner.isEmpty {
+                        controller.fetchRepositories()
                     }
                 })
-                .onChange(of: owner) { foo in
-                    updatePipeline();
+                .onChange(of: selectionState.owner) { foo in
+                    pipelineName = controller.defaultPipelineName()
                 }
 
-                Picker("Repository", selection: $selectedRepository) {
-                    ForEach(repositoryList) { r in
+                Picker("Repository", selection: $selectionState.repository) {
+                    ForEach(selectionState.repositoryList) { r in
                         Text(r.name).tag(r)
                     }
                 }
-                .disabled(repositoryList.count == 1 && selectedRepository.isMessage)
-                .onChange(of: selectedRepository) { _ in
-                    updatePipeline()
-                    if !selectedRepository.isMessage {
-                        workflowList = [Workflow(message: "updating list")]
-                        GitHubAPI.fetchWorkflows(owner: owner, repo:selectedRepository.name, token: authState.accessToken) { newList in
-                            workflowList = newList.count > 0 ? newList : [Workflow()]
-                            workflowList.sort(by: { w1, w2 in w1.name.lowercased().compare(w2.name.lowercased()) == .orderedAscending })
-                            selectedWorkflow = workflowList[0]
-                        }
+                .disabled(!selectionState.repository.isValid)
+                .onChange(of: selectionState.repository) { _ in
+                    pipelineName = controller.defaultPipelineName()
+                    if selectionState.repository.isValid {
+                        controller.fetchWorkflows()
+                    } else {
+                        controller.clearWorkflows()
                     }
                 }
 
-                Picker("Workflow", selection: $selectedWorkflow) {
-                    ForEach(workflowList) { w in
+                Picker("Workflow", selection: $selectionState.workflow) {
+                    ForEach(selectionState.workflowList) { w in
                         Text(w.name).tag(w)
                     }
                 }
-                .disabled(workflowList.count == 1 && selectedWorkflow.isMessage)
-                .onChange(of: selectedWorkflow) { _ in
-                    updatePipeline()
+                .disabled(!selectionState.workflow.isValid)
+                .onChange(of: selectionState.workflow) { _ in
+                    pipelineName = controller.defaultPipelineName()
                 }
 
                 HStack {
-                    TextField("Display name:", text: $pipeline.name)
-                    Button(action: { pipeline.name = "\(selectedRepository.name) (\(selectedWorkflow.name))" }) {
-                        Label("Reset", systemImage: "arrowshape.turn.up.backward")
+                    TextField("Display name:", text: $pipelineName)
+                    Button("Reset", systemImage: "arrowshape.turn.up.backward") {
+                        pipelineName = controller.defaultPipelineName()
                     }
                 }
                 .padding([.bottom])
@@ -126,16 +110,11 @@ struct AddGithubPipelineSheet: View {
                     presentation.dismiss()
                 }
                 Button("Apply") {
-                    // TODO: check for empty display name
-                    // TODO: check whether workflow exists
-                    pipeline.feed.type = .github
-                    pipeline.feed.authToken = authState.accessToken
-                    pipeline.status = Pipeline.Status(activity: .other)
-                    pipeline.status.lastBuild = Build(result: .unknown)
-                    // TODO: should trigger first poll of status
-                    model.pipelines.append(pipeline)
+                    // TODO: It's a bit inconsisten that we pass the name when everything else is in shared state
+                    controller.addPipeline(name: pipelineName)
                     presentation.dismiss()
                 }
+                .disabled(pipelineName.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
             }
         }
         .frame(width: 500, height: 300)
@@ -153,15 +132,6 @@ struct AddGithubPipelineSheet: View {
         }
     }
     
-    private func updatePipeline() {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.github.com"
-        components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, selectedRepository.name, selectedWorkflow.filename)
-        pipeline.feed.url = components.url!.absoluteString
-        pipeline.name = "\(selectedRepository.name) (\(selectedWorkflow.name))"
-    }
-
 }
 
 

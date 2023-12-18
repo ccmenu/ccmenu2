@@ -10,11 +10,13 @@ class PipelineWindowController {
 
     var ghSheetController: GitHubSheetController
 
+    @ObservedObject var model: PipelineModel
     @ObservedObject var listViewState: ListViewState
 
-    init() {
+    init(model: PipelineModel) {
+        self.model = model
         listViewState = ListViewState()
-        ghSheetController = GitHubSheetController()
+        ghSheetController = GitHubSheetController(model: model)
     }
 
 

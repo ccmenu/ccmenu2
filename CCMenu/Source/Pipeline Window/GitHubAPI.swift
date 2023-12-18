@@ -17,7 +17,7 @@ class GitHubAPI {
 
     // MARK: - repository list
 
-    static func fetchRepositories(owner: String, token: String?, callback: @escaping ([GitHubRepository]) -> ()) {
+    static func fetchRepositories(owner: String, token: String?, receiveList: @escaping ([GitHubRepository]) -> ()) {
         let path = String(format: "/users/%@/repos", owner)
         let queryParams = [
             "type": "all",
@@ -33,8 +33,7 @@ class GitHubAPI {
             .catch({ (error) in
                 Just([GitHubRepository(message: messageForError(error: error))])
             })
-            // .replaceError(with: [Repository(message: "unknown owner or network error")])
-            .sink(receiveValue: callback)
+            .sink(receiveValue: receiveList)
             .store(in: &cancellables)
 
         if token == nil {
@@ -56,8 +55,7 @@ class GitHubAPI {
             .catch({ (error) in
                 Just([GitHubRepository(message: messageForError(error: error))])
             })
-            // .replaceError(with: [Repository(message: "unknown owner or network error")])
-            .sink(receiveValue: callback)
+            .sink(receiveValue: receiveList)
             .store(in: &cancellables)
     }
 
@@ -68,8 +66,8 @@ class GitHubAPI {
         var workflows: [GitHubWorkflow]
     }
     
-    static func fetchWorkflows(owner: String, repo: String, token: String?, callback: @escaping ([GitHubWorkflow]) -> ()) {
-        let path = String(format: "/repos/%@/%@/actions/workflows", owner, repo)
+    static func fetchWorkflows(owner: String, repository: String, token: String?, receiveList: @escaping ([GitHubWorkflow]) -> ()) {
+        let path = String(format: "/repos/%@/%@/actions/workflows", owner, repository)
         let queryParams = [
             // "client_id": clientId,
             "sort": "pushed",
@@ -82,8 +80,10 @@ class GitHubAPI {
             .decode(type: WorflowResponse.self, decoder: JSONDecoder())
             .map(\.workflows)
             .receive(on: RunLoop.main)
-            .replaceError(with: [GitHubWorkflow(message: "network error")])
-            .sink(receiveValue: callback)
+            .catch({ (error) in
+                Just([GitHubWorkflow(message: messageForError(error: error))])
+            })
+            .sink(receiveValue: receiveList)
             .store(in: &cancellables)
     }
 
@@ -158,6 +158,15 @@ class GitHubAPI {
 
     static func cancelDeviceFlow() {
         deviceFlowTasks.forEach({ $0.cancel() })
+    }
+
+
+    // MARK: - feed
+
+    static func feedUrl(owner: String, repository: String, workflow: String) -> String {
+        var components = URLComponents(string: "https://api.github.com")!
+        components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+        return components.url!.absoluteString
     }
 
 

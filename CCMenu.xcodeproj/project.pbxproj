@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03024C762B30DE9600DAFCDA /* GitHubSheetControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03024C752B30DE9600DAFCDA /* GitHubSheetControllerTests.swift */; };
 		032030992B2D1AF600D132C0 /* PipelineWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032030982B2D1AF600D132C0 /* PipelineWindowController.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
@@ -82,6 +83,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03024C752B30DE9600DAFCDA /* GitHubSheetControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetControllerTests.swift; sourceTree = "<group>"; };
 		032030982B2D1AF600D132C0 /* PipelineWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowController.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */,
 				03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */,
 				03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */,
+				03024C752B30DE9600DAFCDA /* GitHubSheetControllerTests.swift */,
 				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
 				03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
@@ -295,9 +298,9 @@
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
 				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
-				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
 				032FE8E32A654D96003244D7 /* GitHubSheetController.swift */,
 				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
+				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
 				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 			);
@@ -556,6 +559,7 @@
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 				2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */,
 				03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */,
+				03024C762B30DE9600DAFCDA /* GitHubSheetControllerTests.swift in Sources */,
 				03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */,
 				03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */,
 				03F9B890297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift in Sources */,

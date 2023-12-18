@@ -20,6 +20,11 @@ struct GitHubRepository: Identifiable, Hashable, Decodable {
         self.name = name
     }
 
+    init(id: Int, name: String, owner: GitHubOwner) {
+        self.init(id: id, name: name)
+        self.owner = owner
+    }
+
     init(message: String) {
         self.id = message.hashValue
         self.name = "(" + message + ")"
@@ -38,8 +43,8 @@ struct GitHubRepository: Identifiable, Hashable, Decodable {
         hasher.combine(id)
     }
 
-    var isMessage: Bool {
-        return name.isEmpty || name.starts(with: "(")
+    var isValid: Bool {
+        return !name.isEmpty && !name.starts(with: "(")
     }
 
 }
@@ -50,6 +55,10 @@ struct GitHubOwner: Decodable {
 
     init() {
         self.login = ""
+    }
+
+    init(login: String) {
+        self.login = login
     }
 
 }
@@ -80,8 +89,8 @@ struct GitHubWorkflow: Identifiable, Hashable, Decodable {
         hasher.combine(id)
     }
 
-    var isMessage: Bool {
-        return name.isEmpty || name.starts(with: "(")
+    var isValid: Bool {
+        return !name.isEmpty && !name.starts(with: "{")
     }
 
     var filename: String {

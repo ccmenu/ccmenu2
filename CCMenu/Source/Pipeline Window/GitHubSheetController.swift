@@ -11,11 +11,55 @@ typealias LoginResponse = GitHubAPI.LoginResponse
 
 class GitHubSheetController: ObservableObject {
 
+    @ObservedObject var model: PipelineModel
+    @ObservedObject var selectionState: GitHubWorkflowSelectionState
     @ObservedObject var authState: GitHubAuthState
 
-    init() {
+    init(model: PipelineModel) {
+        self.model = model
+        selectionState = GitHubWorkflowSelectionState()
         authState = GitHubAuthState()
     }
+
+
+    func fetchRepositories() {
+        selectionState.repositoryList = [ GitHubRepository(message: "(updating)") ]
+        GitHubAPI.fetchRepositories(owner: selectionState.owner, token: authState.accessToken) { newList in
+            self.updateRepositoryList(newList: newList)
+        }
+    }
+
+    func updateRepositoryList(newList: [GitHubRepository]) {
+        var repositoryList = selectionState.repositoryList
+        let filteredNewList = newList.filter({ $0.owner?.login == self.selectionState.owner || !$0.isValid })
+        if repositoryList.count == 1 && !repositoryList[0].isValid {
+            repositoryList = []
+        }
+        repositoryList.append(contentsOf: filteredNewList)
+        repositoryList.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
+        if repositoryList.count == 0 {
+            repositoryList = [GitHubRepository()]
+        }
+        self.selectionState.repositoryList = repositoryList
+    }
+
+    func fetchWorkflows() {
+        selectionState.workflowList = [ GitHubWorkflow(message: "(updating)") ]
+        GitHubAPI.fetchWorkflows(owner: selectionState.owner, repository:selectionState.repository.name, token: authState.accessToken) { newList in
+            self.updateWorkflowList(newList: newList)
+        }
+    }
+
+    func updateWorkflowList(newList: [GitHubWorkflow]) {
+        var workflowList = newList.count > 0 ? newList : [GitHubWorkflow()]
+        workflowList.sort(by: { w1, w2 in w1.name.lowercased().compare(w2.name.lowercased()) == .orderedAscending })
+        self.selectionState.workflowList = workflowList
+    }
+
+    func clearWorkflows() {
+        self.selectionState.workflowList = [GitHubWorkflow()]
+    }
+
 
     func signInAtGitHub() {
         authState.isWaitingForToken = true
@@ -58,15 +102,36 @@ class GitHubSheetController: ObservableObject {
         };
     }
 
-
     public func stopWaitingForToken() {
         authState.isWaitingForToken = false
         authState.accessTokenDescription = authState.accessToken ?? ""
         GitHubAPI.cancelDeviceFlow()
     }
 
-
     func openReviewAccessPage() {
         NSWorkspace.shared.open(URL(string: "https://github.com/settings/connections/applications/" + GitHubAPI.clientId)!)
     }
+
+
+    func defaultPipelineName() -> String {
+        var name = ""
+        if selectionState.repository.isValid {
+            name.append(selectionState.repository.name)
+            if selectionState.workflow.isValid {
+                name.append(String(format: " (%@)", selectionState.workflow.name))
+            }
+        }
+        return name
+    }
+
+
+    func addPipeline(name: String) {
+        let url = GitHubAPI.feedUrl(owner: selectionState.owner, repository: selectionState.repository.name, workflow: selectionState.workflow.name)
+        let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.accessToken)
+        let pipeline = Pipeline(name: name, feed: feed)
+        model.pipelines.append(pipeline)
+        // TODO: should trigger first poll of status (but this should happen in model? or does the server monitor listen?)
+   }
+
+
 }

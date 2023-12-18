@@ -30,7 +30,7 @@ struct CCMenuApp: App {
 
         self.userSettings = userSettings
         self.viewModel = viewModel
-        self.pipelineWindowController = PipelineWindowController()
+        self.pipelineWindowController = PipelineWindowController(model: viewModel)
         self.serverMonitor = ServerMonitor(model: viewModel)
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
@@ -46,6 +46,7 @@ struct CCMenuApp: App {
     var body: some Scene {
 
         Window("Pipelines", id:"pipeline-list") {
+            // TODO: Consider: pass only controller, and then view pulls out models?
             PipelineListView(controller: pipelineWindowController, model: viewModel, viewState: pipelineWindowController.listViewState)
                 .environmentObject(userSettings)
         }
