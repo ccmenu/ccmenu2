@@ -12,6 +12,8 @@ struct PipelineListToolbar: ToolbarContent {
     @ObservedObject var model: PipelineModel
     @ObservedObject var viewState: ListViewState
     @EnvironmentObject var settings: UserSettings
+    @State var isHoveringOverDetailMenu = false
+    @State var isHoveringOverAddMenu = false
 
     var body: some ToolbarContent {
         ToolbarItemGroup {
@@ -34,10 +36,19 @@ struct PipelineListToolbar: ToolbarContent {
                 Image(systemName: "list.dash.header.rectangle")
             }
             .menuStyle(.borderlessButton)
+            .padding(.bottom, 1)
+            .padding([.leading, .trailing], 8)
+            .frame(height: 28)
+            .opacity(0.7)
+            .background() {
+                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverDetailMenu ? 0.45 : 0)
+            }
+            .onHover {
+                isHoveringOverDetailMenu = $0
+            }
+            .cornerRadius(6)
             .accessibility(label: Text("Display detail menu"))
             .help("Select which details to show for the pipelines")
-
-            Spacer() // TODO: This shouldn't be necessary
         }
 
         ToolbarItemGroup {
@@ -56,6 +67,17 @@ struct PipelineListToolbar: ToolbarContent {
                 Image(systemName: "plus.square")
             }
             .menuStyle(.borderlessButton)
+            .padding(.bottom, 1)
+            .padding([.leading, .trailing], 8)
+            .frame(height: 28)
+            .opacity(0.7)
+            .background() {
+                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverAddMenu ? 0.45 : 0)
+            }
+            .onHover {
+                isHoveringOverAddMenu = $0
+            }
+            .cornerRadius(6)
             .accessibility(label: Text("Add pipeline menu"))
             .help("Add a pipeline")
 
