@@ -126,7 +126,7 @@ class GitHubSheetController: ObservableObject {
 
 
     func addPipeline(name: String) {
-        let url = GitHubAPI.feedUrl(owner: selectionState.owner, repository: selectionState.repository.name, workflow: selectionState.workflow.name)
+        let url = GitHubAPI.feedUrl(owner: selectionState.owner, repository: selectionState.repository.name, workflow: selectionState.workflow.filename)
         let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.accessToken)
         let pipeline = Pipeline(name: name, feed: feed)
         model.pipelines.append(pipeline)
