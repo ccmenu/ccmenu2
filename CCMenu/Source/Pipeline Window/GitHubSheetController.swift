@@ -130,7 +130,6 @@ class GitHubSheetController: ObservableObject {
         let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.accessToken)
         let pipeline = Pipeline(name: name, feed: feed)
         model.pipelines.append(pipeline)
-        // TODO: should trigger first poll of status (but this should happen in model? or does the server monitor listen?)
    }
 
 
