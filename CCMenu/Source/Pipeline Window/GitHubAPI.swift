@@ -18,6 +18,9 @@ class GitHubAPI {
     // MARK: - repository list
 
     static func fetchRepositories(owner: String, token: String?, receiveList: @escaping ([GitHubRepository]) -> ()) {
+
+        var publisher: AnyPublisher<[GitHubRepository], Error>
+
         let path = String(format: "/users/%@/repos", owner)
         let queryParams = [
             "type": "all",
@@ -25,32 +28,27 @@ class GitHubAPI {
             "per_page": "100",
         ];
         let request = makeRequest(path: path, params: queryParams, token: token)
-
-        URLSession.shared.dataTaskPublisher(for: request)
+        publisher = URLSession.shared.dataTaskPublisher(for: request)
             .tryMap(responseOkData(element:))
             .decode(type: Array<GitHubRepository>.self, decoder: Self.snakeCaseDecoder())
-            .receive(on: RunLoop.main)
-            .catch({ (error) in
-                Just([GitHubRepository(message: messageForError(error: error))])
-            })
-            .sink(receiveValue: receiveList)
-            .store(in: &cancellables)
+            .eraseToAnyPublisher()
 
-        if token == nil {
-            return
+        if token != nil {
+            let path2 = String(format: "/user/repos", owner)
+            let queryParams2 = [
+                "type": "private",
+                "sort": "pushed",
+                "per_page": "100",
+            ];
+            let request2 = makeRequest(path: path2, params: queryParams2, token: token)
+            publisher = URLSession.shared.dataTaskPublisher(for: request2)
+                .tryMap(responseOkData(element:))
+                .decode(type: Array<GitHubRepository>.self, decoder: Self.snakeCaseDecoder())
+                .zip(publisher) { $0 + $1 }
+                .eraseToAnyPublisher()
         }
 
-        let path2 = String(format: "/user/repos", owner)
-        let queryParams2 = [
-            "type": "private",
-            "sort": "pushed",
-            "per_page": "100",
-        ];
-        let request2 = makeRequest(path: path2, params: queryParams2, token: token)
-
-        URLSession.shared.dataTaskPublisher(for: request2)
-            .tryMap(responseOkData(element:))
-            .decode(type: Array<GitHubRepository>.self, decoder: Self.snakeCaseDecoder())
+        publisher
             .receive(on: RunLoop.main)
             .catch({ (error) in
                 Just([GitHubRepository(message: messageForError(error: error))])

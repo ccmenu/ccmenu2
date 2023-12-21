@@ -30,12 +30,7 @@ class GitHubSheetController: ObservableObject {
     }
 
     func updateRepositoryList(newList: [GitHubRepository]) {
-        var repositoryList = selectionState.repositoryList
-        let filteredNewList = newList.filter({ $0.owner?.login == self.selectionState.owner || !$0.isValid })
-        if repositoryList.count == 1 && !repositoryList[0].isValid {
-            repositoryList = []
-        }
-        repositoryList.append(contentsOf: filteredNewList)
+        var repositoryList = newList.filter({ $0.owner?.login == self.selectionState.owner || !$0.isValid })
         repositoryList.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
         if repositoryList.count == 0 {
             repositoryList = [GitHubRepository()]
