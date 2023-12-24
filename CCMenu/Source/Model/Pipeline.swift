@@ -4,11 +4,10 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import SwiftUI
 
 
 struct Pipeline: Hashable, Identifiable, Codable {
-
     var name: String
     var feed: Pipeline.Feed
     var status: Pipeline.Status
@@ -46,6 +45,18 @@ struct Pipeline: Hashable, Identifiable, Codable {
 
 }
 
+
+//extension Pipeline: Transferable {
+//    static var transferRepresentation: some TransferRepresentation {
+//        DataRepresentation(contentType: .json) { pipeline in
+//                pipeline
+//            }, importing: { pipeline in
+//                try Layer(data: data)
+//            }
+//        DataRepresentation(exportedContentType: .json) { layer in
+//            layer.pngData()
+//    }
+//}
 
 extension Pipeline {
 

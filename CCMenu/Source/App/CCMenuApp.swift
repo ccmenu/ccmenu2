@@ -50,6 +50,11 @@ struct CCMenuApp: App {
             PipelineListView(controller: pipelineWindowController, model: viewModel, viewState: pipelineWindowController.listViewState)
                 .environmentObject(userSettings)
         }
+        .defaultSize(width: 550, height: 600)
+        .keyboardShortcut("0", modifiers: [ .command ])
+//        .commands {
+//            PipelineCommands(model: viewModel)
+//        }
         Settings {
             SettingsView(settings: userSettings)
         }

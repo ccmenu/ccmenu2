@@ -111,11 +111,13 @@ struct AddGithubPipelineSheet: View {
                 Button("Cancel") {
                     presentation.dismiss()
                 }
+                .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     // TODO: It's a bit inconsisten that we pass the name when everything else is in shared state
                     controller.addPipeline(name: pipelineName)
                     presentation.dismiss()
                 }
+                .keyboardShortcut(.defaultAction)
                 .disabled(pipelineName.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
             }
         }

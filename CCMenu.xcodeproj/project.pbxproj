@@ -12,7 +12,7 @@
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
-		0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* AppCommands.swift */; };
+		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
 		032FE8E42A654D96003244D7 /* GitHubSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032FE8E32A654D96003244D7 /* GitHubSheetController.swift */; };
 		0331F39F29A8155000245956 /* MenuExtraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0331F39E29A8155000245956 /* MenuExtraModel.swift */; };
 		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
@@ -27,7 +27,6 @@
 		03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* PipelineModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
-		03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825E80259E164500DEB003 /* WorkspaceController.swift */; };
 		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
@@ -88,7 +87,7 @@
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
-		0329F92625B21FE20043FAB1 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
+		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
 		032FE8E32A654D96003244D7 /* GitHubSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetController.swift; sourceTree = "<group>"; };
 		0331F39E29A8155000245956 /* MenuExtraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModel.swift; sourceTree = "<group>"; };
 		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -102,7 +101,6 @@
 		03825DE7259D005B00DEB003 /* PipelineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
-		03825E80259E164500DEB003 /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
@@ -246,8 +244,8 @@
 			isa = PBXGroup;
 			children = (
 				0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */,
+				0329F92625B21FE20043FAB1 /* PipelineCommands.swift */,
 				03BD7E882598E579000F9495 /* AppDelegate.swift */,
-				0329F92625B21FE20043FAB1 /* AppCommands.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -324,7 +322,6 @@
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
 				03BD7EF9259A180C000F9495 /* ImageManager.swift */,
 				037AB214297334EE00C33589 /* UserSettings.swift */,
-				03825E80259E164500DEB003 /* WorkspaceController.swift */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -516,8 +513,7 @@
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				039B524629676D0700994910 /* Build.swift in Sources */,
-				0329F92725B21FE20043FAB1 /* AppCommands.swift in Sources */,
-				03825E81259E164500DEB003 /* WorkspaceController.swift in Sources */,
+				0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */,
 				037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */,
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,

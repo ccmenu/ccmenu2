@@ -9,7 +9,8 @@ import SwiftUI
 
 struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
-    @Environment(\.openWindow) var openWindow
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.openURL) private var openUrl
 
     var body: some View {
         ForEach(model.pipelinesForMenu) { pvm in
@@ -37,22 +38,39 @@ struct MenuBarExtraMenu: View {
         }
         Divider()
         Button("Quit CCMenu") {
-            NSApp.sendAction(#selector(NSApplication.terminate(_:)), to: nil, from: self)
+            NSApplication.shared.terminate(nil)
         }
     }
 
     private func openPipeline(pipeline: Pipeline) {
         if let error = pipeline.connectionError {
             // TODO: Consider adding a UI test for this case
-            let alert = NSAlert()
-            alert.messageText = "Error loading pipeline satus"
-            alert.informativeText = error + "\n\nPlease check the URL, make sure you're logged in if neccessary. Otherwise contact the server administrator."
-            alert.alertStyle = .critical
-            alert.addButton(withTitle: "Cancel")
-            alert.runModal()
+           alertPipelineFeedError(error)
+         } else if let urlString = pipeline.status.webUrl, let url = URL(string: urlString), url.host != nil {
+            openUrl(url)
+        } else if (pipeline.status.webUrl ?? "").isEmpty {
+            alertCannotOpenPipeline("The continuous integration server did not provide a link for this pipeline.")
         } else {
-            WorkspaceController().openPipeline(pipeline)
+            alertCannotOpenPipeline("The continuous integration server provided a malformed link for this pipeline:\n\(pipeline.status.webUrl ?? "")")
         }
+    }
+
+    private func alertPipelineFeedError(_ errorString: String) {
+        let alert = NSAlert()
+        alert.messageText = "Error loading pipeline satus"
+        alert.informativeText = errorString + "\n\nPlease check the URL, make sure you're logged in if neccessary. Otherwise contact the server administrator."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "Cancel")
+        alert.runModal()
+    }
+
+    private func alertCannotOpenPipeline(_ informativeText: String) {
+        let alert = NSAlert()
+        alert.messageText = "Cannot open pipeline"
+        alert.informativeText = informativeText + "\n\nPlease contact the server administrator."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Cancel")
+        alert.runModal()
     }
 
 }
