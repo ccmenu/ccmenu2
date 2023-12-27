@@ -56,7 +56,7 @@ class GithubResponseParserTests: XCTestCase {
         XCTAssertEqual("17", build.label)
         XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), build.timestamp)
         XCTAssertEqual(154, build.duration)
-        XCTAssertEqual("Push \u{279E} Just testing", build.message)
+        XCTAssertEqual("Push \u{22EE} Just testing", build.message)
         XCTAssertEqual("erikdoe", build.user)
         XCTAssertEqual("https://test.org/avatar.jpg", build.avatar?.absoluteString)
         XCTAssertNil(status.currentBuild)
@@ -107,7 +107,7 @@ class GithubResponseParserTests: XCTestCase {
         XCTAssertEqual("18", current.label)
         XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-07-01T18:42:17Z"), current.timestamp)
         XCTAssertEqual(157, current.duration)
-        XCTAssertEqual("Pull Request \u{279E} Merge this", current.message)
+        XCTAssertEqual("Pull Request \u{22EE} Merge this", current.message)
         XCTAssertEqual("erikdoe", current.user)
         XCTAssertEqual("https://test.org/avatar.jpg", current.avatar?.absoluteString)
 
@@ -116,7 +116,7 @@ class GithubResponseParserTests: XCTestCase {
         XCTAssertEqual("17", last.label)
         XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), last.timestamp)
         XCTAssertEqual(154, last.duration)
-        XCTAssertEqual("Push \u{279E} Just testing", last.message)
+        XCTAssertEqual("Push \u{22EE} Just testing", last.message)
         XCTAssertEqual("erikdoe", last.user)
         XCTAssertEqual("https://test.org/avatar.jpg", last.avatar?.absoluteString)
    }

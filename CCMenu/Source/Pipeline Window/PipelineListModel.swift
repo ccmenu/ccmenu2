@@ -7,7 +7,7 @@
 import AppKit
 
 
-struct ListRowModel {
+struct PipelineViewModel {
 
     var pipeline: Pipeline
     var title: String
@@ -19,7 +19,7 @@ struct ListRowModel {
         self.pipeline = pipeline
         self.title = pipeline.name
         self.statusIcon = ImageManager().image(forPipeline: pipeline)
-        self.statusDescription = ListRowModel.describeStatus(pipeline: pipeline)
+        self.statusDescription = PipelineViewModel.describeStatus(pipeline: pipeline)
         if settings.showMessagesInPipelineWindow, let message = pipeline.message {
             self.statusDescription.append("\n\(message)")
         }
