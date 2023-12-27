@@ -31,7 +31,7 @@
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
-		03B1D7612A607DD0007BCB8A /* ListRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7602A607DD0007BCB8A /* ListRowModel.swift */; };
+		03B1D7612A607DD0007BCB8A /* PipelineListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7602A607DD0007BCB8A /* PipelineListModel.swift */; };
 		03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
@@ -105,7 +105,7 @@
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
-		03B1D7602A607DD0007BCB8A /* ListRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowModel.swift; sourceTree = "<group>"; };
+		03B1D7602A607DD0007BCB8A /* PipelineListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListModel.swift; sourceTree = "<group>"; };
 		03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowModelTests.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +170,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0331B3012B3C9A60000FE134 /* GitHub Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
+				032FE8E32A654D96003244D7 /* GitHubSheetController.swift */,
+				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
+				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
+			);
+			path = "GitHub Sheets";
+			sourceTree = "<group>";
+		};
 		03BD7E7C2598E578000F9495 = {
 			isa = PBXGroup;
 			children = (
@@ -274,7 +285,6 @@
 				03825DE7259D005B00DEB003 /* PipelineModel.swift */,
 				0331F39E29A8155000245956 /* MenuExtraModel.swift */,
 				03F9B897297D4D8F00FA866E /* MenuItemModel.swift */,
-				03B1D7602A607DD0007BCB8A /* ListRowModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -292,15 +302,13 @@
 			isa = PBXGroup;
 			children = (
 				032030982B2D1AF600D132C0 /* PipelineWindowController.swift */,
+				03B1D7602A607DD0007BCB8A /* PipelineListModel.swift */,
 				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
 				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
-				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
-				032FE8E32A654D96003244D7 /* GitHubSheetController.swift */,
-				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
-				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
+				0331B3012B3C9A60000FE134 /* GitHub Sheets */,
 			);
 			path = "Pipeline Window";
 			sourceTree = "<group>";
@@ -536,7 +544,7 @@
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
 				0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
-				03B1D7612A607DD0007BCB8A /* ListRowModel.swift in Sources */,
+				03B1D7612A607DD0007BCB8A /* PipelineListModel.swift in Sources */,
 				03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 				0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */,

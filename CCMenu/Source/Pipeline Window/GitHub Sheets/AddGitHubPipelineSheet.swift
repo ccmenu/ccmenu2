@@ -10,7 +10,7 @@ import Combine
 
 struct AddGithubPipelineSheet: View {
     var controller: GitHubSheetController
-    @ObservedObject var selectionState: GitHubWorkflowSelectionState
+    @ObservedObject var selectionState: GitHubWorkflowState
     @ObservedObject var authState: GitHubAuthState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
@@ -28,15 +28,16 @@ struct AddGithubPipelineSheet: View {
 
             Form {
                 HStack {
-                    TextField("Authentication:", text: $authState.accessTokenDescription)
+                    TextField("Authentication:", text: $authState.tokenDescription)
                         .truncationMode(.tail)
                         .disabled(true)
                     if authState.isWaitingForToken {
+                        ProgressView()
                         Button("Cancel") {
                             controller.stopWaitingForToken()
                         }
                     } else {
-                        Button(authState.accessToken == nil ? "Sign in" : "Refresh") {
+                        Button(authState.token == nil ? "Sign in" : "Refresh") {
                             controller.signInAtGitHub()
                         }
                     }
@@ -98,7 +99,6 @@ struct AddGithubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    // TODO: It's a bit inconsisten that we pass the name when everything else is in shared state
                     controller.addPipeline()
                     presentation.dismiss()
                 }
@@ -110,12 +110,12 @@ struct AddGithubPipelineSheet: View {
         .padding()
         .onAppear() {
             if let token = settings.cachedGitHubToken {
-                authState.accessToken = token
-                authState.accessTokenDescription = token
+                authState.token = token
+                authState.tokenDescription = token
             }
         }
         .onDisappear() {
-            if let token = authState.accessToken {
+            if let token = authState.token {
                 settings.cachedGitHubToken = token
             }
         }

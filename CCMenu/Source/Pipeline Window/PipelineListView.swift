@@ -16,7 +16,7 @@ final class ListViewState: ObservableObject {
 struct PipelineListView: View {
     var controller: PipelineWindowController
     @ObservedObject var model: PipelineModel
-    @ObservedObject var viewState: ListViewState = ListViewState()
+    @ObservedObject var viewState: ListViewState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.openURL) private var openUrl
 
@@ -54,7 +54,7 @@ struct PipelineListView: View {
                 case .github:
                     // TODO: Consider: pass only controller, and then view pulls out models?
                     let sheetController = controller.ghSheetController
-                    AddGithubPipelineSheet(controller: sheetController, selectionState: sheetController.selectionState, authState: sheetController.authState)
+                    AddGithubPipelineSheet(controller: sheetController, selectionState: sheetController.workflowState, authState: sheetController.authState)
                 }
             }
         }
@@ -66,31 +66,37 @@ struct PipelineListView: View {
 }
 
 
-//struct PipelineListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
-//            .preferredColorScheme(.light)
-//            PipelineListView(model: makeViewModel(), settings: UserSettings(), viewState: ListViewState())
-//            .preferredColorScheme(.dark)
-//        }
-//    }
-//
-//    static func makeViewModel() -> PipelineModel {
-//        let model = PipelineModel()
-//
-//        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
-//        p0.status.activity = .building
-//        p0.status.lastBuild = Build(result: .failure)
-//        p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-//
-//        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: Pipeline.Feed(type: .cctray, url: "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml", name: "connectfour"))
-//        p1.status.activity = .sleeping
-//        p1.status.lastBuild = Build(result: .success)
-//        p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-//        p1.status.lastBuild!.label = "build.151"
-//
-//        model.pipelines = [p0, p1]
-//        return model
-//    }
-//}
+struct PipelineListView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            let controller = PipelineWindowController(model: makeViewModel())
+            PipelineListView(controller: controller, model: controller.model, viewState: controller.listViewState)
+                .environmentObject(makeSettings())
+        }
+    }
+
+    static func makeViewModel() -> PipelineModel {
+        let model = PipelineModel()
+
+        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: "connectfour"))
+        p0.status.activity = .building
+        p0.status.lastBuild = Build(result: .failure)
+        p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+
+        var p1 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", name: nil))
+        p1.status.activity = .sleeping
+        p1.status.lastBuild = Build(result: .success)
+        p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        p1.status.lastBuild!.label = "build.151"
+        p1.status.lastBuild?.message = "Push ⋮ Made some refactorings."
+
+        model.pipelines = [p0, p1]
+        return model
+    }
+
+    static func makeSettings() -> UserSettings {
+        let settings = UserSettings()
+        settings.showStatusInPipelineWindow = true
+        return settings
+    }
+}

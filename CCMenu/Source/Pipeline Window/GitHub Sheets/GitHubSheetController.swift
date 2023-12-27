@@ -12,35 +12,35 @@ typealias LoginResponse = GitHubAPI.LoginResponse
 class GitHubSheetController {
 
     @ObservedObject var model: PipelineModel
-    @ObservedObject var selectionState: GitHubWorkflowSelectionState
+    @ObservedObject var workflowState: GitHubWorkflowState
     @ObservedObject var authState: GitHubAuthState
 
     init(model: PipelineModel) {
         self.model = model
-        selectionState = GitHubWorkflowSelectionState()
+        workflowState = GitHubWorkflowState()
         authState = GitHubAuthState()
     }
 
 
     func fetchRepositories() {
-        selectionState.repositoryList = [ GitHubRepository(message: "updating") ]
-        GitHubAPI.fetchRepositories(owner: selectionState.owner, token: authState.accessToken) { newList in
+        workflowState.repositoryList = [ GitHubRepository(message: "updating") ]
+        GitHubAPI.fetchRepositories(owner: workflowState.owner, token: authState.token) { newList in
             self.updateRepositoryList(newList: newList)
         }
     }
 
     func updateRepositoryList(newList: [GitHubRepository]) {
-        var repositoryList = newList.filter({ $0.owner?.login == self.selectionState.owner || !$0.isValid })
+        var repositoryList = newList.filter({ $0.owner?.login == self.workflowState.owner || !$0.isValid })
         repositoryList.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
         if repositoryList.count == 0 {
             repositoryList = [GitHubRepository()]
         }
-        self.selectionState.repositoryList = repositoryList
+        self.workflowState.repositoryList = repositoryList
     }
 
     func fetchWorkflows() {
-        selectionState.workflowList = [ GitHubWorkflow(message: "updating") ]
-        GitHubAPI.fetchWorkflows(owner: selectionState.owner, repository:selectionState.repository.name, token: authState.accessToken) { newList in
+        workflowState.workflowList = [ GitHubWorkflow(message: "updating") ]
+        GitHubAPI.fetchWorkflows(owner: workflowState.owner, repository:workflowState.repository.name, token: authState.token) { newList in
             self.updateWorkflowList(newList: newList)
         }
     }
@@ -48,17 +48,17 @@ class GitHubSheetController {
     func updateWorkflowList(newList: [GitHubWorkflow]) {
         var workflowList = newList.count > 0 ? newList : [GitHubWorkflow()]
         workflowList.sort(by: { w1, w2 in w1.name.lowercased().compare(w2.name.lowercased()) == .orderedAscending })
-        self.selectionState.workflowList = workflowList
+        self.workflowState.workflowList = workflowList
     }
 
     func clearWorkflows() {
-        self.selectionState.workflowList = [GitHubWorkflow()]
+        self.workflowState.workflowList = [GitHubWorkflow()]
     }
 
 
     func signInAtGitHub() {
         authState.isWaitingForToken = true
-        authState.accessTokenDescription = "Preparing to sign in..."
+        authState.tokenDescription = "Preparing to sign in..."
         GitHubAPI.deviceFlowLogin() { response in
             self.handleLoginResponse(response: response)
         }
@@ -73,33 +73,33 @@ class GitHubSheetController {
         alert.addButton(withTitle: "Cancel")
         if alert.runModal() == .alertSecondButtonReturn {
             authState.isWaitingForToken = false
-            authState.accessTokenDescription = authState.accessToken ?? ""
+            authState.tokenDescription = authState.token ?? ""
             return
         }
         NSPasteboard.general.prepareForNewContents()
         NSPasteboard.general.setString(response.userCode, forType: .string)
         NSWorkspace.shared.open(URL(string: response.verificationUri)!)
 
-        authState.accessTokenDescription = "Waiting for token..."
+        authState.tokenDescription = "Waiting for token..."
 
         GitHubAPI.deviceFlowGetAccessToken(loginResponse: response) { token in
             if self.authState.isWaitingForToken {
                 self.authState.isWaitingForToken = false
-                self.authState.accessToken = token
-                self.authState.accessTokenDescription = token
+                self.authState.token = token
+                self.authState.tokenDescription = token
             }
         } onError: { message in
             if self.authState.isWaitingForToken {
                 self.authState.isWaitingForToken = false
-                self.authState.accessToken = nil
-                self.authState.accessTokenDescription = message
+                self.authState.token = nil
+                self.authState.tokenDescription = message
             }
         };
     }
 
     public func stopWaitingForToken() {
         authState.isWaitingForToken = false
-        authState.accessTokenDescription = authState.accessToken ?? ""
+        authState.tokenDescription = authState.token ?? ""
         GitHubAPI.cancelDeviceFlow()
     }
 
@@ -110,20 +110,20 @@ class GitHubSheetController {
 
     func resetName() {
         var name = ""
-        if selectionState.repository.isValid {
-            name.append(selectionState.repository.name)
-            if selectionState.workflow.isValid {
-                name.append(String(format: " (%@)", selectionState.workflow.name))
+        if workflowState.repository.isValid {
+            name.append(workflowState.repository.name)
+            if workflowState.workflow.isValid {
+                name.append(String(format: " (%@)", workflowState.workflow.name))
             }
         }
-        selectionState.name = name
+        workflowState.name = name
     }
 
 
     func addPipeline() {
-        let url = GitHubAPI.feedUrl(owner: selectionState.owner, repository: selectionState.repository.name, workflow: selectionState.workflow.filename)
-        let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.accessToken)
-        let pipeline = Pipeline(name: selectionState.name, feed: feed)
+        let url = GitHubAPI.feedUrl(owner: workflowState.owner, repository: workflowState.repository.name, workflow: workflowState.workflow.filename)
+        let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.token)
+        let pipeline = Pipeline(name: workflowState.name, feed: feed)
         model.pipelines.append(pipeline)
    }
 

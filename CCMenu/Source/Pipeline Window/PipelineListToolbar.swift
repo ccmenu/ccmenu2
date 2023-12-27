@@ -16,7 +16,7 @@ struct PipelineListToolbar: ToolbarContent {
     @State var isHoveringOverAddMenu = false
 
     var body: some ToolbarContent {
-        ToolbarItemGroup {
+        ToolbarItem(placement: .principal) {
             Menu() {
                 Picker(selection: $settings.showStatusInPipelineWindow, label: EmptyView()) {
                     Text("Pipeline URL").tag(false)
@@ -51,7 +51,7 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Select which details to show for the pipelines")
         }
 
-        ToolbarItemGroup {
+        ToolbarItemGroup(placement: .principal) {
             Menu() {
                 Button("Add project from CCTray feed...") {
                     viewState.editIndex = nil
@@ -104,14 +104,14 @@ struct PipelineListToolbar: ToolbarContent {
             .disabled(viewState.selection.isEmpty)
         }
 
-        ToolbarItemGroup {
-            Button() {
-                model.reloadPipelineStatus()
-            } label: {
-                Label("Reload", systemImage: "arrow.clockwise")
-            }
-            .help("Update status of all pipelines")
-        }
+//        ToolbarItem(placement: .principal) {
+//            Button() {
+//                model.reloadPipelineStatus()
+//            } label: {
+//                Label("Reload", systemImage: "arrow.clockwise")
+//            }
+//            .help("Update status of all pipelines")
+//        }
     }
 
     private func selectionIndexSet() -> IndexSet {
