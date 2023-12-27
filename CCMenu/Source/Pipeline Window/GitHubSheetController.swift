@@ -9,7 +9,7 @@ import SwiftUI
 typealias LoginResponse = GitHubAPI.LoginResponse
 
 
-class GitHubSheetController: ObservableObject {
+class GitHubSheetController {
 
     @ObservedObject var model: PipelineModel
     @ObservedObject var selectionState: GitHubWorkflowSelectionState
@@ -108,7 +108,7 @@ class GitHubSheetController: ObservableObject {
     }
 
 
-    func defaultPipelineName() -> String {
+    func resetName() {
         var name = ""
         if selectionState.repository.isValid {
             name.append(selectionState.repository.name)
@@ -116,14 +116,14 @@ class GitHubSheetController: ObservableObject {
                 name.append(String(format: " (%@)", selectionState.workflow.name))
             }
         }
-        return name
+        selectionState.name = name
     }
 
 
-    func addPipeline(name: String) {
+    func addPipeline() {
         let url = GitHubAPI.feedUrl(owner: selectionState.owner, repository: selectionState.repository.name, workflow: selectionState.workflow.filename)
         let feed = Pipeline.Feed(type: .github, url:url, authToken: authState.accessToken)
-        let pipeline = Pipeline(name: name, feed: feed)
+        let pipeline = Pipeline(name: selectionState.name, feed: feed)
         model.pipelines.append(pipeline)
    }
 

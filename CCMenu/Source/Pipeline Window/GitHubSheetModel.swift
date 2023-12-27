@@ -9,6 +9,23 @@ import Foundation
 import Combine
 
 
+final class GitHubWorkflowSelectionState: ObservableObject {
+    @Published var owner: String = ""
+    @Published var repositoryList = [GitHubRepository()] { didSet { repository = repositoryList[0] }}
+    @Published var repository = GitHubRepository()
+    @Published var workflowList = [GitHubWorkflow()] { didSet { workflow = workflowList[0] }}
+    @Published var workflow = GitHubWorkflow()
+    @Published var name: String = ""
+}
+
+
+final class GitHubAuthState: ObservableObject {
+    @Published var accessToken: String?
+    @Published var accessTokenDescription: String = ""
+    @Published var isWaitingForToken: Bool = false
+}
+
+
 struct GitHubRepository: Identifiable, Hashable, Decodable {
 
     var id: Int

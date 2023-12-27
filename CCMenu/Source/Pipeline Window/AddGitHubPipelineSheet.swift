@@ -8,28 +8,12 @@ import SwiftUI
 import Combine
 
 
-final class GitHubWorkflowSelectionState: ObservableObject {
-    @Published var owner: String = ""
-    @Published var repositoryList = [GitHubRepository()] { didSet { repository = repositoryList[0] }}
-    @Published var repository = GitHubRepository()
-    @Published var workflowList = [GitHubWorkflow()] { didSet { workflow = workflowList[0] }}
-    @Published var workflow = GitHubWorkflow()
-}
-
-final class GitHubAuthState: ObservableObject {
-    @Published var accessToken: String?
-    @Published var accessTokenDescription: String = ""
-    @Published var isWaitingForToken: Bool = false
-}
-
-
 struct AddGithubPipelineSheet: View {
     var controller: GitHubSheetController
     @ObservedObject var selectionState: GitHubWorkflowSelectionState
     @ObservedObject var authState: GitHubAuthState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
-    @State var pipelineName: String = ""
 
     var body: some View {
         VStack {
@@ -66,7 +50,7 @@ struct AddGithubPipelineSheet: View {
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
                 .onChange(of: selectionState.owner) { foo in
-                    pipelineName = controller.defaultPipelineName()
+                    controller.resetName()
                 }
                 .onSubmit {
                     if !selectionState.owner.isEmpty {
@@ -81,7 +65,7 @@ struct AddGithubPipelineSheet: View {
                 }
                 .disabled(!selectionState.repository.isValid)
                 .onChange(of: selectionState.repository) { _ in
-                    pipelineName = controller.defaultPipelineName()
+                    controller.resetName()
                     if selectionState.repository.isValid {
                         controller.fetchWorkflows()
                     } else {
@@ -96,13 +80,13 @@ struct AddGithubPipelineSheet: View {
                 }
                 .disabled(!selectionState.workflow.isValid)
                 .onChange(of: selectionState.workflow) { _ in
-                    pipelineName = controller.defaultPipelineName()
+                    controller.resetName()
                 }
 
                 HStack {
-                    TextField("Display name:", text: $pipelineName)
+                    TextField("Display name:", text: $selectionState.name)
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        pipelineName = controller.defaultPipelineName()
+                        controller.resetName()
                     }
                 }
                 .padding([.bottom])
@@ -115,11 +99,11 @@ struct AddGithubPipelineSheet: View {
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     // TODO: It's a bit inconsisten that we pass the name when everything else is in shared state
-                    controller.addPipeline(name: pipelineName)
+                    controller.addPipeline()
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(pipelineName.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
+                .disabled(selectionState.name.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
             }
         }
         .frame(width: 500, height: 300)

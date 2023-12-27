@@ -296,9 +296,9 @@
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
 				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
+				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
 				032FE8E32A654D96003244D7 /* GitHubSheetController.swift */,
 				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
-				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
 				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 			);
