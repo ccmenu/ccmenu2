@@ -63,6 +63,7 @@ struct AddGithubPipelineSheet: View {
                 .padding([.top, .bottom])
 
                 TextField("Owner:", text: $selectionState.owner)
+                // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
                 .onChange(of: selectionState.owner) { foo in
                     pipelineName = controller.defaultPipelineName()

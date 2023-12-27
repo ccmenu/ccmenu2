@@ -13,35 +13,40 @@ struct PipelineRow: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        HStack(alignment: .center) {
-            if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
-                avatarImage()
-            }
-            VStack(alignment: .leading, spacing: 2) {
-                Text(pvm.title)
-                .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
-                if settings.showStatusInPipelineWindow {
-                    Text(pvm.statusDescription)
-                    .adjustedColor(colorScheme: colorScheme)
-                } else {
-                    HStack(alignment: .top, spacing: 4) {
-                        Image(pvm.feedTypeIconName)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                        .adjustedColor(colorScheme: colorScheme)
-                        Text(pvm.feedUrl)
-                        .adjustedColor(colorScheme: colorScheme)
+        VStack {
+            HStack(alignment: .center) {
+                if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
+                    avatarImage()
+                        .padding([.trailing], 6)
+
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(pvm.title)
+                        .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
+                    if settings.showStatusInPipelineWindow {
+                        Text(pvm.statusDescription)
+                            .adjustedColor(colorScheme: colorScheme)
+                    } else {
+                        HStack(alignment: .top, spacing: 4) {
+                            Image(pvm.feedTypeIconName)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .adjustedColor(colorScheme: colorScheme)
+                            Text(pvm.feedUrl)
+                                .adjustedColor(colorScheme: colorScheme)
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.bottom], 2)
+                Image(nsImage: pvm.statusIcon)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            Image(nsImage: pvm.statusIcon)
+            .padding(2)
         }
-        .contextMenu(menuItems: {
-            Text("Copy URL") // TODO: add functionality
-        })
-        .padding(4)
+        .listRowSeparator(.visible, edges: [.bottom])
+
     }
+
 
     private func avatarImage() -> some View {
         AsyncImage(url: pvm.pipeline.avatar) { image in
@@ -55,7 +60,6 @@ struct PipelineRow: View {
         }
         .frame(width: 40, height: 40)
         .scaledToFill()
-        .padding([.trailing], 4)
     }
 
 }

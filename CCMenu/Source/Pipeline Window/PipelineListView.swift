@@ -18,6 +18,7 @@ struct PipelineListView: View {
     @ObservedObject var model: PipelineModel
     @ObservedObject var viewState: ListViewState = ListViewState()
     @EnvironmentObject var settings: UserSettings
+    @Environment(\.openURL) private var openUrl
 
     var body: some View {
         List(selection: $viewState.selection) {
@@ -37,7 +38,12 @@ struct PipelineListView: View {
             }
         }
         .frame(minWidth: 500)
-        .listStyle(.inset(alternatesRowBackgrounds: true))
+        .contextMenu(forSelectionType: String.self) {_ in
+            Text("Copy URL") // TODO: add functionality
+        } primaryAction: { _ in
+            // TODO: figure out what to open (same logic as in menu?)
+            openUrl(URL(string: "http://ccmenu.org")!)
+        }
         .sheet(isPresented: $viewState.isShowingSheet) {
             if let index = viewState.editIndex {
                 EditPipelineSheet(model: model, editIndex: index)
