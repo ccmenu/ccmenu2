@@ -67,7 +67,7 @@ class GithubResponseParser {
             messageParts.append(displayTitle)
         }
         if messageParts.count > 0 {
-            build.message = messageParts.joined(separator: " \u{279E} ")
+            build.message = messageParts.joined(separator: " \u{22EE} ")
         }
 
         if let actor = run["actor"] as? Dictionary<String, Any?> {
