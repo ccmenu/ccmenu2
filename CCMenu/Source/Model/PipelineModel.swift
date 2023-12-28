@@ -4,23 +4,16 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import Foundation
 import Combine
 
 
 final class PipelineModel: ObservableObject {
 
-    @Published var pipelines: [Pipeline] { didSet { updateSettings(); updateMenu(); updateMenuBar(); } }
-
-    @Published var informationForMenuBar: MenuExtraModel
-    @Published var pipelinesForMenu: [MenuItemModel] = []
-
+    @Published var pipelines: [Pipeline] { didSet { updateSettings() } }
     var settings: UserSettings
 
-    private var subscribers: [AnyCancellable] = []
-
     init() {
-        informationForMenuBar = MenuExtraModel(pipelines: [], settings: UserSettings())
         pipelines = []
         settings = UserSettings()
     }
@@ -28,27 +21,6 @@ final class PipelineModel: ObservableObject {
     convenience init(settings: UserSettings) {
         self.init()
         self.settings = settings
-        // TODO: there must be a better way then listening to them individually
-        settings.$showBuildTimerInMenuBar
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { _ in self.updateMenuBar() } )
-            .store(in: &subscribers)
-        settings.$useColorInMenuBar
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { _ in self.updateMenuBar() } )
-            .store(in: &subscribers)
-        settings.$showBuildLabelsInMenu
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { _ in self.updateMenu() } )
-            .store(in: &subscribers)
-        settings.$showBuildTimesInMenu
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { _ in self.updateMenu() } )
-            .store(in: &subscribers)
-    }
-
-    func reloadPipelineStatus() {
-        print("Should reload status for all pipelines")
     }
 
     func update(pipeline: Pipeline) {
@@ -58,15 +30,6 @@ final class PipelineModel: ObservableObject {
         }
 
         pipelines[idx] = pipeline
-    }
-
-
-    private func updateMenuBar() {
-        informationForMenuBar = MenuExtraModel.init(pipelines: pipelines, settings: settings)
-    }
-
-    private func updateMenu() {
-        pipelinesForMenu = pipelines.map({ MenuItemModel(pipeline: $0, settings: settings) })
     }
 
     private func updateSettings() {
@@ -98,7 +61,7 @@ final class PipelineModel: ObservableObject {
     }
 
     private func addCCMenu2Pipeline() {
-        var p0 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
+        let p0 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(p0)
     }
 
@@ -122,8 +85,6 @@ final class PipelineModel: ObservableObject {
                 throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date string \(string)")
             }
             pipelines = try decoder.decode([Pipeline].self, from: data)
-            updateMenuBar()
-            updateMenu()
         } catch {
             fatalError("Couldn't parse \(filename) as [Pipeline]:\n\(error)")
         }

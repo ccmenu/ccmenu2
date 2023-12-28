@@ -15,7 +15,7 @@ extension Pipeline {
         github
     }
 
-    struct Feed: Hashable, Codable {
+    struct Feed: Codable {
         var type: FeedType
         var url: String
         var name: String? // for cctray only: name of the project in the feed

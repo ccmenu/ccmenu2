@@ -7,7 +7,7 @@
 import AppKit
 
 
-struct MenuItemModel: Hashable, Identifiable {
+struct MenuItemModel: Identifiable {
 
     var pipeline: Pipeline
     var title: String

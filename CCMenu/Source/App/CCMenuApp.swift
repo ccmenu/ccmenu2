@@ -13,7 +13,7 @@ struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var userSettings: UserSettings
-    @ObservedObject private var viewModel: PipelineModel
+    @ObservedObject private var pipelineModel: PipelineModel
     private var pipelineWindowController: PipelineWindowController
     private var serverMonitor: ServerMonitor
 
@@ -26,18 +26,18 @@ struct CCMenuApp: App {
         }
 
         let userSettings = UserSettings(userDefaults: userDefaults)
-        let viewModel = PipelineModel(settings: userSettings)
+        let pipelineModel = PipelineModel(settings: userSettings)
 
         self.userSettings = userSettings
-        self.viewModel = viewModel
-        self.pipelineWindowController = PipelineWindowController(model: viewModel)
-        self.serverMonitor = ServerMonitor(model: viewModel)
+        self.pipelineModel = pipelineModel
+        self.pipelineWindowController = PipelineWindowController(model: pipelineModel)
+        self.serverMonitor = ServerMonitor(model: pipelineModel)
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
             print("Loading pipeline definitions from file \(filename)")
-            viewModel.loadPipelinesFromFile(filename)
+            pipelineModel.loadPipelinesFromFile(filename)
         } else {
-            viewModel.loadPipelinesFromUserDefaults()
+            pipelineModel.loadPipelinesFromUserDefaults()
             serverMonitor.start()
         }
 
@@ -47,7 +47,7 @@ struct CCMenuApp: App {
 
         Window("Pipelines", id:"pipeline-list") {
             // TODO: Consider: pass only controller, and then view pulls out models?
-            PipelineListView(controller: pipelineWindowController, model: viewModel, viewState: pipelineWindowController.listViewState)
+            PipelineListView(controller: pipelineWindowController, model: pipelineModel, viewState: pipelineWindowController.listViewState)
                 .environmentObject(userSettings)
         }
         .defaultSize(width: 550, height: 600)
@@ -59,9 +59,9 @@ struct CCMenuApp: App {
             SettingsView(settings: userSettings)
         }
         MenuBarExtra() {
-            MenuBarExtraMenu(model: viewModel)
+            MenuBarExtraMenu(model: pipelineModel, settings: userSettings)
         } label: {
-            MenuBarExtraLabel(model: viewModel)
+            MenuBarExtraLabel(model: pipelineModel, settings: userSettings)
         }
 
     }

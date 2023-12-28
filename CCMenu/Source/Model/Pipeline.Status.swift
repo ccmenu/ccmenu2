@@ -16,7 +16,7 @@ extension Pipeline {
         other
     }
 
-    struct Status: Hashable, Codable {
+    struct Status: Codable {
         var activity: Activity
         var currentBuild: Build? // build if pipeline is currently building
         var lastBuild: Build?    // last completed build

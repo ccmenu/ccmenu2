@@ -8,7 +8,7 @@ import SwiftUI
 
 struct PipelineRow: View {
 
-    var pvm: PipelineViewModel
+    var viewModel: PipelineRowModel
     @EnvironmentObject var settings: UserSettings
     @Environment(\.colorScheme) var colorScheme
 
@@ -21,25 +21,25 @@ struct PipelineRow: View {
 
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(pvm.title)
+                    Text(viewModel.title)
                         .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                     if settings.showStatusInPipelineWindow {
-                        Text(pvm.statusDescription)
+                        Text(viewModel.statusDescription)
                             .adjustedColor(colorScheme: colorScheme)
                     } else {
                         HStack(alignment: .top, spacing: 4) {
-                            Image(pvm.feedTypeIconName)
+                            Image(viewModel.feedTypeIconName)
                                 .resizable()
                                 .frame(width: 16, height: 16)
                                 .adjustedColor(colorScheme: colorScheme)
-                            Text(pvm.feedUrl)
+                            Text(viewModel.feedUrl)
                                 .adjustedColor(colorScheme: colorScheme)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.bottom], 2)
-                Image(nsImage: pvm.statusIcon)
+                Image(nsImage: viewModel.statusIcon)
             }
             .padding(2)
         }
@@ -49,7 +49,7 @@ struct PipelineRow: View {
 
 
     private func avatarImage() -> some View {
-        AsyncImage(url: pvm.pipeline.avatar) { image in
+        AsyncImage(url: viewModel.pipeline.avatar) { image in
             image
             .resizable()
             .clipShape(Circle())
@@ -73,9 +73,9 @@ extension View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(pvm: PipelineViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
+        PipelineRow(viewModel: PipelineRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
             .environmentObject(settingsForPreview(status: false))
-        PipelineRow(pvm: PipelineViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
+        PipelineRow(viewModel: PipelineRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
             .environmentObject(settingsForPreview(status: true))
     }
 

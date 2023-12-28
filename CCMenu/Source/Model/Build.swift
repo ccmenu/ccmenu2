@@ -14,7 +14,7 @@ enum BuildResult: String, Codable {
     other
 }
 
-struct Build: Hashable, Codable {
+struct Build: Codable {
     var result: BuildResult
     var label: String?
     var timestamp: Date?

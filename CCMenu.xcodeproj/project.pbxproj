@@ -278,13 +278,11 @@
 		03CC11E12652F08300130833 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				03825DE7259D005B00DEB003 /* PipelineModel.swift */,
 				03825DE2259CFF0A00DEB003 /* Pipeline.swift */,
 				03F9B895297D486C00FA866E /* Pipeline.Feed.swift */,
 				03F9B893297D38AA00FA866E /* Pipeline.Status.swift */,
 				039B524529676D0700994910 /* Build.swift */,
-				03825DE7259D005B00DEB003 /* PipelineModel.swift */,
-				0331F39E29A8155000245956 /* MenuExtraModel.swift */,
-				03F9B897297D4D8F00FA866E /* MenuItemModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -293,7 +291,9 @@
 			isa = PBXGroup;
 			children = (
 				037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */,
+				0331F39E29A8155000245956 /* MenuExtraModel.swift */,
 				037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */,
+				03F9B897297D4D8F00FA866E /* MenuItemModel.swift */,
 			);
 			path = "Menu Bar Extra";
 			sourceTree = "<group>";

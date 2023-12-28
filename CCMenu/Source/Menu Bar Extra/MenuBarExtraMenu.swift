@@ -9,15 +9,17 @@ import SwiftUI
 
 struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
+    @ObservedObject var settings: UserSettings
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openURL) private var openUrl
 
     var body: some View {
-        ForEach(model.pipelinesForMenu) { pvm in
+        ForEach(model.pipelines) { p in
+            let viewModel = MenuItemModel(pipeline: p, settings: settings)
             Button() {
-                openPipeline(pipeline: pvm.pipeline)
+                openPipeline(pipeline: viewModel.pipeline)
             } label: {
-                Label(title: { Text(pvm.title) }, icon: { Image(nsImage: pvm.icon) } )
+                Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) } )
                 .labelStyle(.titleAndIcon)
             }
         }
@@ -79,7 +81,7 @@ struct MenuBarExtraMenu: View {
 struct MenuBarExtraContent_Previews: PreviewProvider {
     static var previews: some View {
         VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
-            MenuBarExtraMenu(model: viewModelForPreview())
+            MenuBarExtraMenu(model: viewModelForPreview(), settings: settingsForPreview())
         }
         .buttonStyle(.borderless)
         .padding(4)

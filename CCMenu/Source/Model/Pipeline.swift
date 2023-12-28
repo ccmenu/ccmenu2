@@ -7,7 +7,7 @@
 import SwiftUI
 
 
-struct Pipeline: Hashable, Identifiable, Codable {
+struct Pipeline: Identifiable, Codable {
     var name: String
     var feed: Pipeline.Feed
     var status: Pipeline.Status
@@ -19,13 +19,8 @@ struct Pipeline: Hashable, Identifiable, Codable {
         status = Status(activity: .other)
     }
 
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(feed.url) // TODO: why? id already contains feedUrl...
-    }
-
     var id: String {
-        name + "|" + feed.url
+        feed.url + "|" + name
     }
 
     var message: String? {

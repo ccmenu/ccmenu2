@@ -7,7 +7,15 @@
 import AppKit
 
 
-struct PipelineViewModel {
+final class ListViewState: ObservableObject {
+    @Published var isShowingSheet: Bool = false
+    @Published var sheetType: Pipeline.FeedType = .cctray
+    @Published var editIndex: Int?
+    @Published var selection: Set<String> = Set()
+}
+
+
+struct PipelineRowModel {
 
     var pipeline: Pipeline
     var title: String
@@ -19,7 +27,7 @@ struct PipelineViewModel {
         self.pipeline = pipeline
         self.title = pipeline.name
         self.statusIcon = ImageManager().image(forPipeline: pipeline)
-        self.statusDescription = PipelineViewModel.describeStatus(pipeline: pipeline)
+        self.statusDescription = PipelineRowModel.describeStatus(pipeline: pipeline)
         if settings.showMessagesInPipelineWindow, let message = pipeline.message {
             self.statusDescription.append("\n\(message)")
         }

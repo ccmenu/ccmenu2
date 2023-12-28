@@ -9,9 +9,11 @@ import SwiftUI
 
 struct MenuBarExtraLabel: View {
     @ObservedObject var model: PipelineModel
+    @ObservedObject var settings: UserSettings
 
     var body: some View {
-        Label(title: { Text(model.informationForMenuBar.title) }, icon: { Image(nsImage: model.informationForMenuBar.icon) })
+        let viewModel = MenuExtraModel(pipelines: model.pipelines, settings: settings)
+        Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("CCMenuMenuExtra")
         .monospacedDigit() // TODO: this doesn't work; why not?
@@ -22,7 +24,7 @@ struct MenuBarExtraLabel: View {
 
 struct MenuBarExtraLabel_Previews: PreviewProvider {
     static var previews: some View {
-        MenuBarExtraLabel(model: viewModelForPreview())
+        MenuBarExtraLabel(model: viewModelForPreview(), settings: settingsForPreview())
     }
 
     static func viewModelForPreview() -> PipelineModel {

@@ -17,7 +17,7 @@ final class ListRowModelTests: XCTestCase {
 
     func testStatusWhenSleepingAndLastBuildNotAvailable() throws {
         let pipeline = makePipeline(activity: .sleeping)
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         XCTAssertEqual("Waiting for first build", pvm.statusDescription)
     }
@@ -28,7 +28,7 @@ final class ListRowModelTests: XCTestCase {
         pipeline.status.lastBuild!.label = "842"
         pipeline.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.status.lastBuild!.duration = 53
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         // Check some components that should definitely be there in this form
         XCTAssertTrue(pvm.statusDescription.contains("2020")) // timestamp year
@@ -41,14 +41,14 @@ final class ListRowModelTests: XCTestCase {
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         XCTAssertEqual("Build finished", pvm.statusDescription)
     }
 
     func testStatusWhenBuildingAndCurrentBuildNotAvailable() throws { // TODO: does this even make sense?
         let pipeline = makePipeline(activity: .building)
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         XCTAssertEqual("Build started", pvm.statusDescription)
     }
@@ -57,7 +57,7 @@ final class ListRowModelTests: XCTestCase {
         var pipeline = makePipeline(activity: .building)
         pipeline.status.currentBuild = Build(result: .unknown)
         pipeline.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         // Check some components that should definitely be there in this form
         XCTAssertTrue(pvm.statusDescription.contains("47"))   // timestamp minute
@@ -67,7 +67,7 @@ final class ListRowModelTests: XCTestCase {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.connectionError = "404 Not Found"
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         XCTAssertEqual("\u{1F53A} 404 Not Found", pvm.statusDescription)
     }
@@ -75,7 +75,7 @@ final class ListRowModelTests: XCTestCase {
     func testUrlWhenCCTrayHasUserAssignedName() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.name = "Connect4"
-        let pvm = PipelineViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = PipelineRowModel(pipeline: pipeline, settings: UserSettings())
 
         XCTAssertEqual("http://localhost:4567/cc.xml (connectfour)", pvm.feedUrl)
     }
