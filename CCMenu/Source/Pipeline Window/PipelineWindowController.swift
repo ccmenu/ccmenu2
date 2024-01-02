@@ -8,15 +8,12 @@ import SwiftUI
 
 class PipelineWindowController {
 
-    var ghSheetController: GitHubSheetController
-
     @ObservedObject var model: PipelineModel
     @ObservedObject var listViewState: ListViewState
 
     init(model: PipelineModel) {
         self.model = model
         listViewState = ListViewState()
-        ghSheetController = GitHubSheetController(model: model)
     }
 
 

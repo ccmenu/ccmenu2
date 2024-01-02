@@ -6,25 +6,6 @@
 
 
 import Foundation
-import Combine
-
-
-final class GitHubWorkflowState: ObservableObject {
-    @Published var owner: String = ""
-    @Published var repositoryList = [GitHubRepository()] { didSet { repository = repositoryList[0] }}
-    @Published var repository = GitHubRepository()
-    @Published var workflowList = [GitHubWorkflow()] { didSet { workflow = workflowList[0] }}
-    @Published var workflow = GitHubWorkflow()
-    @Published var name: String = ""
-}
-
-
-final class GitHubAuthState: ObservableObject {
-    @Published var token: String?
-    @Published var tokenDescription: String = ""
-    @Published var isWaitingForToken: Bool = false
-}
-
 
 struct GitHubRepository: Identifiable, Hashable, Decodable {
 
@@ -119,3 +100,10 @@ struct GitHubWorkflow: Identifiable, Hashable, Decodable {
 
 }
 
+
+struct GitHubDeviceCodeResponse: Decodable {
+    var deviceCode: String
+    var userCode: String
+    var verificationUri: String
+    var interval: Int
+}

@@ -46,9 +46,7 @@ struct PipelineListView: View {
                 case .cctray:
                     AddCCTrayPipelineSheet(model: model)
                 case .github:
-                    // TODO: Consider: pass only controller, and then view pulls out models?
-                    let sheetController = controller.ghSheetController
-                    AddGithubPipelineSheet(controller: sheetController, selectionState: sheetController.workflowState, authState: sheetController.authState)
+                    AddGithubPipelineSheet(model: model)
                 }
             }
         }

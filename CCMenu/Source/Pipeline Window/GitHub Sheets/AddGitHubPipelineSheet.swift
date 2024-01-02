@@ -9,9 +9,12 @@ import Combine
 
 
 struct AddGithubPipelineSheet: View {
-    var controller: GitHubSheetController
-    @ObservedObject var selectionState: GitHubWorkflowState
-    @ObservedObject var authState: GitHubAuthState
+    @State private var owner = ""
+    @StateObject private var repositoryList = GitHubRepositoryList()
+    @StateObject private var workflowList = GitHubWorkflowList()
+    @StateObject private var pipelineBuilder = GitHubPipelineBuilder()
+    @StateObject private var authenticator = GitHubAuthenticator()
+    @ObservedObject var model: PipelineModel
     @EnvironmentObject var settings: UserSettings
     @Environment(\.presentationMode) @Binding var presentation
 
@@ -28,66 +31,67 @@ struct AddGithubPipelineSheet: View {
 
             Form {
                 HStack {
-                    TextField("Authentication:", text: $authState.tokenDescription)
+                    TextField("Authentication:", text: $authenticator.tokenDescription)
                         .truncationMode(.tail)
                         .disabled(true)
-                    if authState.isWaitingForToken {
+                    if authenticator.isWaitingForToken {
                         Button("Cancel") {
-                            controller.stopWaitingForToken()
+                            authenticator.cancelSignIn()
                         }
                     } else {
-                        Button(authState.token == nil ? "Sign in" : "Refresh") {
-                            controller.signInAtGitHub()
+                        Button(authenticator.token == nil ? "Sign in" : "Refresh") {
+                            Task { await authenticator.signInAtGitHub() }
                         }
                     }
                     Button("Review") {
-                        controller.openReviewAccessPage()
+                        authenticator.openApplicationsOnWebsite()
                     }
                 }
                 .padding(.bottom)
 
-                TextField("Owner:", text: $selectionState.owner, prompt: Text("user or organisation"))
+                TextField("Owner:", text: $owner, prompt: Text("user or organisation"))
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
-                .onChange(of: selectionState.owner) { _ in
-                    controller.resetName()
-                }
                 .onSubmit {
-                    if !selectionState.owner.isEmpty {
-                        controller.fetchRepositories()
+                    if !owner.isEmpty {
+                        Task {
+                            await repositoryList.updateRepositories(owner: owner, token: authenticator.token)
+                        }
                     }
                 }
 
-                Picker("Repository", selection: $selectionState.repository) {
-                    ForEach(selectionState.repositoryList) { r in
+                Picker("Repository", selection: $repositoryList.selected) {
+                    ForEach(repositoryList.items) { r in
                         Text(r.name).tag(r)
                     }
                 }
-                .disabled(!selectionState.repository.isValid)
-                .onChange(of: selectionState.repository) { _ in
-                    controller.resetName()
-                    if selectionState.repository.isValid {
-                        controller.fetchWorkflows()
+                .disabled(!repositoryList.selected.isValid)
+                .onChange(of: repositoryList.selected) { _ in
+                    pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    if repositoryList.selected.isValid {
+                        Task {
+                            await workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
+                        }
                     } else {
-                        controller.clearWorkflows()
+                        workflowList.clearWorkflows()
                     }
                 }
 
-                Picker("Workflow", selection: $selectionState.workflow) {
-                    ForEach(selectionState.workflowList) { w in
+                Picker("Workflow", selection: $workflowList.selected) {
+                    ForEach(workflowList.items) { w in
                         Text(w.name).tag(w)
                     }
                 }
-                .disabled(!selectionState.workflow.isValid)
-                .onChange(of: selectionState.workflow) { _ in
-                    controller.resetName()
+                .disabled(!workflowList.selected.isValid)
+                .onChange(of: workflowList.selected) { _ in
+                    pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
                 }
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $selectionState.name)
+                    TextField("Display name:", text: $pipelineBuilder.name)
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        controller.resetName()
+                        pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -99,28 +103,37 @@ struct AddGithubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    controller.addPipeline()
+                    let p = pipelineBuilder.makePipeline(owner: owner, authToken: authenticator.token)
+                    model.pipelines.append(p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(selectionState.name.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
+                .disabled(pipelineBuilder.name.isEmpty || !repositoryList.selected.isValid || !workflowList.selected.isValid)
             }
         }
         .frame(minWidth: 405)
         .padding()
         .onAppear() {
             if let token = settings.cachedGitHubToken {
-                authState.token = token
-                authState.tokenDescription = token
+                authenticator.token = token
+                authenticator.tokenDescription = token
             }
         }
         .onDisappear() {
-            if let token = authState.token {
+            if let token = authenticator.token {
                 settings.cachedGitHubToken = token
             }
         }
     }
-    
+
+    private func addPipeline() {
+        let url = GitHubAPI.feedUrl(owner: owner, repository: repositoryList.selected.name, workflow: workflowList.selected.filename)
+        let feed = Pipeline.Feed(type: .github, url:url, authToken: authenticator.token)
+        let pipeline = Pipeline(name: workflowList.selected.name, feed: feed)
+        model.pipelines.append(pipeline)
+
+    }
+
 }
 
 
