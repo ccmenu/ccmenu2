@@ -19,12 +19,12 @@ struct AddGithubPipelineSheet: View {
         VStack {
             Text("Add GitHub Actions workflow")
                 .font(.headline)
-            Spacer()
-            HStack {
-                Text("Press return in the owner field to fetch the repositories and workflows for that owner (a user or an organisation). If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
-                    .lineLimit(nil)
-                    .multilineTextAlignment(.leading)
-            }
+                .padding(.bottom)
+            Text("Press return in the owner field to fetch repositories and workflows. If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
+                .lineLimit(3...10)
+                .multilineTextAlignment(.leading)
+                .frame(idealWidth: 400)
+                .padding(.bottom)
 
             Form {
                 HStack {
@@ -32,7 +32,6 @@ struct AddGithubPipelineSheet: View {
                         .truncationMode(.tail)
                         .disabled(true)
                     if authState.isWaitingForToken {
-                        ProgressView()
                         Button("Cancel") {
                             controller.stopWaitingForToken()
                         }
@@ -45,12 +44,12 @@ struct AddGithubPipelineSheet: View {
                         controller.openReviewAccessPage()
                     }
                 }
-                .padding([.top, .bottom])
+                .padding(.bottom)
 
-                TextField("Owner:", text: $selectionState.owner)
+                TextField("Owner:", text: $selectionState.owner, prompt: Text("user or organisation"))
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
-                .onChange(of: selectionState.owner) { foo in
+                .onChange(of: selectionState.owner) { _ in
                     controller.resetName()
                 }
                 .onSubmit {
@@ -83,6 +82,7 @@ struct AddGithubPipelineSheet: View {
                 .onChange(of: selectionState.workflow) { _ in
                     controller.resetName()
                 }
+                .padding(.bottom)
 
                 HStack {
                     TextField("Display name:", text: $selectionState.name)
@@ -90,7 +90,7 @@ struct AddGithubPipelineSheet: View {
                         controller.resetName()
                     }
                 }
-                .padding([.bottom])
+                .padding(.bottom)
             }
 
             HStack {
@@ -106,7 +106,7 @@ struct AddGithubPipelineSheet: View {
                 .disabled(selectionState.name.isEmpty || !selectionState.repository.isValid || !selectionState.workflow.isValid)
             }
         }
-        .frame(width: 500, height: 300)
+        .frame(minWidth: 405)
         .padding()
         .onAppear() {
             if let token = settings.cachedGitHubToken {

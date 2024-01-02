@@ -18,7 +18,6 @@ struct PipelineRow: View {
                 if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
                     avatarImage()
                         .padding([.trailing], 6)
-
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(viewModel.title)
@@ -51,12 +50,12 @@ struct PipelineRow: View {
     private func avatarImage() -> some View {
         AsyncImage(url: viewModel.pipeline.avatar) { image in
             image
-            .resizable()
-            .clipShape(Circle())
+                .resizable()
+                .clipShape(Circle())
         } placeholder: {
             Image(systemName: "person.circle.fill")
-            .resizable()
-            .foregroundColor(.gray)
+                .resizable()
+                .foregroundColor(.gray)
         }
         .frame(width: 40, height: 40)
         .scaledToFill()
