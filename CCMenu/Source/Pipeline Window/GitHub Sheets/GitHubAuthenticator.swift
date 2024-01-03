@@ -10,7 +10,7 @@ import SwiftUI
 class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
     @Published var tokenDescription: String = ""
-    @Published var isWaitingForToken: Bool = false
+    @Published private(set) var isWaitingForToken: Bool = false
     @Environment(\.openURL) private var openUrl
 
     func signInAtGitHub() async {
@@ -88,6 +88,7 @@ class GitHubAuthenticator: ObservableObject {
             let json = try JSONDecoder().decode(Dictionary<String, String>.self, from: data)
             if let error = json["error"] {
                 if error == "authorization_pending" && codeResponse.interval > 0 {
+                    // TODO: Implement slow down: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#error-codes-for-the-device-flow
                     try await Task.sleep(for: .seconds(codeResponse.interval))
                     if !isWaitingForToken {
                         return (nil, nil)
@@ -115,7 +116,7 @@ class GitHubAuthenticator: ObservableObject {
     }
 
     func openApplicationsOnWebsite() {
-        openUrl(GitHubAPI.applicationsURL())
+        openUrl(GitHubAPI.applicationsURL()) // TODO: Find out how to call this outside a view
     }
 
 

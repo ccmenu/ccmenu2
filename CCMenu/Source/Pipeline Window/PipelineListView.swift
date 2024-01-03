@@ -8,9 +8,8 @@ import SwiftUI
 
 
 struct PipelineListView: View {
-    var controller: PipelineWindowController
+    @StateObject var viewState = ListViewState()
     @ObservedObject var model: PipelineModel
-    @ObservedObject var viewState: ListViewState
     @EnvironmentObject var settings: UserSettings
     @Environment(\.openURL) private var openUrl
 
@@ -61,8 +60,7 @@ struct PipelineListView: View {
 struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let controller = PipelineWindowController(model: makeViewModel())
-            PipelineListView(controller: controller, model: controller.model, viewState: controller.listViewState)
+            PipelineListView(model: makeViewModel())
                 .environmentObject(makeSettings())
         }
     }

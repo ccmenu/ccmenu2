@@ -126,14 +126,6 @@ struct AddGithubPipelineSheet: View {
         }
     }
 
-    private func addPipeline() {
-        let url = GitHubAPI.feedUrl(owner: owner, repository: repositoryList.selected.name, workflow: workflowList.selected.filename)
-        let feed = Pipeline.Feed(type: .github, url:url, authToken: authenticator.token)
-        let pipeline = Pipeline(name: workflowList.selected.name, feed: feed)
-        model.pipelines.append(pipeline)
-
-    }
-
 }
 
 

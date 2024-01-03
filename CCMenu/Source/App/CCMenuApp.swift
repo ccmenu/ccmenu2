@@ -5,16 +5,14 @@
  */
 
 import SwiftUI
-import Combine
 
 
 @main
 struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @ObservedObject private var userSettings: UserSettings
-    @ObservedObject private var pipelineModel: PipelineModel
-    private var pipelineWindowController: PipelineWindowController
+    private var userSettings: UserSettings
+    private var pipelineModel: PipelineModel
     private var serverMonitor: ServerMonitor
 
     init() {
@@ -30,7 +28,6 @@ struct CCMenuApp: App {
 
         self.userSettings = userSettings
         self.pipelineModel = pipelineModel
-        self.pipelineWindowController = PipelineWindowController(model: pipelineModel)
         self.serverMonitor = ServerMonitor(model: pipelineModel)
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
@@ -46,8 +43,7 @@ struct CCMenuApp: App {
     var body: some Scene {
 
         Window("Pipelines", id:"pipeline-list") {
-            // TODO: Consider: pass only controller, and then view pulls out models?
-            PipelineListView(controller: pipelineWindowController, model: pipelineModel, viewState: pipelineWindowController.listViewState)
+            PipelineListView(model: pipelineModel)
                 .environmentObject(userSettings)
         }
         .defaultSize(width: 550, height: 600)

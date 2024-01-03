@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		032030992B2D1AF600D132C0 /* PipelineWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032030982B2D1AF600D132C0 /* PipelineWindowController.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
@@ -84,7 +83,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		032030982B2D1AF600D132C0 /* PipelineWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowController.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
@@ -179,11 +177,11 @@
 			children = (
 				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
 				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
-				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 				03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */,
 				03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */,
 				03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */,
 				03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */,
+				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 			);
 			path = "GitHub Sheets";
 			sourceTree = "<group>";
@@ -307,11 +305,10 @@
 		03CC11E32652F0B100130833 /* Pipeline Window */ = {
 			isa = PBXGroup;
 			children = (
-				032030982B2D1AF600D132C0 /* PipelineWindowController.swift */,
-				03B1D7602A607DD0007BCB8A /* PipelineListModel.swift */,
 				03825DF9259D0ACF00DEB003 /* PipelineListView.swift */,
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
+				03B1D7602A607DD0007BCB8A /* PipelineListModel.swift */,
 				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 				0331B3012B3C9A60000FE134 /* GitHub Sheets */,
@@ -523,7 +520,6 @@
 				03BD7EFA259A180C000F9495 /* ImageManager.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
-				032030992B2D1AF600D132C0 /* PipelineWindowController.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				039B524629676D0700994910 /* Build.swift in Sources */,
