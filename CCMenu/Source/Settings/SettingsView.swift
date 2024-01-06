@@ -21,23 +21,26 @@ struct SettingsView: View {
         // TODO: why does the animation not work?
         TabView(selection: $selectedTab.animation()) {
             AppearanceSettings(settings: settings)
-                .tag(Tab.appearance)
-                .tabItem {
-                    Image(systemName: "filemenu.and.selection")
-                    Text("Appearance")
-                }
+            .tag(Tab.appearance)
+            .tabItem {
+                Image(systemName: "filemenu.and.selection")
+                Text("Appearance")
+            }
             NotificationSettings()
-                .tag(Tab.notifications)
-                .tabItem {
-                    Image(systemName: "bell.badge")
-                    Text("Notifications")
-                }
+            .tag(Tab.notifications)
+            .tabItem {
+                Image(systemName: "bell.badge")
+                Text("Notifications")
+            }
             AdvancedSettings()
-                .tag(Tab.advanced)
-                .tabItem {
-                    Image(systemName: "gearshape")
-                    Text("Advanced")
-                }
+            .tag(Tab.advanced)
+            .tabItem {
+                Image(systemName: "gearshape")
+                Text("Advanced")
             }
         }
+        .onAppear {
+            WorkspaceController().activateThisApp()
+        }
+    }
 }

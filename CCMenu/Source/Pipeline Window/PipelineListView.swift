@@ -62,12 +62,14 @@ struct PipelineListView: View {
             }
             Divider()
             Button("Open Web Page") {
-                // TODO: see primary action
+                model.pipelines
+                    .filter({ selection.contains($0.id) })
+                    .forEach({ WorkspaceController().openWebPage(pipeline: $0) })
             }
-            .disabled(true)
-        } primaryAction: { _ in
-            // TODO: figure out what to open (same logic as in menu?)
-            openUrl(URL(string: "http://ccmenu.org")!)
+        } primaryAction: { selection in
+                model.pipelines
+                    .filter({ selection.contains($0.id) })
+                    .forEach({ WorkspaceController().openWebPage(pipeline: $0) })
         }
         .sheet(isPresented: $viewState.isShowingSheet) {
             if let index = viewState.editIndex {

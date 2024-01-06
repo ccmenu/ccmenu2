@@ -63,6 +63,7 @@
 		2FA2827139B00E15C5CD2E7F /* GitHubResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */; };
 		2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */; };
 		2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */; };
+		3C4DEDA22B49AB7A00B85A8C /* WorkspaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4DEDA12B49AB7A00B85A8C /* WorkspaceController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
+		3C4DEDA12B49AB7A00B85A8C /* WorkspaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -332,6 +334,7 @@
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
 				03BD7EF9259A180C000F9495 /* ImageManager.swift */,
 				037AB214297334EE00C33589 /* UserSettings.swift */,
+				3C4DEDA12B49AB7A00B85A8C /* WorkspaceController.swift */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				0331F39F29A8155000245956 /* MenuExtraViewModel.swift in Sources */,
 				03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */,
+				3C4DEDA22B49AB7A00B85A8C /* WorkspaceController.swift in Sources */,
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */,

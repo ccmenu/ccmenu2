@@ -6,7 +6,6 @@
 
 import SwiftUI
 
-
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -17,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
-        NSApp.activate(ignoringOtherApps: true)
+        WorkspaceController().activateThisApp()
         let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
         NSApplication.shared.orderFrontStandardAboutPanel(
             options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]

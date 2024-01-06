@@ -11,13 +11,12 @@ struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
     @ObservedObject var settings: UserSettings
     @Environment(\.openWindow) private var openWindow
-    @Environment(\.openURL) private var openUrl
 
     var body: some View {
         ForEach(model.pipelines) { p in
             let viewModel = MenuItemViewModel(pipeline: p, settings: settings)
             Button() {
-                openPipeline(pipeline: viewModel.pipeline)
+                WorkspaceController().openWebPage(pipeline: p)
             } label: {
                 Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) } )
                 .labelStyle(.titleAndIcon)
@@ -25,54 +24,27 @@ struct MenuBarExtraMenu: View {
         }
         Divider()
         Button("Pipelines") {
-            NSApp.activate(ignoringOtherApps: true)
+            WorkspaceController().activateThisApp()
             openWindow(id: "pipeline-list")
         }
         Divider()
         Button("About CCMenu") {
-            NSApp.activate(ignoringOtherApps: true)
+            WorkspaceController().activateThisApp()
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
-        Button("Settings...") {
-            // If/when this stops working in Sonoma: https://stackoverflow.com/questions/65355696/how-to-programatically-open-settings-preferences-window-in-a-macos-swiftui-app
-            NSApp.activate(ignoringOtherApps: true)
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        if #available(macOS 14.0, *) {
+            SettingsLink {
+                Button("Settings...") { }
+            }
+        } else {
+            Button("Settings...") {
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            }
         }
         Divider()
         Button("Quit CCMenu") {
             NSApplication.shared.terminate(nil)
         }
-    }
-
-    private func openPipeline(pipeline: Pipeline) {
-        if let error = pipeline.connectionError {
-            // TODO: Consider adding a UI test for this case
-           alertPipelineFeedError(error)
-         } else if let urlString = pipeline.status.webUrl, let url = URL(string: urlString), url.host != nil {
-            openUrl(url)
-        } else if (pipeline.status.webUrl ?? "").isEmpty {
-            alertCannotOpenPipeline("The continuous integration server did not provide a link for this pipeline.")
-        } else {
-            alertCannotOpenPipeline("The continuous integration server provided a malformed link for this pipeline:\n\(pipeline.status.webUrl ?? "")")
-        }
-    }
-
-    private func alertPipelineFeedError(_ errorString: String) {
-        let alert = NSAlert()
-        alert.messageText = "Error loading pipeline satus"
-        alert.informativeText = errorString + "\n\nPlease check the URL, make sure you're logged in if neccessary. Otherwise contact the server administrator."
-        alert.alertStyle = .critical
-        alert.addButton(withTitle: "Cancel")
-        alert.runModal()
-    }
-
-    private func alertCannotOpenPipeline(_ informativeText: String) {
-        let alert = NSAlert()
-        alert.messageText = "Cannot open pipeline"
-        alert.informativeText = informativeText + "\n\nPlease contact the server administrator."
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Cancel")
-        alert.runModal()
     }
 
 }
