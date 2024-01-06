@@ -54,14 +54,12 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItemGroup(placement: .principal) {
             Menu() {
                 Button("Add project from CCTray feed...") {
-                    viewState.editIndex = nil
                     viewState.sheetType = .cctray
-                    viewState.isShowingSheet = true
+                    viewState.isShowingAddSheet = true
                 }
                 Button("Add GitHub Actions workflow...") {
-                    viewState.editIndex = nil
                     viewState.sheetType = .github
-                    viewState.isShowingSheet = true
+                    viewState.isShowingAddSheet = true
                 }
             } label: {
                 Image(systemName: "plus.square")
@@ -82,8 +80,7 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add a pipeline")
 
             Button() {
-                viewState.editIndex = viewState.selectionIndexSet(pipelines: model.pipelines).first
-                viewState.isShowingSheet = true
+                viewState.isShowingEditSheet = true
             } label: {
                 Label("Edit", systemImage: "gearshape")
             }
@@ -93,7 +90,8 @@ struct PipelineListToolbar: ToolbarContent {
 
             Button() {
                 withAnimation {
-                    model.pipelines.remove(atOffsets: viewState.selectionIndexSet(pipelines: model.pipelines))
+                    model.pipelines.removeAll(where: { viewState.selection.contains($0.id) })
+//                    model.pipelines.remove(atOffsets: viewState.selectionIndexSet(pipelines: model.pipelines))
                     viewState.selection.removeAll()
                 }
             } label: {

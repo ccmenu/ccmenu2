@@ -8,22 +8,10 @@ import SwiftUI
 
 
 final class ListViewState: ObservableObject {
-    @Published var isShowingSheet: Bool = false
-    @Published var sheetType: Pipeline.FeedType = .cctray
-    @Published var editIndex: Int?
     @Published var selection: Set<String> = Set()
-
-    // TODO: Improve API
-    func selectionIndexSet(pipelines: [Pipeline]) -> IndexSet {
-        var indexSet = IndexSet()
-        for (i, p) in pipelines.enumerated() {
-            if selection.contains(p.id) {
-                indexSet.insert(i)
-            }
-        }
-        return indexSet
-    }
-
+    @Published var isShowingAddSheet: Bool = false
+    @Published var isShowingEditSheet: Bool = false
+    @Published var sheetType: Pipeline.FeedType = .cctray
 }
 
 
@@ -71,16 +59,17 @@ struct PipelineListView: View {
                     .filter({ selection.contains($0.id) })
                     .forEach({ WorkspaceController().openWebPage(pipeline: $0) })
         }
-        .sheet(isPresented: $viewState.isShowingSheet) {
-            if let index = viewState.editIndex {
-                EditPipelineSheet(model: model, editIndex: index)
-            } else {
-                switch viewState.sheetType {
-                case .cctray:
-                    AddCCTrayPipelineSheet(model: model)
-                case .github:
-                    AddGitHubPipelineSheet(model: model)
-                }
+        .sheet(isPresented: $viewState.isShowingAddSheet) {
+            switch viewState.sheetType {
+            case .cctray:
+                AddCCTrayPipelineSheet(model: model)
+            case .github:
+                AddGitHubPipelineSheet(model: model)
+            }
+        }
+        .sheet(isPresented: $viewState.isShowingEditSheet) {
+            if let pipeline = model.pipelines.first(where: { viewState.selection.contains($0.id) }) {
+                EditPipelineSheet(pipeline: pipeline, model: model)
             }
         }
         .toolbar {

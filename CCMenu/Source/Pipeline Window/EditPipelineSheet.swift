@@ -8,17 +8,10 @@ import SwiftUI
 
 
 struct EditPipelineSheet: View {
+    var pipeline: Pipeline
     @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
-    let editIndex: Int
-    var pipeline: Pipeline
 
-    init(model: PipelineModel, editIndex: Int) {
-        self.model = model
-        self.editIndex = editIndex
-        self.pipeline = model.pipelines[editIndex]
-    }
-    
     var body: some View {
         VStack {
             Text("Edit Pipeline")
