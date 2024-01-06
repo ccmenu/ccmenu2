@@ -11,7 +11,7 @@ import Combine
 final class PipelineModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateSettings() } }
-    var settings: UserSettings
+    private var settings: UserSettings
 
     init() {
         pipelines = []
@@ -28,7 +28,6 @@ final class PipelineModel: ObservableObject {
             debugPrint("trying to update unknown pipeline \(pipelines.debugDescription)")
             return
         }
-
         pipelines[idx] = pipeline
     }
 

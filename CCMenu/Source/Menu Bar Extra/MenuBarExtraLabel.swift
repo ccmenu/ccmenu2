@@ -12,7 +12,7 @@ struct MenuBarExtraLabel: View {
     @ObservedObject var settings: UserSettings
 
     var body: some View {
-        let viewModel = MenuExtraModel(pipelines: model.pipelines, settings: settings)
+        let viewModel = MenuExtraViewModel(pipelines: model.pipelines, settings: settings)
         Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("CCMenuMenuExtra")

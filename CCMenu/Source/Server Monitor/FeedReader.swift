@@ -7,15 +7,5 @@
 import Foundation
 
 protocol FeedReader {
-    
-    var delegate: FeedReaderDelegate? { get set }
-
     func updatePipelineStatus()
-}
-
-
-protocol FeedReaderDelegate {
-    
-    func feedReader(_ reader: FeedReader, didUpdate pipeline: Pipeline)
-    
 }

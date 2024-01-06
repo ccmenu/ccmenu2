@@ -7,51 +7,53 @@
 import Foundation
 import Combine
 
-class ServerMonitor: FeedReaderDelegate {
-    
-    @Published var model: PipelineModel
+@MainActor
+class ServerMonitor {
+
+    private var model: PipelineModel
     private var lastPipelineCount = 0
     private var subscribers: [AnyCancellable] = []
 
-
     init(model: PipelineModel) {
         self.model = model
-        model.$pipelines
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: pollIfPipelineWasAdded(pipelines:))
-            .store(in: &subscribers)
     }
     
     public func start() {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in self.pollServers() }
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in self.pollServers()}
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
+            Task { await self.updateStatus() }
+        }
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            Task { await self.updateStatus() }
+        }
+        model.$pipelines
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
+            .store(in: &subscribers)
     }
 
-    func pollIfPipelineWasAdded(pipelines: [Pipeline]) {
-        if pipelines.count > lastPipelineCount {
+    func updateStatusIfPipelineWasAdded(pipelines: [Pipeline]) {
+        guard pipelines.count > lastPipelineCount else {
             lastPipelineCount = pipelines.count
-            pollServers()
+            return
         }
         lastPipelineCount = pipelines.count
+        Task { await self.updateStatus() }
     }
 
-    func pollServers() {
-        model.pipelines.forEach({ updateStatus(pipeline: $0) })
-    }
-
-    func updateStatus(pipeline p: Pipeline) {
-        var r: FeedReader
-        switch(p.feed.type) {
-        case .cctray: r = CCTrayFeedReader(for: p)
-        case .github: r = GithubFeedReader(for: p)
+    func updateStatus() async {
+        // TODO: Make sure that the request can happen in parallel (maybe they do already?)
+        for p in model.pipelines {
+            switch(p.feed.type) {
+            case .cctray:
+                let reader = CCTrayFeedReader(for: p)
+                await reader.updatePipelineStatus()
+                reader.pipelines.forEach({ model.update(pipeline: $0) })
+            case .github:
+                let reader = GithubFeedReader(for: p)
+                await reader.updatePipelineStatus()
+                model.update(pipeline: reader.pipeline)
+            }
         }
-        r.delegate = self
-        r.updatePipelineStatus()
     }
 
-    func feedReader(_ reader: FeedReader, didUpdate pipeline: Pipeline) {
-//        print("Received update for pipeline \(pipeline)")
-        model.update(pipeline: pipeline)
-    }
-    
 }

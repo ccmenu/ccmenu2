@@ -4,22 +4,20 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import SwiftUI
 
+struct MenuItemViewModel {
 
-struct MenuItemModel: Identifiable {
-
-    var pipeline: Pipeline
-    var title: String
-    var icon: NSImage
-
-    var id: String {
-        pipeline.id
-    }
+    private(set) var pipeline: Pipeline
+    private var settings: UserSettings
 
     init(pipeline: Pipeline, settings: UserSettings) {
         self.pipeline = pipeline
-        self.title = pipeline.name
+        self.settings = settings
+    }
+
+    var title: String {
+        var result = pipeline.name
         var details: [String] = []
         if settings.showBuildTimesInMenu, let buildTime = pipeline.status.lastBuild?.timestamp {
             let relative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
@@ -30,9 +28,13 @@ struct MenuItemModel: Identifiable {
         }
         if details.count > 0 {
             let detailsJoined = details.joined(separator: ", ")
-            title.append(" \u{2014} \(detailsJoined)")
+            result.append(" \u{2014} \(detailsJoined)")
         }
-        self.icon = ImageManager().image(forPipeline: pipeline)
+        return result
+    }
+
+    var icon: NSImage {
+        return ImageManager().image(forPipeline: pipeline)
     }
 
 }

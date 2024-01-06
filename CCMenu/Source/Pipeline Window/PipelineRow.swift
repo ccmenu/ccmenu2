@@ -8,7 +8,7 @@ import SwiftUI
 
 struct PipelineRow: View {
 
-    var viewModel: PipelineRowModel
+    var viewModel: PipelineRowViewModel
     @EnvironmentObject var settings: UserSettings
     @Environment(\.colorScheme) var colorScheme
 
@@ -72,9 +72,9 @@ extension View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(viewModel: PipelineRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
             .environmentObject(settingsForPreview(status: false))
-        PipelineRow(viewModel: PipelineRowModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
             .environmentObject(settingsForPreview(status: true))
     }
 

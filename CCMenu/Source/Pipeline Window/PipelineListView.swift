@@ -7,6 +7,14 @@
 import SwiftUI
 
 
+final class ListViewState: ObservableObject {
+    @Published var isShowingSheet: Bool = false
+    @Published var sheetType: Pipeline.FeedType = .cctray
+    @Published var editIndex: Int?
+    @Published var selection: Set<String> = Set()
+}
+
+
 struct PipelineListView: View {
     @StateObject var viewState = ListViewState()
     @ObservedObject var model: PipelineModel
@@ -16,7 +24,7 @@ struct PipelineListView: View {
     var body: some View {
         List(selection: $viewState.selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(viewModel: PipelineRowModel(pipeline: p, settings: settings))
+                PipelineRow(viewModel: PipelineRowViewModel(pipeline: p, settings: settings))
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {

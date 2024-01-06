@@ -6,72 +6,52 @@
 
 import Foundation
 
-class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSessionDelegate {
-    
-    var pipelines: [Pipeline]
-    var delegate: FeedReaderDelegate?
-    var receivedData: Data?
+class CCTrayFeedReader {
 
-    private lazy var session: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        configuration.waitsForConnectivity = true
-        return URLSession(configuration: configuration,
-                          delegate: self, delegateQueue: nil)
-    }()
-    
+    private(set) var pipelines: [Pipeline]
+
     public init(for pipeline: Pipeline) {
         self.pipelines = [pipeline]
     }
     
-    public func updatePipelineStatus() {
-        let url = URL(string: pipelines[0].feed.url)! // All pipelines have the same URL.
-        receivedData = Data()
-        let task = session.dataTask(with: url)
-        task.resume()
-    }
-
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
-                    completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        guard let response = response as? HTTPURLResponse,
-            (200...299).contains(response.statusCode)
-        else {
-            completionHandler(.cancel)
+    public func updatePipelineStatus() async {
+        // All pipelines have the same URL.
+        guard let request = requestForFeed(feed: pipelines[0].feed) else {
+            // TODO: Add error to all pipelines
+            pipelines[0].connectionError = "Invalid URL: " + pipelines[0].feed.url
             return
         }
-        completionHandler(.allow)
+        await fetchStatus(request: request)
     }
 
-
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        receivedData?.append(data)
-    }
-
-
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        DispatchQueue.main.async {
-            if let error = error {
-                self.handleClientError(error)
-            } else if let receivedData = self.receivedData {
-                let parser = CCTrayResponseParser()
-                do {
-                    try parser.parseResponse(receivedData)
-                    for p in self.pipelines {
-                        let status = parser.pipelineStatus(name: p.feed.name ?? "") // TODO: report an error? here?
-                        self.updatePipeline(name: p.name, newStatus: status)
-                    }
-                } catch let error {
-                    self.handleParserError(error)
-                }
-            }
+    func requestForFeed(feed: Pipeline.Feed) -> URLRequest? {
+        guard let url = URL(string: feed.url) else {
+            return nil
         }
+        let request = URLRequest(url: url)
+        return request
     }
 
-    func handleClientError(_ error: Error) {
-        print("client error \(error.localizedDescription)")
-    }
-
-    func handleParserError(_ error: Error) {
-        print("parser error \(error.localizedDescription)")
+    private func fetchStatus(request: URLRequest) async {
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let response = response as? HTTPURLResponse else {
+                throw URLError(.unsupportedURL)
+            }
+            guard response.statusCode == 200 else {
+                let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
+                pipelines[0].connectionError = httpError
+                return
+            }
+            let parser = CCTrayResponseParser()
+            try parser.parseResponse(data)
+            for p in self.pipelines {
+                let status = parser.pipelineStatus(name: p.feed.name ?? "") // TODO: report an error? here?
+                self.updatePipeline(name: p.name, newStatus: status)
+            }
+        } catch {
+            pipelines[0].connectionError = error.localizedDescription
+        }
     }
 
     func updatePipeline(name: String, newStatus: Pipeline.Status?) {
@@ -79,27 +59,28 @@ class CCTrayFeedReader: NSObject, FeedReader, URLSessionDataDelegate, URLSession
             debugPrint("Attempt to update pipeline '\(name)', which reader for '\(pipelines[0].feed.url)' does not monitor.")
             return
         }
+        var pipeline = pipelines[idx]
         guard let newStatus = newStatus else {
-            pipelines[idx].connectionError = "The server did not provide a status for this pipeline."
+            pipeline.connectionError = "The server did not provide a status for this pipeline."
+            pipelines[idx] = pipeline
             return
         }
-        pipelines[idx].connectionError = nil
+        pipeline.connectionError = nil
 
-        let oldStatus = pipelines[idx].status
-        pipelines[idx].status = newStatus
-        pipelines[idx].status.currentBuild?.timestamp = oldStatus.currentBuild?.timestamp
-        pipelines[idx].status.lastBuild?.duration = oldStatus.lastBuild?.duration
+        let oldStatus = pipeline.status
+        pipeline.status = newStatus
+        pipeline.status.currentBuild?.timestamp = oldStatus.currentBuild?.timestamp
+        pipeline.status.lastBuild?.duration = oldStatus.lastBuild?.duration
 
         if oldStatus.activity != .building && newStatus.activity == .building {
-            pipelines[idx].status.currentBuild?.timestamp = Date.now
+            pipeline.status.currentBuild?.timestamp = Date.now
         }
         if oldStatus.activity == .building && newStatus.activity != .building {
             if let timestamp = oldStatus.currentBuild?.timestamp {
-                pipelines[idx].status.lastBuild?.duration = DateInterval(start: timestamp, end: Date.now).duration
+                pipeline.status.lastBuild?.duration = DateInterval(start: timestamp, end: Date.now).duration
             }
         }
-
-        self.delegate?.feedReader(self, didUpdate: pipelines[idx])
+        pipelines[idx] = pipeline
     }
 
 }

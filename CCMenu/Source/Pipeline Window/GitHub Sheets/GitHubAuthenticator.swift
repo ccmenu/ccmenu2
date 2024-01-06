@@ -9,6 +9,7 @@ import SwiftUI
 @MainActor
 class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
+    // TODO: Consider making description as private(set) and move logic to didSet.
     @Published var tokenDescription: String = ""
     @Published private(set) var isWaitingForToken: Bool = false
     @Environment(\.openURL) private var openUrl
@@ -116,7 +117,7 @@ class GitHubAuthenticator: ObservableObject {
     }
 
     func openApplicationsOnWebsite() {
-        openUrl(GitHubAPI.applicationsURL()) // TODO: Find out how to call this outside a view
+        openUrl(GitHubAPI.applicationsUrl()) // TODO: Find out how to call this outside a view
     }
 
 

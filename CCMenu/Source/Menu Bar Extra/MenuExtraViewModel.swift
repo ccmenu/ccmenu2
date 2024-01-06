@@ -4,31 +4,31 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import SwiftUI
 
-struct MenuExtraModel {
-    var title: String
-    var icon: NSImage
+struct MenuExtraViewModel {
+
+    private var pipelines: [Pipeline]
+    private var settings: UserSettings
 
     init(pipelines: [Pipeline], settings: UserSettings) {
-        self.icon = MenuExtraModel.chooseImage(pipelines, settings)
-        self.title = MenuExtraModel.makeLabel(pipelines, settings)
+        self.pipelines = pipelines
+        self.settings = settings
     }
 
-
-    private static func chooseImage(_ pipelines: [Pipeline], _ settings: UserSettings) -> NSImage {
-        guard let pipeline = pipelineForMenuBar(pipelines: pipelines) else {
+    var icon: NSImage {
+        guard let pipeline = pipelineForMenuBar() else {
             return ImageManager().defaultImage
         }
-        let useColor = settings.useColorInMenuBar && (!settings.useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
+        let useColor = settings.useColorInMenuBar && 
+            (!settings.useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
         return ImageManager().image(forPipeline: pipeline, asTemplate: !useColor)
     }
 
-    private static func makeLabel(_ pipelines: [Pipeline], _ settings: UserSettings) -> String {
-        guard let pipeline = pipelineForMenuBar(pipelines: pipelines) else {
+    var title: String {
+        guard let pipeline = pipelineForMenuBar() else {
             return ""
         }
-
         var newText = ""
         if pipeline.status.activity == .building {
             if settings.showBuildTimerInMenuBar, let completionTime = pipeline.estimatedBuildComplete {
@@ -43,12 +43,11 @@ struct MenuExtraModel {
         return newText
     }
 
-    private static func pipelineForMenuBar(pipelines: [Pipeline]) -> Pipeline? {
+    private func pipelineForMenuBar() -> Pipeline? {
         try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:)).first
     }
 
-    private static func compareMenuBarPriority(lhs: Pipeline, rhs: Pipeline) throws -> Bool {
-
+    private func compareMenuBarPriority(lhs: Pipeline, rhs: Pipeline) throws -> Bool {
         let priorities = [
             priority(hasBuild:),
             priority(isBuilding:),
@@ -66,15 +65,15 @@ struct MenuExtraModel {
         return false
     }
 
-    private static func priority(hasBuild pipeline: Pipeline) -> Int {
+    private func priority(hasBuild pipeline: Pipeline) -> Int {
         return (pipeline.status.lastBuild != nil) ? 1 : 0
     }
 
-    private static func priority(isBuilding pipeline: Pipeline) -> Int {
+    private func priority(isBuilding pipeline: Pipeline) -> Int {
         return (pipeline.status.activity == .building) ? 1 : 0
     }
 
-    private static func priority(buildResult pipeline: Pipeline) -> Int {
+    private func priority(buildResult pipeline: Pipeline) -> Int {
         switch pipeline.status.lastBuild?.result {
         case .failure:
             return 3
@@ -87,7 +86,7 @@ struct MenuExtraModel {
         }
     }
 
-    private static func priority(estimatedComplete pipeline: Pipeline) -> Int {
+    private func priority(estimatedComplete pipeline: Pipeline) -> Int {
         let date = pipeline.estimatedBuildComplete ?? Date.distantFuture
         assert(Date.distantFuture.timeIntervalSinceReferenceDate < Double(Int.max))
         // Multiplying all intervals with -1 makes shorter intervals higher priority.

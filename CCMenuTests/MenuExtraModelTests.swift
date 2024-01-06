@@ -9,10 +9,10 @@ import XCTest
 
 class MenuExtraModelTests: XCTestCase {
 
-    private func makeModel(pipelines: [Pipeline]) -> MenuExtraModel {
+    private func makeModel(pipelines: [Pipeline]) -> MenuExtraViewModel {
         let settings = UserSettings()
         settings.useColorInMenuBar = true
-        return MenuExtraModel(pipelines: pipelines, settings: settings)
+        return MenuExtraViewModel(pipelines: pipelines, settings: settings)
     }
 
     private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
@@ -84,7 +84,7 @@ class MenuExtraModelTests: XCTestCase {
         let settings: UserSettings = UserSettings()
         settings.useColorInMenuBar = false
         settings.useColorInMenuBarFailedOnly = false
-        let model = MenuExtraModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
 
         XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
     }
@@ -95,7 +95,7 @@ class MenuExtraModelTests: XCTestCase {
         let settings: UserSettings = UserSettings()
         settings.useColorInMenuBar = true
         settings.useColorInMenuBarFailedOnly = true
-        let model = MenuExtraModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
 
         XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
     }
@@ -107,7 +107,7 @@ class MenuExtraModelTests: XCTestCase {
 
         let settings: UserSettings = UserSettings()
         settings.showBuildTimerInMenuBar = false
-        let model = MenuExtraModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
 
         XCTAssertEqual("", model.title)
     }
@@ -122,7 +122,7 @@ class MenuExtraModelTests: XCTestCase {
         p2.status.currentBuild!.timestamp = Date.now
 
         let settings: UserSettings = UserSettings()
-        let model = MenuExtraModel(pipelines: [p0, p1, p2], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0, p1, p2], settings: settings)
 
         XCTAssertEqual("-29s", model.title)
     }
@@ -136,7 +136,7 @@ class MenuExtraModelTests: XCTestCase {
         p1.status.currentBuild!.timestamp = Date.now
 
         let settings: UserSettings = UserSettings()
-        let model = MenuExtraModel(pipelines: [p0, p1], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0, p1], settings: settings)
 
         XCTAssertEqual("-01:29", model.title)
     }

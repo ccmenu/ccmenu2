@@ -23,7 +23,7 @@ final class MenuItemModelTests: XCTestCase {
 
     func testUsesPipelineNameInMenuAsDefault() throws {
         let pipeline = makePipeline(name: "connectfour")
-        let pvm = MenuItemModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = MenuItemViewModel(pipeline: pipeline, settings: UserSettings())
         XCTAssertEqual("connectfour", pvm.title)
     }
 
@@ -32,7 +32,7 @@ final class MenuItemModelTests: XCTestCase {
         pipeline.status.lastBuild = Build(result: .success, label: "build.1")
         let settings = UserSettings()
         settings.showBuildLabelsInMenu = true
-        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
 
         XCTAssertEqual("connectfour \u{2014} build.1", pvm.title)
     }
@@ -42,7 +42,7 @@ final class MenuItemModelTests: XCTestCase {
         pipeline.status.lastBuild = Build(result: .success, label: "build.1", timestamp: Date.now)
         let settings = UserSettings()
         settings.showBuildTimesInMenu = true
-        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
 
         XCTAssertEqual("connectfour \u{2014} now", pvm.title) // TODO: can this become flaky?
     }
@@ -52,7 +52,7 @@ final class MenuItemModelTests: XCTestCase {
         pipeline.status.lastBuild = Build(result: .success, label: "build.1")
         let settings = UserSettings()
         settings.showBuildTimesInMenu = true
-        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
 
         XCTAssertEqual("connectfour", pvm.title)
     }
@@ -63,7 +63,7 @@ final class MenuItemModelTests: XCTestCase {
         let settings = UserSettings()
         settings.showBuildLabelsInMenu = true
         settings.showBuildTimesInMenu = true
-        let pvm = MenuItemModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
 
         XCTAssertEqual("connectfour \u{2014} now, build.1", pvm.title)
     }

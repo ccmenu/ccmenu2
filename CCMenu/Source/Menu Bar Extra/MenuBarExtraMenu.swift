@@ -15,7 +15,7 @@ struct MenuBarExtraMenu: View {
 
     var body: some View {
         ForEach(model.pipelines) { p in
-            let viewModel = MenuItemModel(pipeline: p, settings: settings)
+            let viewModel = MenuItemViewModel(pipeline: p, settings: settings)
             Button() {
                 openPipeline(pipeline: viewModel.pipeline)
             } label: {

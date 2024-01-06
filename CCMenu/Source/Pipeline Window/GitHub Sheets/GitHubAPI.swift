@@ -65,7 +65,7 @@ class GitHubAPI {
         return makeRequest(method: "POST", baseUrl: "https://github.com", path: path, params: queryParams)
     }
 
-    static func applicationsURL() -> URL {
+    static func applicationsUrl() -> URL {
         URL(string: "https://github.com/settings/connections/applications/\(GitHubAPI.clientId)")!
     }
 
@@ -78,6 +78,13 @@ class GitHubAPI {
         return components.url!.absoluteString
     }
 
+    static func requestForFeed(feed: Pipeline.Feed, pageSize: Int = 5) -> URLRequest? {
+        guard let url = URL(string: feed.url + "?per_page=5") else {
+            return nil
+        }
+        return makeRequest(url: url, token: feed.authToken)
+    }
+
 
     // MARK: - helper functions
 
@@ -85,7 +92,11 @@ class GitHubAPI {
         var components = URLComponents(string: baseUrl)!
         components.path = path
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
-        var request = URLRequest(url: components.url!)
+        return makeRequest(url: components.url!, token: token)
+    }
+
+    private static func makeRequest(method: String = "GET", url: URL, token: String?) -> URLRequest {
+        var request = URLRequest(url: url)
         request.httpMethod = method
         request.addValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         request.addValue("2022-11-28", forHTTPHeaderField: "X-GitHub-Api-Version")

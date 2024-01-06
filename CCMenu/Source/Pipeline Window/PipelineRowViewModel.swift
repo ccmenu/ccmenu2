@@ -4,69 +4,56 @@
  *  not use these files except in compliance with the License.
  */
 
-import AppKit
+import SwiftUI
 
+class PipelineRowViewModel {
 
-final class ListViewState: ObservableObject {
-    @Published var isShowingSheet: Bool = false
-    @Published var sheetType: Pipeline.FeedType = .cctray
-    @Published var editIndex: Int?
-    @Published var selection: Set<String> = Set()
-}
-
-
-struct PipelineRowModel {
-
-    var pipeline: Pipeline
-    var title: String
-    var statusIcon: NSImage
-    var statusDescription: String
-    var feedTypeIconName: String
+    private(set) var pipeline: Pipeline
+    private var settings: UserSettings
 
     init(pipeline: Pipeline, settings: UserSettings) {
         self.pipeline = pipeline
-        self.title = pipeline.name
-        self.statusIcon = ImageManager().image(forPipeline: pipeline)
-        self.statusDescription = PipelineRowModel.describeStatus(pipeline: pipeline)
-        if settings.showMessagesInPipelineWindow, let message = pipeline.message {
-            self.statusDescription.append("\n\(message)")
-        }
-        self.feedTypeIconName = "feed-\(pipeline.feed.type)-template"
+        self.settings = settings
     }
 
-    var feedUrl: String {
-        var result = pipeline.feed.url
-        if pipeline.feed.type == .cctray, let name = pipeline.feed.name, name != pipeline.name {
-            result.append(" (\(name))")
-        }
-        return result
+    var title: String {
+        return pipeline.name
     }
 
-    private static func describeStatus(pipeline: Pipeline) -> String {
+    var statusIcon: NSImage {
+        return ImageManager().image(forPipeline: pipeline)
+    }
+
+    var statusDescription: String {
+        var description = ""
         if let error = pipeline.connectionError {
-            return "\u{1F53A} " + error
+            description = "\u{1F53A} \(error)"
         } else if pipeline.status.activity == .building {
             if let build = pipeline.status.currentBuild, let timestamp = build.timestamp {
-                return statusForActiveBuild(build, timestamp)
+                description = statusDecription(activeBuild: build, timestamp: timestamp)
             } else {
-                return "Build started"
+                description =  "Build started"
             }
         } else {
             if let build = pipeline.status.lastBuild {
-                return statusForFinishedBuild(build)
+                description =  statusDescription(finishedBuild: build)
             } else {
-                return "Waiting for first build"
+                description =  "Waiting for first build"
             }
         }
+        if settings.showMessagesInPipelineWindow, let message = pipeline.message {
+            description.append("\n\(message)")
+        }
+        return description
     }
 
-    private static func statusForActiveBuild(_ build: Build, _ timestamp: Date) -> String {
+    private func statusDecription(activeBuild build: Build, timestamp: Date) -> String {
         let absolute = timestamp.formatted(date: .omitted, time: .shortened)
         let status = "Started: \(absolute)"
         return status
     }
 
-    private static func statusForFinishedBuild(_ build: Build) -> String {
+    private func statusDescription(finishedBuild build: Build) -> String {
         var components: [String] = []
         if let timestamp = build.timestamp {
             let absolute = timestamp.formatted(date: .numeric, time: .shortened)
@@ -90,4 +77,17 @@ struct PipelineRowModel {
         }
         return "Build finished"
     }
+
+    var feedTypeIconName: String {
+        return "feed-\(pipeline.feed.type)-template"
+    }
+
+    var feedUrl: String {
+        var result = pipeline.feed.url
+        if pipeline.feed.type == .cctray, let name = pipeline.feed.name, name != pipeline.name {
+            result.append(" (\(name))")
+        }
+        return result
+    }
+
 }

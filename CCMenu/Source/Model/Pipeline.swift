@@ -38,6 +38,10 @@ struct Pipeline: Identifiable, Codable {
         return nil;
     }
 
+    mutating func update(status newStatus: Pipeline.Status) {
+        status = newStatus
+    }
+
 }
 
 
