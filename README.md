@@ -2,7 +2,7 @@
 
 This is a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu).
 
-There will be a number of pre-releases via Github before it replaces the old version in the AppStore.
+There will be a number of pre-releases via GitHub before it replaces the old version in the AppStore.
 
 Significant known issues are filed as bugs.
 
@@ -30,6 +30,7 @@ For now the roadmap is tracked in this readme file.
 ### Pre-release 3
 
 - [ ] Basic auth login for CCTray feeds
+- [ ] Optimised CCTray reader requests
 - [ ] Edit pipelines
 
 ### Later

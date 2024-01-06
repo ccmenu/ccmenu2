@@ -7,7 +7,7 @@
 import Foundation
 
 
-class GithubFeedReader {
+class GitHubFeedReader {
 
     private(set) var pipeline: Pipeline
 
@@ -45,15 +45,15 @@ class GithubFeedReader {
             }
             if let rll = response.allHeaderFields["x-ratelimit-limit"] as? String,
                let rlu = response.allHeaderFields["x-ratelimit-used"] as? String {
-                debugPrint("received response from Github; rate limit \(rlu)/\(rll)")
+                debugPrint("received response from GitHub; rate limit \(rlu)/\(rll)")
             } else {
-                debugPrint("received response from Github")
+                debugPrint("received response from GitHub")
             }
             guard response.statusCode == 200 else {
                 let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
                 return (nil, httpError)
             }
-            let parser = GithubResponseParser()
+            let parser = GitHubResponseParser()
             try parser.parseResponse(data)
             let status = parser.pipelineStatus(name: pipeline.name)
             return (status, nil)

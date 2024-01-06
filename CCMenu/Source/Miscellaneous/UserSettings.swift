@@ -7,7 +7,7 @@
 import AppKit
 import Combine
 
-
+// TODO: consider making this a BindableObject
 final class UserSettings: ObservableObject  {
 
     private static let pipelineList = "pipelines"

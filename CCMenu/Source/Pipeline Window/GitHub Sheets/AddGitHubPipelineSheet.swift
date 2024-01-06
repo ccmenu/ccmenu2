@@ -8,7 +8,7 @@ import SwiftUI
 import Combine
 
 
-struct AddGithubPipelineSheet: View {
+struct AddGitHubPipelineSheet: View {
     @State private var owner = ""
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()

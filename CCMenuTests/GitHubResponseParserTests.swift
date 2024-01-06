@@ -7,11 +7,11 @@
 import XCTest
 @testable import CCMenu
 
-class GithubResponseParserTests: XCTestCase {
+class GitHubResponseParserTests: XCTestCase {
 
     func testParsesJSON() throws {
         let json = "{ \"workflow_runs\": [ { \"name\": \"Rust\", \"conclusion\": \"success\" } ] }\n"
-        let parser = GithubResponseParser()
+        let parser = GitHubResponseParser()
 
         try parser.parseResponse(json.data(using: .ascii)!)
 
@@ -22,7 +22,7 @@ class GithubResponseParserTests: XCTestCase {
 
     func testThrowsForMalformedJSON() throws {
         let json = " \"workflow_runs\": [ { \"name\": \"Rust\" deliberately broken"
-        let parser = GithubResponseParser()
+        let parser = GitHubResponseParser()
 
         XCTAssertThrowsError(try parser.parseResponse(json.data(using: .ascii)!))
     }
@@ -44,7 +44,7 @@ class GithubResponseParserTests: XCTestCase {
                 }
             }]}
         """
-        let parser = GithubResponseParser()
+        let parser = GitHubResponseParser()
         try parser.parseResponse(json.data(using: .ascii)!)
 
         let status = parser.pipelineStatus(name: "quvyn:rust.yml")!
@@ -94,7 +94,7 @@ class GithubResponseParserTests: XCTestCase {
               }
             ]}
         """
-        let parser = GithubResponseParser()
+        let parser = GitHubResponseParser()
         try parser.parseResponse(json.data(using: .ascii)!)
 
         let status = parser.pipelineStatus(name: "quvyn:Rust")!

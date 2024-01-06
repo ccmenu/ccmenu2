@@ -6,7 +6,7 @@
 
 import Foundation
 
-class GithubResponseParser {
+class GitHubResponseParser {
 
     var runList: [Dictionary<String, Any>] = []
 

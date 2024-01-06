@@ -53,7 +53,7 @@ struct PipelineListView: View {
                 case .cctray:
                     AddCCTrayPipelineSheet(model: model)
                 case .github:
-                    AddGithubPipelineSheet(model: model)
+                    AddGitHubPipelineSheet(model: model)
                 }
             }
         }

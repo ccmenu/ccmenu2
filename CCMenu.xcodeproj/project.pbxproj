@@ -42,8 +42,8 @@
 		03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */; };
 		03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11F1265467C200130833 /* CCTrayResponseParser.swift */; };
 		03D4BB012659A1120023F4CB /* PipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB002659A1120023F4CB /* PipelineTests.swift */; };
-		03D4BB03265EE5840023F4CB /* GithubFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB02265EE5840023F4CB /* GithubFeedReader.swift */; };
-		03D4BB05265EE6B50023F4CB /* GithubResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB04265EE6B50023F4CB /* GithubResponseParser.swift */; };
+		03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */; };
+		03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */; };
 		03DA98DC2B4498BB0073F5BB /* GitHubRepositoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */; };
 		03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */; };
 		03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */; };
@@ -60,7 +60,7 @@
 		03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B895297D486C00FA866E /* Pipeline.Feed.swift */; };
 		03F9B898297D4D8F00FA866E /* MenuItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B897297D4D8F00FA866E /* MenuItemViewModel.swift */; };
 		03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */; };
-		2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */; };
+		2FA2827139B00E15C5CD2E7F /* GitHubResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */; };
 		2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */; };
 		2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */; };
 /* End PBXBuildFile section */
@@ -124,8 +124,8 @@
 		03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReader.swift; sourceTree = "<group>"; };
 		03CC11F1265467C200130833 /* CCTrayResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParser.swift; sourceTree = "<group>"; };
 		03D4BB002659A1120023F4CB /* PipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineTests.swift; sourceTree = "<group>"; };
-		03D4BB02265EE5840023F4CB /* GithubFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubFeedReader.swift; sourceTree = "<group>"; };
-		03D4BB04265EE6B50023F4CB /* GithubResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubResponseParser.swift; sourceTree = "<group>"; };
+		03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubFeedReader.swift; sourceTree = "<group>"; };
+		03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubResponseParser.swift; sourceTree = "<group>"; };
 		03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubRepositoryList.swift; sourceTree = "<group>"; };
 		03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubWorkflowList.swift; sourceTree = "<group>"; };
 		03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPipelineBuilder.swift; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 		03F9B897297D4D8F00FA866E /* MenuItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemViewModel.swift; sourceTree = "<group>"; };
 		03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReaderTests.swift; sourceTree = "<group>"; };
 		2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParserTests.swift; sourceTree = "<group>"; };
-		2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubResponseParserTests.swift; sourceTree = "<group>"; };
+		2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubResponseParserTests.swift; sourceTree = "<group>"; };
 		2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -181,7 +181,6 @@
 				03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */,
 				03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */,
 				03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */,
-				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 			);
 			path = "GitHub Sheets";
 			sourceTree = "<group>";
@@ -237,7 +236,7 @@
 				03CC11EB2652F58B00130833 /* ServerMonitorTests.swift */,
 				03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
-				2FA2833D541ABE8B0D2E7615 /* GithubResponseParserTests.swift */,
+				2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */,
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* ImageManagerTests.swift */,
 				03BD7EA02598E57A000F9495 /* Info.plist */,
@@ -354,8 +353,9 @@
 				03CC11ED2652F6B900130833 /* FeedReader.swift */,
 				03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */,
 				03CC11F1265467C200130833 /* CCTrayResponseParser.swift */,
-				03D4BB02265EE5840023F4CB /* GithubFeedReader.swift */,
-				03D4BB04265EE6B50023F4CB /* GithubResponseParser.swift */,
+				03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */,
+				03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */,
+				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
 			);
 			path = "Server Monitor";
 			sourceTree = "<group>";
@@ -542,10 +542,10 @@
 				03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
-				03D4BB03265EE5840023F4CB /* GithubFeedReader.swift in Sources */,
+				03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */,
 				03DA98DC2B4498BB0073F5BB /* GitHubRepositoryList.swift in Sources */,
 				03F9B898297D4D8F00FA866E /* MenuItemViewModel.swift in Sources */,
-				03D4BB05265EE6B50023F4CB /* GithubResponseParser.swift in Sources */,
+				03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */,
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
 				0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
@@ -566,7 +566,7 @@
 				2FA28FBCC0398D63EF2D2C16 /* ImageManagerTests.swift in Sources */,
 				03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
-				2FA2827139B00E15C5CD2E7F /* GithubResponseParserTests.swift in Sources */,
+				2FA2827139B00E15C5CD2E7F /* GitHubResponseParserTests.swift in Sources */,
 				03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */,
 				03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */,
 				03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */,

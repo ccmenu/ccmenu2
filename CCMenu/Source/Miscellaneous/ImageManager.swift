@@ -6,7 +6,7 @@
 
 import AppKit
 
-
+// TODO: find a better pattern for making this logic available (and testable)
 class ImageManager {
 
     public lazy var defaultImage = image(forResult: .other, activity: .other)

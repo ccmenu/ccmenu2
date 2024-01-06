@@ -49,7 +49,7 @@ class ServerMonitor {
                 await reader.updatePipelineStatus()
                 reader.pipelines.forEach({ model.update(pipeline: $0) })
             case .github:
-                let reader = GithubFeedReader(for: p)
+                let reader = GitHubFeedReader(for: p)
                 await reader.updatePipelineStatus()
                 model.update(pipeline: reader.pipeline)
             }
