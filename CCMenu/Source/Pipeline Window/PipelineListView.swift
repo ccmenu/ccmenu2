@@ -12,6 +12,18 @@ final class ListViewState: ObservableObject {
     @Published var sheetType: Pipeline.FeedType = .cctray
     @Published var editIndex: Int?
     @Published var selection: Set<String> = Set()
+
+    // TODO: Improve API
+    func selectionIndexSet(pipelines: [Pipeline]) -> IndexSet {
+        var indexSet = IndexSet()
+        for (i, p) in pipelines.enumerated() {
+            if selection.contains(p.id) {
+                indexSet.insert(i)
+            }
+        }
+        return indexSet
+    }
+
 }
 
 
@@ -39,8 +51,20 @@ struct PipelineListView: View {
             }
         }
         .frame(minWidth: 500)
-        .contextMenu(forSelectionType: String.self) {_ in
-            Text("Copy URL") // TODO: add functionality
+        .contextMenu(forSelectionType: String.self) { selection in
+            Button("Copy Feed URL") {
+                let value = model.pipelines
+                    .filter({ selection.contains($0.id) })
+                    .map({ $0.feed.url })
+                    .joined(separator: "\n")
+                NSPasteboard.general.prepareForNewContents()
+                NSPasteboard.general.setString(value, forType: .string)
+            }
+            Divider()
+            Button("Open Web Page") {
+                // TODO: see primary action
+            }
+            .disabled(true)
         } primaryAction: { _ in
             // TODO: figure out what to open (same logic as in menu?)
             openUrl(URL(string: "http://ccmenu.org")!)

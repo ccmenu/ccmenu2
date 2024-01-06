@@ -82,7 +82,7 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add a pipeline")
 
             Button() {
-                viewState.editIndex = selectionIndexSet().first
+                viewState.editIndex = viewState.selectionIndexSet(pipelines: model.pipelines).first
                 viewState.isShowingSheet = true
             } label: {
                 Label("Edit", systemImage: "gearshape")
@@ -93,7 +93,7 @@ struct PipelineListToolbar: ToolbarContent {
 
             Button() {
                 withAnimation {
-                    model.pipelines.remove(atOffsets: selectionIndexSet())
+                    model.pipelines.remove(atOffsets: viewState.selectionIndexSet(pipelines: model.pipelines))
                     viewState.selection.removeAll()
                 }
             } label: {
@@ -112,16 +112,6 @@ struct PipelineListToolbar: ToolbarContent {
 //            }
 //            .help("Update status of all pipelines")
 //        }
-    }
-
-    private func selectionIndexSet() -> IndexSet {
-        var indexSet = IndexSet()
-        for (i, p) in model.pipelines.enumerated() {
-            if viewState.selection.contains(p.id) {
-                indexSet.insert(i)
-            }
-        }
-        return indexSet
     }
 
 }
