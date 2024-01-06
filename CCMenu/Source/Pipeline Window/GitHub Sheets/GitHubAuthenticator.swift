@@ -9,7 +9,6 @@ import SwiftUI
 @MainActor
 class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
-    // TODO: Consider making description as private(set) and move logic to didSet.
     @Published var tokenDescription: String = ""
     @Published private(set) var isWaitingForToken: Bool = false
     @Environment(\.openURL) private var openUrl
@@ -20,13 +19,12 @@ class GitHubAuthenticator: ObservableObject {
 
         let codeRequest = GitHubAPI.requestForDeviceCode()
         guard let codeResponse = await fetchDeviceCode(request: codeRequest) else {
-            isWaitingForToken = false
-            tokenDescription = token ?? ""
+            // TODO: Consider adding error handling in fetchDeviceCode
+            cancelSignIn()
             return
         }
         if !startDeviceFlowOnWebsite(response: codeResponse) {
-            isWaitingForToken = false
-            tokenDescription = token ?? ""
+            cancelSignIn()
             return
         }
 
@@ -55,7 +53,11 @@ class GitHubAuthenticator: ObservableObject {
         }
         NSPasteboard.general.prepareForNewContents()
         NSPasteboard.general.setString(response.userCode, forType: .string)
-        openUrl(URL(string: response.verificationUri)!) // TODO: Find out how to call this outside a view
+        guard let url = URL(string: response.verificationUri) else {
+            // TODO: Consider adding error handling. But will GH really send a bad URL?
+            return false
+        }
+        WorkspaceController().openUrl(url: url)
         return true
     }
 
@@ -117,8 +119,7 @@ class GitHubAuthenticator: ObservableObject {
     }
 
     func openApplicationsOnWebsite() {
-        openUrl(GitHubAPI.applicationsUrl()) // TODO: Find out how to call this outside a view
+        WorkspaceController().openUrl(url: GitHubAPI.applicationsUrl())
     }
-
 
 }

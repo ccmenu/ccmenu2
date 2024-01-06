@@ -14,6 +14,10 @@ class WorkspaceController {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    func openUrl(url: URL) {
+        NSWorkspace.shared.open(url)
+    }
+    
     func openWebPage(pipeline: Pipeline) {
         if let error = pipeline.connectionError {
             // TODO: Consider adding a UI test for this case
