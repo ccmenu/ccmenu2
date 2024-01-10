@@ -9,12 +9,13 @@ import SwiftUI
 
 struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
-    @ObservedObject var settings: UserSettings
+    @AppStorage(.showBuildTimesInMenu) private var showBuildTimesInMenu = false
+    @AppStorage(.showBuildLabelsInMenu) private var showBuildLabelsInMenu = false
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         ForEach(model.pipelines) { p in
-            let viewModel = MenuItemViewModel(pipeline: p, settings: settings)
+            let viewModel = MenuItemViewModel(pipeline: p, showBuildTimesInMenu: showBuildTimesInMenu, showBuildLabelsInMenu: showBuildLabelsInMenu)
             Button() {
                 NSWorkspace.shared.openWebPage(pipeline: p)
             } label: {
@@ -53,7 +54,7 @@ struct MenuBarExtraMenu: View {
 struct MenuBarExtraContent_Previews: PreviewProvider {
     static var previews: some View {
         VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
-            MenuBarExtraMenu(model: viewModelForPreview(), settings: settingsForPreview())
+            MenuBarExtraMenu(model: viewModelForPreview())
         }
         .buttonStyle(.borderless)
         .padding(4)
@@ -61,7 +62,7 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
     }
 
     static func viewModelForPreview() -> PipelineModel {
-        let model = PipelineModel(settings: settingsForPreview())
+        let model = PipelineModel()
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
         p0.status.activity = .building
@@ -80,11 +81,6 @@ struct MenuBarExtraContent_Previews: PreviewProvider {
         model.update(pipeline: p1)
 
         return model
-    }
-
-    private static func settingsForPreview() -> UserSettings {
-        let s = UserSettings()
-        return s
     }
 
 }

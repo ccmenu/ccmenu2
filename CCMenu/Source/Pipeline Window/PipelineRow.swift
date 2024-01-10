@@ -9,22 +9,28 @@ import SwiftUI
 struct PipelineRow: View {
 
     var viewModel: PipelineRowViewModel
-    @EnvironmentObject var settings: UserSettings
+    @AppStorage(.showStatusInWindow) var showStatus = true
+    @AppStorage(.showAvatarsInWindow) var showAvatars = true
+    @AppStorage(.showMessagesInWindow) var showMessages = true
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         VStack {
             HStack(alignment: .center) {
-                if settings.showStatusInPipelineWindow && settings.showAvatarsInPipelineWindow {
+                if showStatus && showAvatars {
                     avatarImage()
                         .padding([.trailing], 6)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(viewModel.title)
                         .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
-                    if settings.showStatusInPipelineWindow {
+                    if showStatus {
                         Text(viewModel.statusDescription)
                             .adjustedColor(colorScheme: colorScheme)
+                        if showMessages, let message = viewModel.statusMessage {
+                            Text(message)
+                                .adjustedColor(colorScheme: colorScheme)
+                        }
                     } else {
                         HStack(alignment: .top, spacing: 4) {
                             Image(viewModel.feedTypeIconName)
@@ -72,10 +78,9 @@ extension View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: false)))
-            .environmentObject(settingsForPreview(status: false))
-        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), settings: settingsForPreview(status: true)))
-            .environmentObject(settingsForPreview(status: true))
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview()))
+        // TODO: Figure out how to set showStatus from here
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview()))
     }
 
     static func pipelineForPreview() -> Pipeline {
@@ -87,14 +92,6 @@ struct PipelineRow_Previews: PreviewProvider {
         p.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2023-01-22T14:24:16Z")
         p.status.currentBuild!.message = "Made an important change."
         return p
-    }
-
-    private static func settingsForPreview(status: Bool) -> UserSettings {
-        let s = UserSettings()
-        s.showStatusInPipelineWindow = status
-        s.showMessagesInPipelineWindow = true
-        s.showAvatarsInPipelineWindow = true
-        return s
     }
 
 }

@@ -14,13 +14,12 @@ struct SettingsView: View {
         case advanced
     }
 
-    @ObservedObject var settings: UserSettings
     @State private var selectedTab: Tab = .appearance
     
     var body: some View {
         // TODO: why does the animation not work?
         TabView(selection: $selectedTab.animation()) {
-            AppearanceSettings(settings: settings)
+            AppearanceSettings()
             .tag(Tab.appearance)
             .tabItem {
                 Image(systemName: "filemenu.and.selection")

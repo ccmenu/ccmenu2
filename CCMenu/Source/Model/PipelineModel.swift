@@ -11,16 +11,9 @@ import Combine
 final class PipelineModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateSettings() } }
-    private var settings: UserSettings
 
     init() {
         pipelines = []
-        settings = UserSettings()
-    }
-
-    convenience init(settings: UserSettings) {
-        self.init()
-        self.settings = settings
     }
 
     func update(pipeline: Pipeline) {
@@ -33,16 +26,18 @@ final class PipelineModel: ObservableObject {
 
     private func updateSettings() {
         // TODO: this is called, too, every time the status gets updated...
-        settings.pipelineList = pipelines.map({ $0.asDictionaryForPersisting() })
+        let list = pipelines.map({ $0.asDictionaryForPersisting() })
+        UserDefaults.active?.set(list, forKey: DefaultsKey.pipelineList.rawValue)
     }
 
 
     func loadPipelinesFromUserDefaults() {
-        if settings.pipelineList.isEmpty {
+        if let list = UserDefaults.active?.array(forKey: DefaultsKey.pipelineList.rawValue) as? Array<Dictionary<String, String>>, !list.isEmpty  {
+            pipelines = list.compactMap(Pipeline.fromPersistedDictionary)
+        }
+        else {
             loadPipelinesFromLegacyDefaults()
             addCCMenu2Pipeline()
-        } else {
-            pipelines = settings.pipelineList.compactMap(Pipeline.fromPersistedDictionary)
         }
     }
 

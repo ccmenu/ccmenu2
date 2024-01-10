@@ -8,22 +8,18 @@ import SwiftUI
 
 struct MenuItemViewModel {
 
-    private(set) var pipeline: Pipeline
-    private var settings: UserSettings
-
-    init(pipeline: Pipeline, settings: UserSettings) {
-        self.pipeline = pipeline
-        self.settings = settings
-    }
+    var pipeline: Pipeline
+    var showBuildTimesInMenu: Bool
+    var showBuildLabelsInMenu: Bool
 
     var title: String {
         var result = pipeline.name
         var details: [String] = []
-        if settings.showBuildTimesInMenu, let buildTime = pipeline.status.lastBuild?.timestamp {
+        if showBuildTimesInMenu, let buildTime = pipeline.status.lastBuild?.timestamp {
             let relative = buildTime.formatted(Date.RelativeFormatStyle(presentation: .named))
             details.append(relative)
         }
-        if settings.showBuildLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
+        if showBuildLabelsInMenu, let buildLabel = pipeline.status.lastBuild?.label {
             details.append(buildLabel)
         }
         if details.count > 0 {

@@ -8,20 +8,17 @@ import SwiftUI
 
 struct MenuExtraViewModel {
 
-    private var pipelines: [Pipeline]
-    private var settings: UserSettings
-
-    init(pipelines: [Pipeline], settings: UserSettings) {
-        self.pipelines = pipelines
-        self.settings = settings
-    }
+    var pipelines: [Pipeline]
+    var useColorInMenuBar: Bool
+    var useColorInMenuBarFailedOnly: Bool
+    var showBuildTimerInMenuBar: Bool
 
     var icon: NSImage {
         guard let pipeline = pipelineForMenuBar() else {
             return NSImage(forPipeline: nil)
         }
-        let useColor = settings.useColorInMenuBar && 
-            (!settings.useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
+        let useColor = useColorInMenuBar && 
+            (!useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
         return NSImage(forPipeline: pipeline, asTemplate: !useColor)
     }
 
@@ -31,7 +28,7 @@ struct MenuExtraViewModel {
         }
         var newText = ""
         if pipeline.status.activity == .building {
-            if settings.showBuildTimerInMenuBar, let completionTime = pipeline.estimatedBuildComplete {
+            if showBuildTimerInMenuBar, let completionTime = pipeline.estimatedBuildComplete {
                 newText = Date.now.formatted(.compactRelative(reference: completionTime))
             }
         } else {

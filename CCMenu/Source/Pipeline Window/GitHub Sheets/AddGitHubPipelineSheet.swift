@@ -9,14 +9,14 @@ import Combine
 
 
 struct AddGitHubPipelineSheet: View {
+    @ObservedObject var model: PipelineModel
+    @AppStorage(.cachedGitHubToken) var cachedToken: String = ""
+    @Environment(\.presentationMode) @Binding var presentation
     @State private var owner = ""
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var pipelineBuilder = GitHubPipelineBuilder()
     @StateObject private var authenticator = GitHubAuthenticator()
-    @ObservedObject var model: PipelineModel
-    @EnvironmentObject var settings: UserSettings
-    @Environment(\.presentationMode) @Binding var presentation
 
     var body: some View {
         VStack {
@@ -114,14 +114,12 @@ struct AddGitHubPipelineSheet: View {
         .frame(minWidth: 405)
         .padding()
         .onAppear() {
-            if let token = settings.cachedGitHubToken {
-                authenticator.token = token
-                authenticator.tokenDescription = token
-            }
+            authenticator.token = cachedToken
+            authenticator.tokenDescription = cachedToken
         }
         .onDisappear() {
             if let token = authenticator.token {
-                settings.cachedGitHubToken = token
+                cachedToken = token
             }
         }
     }

@@ -23,16 +23,14 @@ final class MenuItemModelTests: XCTestCase {
 
     func testUsesPipelineNameInMenuAsDefault() throws {
         let pipeline = makePipeline(name: "connectfour")
-        let pvm = MenuItemViewModel(pipeline: pipeline, settings: UserSettings())
+        let pvm = MenuItemViewModel(pipeline: pipeline, showBuildTimesInMenu: false, showBuildLabelsInMenu: false)
         XCTAssertEqual("connectfour", pvm.title)
     }
 
     func testAppendsBuildLabelToPipelineNameInMenuBasedOnSetting() throws {
         var pipeline = makePipeline(name: "connectfour")
         pipeline.status.lastBuild = Build(result: .success, label: "build.1")
-        let settings = UserSettings()
-        settings.showBuildLabelsInMenu = true
-        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, showBuildTimesInMenu: false, showBuildLabelsInMenu: true)
 
         XCTAssertEqual("connectfour \u{2014} build.1", pvm.title)
     }
@@ -40,9 +38,7 @@ final class MenuItemModelTests: XCTestCase {
     func testAppendsBuildTimeToPipelineNameInMenuBasedOnSetting() throws {
         var pipeline = makePipeline(name: "connectfour")
         pipeline.status.lastBuild = Build(result: .success, label: "build.1", timestamp: Date.now)
-        let settings = UserSettings()
-        settings.showBuildTimesInMenu = true
-        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, showBuildTimesInMenu: true, showBuildLabelsInMenu: false)
 
         XCTAssertEqual("connectfour \u{2014} now", pvm.title) // TODO: can this become flaky?
     }
@@ -50,9 +46,7 @@ final class MenuItemModelTests: XCTestCase {
     func testDoesNotAppendsBuildTimeToPipelineNameInMenuWhenNoBuildAvailable() throws {
         var pipeline = makePipeline(name: "connectfour")
         pipeline.status.lastBuild = Build(result: .success, label: "build.1")
-        let settings = UserSettings()
-        settings.showBuildTimesInMenu = true
-        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, showBuildTimesInMenu: true, showBuildLabelsInMenu: false)
 
         XCTAssertEqual("connectfour", pvm.title)
     }
@@ -60,10 +54,7 @@ final class MenuItemModelTests: XCTestCase {
     func testAppendsBuildLabelAndTimeToPipelineNameInMenuBasedOnSetting() throws {
         var pipeline = makePipeline(name: "connectfour")
         pipeline.status.lastBuild = Build(result: .success, label: "build.1", timestamp: Date.now)
-        let settings = UserSettings()
-        settings.showBuildLabelsInMenu = true
-        settings.showBuildTimesInMenu = true
-        let pvm = MenuItemViewModel(pipeline: pipeline, settings: settings)
+        let pvm = MenuItemViewModel(pipeline: pipeline, showBuildTimesInMenu: true, showBuildLabelsInMenu: true)
 
         XCTAssertEqual("connectfour \u{2014} now, build.1", pvm.title)
     }

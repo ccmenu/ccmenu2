@@ -11,24 +11,18 @@ import SwiftUI
 struct CCMenuApp: App {
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    private var userSettings: UserSettings
     private var pipelineModel: PipelineModel
     private var serverMonitor: ServerMonitor
 
     init() {
-        var userDefaults: UserDefaults? = nil
+        pipelineModel = PipelineModel()
+        serverMonitor = ServerMonitor(model: pipelineModel)
+
         if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
             print("Ignoring user defaults from system")
         } else {
-            userDefaults = UserDefaults.standard
+            UserDefaults.active = UserDefaults.standard
         }
-
-        let userSettings = UserSettings(userDefaults: userDefaults)
-        let pipelineModel = PipelineModel(settings: userSettings)
-
-        self.userSettings = userSettings
-        self.pipelineModel = pipelineModel
-        self.serverMonitor = ServerMonitor(model: pipelineModel)
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
             print("Loading pipeline definitions from file \(filename)")
@@ -44,7 +38,6 @@ struct CCMenuApp: App {
 
         Window("Pipelines", id:"pipeline-list") {
             PipelineListView(model: pipelineModel)
-                .environmentObject(userSettings)
         }
         .defaultSize(width: 550, height: 600)
         .keyboardShortcut("0", modifiers: [ .command ])
@@ -52,12 +45,12 @@ struct CCMenuApp: App {
 //            PipelineCommands(model: viewModel)
 //        }
         Settings {
-            SettingsView(settings: userSettings)
+            SettingsView()
         }
         MenuBarExtra() {
-            MenuBarExtraMenu(model: pipelineModel, settings: userSettings)
+            MenuBarExtraMenu(model: pipelineModel)
         } label: {
-            MenuBarExtraLabel(model: pipelineModel, settings: userSettings)
+            MenuBarExtraLabel(model: pipelineModel)
         }
 
     }

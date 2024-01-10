@@ -9,25 +9,36 @@ import SwiftUI
 
 struct AppearanceSettings: View {
 
-    @ObservedObject var settings: UserSettings
+    @AppStorage(.useColorInMenuBar) var useColorInMenuBar = true
+    @AppStorage(.useColorInMenuBarFailedOnly) var useColorInMenuBarFailedOnly = true
+    @AppStorage(.showBuildTimerInMenuBar) var showBuildTimerInMenuBar = true
+    @AppStorage(.showBuildTimesInMenu) var showBuildTimesInMenu = false
+    @AppStorage(.showBuildLabelsInMenu) var showBuildLabelsInMenu = false
 
     var body: some View {
         VStack {
-            Toggle(isOn: $settings.showBuildTimerInMenuBar) {
-                Text("Show build timer in menu bar")
-            }
-            Toggle(isOn: $settings.useColorInMenuBar) {
+            Toggle(isOn: $useColorInMenuBar) {
                 Text("Use color in menu bar")
             }
-            Toggle(isOn: $settings.useColorInMenuBarFailedOnly) {
+            .onChange(of: useColorInMenuBar) { newValue in
+                if newValue == false {
+                    useColorInMenuBarFailedOnly = false
+                }
+            }
+            Toggle(isOn: $useColorInMenuBarFailedOnly) {
                 Text("Use color for failed builds only ")
             }
-            Toggle(isOn: $settings.showBuildTimesInMenu) {
+            .disabled(!useColorInMenuBar)
+            Toggle(isOn: $showBuildTimerInMenuBar) {
+                Text("Show build timer in menu bar")
+            }
+            Toggle(isOn: $showBuildTimesInMenu) {
                 Text("Show build times in menu")
             }
-            Toggle(isOn: $settings.showBuildLabelsInMenu) {
+            Toggle(isOn: $showBuildLabelsInMenu) {
                 Text("Show build labels in menu")
             }
+
         }
         .frame(width: 300)
         .navigationTitle("Appearance")
@@ -39,13 +50,7 @@ struct AppearanceSettings: View {
 
 struct AppearanceSettings_Previews: PreviewProvider {
     static var previews: some View {
-        AppearanceSettings(settings: settingsForPreview())
-    }
-
-    private static func settingsForPreview() -> UserSettings {
-        let s = UserSettings()
-        s.useColorInMenuBar = true
-        return s
+        AppearanceSettings()
     }
 
 }

@@ -11,7 +11,6 @@ class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
     @Published var tokenDescription: String = ""
     @Published private(set) var isWaitingForToken: Bool = false
-    @Environment(\.openURL) private var openUrl
 
     func signInAtGitHub() async {
         isWaitingForToken = true

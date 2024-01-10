@@ -10,9 +10,7 @@ import XCTest
 class MenuExtraModelTests: XCTestCase {
 
     private func makeModel(pipelines: [Pipeline]) -> MenuExtraViewModel {
-        let settings = UserSettings()
-        settings.useColorInMenuBar = true
-        return MenuExtraViewModel(pipelines: pipelines, settings: settings)
+        return MenuExtraViewModel(pipelines: pipelines, useColorInMenuBar: true, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
     }
 
     private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
@@ -84,11 +82,7 @@ class MenuExtraModelTests: XCTestCase {
 
     func testUseTemplateImageWhenUseColorIsOff() throws {
         let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
-
-        let settings: UserSettings = UserSettings()
-        settings.useColorInMenuBar = false
-        settings.useColorInMenuBarFailedOnly = false
-        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
 
         let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
         XCTAssertEqual(NSImage(forPipeline: pe, asTemplate: true), model.icon)
@@ -96,11 +90,7 @@ class MenuExtraModelTests: XCTestCase {
 
     func testUseTemplateImageWhenSucessAndUseColorAndUseColorFailedOnly() throws {
         let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
-
-        let settings: UserSettings = UserSettings()
-        settings.useColorInMenuBar = true
-        settings.useColorInMenuBarFailedOnly = true
-        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: true, useColorInMenuBarFailedOnly: true, showBuildTimerInMenuBar: false)
 
         let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
         XCTAssertEqual(NSImage(forPipeline: pe, asTemplate: true), model.icon)
@@ -110,10 +100,7 @@ class MenuExtraModelTests: XCTestCase {
         var p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
         p0.status.lastBuild!.duration = 90
         p0.status.currentBuild!.timestamp = Date.now
-
-        let settings: UserSettings = UserSettings()
-        settings.showBuildTimerInMenuBar = false
-        let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
 
         XCTAssertEqual("", model.title)
     }
@@ -127,8 +114,7 @@ class MenuExtraModelTests: XCTestCase {
         p2.status.lastBuild!.duration = 30
         p2.status.currentBuild!.timestamp = Date.now
 
-        let settings: UserSettings = UserSettings()
-        let model = MenuExtraViewModel(pipelines: [p0, p1, p2], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0, p1, p2], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: true)
 
         XCTAssertEqual("-29s", model.title)
     }
@@ -141,8 +127,7 @@ class MenuExtraModelTests: XCTestCase {
         p1.status.lastBuild!.duration = 90
         p1.status.currentBuild!.timestamp = Date.now
 
-        let settings: UserSettings = UserSettings()
-        let model = MenuExtraViewModel(pipelines: [p0, p1], settings: settings)
+        let model = MenuExtraViewModel(pipelines: [p0, p1], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: true)
 
         XCTAssertEqual("-01:29", model.title)
     }

@@ -6,15 +6,9 @@
 
 import SwiftUI
 
-class PipelineRowViewModel {
+struct PipelineRowViewModel {
 
-    private(set) var pipeline: Pipeline
-    private var settings: UserSettings
-
-    init(pipeline: Pipeline, settings: UserSettings) {
-        self.pipeline = pipeline
-        self.settings = settings
-    }
+    var pipeline: Pipeline
 
     var title: String {
         return pipeline.name
@@ -40,9 +34,6 @@ class PipelineRowViewModel {
             } else {
                 description =  "Waiting for first build"
             }
-        }
-        if settings.showMessagesInPipelineWindow, let message = pipeline.message {
-            description.append("\n\(message)")
         }
         return description
     }
@@ -78,8 +69,12 @@ class PipelineRowViewModel {
         return "Build finished"
     }
 
+    var statusMessage: String? {
+        pipeline.message
+    }
+
     var feedTypeIconName: String {
-        return "feed-\(pipeline.feed.type)-template"
+        "feed-\(pipeline.feed.type)-template"
     }
 
     var feedUrl: String {

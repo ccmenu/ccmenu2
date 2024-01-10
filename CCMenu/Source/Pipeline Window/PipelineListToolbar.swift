@@ -11,27 +11,29 @@ struct PipelineListToolbar: ToolbarContent {
 
     @ObservedObject var model: PipelineModel
     @ObservedObject var viewState: ListViewState
-    @EnvironmentObject var settings: UserSettings
+    @AppStorage(.showStatusInWindow) var showStatus = true
+    @AppStorage(.showAvatarsInWindow) var showAvatars = true
+    @AppStorage(.showMessagesInWindow) var showMessages = true
     @State var isHoveringOverDetailMenu = false
     @State var isHoveringOverAddMenu = false
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .principal) {
             Menu() {
-                Picker(selection: $settings.showStatusInPipelineWindow, label: EmptyView()) {
+                Picker(selection: $showStatus, label: EmptyView()) {
                     Text("Pipeline URL").tag(false)
                     Text("Build Status").tag(true)
                 }
                 .pickerStyle(InlinePickerStyle())
                 .accessibility(label: Text("Details picker"))
-                Button(settings.showMessagesInPipelineWindow ? "Hide Messages" : "Show Messages") {
-                    settings.showMessagesInPipelineWindow.toggle()
+                Button(showMessages ? "Hide Messages" : "Show Messages") {
+                    showMessages.toggle()
                 }
-                .disabled(!settings.showStatusInPipelineWindow)
-                Button(settings.showAvatarsInPipelineWindow ? "Hide Avatars" : "Show Avatars") {
-                    settings.showAvatarsInPipelineWindow.toggle()
+                .disabled(!showStatus)
+                Button(showAvatars ? "Hide Avatars" : "Show Avatars") {
+                    showAvatars.toggle()
                 }
-                .disabled(!settings.showStatusInPipelineWindow)
+                .disabled(!showStatus)
             } label: {
                 Image(systemName: "list.dash.header.rectangle")
             }
@@ -91,7 +93,6 @@ struct PipelineListToolbar: ToolbarContent {
             Button() {
                 withAnimation {
                     model.pipelines.removeAll(where: { viewState.selection.contains($0.id) })
-//                    model.pipelines.remove(atOffsets: viewState.selectionIndexSet(pipelines: model.pipelines))
                     viewState.selection.removeAll()
                 }
             } label: {

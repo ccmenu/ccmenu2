@@ -116,11 +116,9 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
         XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
         
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
-
         toolbars.popUpButtons["Display detail menu"].click()
-        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == false)
-        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
+        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == true)
+        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == true)
         toolbars.menuItems["Build Status"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
 
@@ -130,6 +128,13 @@ class CCMenuUITests: XCTestCase {
         XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled)
         toolbars.menuItems["Hide Messages"].click()
         XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists == false)
+
+        toolbars.popUpButtons["Display detail menu"].click()
+        toolbars.menuItems["Pipeline URL"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+        toolbars.popUpButtons["Display detail menu"].click()
+        XCTAssertTrue(toolbars.menuItems["Show Messages"].isEnabled == false)
+        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
 
     }
     

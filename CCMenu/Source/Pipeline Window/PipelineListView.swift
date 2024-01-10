@@ -16,15 +16,13 @@ final class ListViewState: ObservableObject {
 
 
 struct PipelineListView: View {
-    @StateObject var viewState = ListViewState()
     @ObservedObject var model: PipelineModel
-    @EnvironmentObject var settings: UserSettings
-    @Environment(\.openURL) private var openUrl
+    @StateObject var viewState = ListViewState()
 
     var body: some View {
         List(selection: $viewState.selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(viewModel: PipelineRowViewModel(pipeline: p, settings: settings))
+                PipelineRow(viewModel: PipelineRowViewModel(pipeline: p))
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {
@@ -84,7 +82,6 @@ struct PipelineListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PipelineListView(model: makeViewModel())
-                .environmentObject(makeSettings())
         }
     }
 
@@ -107,9 +104,4 @@ struct PipelineListView_Previews: PreviewProvider {
         return model
     }
 
-    static func makeSettings() -> UserSettings {
-        let settings = UserSettings()
-        settings.showStatusInPipelineWindow = true
-        return settings
-    }
 }

@@ -9,10 +9,12 @@ import SwiftUI
 
 struct MenuBarExtraLabel: View {
     @ObservedObject var model: PipelineModel
-    @ObservedObject var settings: UserSettings
+    @AppStorage(.useColorInMenuBar) var useColorInMenuBar: Bool = true
+    @AppStorage(.useColorInMenuBarFailedOnly) var useColorInMenuBarFailedOnly: Bool = false
+    @AppStorage(.showBuildTimerInMenuBar) var showBuildTimerInMenuBar: Bool = false
 
     var body: some View {
-        let viewModel = MenuExtraViewModel(pipelines: model.pipelines, settings: settings)
+        let viewModel = MenuExtraViewModel(pipelines: model.pipelines, useColorInMenuBar: useColorInMenuBar, useColorInMenuBarFailedOnly: useColorInMenuBarFailedOnly, showBuildTimerInMenuBar: showBuildTimerInMenuBar)
         Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
         .labelStyle(.titleAndIcon)
         .accessibilityIdentifier("CCMenuMenuExtra")
@@ -24,11 +26,11 @@ struct MenuBarExtraLabel: View {
 
 struct MenuBarExtraLabel_Previews: PreviewProvider {
     static var previews: some View {
-        MenuBarExtraLabel(model: viewModelForPreview(), settings: settingsForPreview())
+        MenuBarExtraLabel(model: viewModelForPreview())
     }
 
     static func viewModelForPreview() -> PipelineModel {
-        let model = PipelineModel(settings: settingsForPreview())
+        let model = PipelineModel()
 
         var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
         p0.status.activity = .building
@@ -50,12 +52,6 @@ struct MenuBarExtraLabel_Previews: PreviewProvider {
         model.update(pipeline: p1)
 
         return model
-    }
-
-    private static func settingsForPreview() -> UserSettings {
-        let s = UserSettings()
-        s.useColorInMenuBar = true
-        return s
     }
 
 }

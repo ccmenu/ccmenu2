@@ -10,7 +10,7 @@ import XCTest
 class ViewModelTests: XCTestCase {
 
     private func makeModel() -> PipelineModel {
-        let m = PipelineModel(settings: UserSettings())
+        let m = PipelineModel()
         return m
     }
 

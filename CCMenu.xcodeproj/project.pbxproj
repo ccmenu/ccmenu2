@@ -15,7 +15,7 @@
 		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
 		0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */; };
 		0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */; };
-		037AB215297334EE00C33589 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserSettings.swift */; };
+		037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserDefaultsExtension.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */; };
 		037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */; };
@@ -92,7 +92,7 @@
 		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
 		0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGitHubPipelineSheet.swift; sourceTree = "<group>"; };
-		037AB214297334EE00C33589 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		037AB214297334EE00C33589 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraMenu.swift; sourceTree = "<group>"; };
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
 		037AB21B297B4D5F00C33589 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
@@ -332,7 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
-				037AB214297334EE00C33589 /* UserSettings.swift */,
+				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
 				03BD7EF9259A180C000F9495 /* NSImageExtension.swift */,
 				3C4DEDA12B49AB7A00B85A8C /* NSWorkspaceExtension.swift */,
 			);
@@ -519,7 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */,
-				037AB215297334EE00C33589 /* UserSettings.swift in Sources */,
+				037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */,
 				03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
