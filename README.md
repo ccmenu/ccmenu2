@@ -24,10 +24,14 @@ For now the roadmap is tracked in this readme file.
 
 - [X] GitHub repository and workflow selection
 - [X] Caching of last-used authentication token
-- [ ] Notifications (check out: UNNotificationContentExtension)
-- [ ] Remaining menu appearance options
 
 ### Pre-release 3
+
+- [ ] Notifications (check out: UNNotificationContentExtension)
+- [ ] Build timer updates every second
+- [ ] Remaining menu appearance options
+
+### Pre-release 4
 
 - [ ] Basic auth login for CCTray feeds
 - [ ] Optimised CCTray reader requests
