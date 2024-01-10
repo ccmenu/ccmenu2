@@ -18,11 +18,11 @@ struct MenuExtraViewModel {
 
     var icon: NSImage {
         guard let pipeline = pipelineForMenuBar() else {
-            return ImageManager().defaultImage
+            return NSImage(forPipeline: nil)
         }
         let useColor = settings.useColorInMenuBar && 
             (!settings.useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
-        return ImageManager().image(forPipeline: pipeline, asTemplate: !useColor)
+        return NSImage(forPipeline: pipeline, asTemplate: !useColor)
     }
 
     var title: String {

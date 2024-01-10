@@ -16,7 +16,7 @@ struct MenuBarExtraMenu: View {
         ForEach(model.pipelines) { p in
             let viewModel = MenuItemViewModel(pipeline: p, settings: settings)
             Button() {
-                WorkspaceController().openWebPage(pipeline: p)
+                NSWorkspace.shared.openWebPage(pipeline: p)
             } label: {
                 Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) } )
                 .labelStyle(.titleAndIcon)
@@ -24,12 +24,12 @@ struct MenuBarExtraMenu: View {
         }
         Divider()
         Button("Pipelines") {
-            WorkspaceController().activateThisApp()
+            NSWorkspace.shared.activateThisApp()
             openWindow(id: "pipeline-list")
         }
         Divider()
         Button("About CCMenu") {
-            WorkspaceController().activateThisApp()
+            NSWorkspace.shared.activateThisApp()
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
         if #available(macOS 14.0, *) {

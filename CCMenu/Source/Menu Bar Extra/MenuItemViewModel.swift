@@ -34,7 +34,7 @@ struct MenuItemViewModel {
     }
 
     var icon: NSImage {
-        return ImageManager().image(forPipeline: pipeline)
+        return NSImage(forPipeline: pipeline)
     }
 
 }

@@ -40,7 +40,7 @@ struct SettingsView: View {
             }
         }
         .onAppear {
-            WorkspaceController().activateThisApp()
+            NSWorkspace.shared.activateThisApp()
         }
     }
 }

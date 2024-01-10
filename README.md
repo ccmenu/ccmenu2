@@ -2,7 +2,7 @@
 
 This is a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu).
 
-There will be a number of pre-releases via GitHub before it replaces the old version in the AppStore.
+There will be a number of pre-releases via GitHub before it reaches the AppStore.
 
 Significant known issues are filed as bugs.
 

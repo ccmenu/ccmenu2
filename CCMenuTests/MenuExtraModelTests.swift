@@ -30,14 +30,14 @@ class MenuExtraModelTests: XCTestCase {
     func testDisplaysDefaultImageAndNoTextWhenNoPipelinesAreMonitored() throws {
         let model = makeModel(pipelines: [])
 
-        XCTAssertEqual(ImageManager().defaultImage, model.icon)
+        XCTAssertEqual(NSImage(forPipeline: nil), model.icon)
         XCTAssertEqual("", model.title)
     }
 
     func testDisplaysDefaultImageAndNoTextWhenNoStatusIsKnown() throws {
         let model = makeModel(pipelines: [makePipeline(name: "connectfour")])
 
-        XCTAssertEqual(ImageManager().defaultImage, model.icon)
+        XCTAssertEqual(NSImage(forPipeline: nil), model.icon)
         XCTAssertEqual("", model.title)
     }
 
@@ -46,7 +46,8 @@ class MenuExtraModelTests: XCTestCase {
         let p1 = makePipeline(name: "p1", activity: .sleeping, lastBuildResult: .success)
         let model = makeModel(pipelines: [p0, p1])
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping), model.icon)
+        let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
+        XCTAssertEqual(NSImage(forPipeline: pe), model.icon)
         XCTAssertEqual("", model.title)
     }
 
@@ -56,7 +57,8 @@ class MenuExtraModelTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .sleeping), model.icon)
+        let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .failure)
+        XCTAssertEqual(NSImage(forPipeline: pe), model.icon)
         XCTAssertEqual("2", model.title)
     }
 
@@ -66,7 +68,8 @@ class MenuExtraModelTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .sleeping, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .building), model.icon)
+        let pe = makePipeline(name: "expected", activity: .building, lastBuildResult: .success)
+        XCTAssertEqual(NSImage(forPipeline: pe), model.icon)
     }
 
     func testDisplaysFixingWhenAtLeastOneProjectWithLastStatusFailedIsBuilding() throws {
@@ -75,7 +78,8 @@ class MenuExtraModelTests: XCTestCase {
         let p2 = makePipeline(name: "p2", activity: .building, lastBuildResult: .failure)
         let model = makeModel(pipelines: [p0, p1, p2])
 
-        XCTAssertEqual(ImageManager().image(forResult: .failure, activity: .building), model.icon)
+        let pe = makePipeline(name: "expected", activity: .building, lastBuildResult: .failure)
+        XCTAssertEqual(NSImage(forPipeline: pe), model.icon)
     }
 
     func testUseTemplateImageWhenUseColorIsOff() throws {
@@ -86,7 +90,8 @@ class MenuExtraModelTests: XCTestCase {
         settings.useColorInMenuBarFailedOnly = false
         let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
+        let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
+        XCTAssertEqual(NSImage(forPipeline: pe, asTemplate: true), model.icon)
     }
 
     func testUseTemplateImageWhenSucessAndUseColorAndUseColorFailedOnly() throws {
@@ -97,7 +102,8 @@ class MenuExtraModelTests: XCTestCase {
         settings.useColorInMenuBarFailedOnly = true
         let model = MenuExtraViewModel(pipelines: [p0], settings: settings)
 
-        XCTAssertEqual(ImageManager().image(forResult: .success, activity: .sleeping, asTemplate: true), model.icon)
+        let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
+        XCTAssertEqual(NSImage(forPipeline: pe, asTemplate: true), model.icon)
     }
 
     func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {

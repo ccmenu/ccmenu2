@@ -21,7 +21,7 @@ class PipelineRowViewModel {
     }
 
     var statusIcon: NSImage {
-        return ImageManager().image(forPipeline: pipeline)
+        return NSImage(forPipeline: pipeline)
     }
 
     var statusDescription: String {

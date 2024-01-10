@@ -6,18 +6,15 @@
 
 import AppKit
 
-// TODO: find a better pattern for making this logic available (and testable)
-class ImageManager {
+extension NSImage {
 
-    public lazy var defaultImage = image(forResult: .other, activity: .other)
-
-    func image(forPipeline pipeline: Pipeline, asTemplate: Bool = false) -> NSImage {
-        let result = pipeline.status.lastBuild?.result ?? BuildResult.other
-        let activity = pipeline.status.activity
-        return image(forResult: result, activity: activity, asTemplate: asTemplate)
+    convenience init(forPipeline pipeline: Pipeline?, asTemplate: Bool = false) {
+        let result = pipeline?.status.lastBuild?.result ?? BuildResult.other
+        let activity = pipeline?.status.activity ?? Pipeline.Activity.other
+        self.init(forResult: result, activity: activity, asTemplate: asTemplate)
     }
 
-    func image(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool = false) -> NSImage {
+    convenience init(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool = false) {
         var name = "build"
         switch result {
         case .success:
@@ -35,13 +32,9 @@ class ImageManager {
         if asTemplate {
             name += "-template"
         }
-        guard let image = NSImage(named: name) else {
-            fatalError("Missing asset \(name)")
-        }
+        self.init(named: name)!
         // not strictly necessary; it's automatically set for names ending with "template"
-        image.isTemplate = asTemplate
-        return image
+        isTemplate = asTemplate
     }
-
 
 }

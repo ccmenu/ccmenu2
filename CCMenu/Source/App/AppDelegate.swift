@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
-        WorkspaceController().activateThisApp()
+        NSWorkspace.shared.activateThisApp()
         let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
         NSApplication.shared.orderFrontStandardAboutPanel(
             options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]

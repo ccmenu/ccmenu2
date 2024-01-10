@@ -6,8 +6,8 @@
 
 import AppKit
 
-class WorkspaceController {
-    
+extension NSWorkspace {
+
     func activateThisApp() {
         // TODO: There must be a better way...
         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
@@ -15,7 +15,7 @@ class WorkspaceController {
     }
     
     func openUrl(url: URL) {
-        NSWorkspace.shared.open(url)
+        self.open(url)
     }
     
     func openWebPage(pipeline: Pipeline) {
@@ -24,7 +24,7 @@ class WorkspaceController {
            alertPipelineFeedError(error)
         } else {
             if let urlString = pipeline.status.webUrl, let url = URL(string: urlString), url.host != nil {
-                NSWorkspace.shared.open(url)
+                self.open(url)
             } else if (pipeline.status.webUrl ?? "").isEmpty {
                 alertPipelineLinkProblem("The continuous integration server did not provide a link for this pipeline.")
             } else {

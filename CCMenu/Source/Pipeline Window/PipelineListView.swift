@@ -52,12 +52,12 @@ struct PipelineListView: View {
             Button("Open Web Page") {
                 model.pipelines
                     .filter({ selection.contains($0.id) })
-                    .forEach({ WorkspaceController().openWebPage(pipeline: $0) })
+                    .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
             }
         } primaryAction: { selection in
                 model.pipelines
                     .filter({ selection.contains($0.id) })
-                    .forEach({ WorkspaceController().openWebPage(pipeline: $0) })
+                    .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
         }
         .sheet(isPresented: $viewState.isShowingAddSheet) {
             switch viewState.sheetType {
