@@ -11,7 +11,6 @@ import Combine
 class ServerMonitor {
 
     private var model: PipelineModel
-    private var lastPipelineCount = 0
     private var subscribers: [AnyCancellable] = []
 
     init(model: PipelineModel) {
@@ -20,29 +19,27 @@ class ServerMonitor {
     
     public func start() {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
-            Task { await self.updateStatus() }
+            Task { await self.updateStatus(pipelines: self.model.pipelines) }
         }
         Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
-            Task { await self.updateStatus() }
+            Task { await self.updateStatus(pipelines: self.model.pipelines) }
         }
         model.$pipelines
-            .receive(on: DispatchQueue.main)
             .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
             .store(in: &subscribers)
     }
 
     func updateStatusIfPipelineWasAdded(pipelines: [Pipeline]) {
-        guard pipelines.count > lastPipelineCount else {
-            lastPipelineCount = pipelines.count
+        guard pipelines.count > model.pipelines.count else {
             return
         }
-        lastPipelineCount = pipelines.count
-        Task { await self.updateStatus() }
+        let newPipelines = Set(pipelines).subtracting(Set(model.pipelines))
+        Task { await self.updateStatus(pipelines: Array(newPipelines)) }
     }
 
-    func updateStatus() async {
+    private func updateStatus(pipelines: [Pipeline]) async {
         // TODO: Make sure that the request can happen in parallel (maybe they do already?)
-        for p in model.pipelines {
+        for p in pipelines {
             switch(p.feed.type) {
             case .cctray:
                 let reader = CCTrayFeedReader(for: p)
