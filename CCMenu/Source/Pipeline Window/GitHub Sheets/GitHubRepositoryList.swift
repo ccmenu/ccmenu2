@@ -17,23 +17,27 @@ class GitHubRepositoryList: ObservableObject {
     }
 
     private func fetchRepositories(owner: String, token: String?) async -> [GitHubRepository] {
-        let request1 = GitHubAPI.requestForRepositories(owner: owner, token: token)
-        let publicRepos = await fetchRepositories(request: request1)
-        if publicRepos.count > 0 && !publicRepos[0].isValid {
-            return publicRepos
+        let ownerRepoRequest = GitHubAPI.requestForRepositories(owner: owner, token: token)
+        var allRepos = await fetchRepositories(request: ownerRepoRequest)
+        if allRepos.count > 0 && !allRepos[0].isValid {
+            return allRepos
         }
 
-        let request2 = GitHubAPI.requestForPrivateRepositories(token: token)
-        let privateRepos = (token != nil) ? await fetchRepositories(request: request2) : []
-        if privateRepos.count > 0 && !privateRepos[0].isValid {
-            return privateRepos
+        if let token = token, !token.isEmpty {
+            let privateRepoRequest = GitHubAPI.requestForPrivateRepositories(token: token)
+            let privateRepos = await fetchRepositories(request: privateRepoRequest)
+            if privateRepos.count > 0 && !privateRepos[0].isValid {
+                return privateRepos
+            }
+            allRepos.append(contentsOf: privateRepos)
         }
 
-        var allRepos = (publicRepos + privateRepos).filter({ $0.owner?.login == owner })
+        allRepos = allRepos.filter({ $0.owner?.login == owner })
         if allRepos.count == 0 {
             allRepos = [GitHubRepository()]
         }
         allRepos.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
+        
         return allRepos
     }
 

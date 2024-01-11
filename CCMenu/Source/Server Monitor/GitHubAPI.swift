@@ -24,7 +24,7 @@ class GitHubAPI {
         return makeRequest(path: path, params: queryParams, token: token)
     }
 
-    static func requestForPrivateRepositories(token: String?) -> URLRequest {
+    static func requestForPrivateRepositories(token: String) -> URLRequest {
         let path = String(format: "/user/repos")
         let queryParams = [
             "type": "private",
@@ -100,7 +100,7 @@ class GitHubAPI {
         request.httpMethod = method
         request.addValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         request.addValue("2022-11-28", forHTTPHeaderField: "X-GitHub-Api-Version")
-        if let token = token {
+        if let token = token, !token.isEmpty {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         return request
