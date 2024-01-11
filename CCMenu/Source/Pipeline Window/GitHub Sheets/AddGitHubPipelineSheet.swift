@@ -104,7 +104,7 @@ struct AddGitHubPipelineSheet: View {
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     let p = pipelineBuilder.makePipeline(owner: owner, authToken: authenticator.token)
-                    model.pipelines.append(p)
+                    model.add(pipeline: p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

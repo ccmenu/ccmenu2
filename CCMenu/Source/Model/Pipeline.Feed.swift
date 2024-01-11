@@ -15,11 +15,16 @@ extension Pipeline {
         github
     }
 
-    struct Feed: Codable {
+    struct Feed: Codable, Equatable {
         var type: FeedType
         var url: String
         var name: String? // for cctray only: name of the project in the feed
         var authToken: String? // for GitHub only: bearer token for authentication
+
+        static func == (lhs: Pipeline.Feed, rhs: Pipeline.Feed) -> Bool {
+            (lhs.type == rhs.type) && (lhs.url == rhs.url) && (lhs.name == rhs.name)
+        }
+
     }
     
 }

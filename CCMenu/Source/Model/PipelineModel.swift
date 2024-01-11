@@ -23,6 +23,15 @@ final class PipelineModel: ObservableObject {
         }
         pipelines[idx] = pipeline
     }
+    
+    @discardableResult
+    func add(pipeline newPipeline: Pipeline) -> Bool {
+        guard !pipelines.contains(where: {$0.id == newPipeline.id}) else {
+            return false
+        }
+        pipelines.append(newPipeline)
+        return true
+    }
 
     private func updateSettings() {
         // TODO: this is called, too, every time the status gets updated...

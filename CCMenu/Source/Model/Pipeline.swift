@@ -8,6 +8,7 @@ import SwiftUI
 
 
 struct Pipeline: Identifiable, Codable {
+
     var name: String
     var feed: Pipeline.Feed
     var status: Pipeline.Status
@@ -20,7 +21,7 @@ struct Pipeline: Identifiable, Codable {
     }
 
     var id: String {
-        feed.url + "|" + name
+        (feed.name == nil) ? feed.url : "\(feed.url)|\(feed.name!)"
     }
 
     var message: String? {
@@ -44,6 +45,22 @@ struct Pipeline: Identifiable, Codable {
 
 }
 
+
+extension Pipeline: Hashable {
+
+    var hashValue: Int {
+        id.hashValue
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: Pipeline, rhs: Pipeline) -> Bool {
+        lhs.id == rhs.id
+    }
+      
+}
 
 //extension Pipeline: Transferable {
 //    static var transferRepresentation: some TransferRepresentation {
