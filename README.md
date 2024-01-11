@@ -11,7 +11,7 @@ For now the roadmap is tracked in this readme file.
 
 ## Roadmap
 
-### Version 20.0 (CCMenu2 pre-release 1)
+### Version 20 (CCMenu2 pre-release 1)
 
 - [X] Monitor hard-coded pipelines
 - [X] Read legacy config
@@ -20,18 +20,18 @@ For now the roadmap is tracked in this readme file.
 - [X] Persistent sorting of pipelines
 - [X] Sign in at GitHub
 
-### Pre-release 2
+### Version 21 (CCMenu2 pre-release 2)
 
 - [X] GitHub repository and workflow selection
 - [X] Caching of last-used authentication token
 
-### Pre-release 3
+### Pre-release 3 (planned)
 
 - [ ] Notifications (check out: UNNotificationContentExtension)
 - [ ] Build timer updates every second
 - [ ] Remaining menu appearance options
 
-### Pre-release 4
+### Pre-release 4 (planned)
 
 - [ ] Basic auth login for CCTray feeds
 - [ ] Optimised CCTray reader requests
