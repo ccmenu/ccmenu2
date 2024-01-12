@@ -25,8 +25,8 @@ public enum DefaultsKey: String {
 
 extension UserDefaults {
     public static var active = {
-        let d = UserDefaults(suiteName: "org.ccmenu.tempdomain")
-        d?.removePersistentDomain(forName: "org.ccmenu.tempdomain")
+        let d = UserDefaults(suiteName: "org.ccmenu.tempdomain")!
+        d.removePersistentDomain(forName: "org.ccmenu.tempdomain")
         return d
     }()
 }

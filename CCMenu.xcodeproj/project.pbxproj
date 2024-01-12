@@ -30,6 +30,8 @@
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
 		03B1D7612A607DD0007BCB8A /* PipelineRowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */; };
 		03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */; };
+		03B263F22B50968800CA989A /* StatusChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B263F12B50968800CA989A /* StatusChange.swift */; };
+		03B263F42B509E5300CA989A /* StatusChangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B263F32B509E5300CA989A /* StatusChangeTests.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
@@ -106,6 +108,8 @@
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
 		03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRowViewModel.swift; sourceTree = "<group>"; };
 		03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowModelTests.swift; sourceTree = "<group>"; };
+		03B263F12B50968800CA989A /* StatusChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusChange.swift; sourceTree = "<group>"; };
+		03B263F32B509E5300CA989A /* StatusChangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusChangeTests.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BD7E8C2598E57A000F9495 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -232,6 +236,7 @@
 			children = (
 				03D4BB002659A1120023F4CB /* PipelineTests.swift */,
 				037AB21B297B4D5F00C33589 /* PipelineModelTests.swift */,
+				03B263F32B509E5300CA989A /* StatusChangeTests.swift */,
 				03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */,
 				03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */,
 				03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */,
@@ -288,6 +293,7 @@
 				03F9B895297D486C00FA866E /* Pipeline.Feed.swift */,
 				03F9B893297D38AA00FA866E /* Pipeline.Status.swift */,
 				039B524529676D0700994910 /* Build.swift */,
+				03B263F12B50968800CA989A /* StatusChange.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -545,6 +551,7 @@
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
+				03B263F22B50968800CA989A /* StatusChange.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
 				03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */,
 				03DA98DC2B4498BB0073F5BB /* GitHubRepositoryList.swift in Sources */,
@@ -571,6 +578,7 @@
 				03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 				2FA2827139B00E15C5CD2E7F /* GitHubResponseParserTests.swift in Sources */,
+				03B263F42B509E5300CA989A /* StatusChangeTests.swift in Sources */,
 				03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */,
 				03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */,
 				03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */,

@@ -11,6 +11,7 @@ import Combine
 final class PipelineModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateSettings() } }
+    @Published var lastStatusChange: StatusChange?
 
     init() {
         pipelines = []
@@ -21,7 +22,11 @@ final class PipelineModel: ObservableObject {
             debugPrint("trying to update unknown pipeline \(pipelines.debugDescription)")
             return
         }
+        let change = StatusChange(pipeline: pipeline, previousStatus: pipelines[idx].status)
         pipelines[idx] = pipeline
+        if change.kind != .noChange {
+            lastStatusChange = change
+        }
     }
     
     @discardableResult
@@ -36,12 +41,12 @@ final class PipelineModel: ObservableObject {
     private func updateSettings() {
         // TODO: this is called, too, every time the status gets updated...
         let list = pipelines.map({ $0.asDictionaryForPersisting() })
-        UserDefaults.active?.set(list, forKey: DefaultsKey.pipelineList.rawValue)
+        UserDefaults.active.set(list, forKey: DefaultsKey.pipelineList.rawValue)
     }
 
 
     func loadPipelinesFromUserDefaults() {
-        if let list = UserDefaults.active?.array(forKey: DefaultsKey.pipelineList.rawValue) as? Array<Dictionary<String, String>>, !list.isEmpty  {
+        if let list = UserDefaults.active.array(forKey: DefaultsKey.pipelineList.rawValue) as? Array<Dictionary<String, String>>, !list.isEmpty  {
             pipelines = list.compactMap(Pipeline.fromPersistedDictionary)
         }
         else {

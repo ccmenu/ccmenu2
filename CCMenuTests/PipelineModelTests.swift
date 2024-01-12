@@ -7,7 +7,7 @@
 import XCTest
 @testable import CCMenu
 
-class ViewModelTests: XCTestCase {
+class PipelineModelTests: XCTestCase {
 
     func testDoesntAddPipelineIfItsInTheModelAlready() throws {
         let model = PipelineModel()
@@ -50,6 +50,36 @@ class ViewModelTests: XCTestCase {
         XCTAssert(success)
         XCTAssertEqual(2, model.pipelines.count)
     }
-        
+
+    func testSetsStatusChangeWhenPipelineStatusChanged() throws {
+        let model = PipelineModel()
+        var p = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: "http://localhost/cctray.xml", name: "foo"))
+        p.status = Pipeline.Status(activity: .building)
+        model.add(pipeline: p)
+        XCTAssertNil(model.lastStatusChange)
+
+        p.status = Pipeline.Status(activity: .sleeping)
+        model.update(pipeline: p)
+        let change = model.lastStatusChange
+
+        XCTAssertNotNil(change)
+        XCTAssertEqual(p, change?.pipeline)
+        XCTAssertEqual(.completion, change?.kind)
+    }
+
+    func testDoesNotSetStatusChangeWhenPipelineStatusIsNotChanged() throws {
+        let model = PipelineModel()
+        var p = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: "http://localhost/cctray.xml", name: "foo"))
+        p.status = Pipeline.Status(activity: .building)
+        model.add(pipeline: p)
+        XCTAssertNil(model.lastStatusChange)
+
+        p.status = Pipeline.Status(activity: .building)
+        model.update(pipeline: p)
+        let change = model.lastStatusChange
+
+        XCTAssertNil(change)
+    }
+
 }
 
