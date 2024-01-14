@@ -14,7 +14,7 @@ class NotificationFactory {
             let content = makeContentObject(title: change.pipeline.name)
             content.body = "Build started."
             if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
-                content.body.append("\nLast build: \(facts)")
+                content.body.append("\n\(facts)")
             }
             return content
         } else if change.kind == .completion {
@@ -23,7 +23,7 @@ class NotificationFactory {
             let previous = change.previousStatus
             content.body = resultOfCompletedBuild(status.lastBuild, previousBuild: previous.lastBuild)
             if let build = status.lastBuild {
-                if let duration = build.duration, let durationAsString = formattedDuration(duration) {
+                if let duration = build.duration, let durationAsString = formattedDurationPrecise(duration) {
                     content.body.append("\nTime: \(durationAsString)")
                 }
                 attachImage(forBuild: build, to: content)
@@ -47,16 +47,16 @@ class NotificationFactory {
         if let duration = build.duration {
             if let durationAsString = formattedDuration(duration) {
                 if build.result != .failure {
-                    facts = "took \(durationAsString)"
+                    facts = "Last build took \(durationAsString)."
                 } else {
-                    facts = "failed after \(durationAsString)"
+                    facts = "Last build failed after \(durationAsString)."
                 }
             }
         } else {
             if build.result == .success {
-                facts = "successful"
+                facts = "Last build was successful."
             } else if build.result == .failure {
-                facts = "failed"
+                facts = "Last build failed."
             }
         }
         return facts
@@ -96,6 +96,15 @@ class NotificationFactory {
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .full
         formatter.collapsesLargestUnit = true
+        return formatter.string(from: duration)
+    }
+
+    private func formattedDurationPrecise(_ duration: TimeInterval) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.collapsesLargestUnit = true
+        formatter.maximumUnitCount = 2
         return formatter.string(from: duration)
     }
 

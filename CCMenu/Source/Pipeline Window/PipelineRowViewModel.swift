@@ -28,9 +28,9 @@ struct PipelineRowViewModel {
             }
         } else {
             if let build = pipeline.status.lastBuild {
-                description =  statusDescription(finishedBuild: build)
+                description = statusDescription(finishedBuild: build)
             } else {
-                description =  "Waiting for first build"
+                description = "Waiting for first build"
             }
         }
         return description
@@ -44,23 +44,14 @@ struct PipelineRowViewModel {
         } else {
             description =  "Started"
         }
-        if let duration = lastBuild?.duration {
-            description.append(", Last build: ")
-            let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.hour, .minute, .second]
-            formatter.unitsStyle = .abbreviated
-            formatter.collapsesLargestUnit = true
-            formatter.maximumUnitCount = 2
-            if let durationAsString = formatter.string(from: duration) {
-                if lastBuild?.result == .failure {
-                    description.append("failed after \(durationAsString)")
-                } else {
-                    description.append("took \(durationAsString)")
-                }
+        if let duration = lastBuild?.duration, let durationAsString = formattedDuration(duration) {
+            description.append(", Last build time: ")
+            if lastBuild?.result == .failure {
+                description.append("failed after \(durationAsString)")
+            } else {
+                description.append("\(durationAsString)")
             }
-
         }
-
         return description
     }
 
@@ -70,15 +61,8 @@ struct PipelineRowViewModel {
             let absolute = timestamp.formatted(date: .numeric, time: .shortened)
             components.append("Last build: \(absolute)")
         }
-        if let duration = build.duration {
-            let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.hour, .minute, .second]
-            formatter.unitsStyle = .abbreviated
-            formatter.collapsesLargestUnit = true
-            formatter.maximumUnitCount = 2
-            if let durationAsString = formatter.string(from: duration) {
-                components.append("Duration: \(durationAsString)")
-            }
+        if let duration = build.duration, let durationAsString = formattedDuration(duration) {
+            components.append("Time: \(durationAsString)")
         }
         if let label = build.label {
             components.append("Label: \(label)")
@@ -87,6 +71,15 @@ struct PipelineRowViewModel {
             return components.joined(separator: ", ")
         }
         return "Build finished"
+    }
+
+    private func formattedDuration(_ duration: TimeInterval) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.collapsesLargestUnit = true
+        formatter.maximumUnitCount = 2
+        return formatter.string(from: duration)
     }
 
     var statusMessage: String? {

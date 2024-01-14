@@ -40,7 +40,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build started.\nLast build: successful", notification?.body)
+        XCTAssertEqual("Build started.\nLast build was successful.", notification?.body)
     }
 
     func testCreatesStartNotificationWithSuccessfulLastBuildWithDurationThatNeedsRounding() throws {
@@ -51,7 +51,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build started.\nLast build: took 1 minute", notification?.body)
+        XCTAssertEqual("Build started.\nLast build took 1 minute.", notification?.body)
     }
 
     func testCreatesStartNotificationWithFailedLastBuildWithDurationThatCanBeCollapsed() throws {
@@ -62,7 +62,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build started.\nLast build: failed after 62 minutes", notification?.body)
+        XCTAssertEqual("Build started.\nLast build failed after 62 minutes.", notification?.body)
     }
 
     func testCreatesStartNotificationWithUnknownLastBuildWithDurationThatNeedsHoursAndMinutes() throws {
@@ -73,7 +73,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build started.\nLast build: took 2 hours, 5 minutes", notification?.body)
+        XCTAssertEqual("Build started.\nLast build took 2 hours, 5 minutes.", notification?.body)
     }
 
     // MARK: - completion
@@ -86,7 +86,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build completed successfully.\nTime: 5 minutes", notification?.body)
+        XCTAssertEqual("Build completed successfully.\nTime: 5m", notification?.body)
     }
 
     func testCreatesCompletionNotificationForSuccessfulBuildFollowingFailedBuild() throws {
@@ -108,7 +108,7 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Recent changes broke the build.\nTime: 5 minutes", notification?.body)
+        XCTAssertEqual("Recent changes broke the build.\nTime: 5m", notification?.body)
     }
 
     func testCreatesCompletionNotificationForFailedBuildFollowingFailedBuild() throws {
