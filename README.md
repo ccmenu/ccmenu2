@@ -27,7 +27,7 @@ For now the roadmap is tracked in this readme file.
 
 ### Pre-release 3 (planned)
 
-- [ ] Notifications (check out: UNNotificationContentExtension)
+- [ ] Notifications
 - [ ] Build timer updates every second
 - [ ] Remaining menu appearance options
 

@@ -24,10 +24,12 @@ public enum DefaultsKey: String {
 }
 
 extension UserDefaults {
-    public static var active = {
-        let d = UserDefaults(suiteName: "org.ccmenu.tempdomain")!
-        d.removePersistentDomain(forName: "org.ccmenu.tempdomain")
-        return d
+    public static var active = UserDefaults.standard
+
+    public static var transient = {
+            let d = UserDefaults(suiteName: "org.ccmenu.transient")!
+            d.removePersistentDomain(forName: "org.ccmenu.transient")
+            return d
     }()
 }
 

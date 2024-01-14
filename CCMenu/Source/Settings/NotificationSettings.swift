@@ -25,3 +25,7 @@ struct NotificationSettings_Previews: PreviewProvider {
     }
 
 }
+
+
+//         Task { try await center.requestAuthorization(options: [.alert]) }
+

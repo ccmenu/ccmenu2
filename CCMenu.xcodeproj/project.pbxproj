@@ -15,6 +15,8 @@
 		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
 		0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */; };
 		0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */; };
+		0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */; };
+		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
 		037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserDefaultsExtension.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */; };
@@ -32,6 +34,7 @@
 		03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */; };
 		03B263F22B50968800CA989A /* StatusChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B263F12B50968800CA989A /* StatusChange.swift */; };
 		03B263F42B509E5300CA989A /* StatusChangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B263F32B509E5300CA989A /* StatusChangeTests.swift */; };
+		03B263F82B51FF2100CA989A /* NotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B263F72B51FF2100CA989A /* NotificationSender.swift */; };
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
@@ -94,6 +97,8 @@
 		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
 		0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGitHubPipelineSheet.swift; sourceTree = "<group>"; };
+		0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactory.swift; sourceTree = "<group>"; };
+		0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactoryTests.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraMenu.swift; sourceTree = "<group>"; };
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
@@ -110,6 +115,7 @@
 		03B1D7622A6085F1007BCB8A /* ListRowModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowModelTests.swift; sourceTree = "<group>"; };
 		03B263F12B50968800CA989A /* StatusChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusChange.swift; sourceTree = "<group>"; };
 		03B263F32B509E5300CA989A /* StatusChangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusChangeTests.swift; sourceTree = "<group>"; };
+		03B263F72B51FF2100CA989A /* NotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSender.swift; sourceTree = "<group>"; };
 		03BD7E852598E578000F9495 /* CCMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7E882598E579000F9495 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03BD7E8C2598E57A000F9495 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -191,6 +197,15 @@
 			path = "GitHub Sheets";
 			sourceTree = "<group>";
 		};
+		03B263F62B51FEF800CA989A /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				03B263F72B51FF2100CA989A /* NotificationSender.swift */,
+				0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		03BD7E7C2598E578000F9495 = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +259,7 @@
 				03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
 				2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */,
+				0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */,
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* NSImageExtensionTests.swift */,
 				03BD7EA02598E57A000F9495 /* Info.plist */,
@@ -278,8 +294,9 @@
 				03CC11E12652F08300130833 /* Model */,
 				03CC11E22652F09800130833 /* Menu Bar Extra */,
 				03CC11E32652F0B100130833 /* Pipeline Window */,
-				03CC11E42652F0D800130833 /* Settings */,
 				03CC11E82652F38A00130833 /* Server Monitor */,
+				03B263F62B51FEF800CA989A /* Notifications */,
+				03CC11E42652F0D800130833 /* Settings */,
 				03CC11E52652F0F200130833 /* Miscellaneous */,
 			);
 			path = Source;
@@ -529,6 +546,7 @@
 				03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
+				0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,
 				03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */,
 				039B524629676D0700994910 /* Build.swift in Sources */,
@@ -541,6 +559,7 @@
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
+				03B263F82B51FF2100CA989A /* NotificationSender.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				0331F39F29A8155000245956 /* MenuExtraViewModel.swift in Sources */,
 				03F9B894297D38AA00FA866E /* Pipeline.Status.swift in Sources */,
@@ -581,6 +600,7 @@
 				03B263F42B509E5300CA989A /* StatusChangeTests.swift in Sources */,
 				03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */,
 				03F9B89A297D930A00FA866E /* CCTrayFeedReaderTests.swift in Sources */,
+				0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */,
 				03B1D7632A6085F1007BCB8A /* ListRowModelTests.swift in Sources */,
 				03F9B890297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift in Sources */,
 			);
