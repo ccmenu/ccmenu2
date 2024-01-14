@@ -36,7 +36,7 @@ struct Pipeline: Identifiable, Codable {
         if status.activity == .building, let duration = status.lastBuild?.duration {
             return status.currentBuild?.timestamp?.advanced(by: duration)
         }
-        return nil;
+        return nil
     }
 
     mutating func update(status newStatus: Pipeline.Status) {

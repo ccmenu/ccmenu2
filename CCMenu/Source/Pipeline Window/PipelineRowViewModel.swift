@@ -52,7 +52,7 @@ struct PipelineRowViewModel {
         }
         if let duration = build.duration {
             let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.day, .hour, .minute, .second]
+            formatter.allowedUnits = [.hour, .minute, .second]
             formatter.unitsStyle = .abbreviated
             formatter.collapsesLargestUnit = true
             formatter.maximumUnitCount = 2

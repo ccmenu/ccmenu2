@@ -55,9 +55,8 @@ final class PipelineModel: ObservableObject {
         }
     }
 
-
     private func loadPipelinesFromLegacyDefaults() {
-        guard  let legacyProjects = UserDefaults.standard.array(forKey: "Projects") as? Array<Dictionary<String, String>> else {
+        guard let legacyProjects = UserDefaults.active.array(forKey: "Projects") as? Array<Dictionary<String, String>> else {
             return
         }
         for project in legacyProjects {
@@ -72,6 +71,7 @@ final class PipelineModel: ObservableObject {
         let p0 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(p0)
     }
+
 
     func loadPipelinesFromFile(_ filename: String) {
         let data: Data
