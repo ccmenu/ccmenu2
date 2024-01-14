@@ -7,7 +7,7 @@
 import XCTest
 @testable import CCMenu
 
-final class ListRowModelTests: XCTestCase {
+final class PipelineRowModelTests: XCTestCase {
 
     private func makePipeline(name: String = "connectfour", activity: Pipeline.Activity = .other) -> Pipeline {
         var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cc.xml", name: name))
@@ -46,21 +46,34 @@ final class ListRowModelTests: XCTestCase {
         XCTAssertEqual("Build finished", pvm.statusDescription)
     }
 
-    func testStatusWhenBuildingAndCurrentBuildNotAvailable() throws { // TODO: does this even make sense?
-        let pipeline = makePipeline(activity: .building)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
-
-        XCTAssertEqual("Build started", pvm.statusDescription)
-    }
-
     func testStatusWhenBuildingAndCurrentBuildIsAvailable() throws {
         var pipeline = makePipeline(activity: .building)
-        pipeline.status.currentBuild = Build(result: .unknown)
-        pipeline.status.currentBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
         let pvm = PipelineRowViewModel(pipeline: pipeline)
 
         // Check some components that should definitely be there in this form
         XCTAssertTrue(pvm.statusDescription.contains("47"))   // timestamp minute
+    }
+
+    func testStatusWhenBuildingAndCurrentBuildAndLastBuildWhichWasSuccessfulAndHasDurationAreAvailable() throws {
+        var pipeline = makePipeline(activity: .building)
+        let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
+        pipeline.status.lastBuild = Build(result: .success, duration: 310)
+        let pvm = PipelineRowViewModel(pipeline: pipeline)
+
+        XCTAssertTrue(pvm.statusDescription.contains("Last build: took 5m 10s"))
+    }
+
+    func testStatusWhenBuildingAndCurrentBuildAndLastBuildWhichWasFailureAndHasDurationAreAvailable() throws {
+        var pipeline = makePipeline(activity: .building)
+        let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
+        pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
+        pipeline.status.lastBuild = Build(result: .failure, duration: 40)
+        let pvm = PipelineRowViewModel(pipeline: pipeline)
+
+        XCTAssertTrue(pvm.statusDescription.contains("Last build: failed after 40s"))
     }
 
     func testStatusWhenErrorIsSet() throws {

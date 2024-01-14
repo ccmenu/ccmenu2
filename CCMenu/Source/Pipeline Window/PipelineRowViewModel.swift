@@ -23,10 +23,8 @@ struct PipelineRowViewModel {
         if let error = pipeline.connectionError {
             description = "\u{1F53A} \(error)"
         } else if pipeline.status.activity == .building {
-            if let build = pipeline.status.currentBuild, let timestamp = build.timestamp {
-                description = statusDecription(activeBuild: build, timestamp: timestamp)
-            } else {
-                description =  "Build started"
+            if let build = pipeline.status.currentBuild {
+                description = statusDecription(activeBuild: build, lastBuild: pipeline.status.lastBuild)
             }
         } else {
             if let build = pipeline.status.lastBuild {
@@ -38,10 +36,32 @@ struct PipelineRowViewModel {
         return description
     }
 
-    private func statusDecription(activeBuild build: Build, timestamp: Date) -> String {
-        let absolute = timestamp.formatted(date: .omitted, time: .shortened)
-        let status = "Started: \(absolute)"
-        return status
+    private func statusDecription(activeBuild build: Build, lastBuild: Build?) -> String {
+        var description: String
+        if let timestamp = build.timestamp {
+            let absolute = timestamp.formatted(date: .omitted, time: .shortened)
+            description = "Started: \(absolute)"
+        } else {
+            description =  "Started"
+        }
+        if let duration = lastBuild?.duration {
+            description.append(", Last build: ")
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.hour, .minute, .second]
+            formatter.unitsStyle = .abbreviated
+            formatter.collapsesLargestUnit = true
+            formatter.maximumUnitCount = 2
+            if let durationAsString = formatter.string(from: duration) {
+                if lastBuild?.result == .failure {
+                    description.append("failed after \(durationAsString)")
+                } else {
+                    description.append("took \(durationAsString)")
+                }
+            }
+
+        }
+
+        return description
     }
 
     private func statusDescription(finishedBuild build: Build) -> String {
