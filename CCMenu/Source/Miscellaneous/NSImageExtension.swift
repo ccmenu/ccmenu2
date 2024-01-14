@@ -15,6 +15,17 @@ extension NSImage {
     }
 
     convenience init(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool = false) {
+        self.init(named: Self.name(forResult: result, activity: activity, asTemplate: asTemplate))!
+        // not strictly necessary; it's automatically set for names ending with "template"
+        isTemplate = asTemplate
+    }
+
+    static func urlOfImage(forResult result: BuildResult) -> URL? {
+        let name = "Icon-" + result.rawValue
+        return Bundle.main.url(forResource: name, withExtension: "png")
+    }
+
+    private static func name(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool) -> String {
         var name = "build"
         switch result {
         case .success:
@@ -32,9 +43,7 @@ extension NSImage {
         if asTemplate {
             name += "-template"
         }
-        self.init(named: name)!
-        // not strictly necessary; it's automatically set for names ending with "template"
-        isTemplate = asTemplate
+        return name
     }
 
 }

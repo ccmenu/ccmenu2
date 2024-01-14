@@ -78,15 +78,15 @@ class NotificationFactoryTests: XCTestCase {
 
     // MARK: - completion
 
-    func testCreatesCompletionNotificationForSuccessfulBuild() throws {
-        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
+    func testCreatesCompletionNotificationForSuccessfulBuildWithDuration() throws {
+        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success, duration: 300))
         let previous = Pipeline.Status(activity: .building)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
 
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build completed successfully.", notification?.body)
+        XCTAssertEqual("Build completed successfully.\nTime: 5 minutes", notification?.body)
     }
 
     func testCreatesCompletionNotificationForSuccessfulBuildFollowingFailedBuild() throws {
@@ -100,15 +100,15 @@ class NotificationFactoryTests: XCTestCase {
         XCTAssertEqual("Recent changes fixed the build.", notification?.body)
     }
 
-    func testCreatesCompletionNotificationForFailedBuild() throws {
-        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .failure))
+    func testCreatesCompletionNotificationForFailedBuildWithTime() throws {
+        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .failure, duration: 300))
         let previous = Pipeline.Status(activity: .building)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
 
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Recent changes broke the build.", notification?.body)
+        XCTAssertEqual("Recent changes broke the build.\nTime: 5 minutes", notification?.body)
     }
 
     func testCreatesCompletionNotificationForFailedBuildFollowingFailedBuild() throws {

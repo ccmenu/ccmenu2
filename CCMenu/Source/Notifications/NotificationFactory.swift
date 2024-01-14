@@ -4,26 +4,33 @@
  *  not use these files except in compliance with the License.
  */
 
-import Foundation
+import AppKit
 import UserNotifications
 
 class NotificationFactory {
 
     func notificationContent(change: StatusChange) -> UNNotificationContent? {
-        var content: UNMutableNotificationContent?
         if change.kind == .start {
-            content = makeContentObject(title: change.pipeline.name)
-            content?.body = "Build started."
+            let content = makeContentObject(title: change.pipeline.name)
+            content.body = "Build started."
             if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
-                content?.body.append("\nLast build: \(facts)")
+                content.body.append("\nLast build: \(facts)")
             }
+            return content
         } else if change.kind == .completion {
-            content = makeContentObject(title: change.pipeline.name)
-            let previous = change.previousStatus.lastBuild
-            content?.body = resultOfCompletedBuild(change.pipeline.status.lastBuild, previousBuild: previous)
-            addTestImage(content: content!)
-        }
-        return content
+            let content = makeContentObject(title: change.pipeline.name)
+            let status = change.pipeline.status
+            let previous = change.previousStatus
+            content.body = resultOfCompletedBuild(status.lastBuild, previousBuild: previous.lastBuild)
+            if let build = status.lastBuild {
+                if let duration = build.duration, let durationAsString = formattedDuration(duration) {
+                    content.body.append("\nTime: \(durationAsString)")
+                }
+                attachImage(forBuild: build, to: content)
+            }
+            return content
+       }
+        return nil
     }
 
     private func makeContentObject(title: String) -> UNMutableNotificationContent {
@@ -38,11 +45,7 @@ class NotificationFactory {
         }
         var facts: String? = nil
         if let duration = build.duration {
-            let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.hour, .minute]
-            formatter.unitsStyle = .full
-            formatter.collapsesLargestUnit = true
-            if let durationAsString = formatter.string(from: duration) {
+            if let durationAsString = formattedDuration(duration) {
                 if build.result != .failure {
                     facts = "took \(durationAsString)"
                 } else {
@@ -76,14 +79,24 @@ class NotificationFactory {
         }
     }
 
-    private func addTestImage(content: UNMutableNotificationContent) {
+    private func attachImage(forBuild build: Build, to content: UNMutableNotificationContent) {
         do {
-            let image1 = try UNNotificationAttachment(identifier: "erik", url: URL(string: "file:///Users/erik/Pictures/erik.jpg")!, options: [:])
-            content.attachments = [ image1 ]
+            guard let imageUrl = NSImage.urlOfImage(forResult: build.result) else {
+                return
+            }
+            let attachment = try UNNotificationAttachment(identifier: build.result.rawValue, url: imageUrl, options: [:])
+            content.attachments = [ attachment ]
         } catch {
             debugPrint(error)
         }
     }
 
+    private func formattedDuration(_ duration: TimeInterval) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .full
+        formatter.collapsesLargestUnit = true
+        return formatter.string(from: duration)
+    }
 
 }
