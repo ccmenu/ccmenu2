@@ -44,7 +44,7 @@ class CCMenuUITests: XCTestCase {
 
         // Make sure broken URLs are not opened
         menu.menuItems["erikdoe/ccmenu"].click()
-        XCTAssert(app.dialogs["alert"].staticTexts["Cannot open pipeline"].exists)
+        XCTAssert(app.dialogs["alert"].staticTexts["Can't open web page"].exists)
         app.dialogs["alert"].buttons["Cancel"].click()
     }
 

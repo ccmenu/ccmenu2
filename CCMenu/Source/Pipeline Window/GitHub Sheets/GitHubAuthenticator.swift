@@ -56,7 +56,7 @@ class GitHubAuthenticator: ObservableObject {
             // TODO: Consider adding error handling. But will GH really send a bad URL?
             return false
         }
-        NSWorkspace.shared.openUrl(url: url)
+        NSWorkspace.shared.open(url)
         return true
     }
 
@@ -118,7 +118,7 @@ class GitHubAuthenticator: ObservableObject {
     }
 
     func openApplicationsOnWebsite() {
-        NSWorkspace.shared.openUrl(url: GitHubAPI.applicationsUrl())
+        NSWorkspace.shared.open(GitHubAPI.applicationsUrl())
     }
 
 }

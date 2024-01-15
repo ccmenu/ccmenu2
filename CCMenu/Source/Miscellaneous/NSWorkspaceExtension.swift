@@ -13,24 +13,25 @@ extension NSWorkspace {
         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
         NSApp.activate(ignoringOtherApps: true)
     }
-    
-    func openUrl(url: URL) {
-        self.open(url)
-    }
-    
+
     func openWebPage(pipeline: Pipeline) {
         if let error = pipeline.connectionError {
             // TODO: Consider adding a UI test for this case
-           alertPipelineFeedError(error)
+            alertPipelineFeedError(error)
         } else {
-            if let urlString = pipeline.status.webUrl, let url = URL(string: urlString), url.host != nil {
-                self.open(url)
-            } else if (pipeline.status.webUrl ?? "").isEmpty {
-                alertPipelineLinkProblem("The continuous integration server did not provide a link for this pipeline.")
-            } else {
-                alertPipelineLinkProblem("The continuous integration server provided a malformed link for this pipeline:\n\(pipeline.status.webUrl ?? "")")
-            }
+            openPipelineWebPage(pipeline.status.webUrl)
         }
+    }
+
+    func openPipelineWebPage(_ urlStringOption: String?) {
+        if let urlString = urlStringOption, let url = URL(string: urlString), url.host != nil {
+            self.open(url)
+        } else if (urlStringOption ?? "").isEmpty {
+            alertPipelineLinkProblem("The continuous integration server did not provide a link for this pipeline.")
+        } else {
+            alertPipelineLinkProblem("The continuous integration server provided a malformed link for this pipeline:\n\(urlStringOption ?? "")")
+        }
+
     }
 
     private func alertPipelineFeedError(_ errorString: String) {
@@ -44,7 +45,7 @@ extension NSWorkspace {
 
     private func alertPipelineLinkProblem(_ informativeText: String) {
         let alert = NSAlert()
-        alert.messageText = "Cannot open pipeline"
+        alert.messageText = "Can't open web page"
         alert.informativeText = informativeText + "\n\nPlease contact the server administrator."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "Cancel")

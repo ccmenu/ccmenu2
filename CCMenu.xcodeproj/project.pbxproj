@@ -19,6 +19,7 @@
 		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
 		0362EBF22B54230C0079DEFE /* Icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = 0362EBF02B54230C0079DEFE /* Icon-success.png */; };
 		0362EBF32B54230C0079DEFE /* Icon-failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0362EBF12B54230C0079DEFE /* Icon-failure.png */; };
+		0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */; };
 		037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserDefaultsExtension.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */; };
@@ -103,6 +104,7 @@
 		0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactoryTests.swift; sourceTree = "<group>"; };
 		0362EBF02B54230C0079DEFE /* Icon-success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-success.png"; sourceTree = "<group>"; };
 		0362EBF12B54230C0079DEFE /* Icon-failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-failure.png"; sourceTree = "<group>"; };
+		0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationReceiver.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraMenu.swift; sourceTree = "<group>"; };
 		037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraLabel.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 			children = (
 				03B263F72B51FF2100CA989A /* NotificationSender.swift */,
 				0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */,
+				0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
+				0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03B263F82B51FF2100CA989A /* NotificationSender.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,

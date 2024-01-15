@@ -76,6 +76,16 @@ class NotificationFactoryTests: XCTestCase {
         XCTAssertEqual("Build started.\nLast build took 2 hours, 5 minutes.", notification?.body)
     }
 
+    func testAddsWebUrlToUserInfoToStartNotification() throws {
+        pipeline.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .success), webUrl: "http://localhost/connectfour")
+        let previous = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .other))
+        let change = StatusChange(pipeline: pipeline, previousStatus: previous)
+
+        let notification = factory.notificationContent(change: change)
+
+        XCTAssertEqual("http://localhost/connectfour", notification?.userInfo["webUrl"] as? String)
+    }
+
     // MARK: - completion
 
     func testCreatesCompletionNotificationForSuccessfulBuildWithDuration() throws {
@@ -123,10 +133,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesCompletionNotificationForOtherBuildResult() throws {
-        let factory = NotificationFactory()
-        var pipeline = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .github, url: ""))
-        pipeline.status = Pipeline.Status(activity: .sleeping)
-        pipeline.status.lastBuild = Build(result: .other)
+        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .other))
         let previous = Pipeline.Status(activity: .building)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
 
@@ -134,6 +141,16 @@ class NotificationFactoryTests: XCTestCase {
 
         XCTAssertEqual("connectfour", notification?.title)
         XCTAssertEqual("Build completed with an indeterminate result.", notification?.body)
+    }
+
+    func testAddsWebUrlToUserInfoToCompletionNotification() throws {
+        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success), webUrl: "http://localhost/connectfour")
+        let previous = Pipeline.Status(activity: .building, lastBuild: Build(result: .other))
+        let change = StatusChange(pipeline: pipeline, previousStatus: previous)
+
+        let notification = factory.notificationContent(change: change)
+
+        XCTAssertEqual("http://localhost/connectfour", notification?.userInfo["webUrl"] as? String)
     }
 
 }

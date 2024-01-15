@@ -8,14 +8,16 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    func applicationWillFinishLaunching(_ aNotification: Notification) {
+        NotificationReceiver.shared.start()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
     }
 
-    @IBAction func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
+    @IBAction 
+    func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
         NSWorkspace.shared.activateThisApp()
         let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
         NSApplication.shared.orderFrontStandardAboutPanel(

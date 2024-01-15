@@ -16,6 +16,9 @@ class NotificationFactory {
             if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
                 content.body.append("\n\(facts)")
             }
+            if let webUrl = change.pipeline.status.webUrl {
+                addWebUrl(webUrl, to: content)
+            }
             return content
         } else if change.kind == .completion {
             let content = makeContentObject(title: change.pipeline.name)
@@ -27,6 +30,9 @@ class NotificationFactory {
                     content.body.append("\nTime: \(durationAsString)")
                 }
                 attachImage(forBuild: build, to: content)
+            }
+            if let webUrl = status.webUrl {
+                addWebUrl(webUrl, to: content)
             }
             return content
        }
@@ -89,6 +95,10 @@ class NotificationFactory {
         } catch {
             debugPrint(error)
         }
+    }
+
+    private func addWebUrl(_ webUrl: String, to content: UNMutableNotificationContent) {
+        content.userInfo["webUrl"] = webUrl
     }
 
     private func formattedDuration(_ duration: TimeInterval) -> String? {
