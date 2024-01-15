@@ -33,6 +33,7 @@ class NotificationSender {
 
     private func send(content: UNNotificationContent) async throws {
         let center = UNUserNotificationCenter.current()
+        try await center.requestAuthorization(options: [.alert])
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized && settings.alertSetting == .enabled else {
             return
