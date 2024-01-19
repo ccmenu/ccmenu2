@@ -114,7 +114,7 @@ struct AddGitHubPipelineSheet: View {
         .frame(minWidth: 405)
         .padding()
         .onAppear() {
-            authenticator.token = cachedToken
+            authenticator.token = !cachedToken.isEmpty ? cachedToken : nil
             authenticator.tokenDescription = cachedToken
         }
         .onDisappear() {
