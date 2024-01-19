@@ -92,7 +92,7 @@ class GitHubAPI {
         var components = URLComponents(string: baseUrl)!
         components.path = path
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
-        return makeRequest(url: components.url!, token: token)
+        return makeRequest(method: method, url: components.url!, token: token)
     }
 
     private static func makeRequest(method: String = "GET", url: URL, token: String?) -> URLRequest {
