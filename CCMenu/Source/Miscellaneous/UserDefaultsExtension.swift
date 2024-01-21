@@ -20,16 +20,21 @@ public enum DefaultsKey: String {
     showBuildLabelsInMenu = "ShowLastBuildLabel",
     showStatusInWindow = "ShowPipelineStatusInWindow",
     showAvatarsInWindow = "ShowAvatarsInWindow",
-    showMessagesInWindow = "ShowPipelineMessagesInWindow"
+    showMessagesInWindow = "ShowPipelineMessagesInWindow",
+    sendNotificationSuccessful = "SendNotification Successful",
+    sendNotificationBroken = "SendNotification Broken",
+    sendNotificationFixed = "SendNotification Fixed",
+    sendNotificationStillFailing = "SendNotification StillFailing",
+    sendNotificationStarted = "SendNotification Starting"
 }
 
 extension UserDefaults {
     public static var active = UserDefaults.standard
 
     public static var transient = {
-            let d = UserDefaults(suiteName: "org.ccmenu.transient")!
-            d.removePersistentDomain(forName: "org.ccmenu.transient")
-            return d
+        let d = UserDefaults(suiteName: "org.ccmenu.transient")!
+        d.removePersistentDomain(forName: "org.ccmenu.transient")
+        return d
     }()
 }
 

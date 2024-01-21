@@ -11,6 +11,9 @@ class NotificationFactory {
 
     func notificationContent(change: StatusChange) -> UNNotificationContent? {
         if change.kind == .start {
+            if !isTrue(default: .sendNotificationStarted) {
+                return nil
+            }
             let content = makeContentObject(title: change.pipeline.name)
             content.body = "Build started."
             if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
@@ -24,7 +27,10 @@ class NotificationFactory {
             let content = makeContentObject(title: change.pipeline.name)
             let status = change.pipeline.status
             let previous = change.previousStatus
-            content.body = resultOfCompletedBuild(status.lastBuild, previousBuild: previous.lastBuild)
+            guard let result = resultOfCompletedBuild(status.lastBuild, previousBuild: previous.lastBuild) else {
+                return nil
+            }
+            content.body = result
             if let build = status.lastBuild {
                 if let duration = build.duration, let durationAsString = formattedDurationPrecise(duration) {
                     content.body.append("\nTime: \(durationAsString)")
@@ -68,20 +74,20 @@ class NotificationFactory {
         return facts
     }
 
-    private func resultOfCompletedBuild(_ build: Build?, previousBuild previous: Build?) -> String {
+    private func resultOfCompletedBuild(_ build: Build?, previousBuild previous: Build?) -> String? {
         switch build?.result {
         case .success:
             if previous?.result == .failure {
-                return "Recent changes fixed the build."
+                return isTrue(default: .sendNotificationFixed) ? "Recent changes fixed the build." : nil
             }
-            return "Build completed successfully."
+            return isTrue(default: .sendNotificationSuccessful) ? "The build was successful." : nil
         case .failure:
             if previous?.result != .failure {
-                return "Recent changes broke the build."
+                return isTrue(default: .sendNotificationBroken) ? "Recent changes broke the build." : nil
             }
-            return "The build is still broken."
+            return isTrue(default: .sendNotificationStillFailing) ? "The build is still broken." : nil
         default:
-            return "Build completed with an indeterminate result."
+            return "The build finished with an indeterminate result."
         }
     }
 
@@ -116,6 +122,10 @@ class NotificationFactory {
         formatter.collapsesLargestUnit = true
         formatter.maximumUnitCount = 2
         return formatter.string(from: duration)
+    }
+
+    private func isTrue(default key: DefaultsKey) -> Bool {
+        UserDefaults.active.bool(forKey: key.rawValue)
     }
 
 }

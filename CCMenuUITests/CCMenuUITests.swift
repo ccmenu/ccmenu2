@@ -77,10 +77,10 @@ class CCMenuUITests: XCTestCase {
         menu.menuItems["Settings..."].click()
         let window = app.windows["com_apple_SwiftUI_Settings_window"]
         window.toolbars.buttons["Appearance"].click()
-        XCTAssert(window.checkBoxes["Show build labels in menu"].isSelected == false)
-        window.checkBoxes["Show build labels in menu"].click()
-        XCTAssert(window.checkBoxes["Show build times in menu"].isSelected == false)
-        window.checkBoxes["Show build times in menu"].click()
+        XCTAssert(window.checkBoxes["Show label of last build"].isSelected == false)
+        window.checkBoxes["Show label of last build"].click()
+        XCTAssert(window.checkBoxes["Show time of last build"].isSelected == false)
+        window.checkBoxes["Show time of last build"].click()
         window.buttons[XCUIIdentifierCloseWindow].click()
 
         // Make sure the pipeline menu item now displays the build label and relative time

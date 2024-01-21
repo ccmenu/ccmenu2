@@ -11,15 +11,32 @@ class NotificationFactoryTests: XCTestCase {
 
     private var factory: NotificationFactory!
     private var pipeline: Pipeline!
+    private var defaults: UserDefaults!
 
     override func setUp() {
         factory = NotificationFactory()
         pipeline = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: ""))
+        UserDefaults.active = UserDefaults.transient
+        defaults = UserDefaults.active
     }
 
     // MARK: - start
 
+    func testDoesntCreateStartNotificationIfDefaultIsFalse() throws {
+        defaults.set(false, forKey: DefaultsKey.sendNotificationStarted.rawValue)
+        pipeline.status.activity = .building
+        let previous = Pipeline.Status(activity: .sleeping)
+        let change = StatusChange(pipeline: pipeline, previousStatus: previous)
+
+        defaults.set(false, forKey: DefaultsKey.sendNotificationStarted.rawValue)
+
+        let notification = factory.notificationContent(change: change)
+
+        XCTAssertNil(notification)
+    }
+
     func testCreatesBasicStartNotification() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status.activity = .building
         let previous = Pipeline.Status(activity: .sleeping)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -32,6 +49,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesStartNotificationWithSuccessfulLastBuild() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status.activity = .building
         pipeline.status.lastBuild = Build(result: .success)
         let previous = Pipeline.Status(activity: .sleeping)
@@ -44,6 +62,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesStartNotificationWithSuccessfulLastBuildWithDurationThatNeedsRounding() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .success, duration: 65))
         let previous = Pipeline.Status(activity: .sleeping)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -55,6 +74,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesStartNotificationWithFailedLastBuildWithDurationThatCanBeCollapsed() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure, duration: 62*60))
         let previous = Pipeline.Status(activity: .sleeping)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -66,6 +86,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesStartNotificationWithUnknownLastBuildWithDurationThatNeedsHoursAndMinutes() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .unknown, duration: 7500))
         let previous = Pipeline.Status(activity: .sleeping)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -77,6 +98,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testAddsWebUrlToUserInfoToStartNotification() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStarted.rawValue)
         pipeline.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .success), webUrl: "http://localhost/connectfour")
         let previous = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .other))
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -88,7 +110,19 @@ class NotificationFactoryTests: XCTestCase {
 
     // MARK: - completion
 
+    func testDoesntCreateCompletionNotificationIfDefaultIsFalse() throws {
+        defaults.set(false, forKey: DefaultsKey.sendNotificationSuccessful.rawValue)
+        pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
+        let previous = Pipeline.Status(activity: .building)
+        let change = StatusChange(pipeline: pipeline, previousStatus: previous)
+
+        let notification = factory.notificationContent(change: change)
+
+        XCTAssertNil(notification)
+    }
+
     func testCreatesCompletionNotificationForSuccessfulBuildWithDuration() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationSuccessful.rawValue)
         pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success, duration: 300))
         let previous = Pipeline.Status(activity: .building)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -96,10 +130,11 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build completed successfully.\nTime: 5m", notification?.body)
+        XCTAssertEqual("The build was successful.\nTime: 5m", notification?.body)
     }
 
     func testCreatesCompletionNotificationForSuccessfulBuildFollowingFailedBuild() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationFixed.rawValue)
         pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
         let previous = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure))
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -111,6 +146,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesCompletionNotificationForFailedBuildWithTime() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationBroken.rawValue)
         pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .failure, duration: 300))
         let previous = Pipeline.Status(activity: .building)
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -122,6 +158,7 @@ class NotificationFactoryTests: XCTestCase {
     }
 
     func testCreatesCompletionNotificationForFailedBuildFollowingFailedBuild() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationStillFailing.rawValue)
         pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .failure))
         let previous = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure))
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
@@ -140,10 +177,11 @@ class NotificationFactoryTests: XCTestCase {
         let notification = factory.notificationContent(change: change)
 
         XCTAssertEqual("connectfour", notification?.title)
-        XCTAssertEqual("Build completed with an indeterminate result.", notification?.body)
+        XCTAssertEqual("The build finished with an indeterminate result.", notification?.body)
     }
 
     func testAddsWebUrlToUserInfoToCompletionNotification() throws {
+        defaults.set(true, forKey: DefaultsKey.sendNotificationSuccessful.rawValue)
         pipeline.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success), webUrl: "http://localhost/connectfour")
         let previous = Pipeline.Status(activity: .building, lastBuild: Build(result: .other))
         let change = StatusChange(pipeline: pipeline, previousStatus: previous)
