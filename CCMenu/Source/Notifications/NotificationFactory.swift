@@ -7,42 +7,69 @@
 import AppKit
 import UserNotifications
 
+
+public enum NotificationType: String {
+    case // raw values for compatibility with legacy defaults
+    started = "Starting",
+    wasSuccessful = "Successful",
+    wasBroken = "Broken",
+    wasFixed = "Fixed",
+    isStillBroken = "StillFailing",
+    finished = "Finished"
+}
+
 class NotificationFactory {
 
     func notificationContent(change: StatusChange) -> UNNotificationContent? {
-        if change.kind == .start {
-            if !isTrue(default: .sendNotificationStarted) {
-                return nil
+        switch change.kind {
+        case .start:
+            return notificationContentForStarted(change: change)
+        case .completion:
+            return notificationContentForFinished(change: change)
+        default:
+            return nil
+        }
+    }
+
+    private func notificationContentForStarted(change: StatusChange) -> UNNotificationContent? {
+        if !UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: .started)) {
+            return nil
+        }
+        let content = makeContentObject(title: change.pipeline.name)
+        content.body = "Build started."
+        if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
+            content.body.append("\n\(facts)")
+        }
+        if let webUrl = change.pipeline.status.webUrl {
+            addWebUrl(webUrl, to: content)
+        }
+        return content
+    }
+
+    private func notificationContentForFinished(change: StatusChange) -> UNNotificationContent? {
+        let status = change.pipeline.status
+        let type = notificationTypeForBuild(status.lastBuild, previousBuild: change.previousStatus.lastBuild)
+        if !UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: type)) {
+            return nil
+        }
+        let content = makeContentObject(title: change.pipeline.name)
+        switch type {
+        case .wasSuccessful: content.body = "The build was successful.";       break
+        case .wasBroken:     content.body = "Recent changes broke the build."; break
+        case .wasFixed:      content.body = "Recent changes fixed the build."; break
+        case .isStillBroken: content.body = "The build is still broken.";      break
+        default:             content.body = "The build finished.";             break
+        }
+        if let build = status.lastBuild {
+            if let duration = build.duration, let durationAsString = formattedDurationPrecise(duration) {
+                content.body.append("\nTime: \(durationAsString)")
             }
-            let content = makeContentObject(title: change.pipeline.name)
-            content.body = "Build started."
-            if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
-                content.body.append("\n\(facts)")
-            }
-            if let webUrl = change.pipeline.status.webUrl {
-                addWebUrl(webUrl, to: content)
-            }
-            return content
-        } else if change.kind == .completion {
-            let content = makeContentObject(title: change.pipeline.name)
-            let status = change.pipeline.status
-            let previous = change.previousStatus
-            guard let result = resultOfCompletedBuild(status.lastBuild, previousBuild: previous.lastBuild) else {
-                return nil
-            }
-            content.body = result
-            if let build = status.lastBuild {
-                if let duration = build.duration, let durationAsString = formattedDurationPrecise(duration) {
-                    content.body.append("\nTime: \(durationAsString)")
-                }
-                attachImage(forBuild: build, to: content)
-            }
-            if let webUrl = status.webUrl {
-                addWebUrl(webUrl, to: content)
-            }
-            return content
-       }
-        return nil
+            attachImage(forBuild: build, to: content)
+        }
+        if let webUrl = status.webUrl {
+            addWebUrl(webUrl, to: content)
+        }
+        return content
     }
 
     private func makeContentObject(title: String) -> UNMutableNotificationContent {
@@ -74,23 +101,17 @@ class NotificationFactory {
         return facts
     }
 
-    private func resultOfCompletedBuild(_ build: Build?, previousBuild previous: Build?) -> String? {
+    private func notificationTypeForBuild(_ build: Build?, previousBuild previous: Build?) -> NotificationType {
         switch build?.result {
         case .success:
-            if previous?.result == .failure {
-                return isTrue(default: .sendNotificationFixed) ? "Recent changes fixed the build." : nil
-            }
-            return isTrue(default: .sendNotificationSuccessful) ? "The build was successful." : nil
+            return (previous?.result == .failure) ? .wasFixed : .wasSuccessful
         case .failure:
-            if previous?.result != .failure {
-                return isTrue(default: .sendNotificationBroken) ? "Recent changes broke the build." : nil
-            }
-            return isTrue(default: .sendNotificationStillFailing) ? "The build is still broken." : nil
+            return (previous?.result != .failure) ? .wasBroken : .isStillBroken
         default:
-            return "The build finished with an indeterminate result."
+            return .finished
         }
     }
-
+    
     private func attachImage(forBuild build: Build, to content: UNMutableNotificationContent) {
         do {
             guard let imageUrl = NSImage.urlOfImage(forResult: build.result) else {
@@ -122,10 +143,6 @@ class NotificationFactory {
         formatter.collapsesLargestUnit = true
         formatter.maximumUnitCount = 2
         return formatter.string(from: duration)
-    }
-
-    private func isTrue(default key: DefaultsKey) -> Bool {
-        UserDefaults.active.bool(forKey: key.rawValue)
     }
 
 }

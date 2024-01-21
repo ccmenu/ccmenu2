@@ -10,11 +10,11 @@ import UserNotifications
 
 struct NotificationSettings: View {
 
-    @AppStorage(.sendNotificationStarted) var notificationStarted = false
-    @AppStorage(.sendNotificationSuccessful) var notificationSuccessful = true
-    @AppStorage(.sendNotificationBroken) var notificationBroken = true
-    @AppStorage(.sendNotificationFixed) var notificationFixed = true
-    @AppStorage(.sendNotificationStillFailing) var notificationStillFailing = true
+    @AppStorage(DefaultsKey.key(forNotification: .started)) var notificationStarted = false
+    @AppStorage(DefaultsKey.key(forNotification: .wasSuccessful)) var notificationSuccessful = true
+    @AppStorage(DefaultsKey.key(forNotification: .wasBroken)) var notificationBroken = true
+    @AppStorage(DefaultsKey.key(forNotification: .wasFixed)) var notificationFixed = true
+    @AppStorage(DefaultsKey.key(forNotification: .isStillBroken)) var notificationStillBroken = true
 
     var body: some View {
         VStack {
@@ -43,8 +43,8 @@ struct NotificationSettings: View {
                     Text("The build was broken, and the last build finished successfully.")
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                Toggle(isOn: $notificationStillFailing) {
-                    Text("Build finished: still failing")
+                Toggle(isOn: $notificationStillBroken) {
+                    Text("Build finished: still broken")
                     Text("The build was broken, and the last build failed, too.")
                         .fixedSize(horizontal: false, vertical: true)
                 }

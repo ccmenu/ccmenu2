@@ -20,12 +20,12 @@ public enum DefaultsKey: String {
     showBuildLabelsInMenu = "ShowLastBuildLabel",
     showStatusInWindow = "ShowPipelineStatusInWindow",
     showAvatarsInWindow = "ShowAvatarsInWindow",
-    showMessagesInWindow = "ShowPipelineMessagesInWindow",
-    sendNotificationSuccessful = "SendNotification Successful",
-    sendNotificationBroken = "SendNotification Broken",
-    sendNotificationFixed = "SendNotification Fixed",
-    sendNotificationStillFailing = "SendNotification StillFailing",
-    sendNotificationStarted = "SendNotification Starting"
+    showMessagesInWindow = "ShowPipelineMessagesInWindow"
+
+    public static func key(forNotification n: NotificationType) -> String {
+        "SendNotification \(n.rawValue)"
+    }
+
 }
 
 extension UserDefaults {
@@ -36,6 +36,7 @@ extension UserDefaults {
         d.removePersistentDomain(forName: "org.ccmenu.transient")
         return d
     }()
+
 }
 
 extension AppStorage {
