@@ -42,3 +42,11 @@ For now the roadmap is tracked in this readme file.
 - [ ] Sounds
 - [ ] Discover project (pipeline) names for CCTray feeds
 - [ ] Import and export of pipeline config
+
+### To consider
+
+- [ ] Improve accessibility
+- [ ] Add support for localisation
+- [ ] Reduced polling frequency on low data connections
+- [ ] Add Nevergreen-style dashboard (full screen window)
+- [ ] Embed libjq to transform feeds from other CI servers
