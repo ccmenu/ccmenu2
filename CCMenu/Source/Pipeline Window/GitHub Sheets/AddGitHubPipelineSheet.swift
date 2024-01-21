@@ -24,11 +24,8 @@ struct AddGitHubPipelineSheet: View {
                 .font(.headline)
                 .padding(.bottom)
             Text("Press return in the owner field to fetch repositories and workflows. If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
-                .lineLimit(3...10)
-                .multilineTextAlignment(.leading)
-                .frame(idealWidth: 400)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
-
             Form {
                 HStack {
                     TextField("Authentication:", text: $authenticator.tokenDescription)
@@ -111,7 +108,8 @@ struct AddGitHubPipelineSheet: View {
                 .disabled(pipelineBuilder.name.isEmpty || !repositoryList.selected.isValid || !workflowList.selected.isValid)
             }
         }
-        .frame(minWidth: 405)
+        .frame(minWidth: 400)
+        .frame(idealWidth: 450)
         .padding()
         .onAppear() {
             authenticator.token = !cachedToken.isEmpty ? cachedToken : nil

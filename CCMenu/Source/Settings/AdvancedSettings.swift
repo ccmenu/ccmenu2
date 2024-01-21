@@ -11,7 +11,6 @@ struct AdvancedSettings: View {
 
     var body: some View {
             Text("missing")
-                .frame(width: 300, height: 200)
             .navigationTitle("Advanced")
             .padding(80)
     }

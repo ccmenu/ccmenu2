@@ -17,32 +17,44 @@ struct AppearanceSettings: View {
 
     var body: some View {
         VStack {
-            Toggle(isOn: $useColorInMenuBar) {
-                Text("Use color in menu bar")
-            }
-            .onChange(of: useColorInMenuBar) { newValue in
-                if newValue == false {
-                    useColorInMenuBarFailedOnly = false
+            Form {
+                Text("Menu bar")
+                    .font(.headline)
+                Toggle(isOn: $showBuildTimerInMenuBar) {
+                    Text("Show build timer")
+                    Text("Negative values represent estimated time to complete based on previous build. Positive values are shown when the build is taking longer than the previous build.")
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-            }
-            Toggle(isOn: $useColorInMenuBarFailedOnly) {
-                Text("Use color for failed builds only ")
-            }
-            .disabled(!useColorInMenuBar)
-            Toggle(isOn: $showBuildTimerInMenuBar) {
-                Text("Show build timer in menu bar")
-            }
-            Toggle(isOn: $showBuildTimesInMenu) {
-                Text("Show build times in menu")
-            }
-            Toggle(isOn: $showBuildLabelsInMenu) {
-                Text("Show build labels in menu")
-            }
+                Toggle(isOn: $useColorInMenuBar) {
+                    Text("Use colored icons")
+                }
+                .onChange(of: useColorInMenuBar) { newValue in
+                    if newValue == false {
+                        useColorInMenuBarFailedOnly = false
+                    }
+                }
+                Toggle(isOn: $useColorInMenuBarFailedOnly) {
+                    Text("only when build is broken")
+                }
+                .padding(.leading, 20)
+                .disabled(!useColorInMenuBar)
 
+                Divider()
+                    .padding([ .top, .bottom ], 4)
+
+                Text("Menu items")
+                    .font(.headline)
+                Toggle(isOn: $showBuildTimesInMenu) {
+                    Text("Show time of last build")
+                }
+                Toggle(isOn: $showBuildLabelsInMenu) {
+                    Text("Show label of last build")
+                }
+                .padding(.bottom)
+            }
         }
-        .frame(width: 300)
         .navigationTitle("Appearance")
-        .padding(80)
+        .padding()
     }
 
 }
@@ -51,6 +63,7 @@ struct AppearanceSettings: View {
 struct AppearanceSettings_Previews: PreviewProvider {
     static var previews: some View {
         AppearanceSettings()
+            .frame(width: 350)
     }
 
 }

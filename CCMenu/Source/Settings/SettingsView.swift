@@ -17,8 +17,7 @@ struct SettingsView: View {
     @State private var selectedTab: Tab = .appearance
     
     var body: some View {
-        // TODO: why does the animation not work?
-        TabView(selection: $selectedTab.animation()) {
+        TabView(selection: $selectedTab) {
             AppearanceSettings()
             .tag(Tab.appearance)
             .tabItem {
@@ -38,6 +37,7 @@ struct SettingsView: View {
                 Text("Advanced")
             }
         }
+        .frame(width: 350)
         .onAppear {
             NSWorkspace.shared.activateThisApp()
         }
