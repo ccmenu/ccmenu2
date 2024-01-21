@@ -29,7 +29,7 @@ struct NotificationSettings: View {
                     .padding([ .top, .bottom ], 4)
                 
                 Toggle(isOn: $notificationSuccessful) {
-                    Text("Build finished: successful")
+                    Text("Build finished: success")
                     Text("The previous build was successful, and the last build finished sucessfully, too.")
                         .fixedSize(horizontal: false, vertical: true)
                 }

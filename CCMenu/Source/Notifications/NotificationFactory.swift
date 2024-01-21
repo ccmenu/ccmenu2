@@ -21,24 +21,20 @@ public enum NotificationType: String {
 class NotificationFactory {
 
     func notificationContent(change: StatusChange) -> UNNotificationContent? {
+        var content = UNMutableNotificationContent()
         switch change.kind {
         case .start:
-            return notificationContentForStarted(change: change)
+            if !shouldSendStartNotification(change: change) {
+                return nil
+            }
+            addContentForStartedNotification(content, change: change)
         case .completion:
-            return notificationContentForFinished(change: change)
+            if !shouldSendFinishedNotification(change: change) {
+                return nil
+            }
+            addContentForFinishedNotification(content, change: change)
         default:
             return nil
-        }
-    }
-
-    private func notificationContentForStarted(change: StatusChange) -> UNNotificationContent? {
-        if !UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: .started)) {
-            return nil
-        }
-        let content = makeContentObject(title: change.pipeline.name)
-        content.body = "Build started."
-        if let facts = factsAboutBuild(change.pipeline.status.lastBuild) {
-            content.body.append("\n\(facts)")
         }
         if let webUrl = change.pipeline.status.webUrl {
             addWebUrl(webUrl, to: content)
@@ -46,42 +42,19 @@ class NotificationFactory {
         return content
     }
 
-    private func notificationContentForFinished(change: StatusChange) -> UNNotificationContent? {
-        let status = change.pipeline.status
-        let type = notificationTypeForBuild(status.lastBuild, previousBuild: change.previousStatus.lastBuild)
-        if !UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: type)) {
-            return nil
-        }
-        let content = makeContentObject(title: change.pipeline.name)
-        switch type {
-        case .wasSuccessful: content.body = "The build was successful.";       break
-        case .wasBroken:     content.body = "Recent changes broke the build."; break
-        case .wasFixed:      content.body = "Recent changes fixed the build."; break
-        case .isStillBroken: content.body = "The build is still broken.";      break
-        default:             content.body = "The build finished.";             break
-        }
-        if let build = status.lastBuild {
-            if let duration = build.duration, let durationAsString = formattedDurationPrecise(duration) {
-                content.body.append("\nTime: \(durationAsString)")
-            }
-            attachImage(forBuild: build, to: content)
-        }
-        if let webUrl = status.webUrl {
-            addWebUrl(webUrl, to: content)
-        }
-        return content
+    private func shouldSendStartNotification(change: StatusChange) -> Bool {
+        UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: .started))
     }
 
-    private func makeContentObject(title: String) -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.title = "\(title)"
-        return content
+    private func addContentForStartedNotification(_ content: UNMutableNotificationContent, change: StatusChange) {
+        content.title = "Build started"
+        content.body = change.pipeline.name
+        if let build = change.pipeline.status.lastBuild, let facts = factsAboutBuild(build) {
+            content.body.append("\n\(facts)")
+        }
     }
 
-    private func factsAboutBuild(_ build: Build?) -> String? {
-        guard let build = build else {
-            return nil
-        }
+    private func factsAboutBuild(_ build: Build) -> String? {
         var facts: String? = nil
         if let duration = build.duration {
             if let durationAsString = formattedDuration(duration) {
@@ -101,6 +74,25 @@ class NotificationFactory {
         return facts
     }
 
+    private func shouldSendFinishedNotification(change: StatusChange) -> Bool {
+        let type = notificationTypeForBuild(change.pipeline.status.lastBuild, previousBuild: change.previousStatus.lastBuild)
+        return UserDefaults.active.bool(forKey: DefaultsKey.key(forNotification: type))
+
+    }
+
+    private func addContentForFinishedNotification(_ content: UNMutableNotificationContent, change: StatusChange) {
+        content.title = "Build finished"
+        let status = change.pipeline.status
+        let type = notificationTypeForBuild(status.lastBuild, previousBuild: change.previousStatus.lastBuild)
+        if let description = desciptionForType(type) {
+            content.title.append(": \(description)")
+        }
+        content.body = change.pipeline.name
+//        if let build = status.lastBuild {
+//            attachImage(forBuild: build, to: content)
+//        }
+    }
+
     private func notificationTypeForBuild(_ build: Build?, previousBuild previous: Build?) -> NotificationType {
         switch build?.result {
         case .success:
@@ -112,6 +104,16 @@ class NotificationFactory {
         }
     }
     
+    private func desciptionForType(_ type: NotificationType) -> String? {
+        switch type {
+        case .wasSuccessful: return "success"
+        case .wasBroken:     return "broken"
+        case .wasFixed:      return "fixed"
+        case .isStillBroken: return "still broken"
+        default:             return nil
+        }
+    }
+
     private func attachImage(forBuild build: Build, to content: UNMutableNotificationContent) {
         do {
             guard let imageUrl = NSImage.urlOfImage(forResult: build.result) else {
@@ -133,15 +135,6 @@ class NotificationFactory {
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .full
         formatter.collapsesLargestUnit = true
-        return formatter.string(from: duration)
-    }
-
-    private func formattedDurationPrecise(_ duration: TimeInterval) -> String? {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second]
-        formatter.unitsStyle = .abbreviated
-        formatter.collapsesLargestUnit = true
-        formatter.maximumUnitCount = 2
         return formatter.string(from: duration)
     }
 

@@ -17,7 +17,7 @@ class GitHubPipelineBuilder: ObservableObject {
         if repository.isValid {
             newName.append(repository.name)
             if workflow.isValid {
-                newName.append(String(format: " (%@)", workflow.name))
+                newName.append(String(format: " | %@", workflow.name))
             }
         }
         self.repository = repository
