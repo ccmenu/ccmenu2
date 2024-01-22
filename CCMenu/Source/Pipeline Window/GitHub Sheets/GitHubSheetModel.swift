@@ -88,7 +88,7 @@ struct GitHubWorkflow: Identifiable, Hashable, Decodable {
     }
 
     var isValid: Bool {
-        return !name.isEmpty && !name.starts(with: "{")
+        return !name.isEmpty && !name.starts(with: "(")
     }
 
     var filename: String {
