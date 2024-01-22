@@ -13,8 +13,11 @@
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
 		0331F39F29A8155000245956 /* MenuExtraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0331F39E29A8155000245956 /* MenuExtraViewModel.swift */; };
 		0336DBAA29846EB800E5811C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0336DBA929846EB800E5811C /* README.md */; };
-		0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */; };
+		0336DBAC29848FE200E5811C /* AddCCTrayPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */; };
 		0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */; };
+		03412ADF2B5DCC8A00EFDFCB /* CCTrayProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */; };
+		03412AE12B5DCD5100EFDFCB /* CCTrayAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */; };
+		03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */; };
 		0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */; };
 		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
 		0362EBF22B54230C0079DEFE /* Icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = 0362EBF02B54230C0079DEFE /* Icon-success.png */; };
@@ -98,8 +101,11 @@
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
 		0331F39E29A8155000245956 /* MenuExtraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraViewModel.swift; sourceTree = "<group>"; };
 		0336DBA929846EB800E5811C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipeline.swift; sourceTree = "<group>"; };
+		0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCCTrayPipelineSheet.swift; sourceTree = "<group>"; };
 		0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGitHubPipelineSheet.swift; sourceTree = "<group>"; };
+		03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayProjectList.swift; sourceTree = "<group>"; };
+		03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAPI.swift; sourceTree = "<group>"; };
+		03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTraySheetModel.swift; sourceTree = "<group>"; };
 		0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactory.swift; sourceTree = "<group>"; };
 		0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactoryTests.swift; sourceTree = "<group>"; };
 		0362EBF02B54230C0079DEFE /* Icon-success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-success.png"; sourceTree = "<group>"; };
@@ -201,6 +207,16 @@
 				03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */,
 			);
 			path = "GitHub Sheets";
+			sourceTree = "<group>";
+		};
+		03412ADD2B5DCC1600EFDFCB /* CCTray Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */,
+				03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */,
+				03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */,
+			);
+			path = "CCTray Sheets";
 			sourceTree = "<group>";
 		};
 		03B263F62B51FEF800CA989A /* Notifications */ = {
@@ -340,8 +356,8 @@
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
-				0336DBAB29848FE200E5811C /* AddCCTrayPipeline.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
+				03412ADD2B5DCC1600EFDFCB /* CCTray Sheets */,
 				0331B3012B3C9A60000FE134 /* GitHub Sheets */,
 			);
 			path = "Pipeline Window";
@@ -388,6 +404,7 @@
 				03CC11ED2652F6B900130833 /* FeedReader.swift */,
 				03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */,
 				03CC11F1265467C200130833 /* CCTrayResponseParser.swift */,
+				03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */,
 				03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */,
 				03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */,
 				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
@@ -563,6 +580,7 @@
 				039B524629676D0700994910 /* Build.swift in Sources */,
 				0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */,
 				03DA98E22B44CE1A0073F5BB /* GitHubAuthenticator.swift in Sources */,
+				03412AE12B5DCD5100EFDFCB /* CCTrayAPI.swift in Sources */,
 				03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */,
 				037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */,
 				03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */,
@@ -579,6 +597,7 @@
 				03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */,
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */,
+				03412ADF2B5DCC8A00EFDFCB /* CCTrayProjectList.swift in Sources */,
 				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
@@ -589,12 +608,13 @@
 				03F9B898297D4D8F00FA866E /* MenuItemViewModel.swift in Sources */,
 				03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */,
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
-				0336DBAC29848FE200E5811C /* AddCCTrayPipeline.swift in Sources */,
+				0336DBAC29848FE200E5811C /* AddCCTrayPipelineSheet.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
 				03B1D7612A607DD0007BCB8A /* PipelineRowViewModel.swift in Sources */,
 				03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 				0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */,
+				03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
