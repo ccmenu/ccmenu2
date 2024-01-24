@@ -59,6 +59,7 @@
 		03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */; };
 		03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */; };
 		03DA98E22B44CE1A0073F5BB /* GitHubAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */; };
+		03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */; };
 		03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E6A9F62B2651C200284138 /* GitHubAPI.swift */; };
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
@@ -153,6 +154,7 @@
 		03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubWorkflowList.swift; sourceTree = "<group>"; };
 		03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPipelineBuilder.swift; sourceTree = "<group>"; };
 		03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAuthenticator.swift; sourceTree = "<group>"; };
+		03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayPipelineBuilder.swift; sourceTree = "<group>"; };
 		03E6A9F62B2651C200284138 /* GitHubAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */,
 				03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */,
 				03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */,
+				03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */,
 			);
 			path = "CCTray Sheets";
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
 				0336DBAC29848FE200E5811C /* AddCCTrayPipelineSheet.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
+				03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */,
 				03B1D7612A607DD0007BCB8A /* PipelineRowViewModel.swift in Sources */,
 				03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,

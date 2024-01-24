@@ -8,12 +8,8 @@ import Foundation
 
 class CCTrayAPI {
 
-    static func requestForProjects(url urlString: String) -> URLRequest? {
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-        var request = URLRequest(url: url)
-        return request
+    static func requestForProjects(url: URL) -> URLRequest {
+        return URLRequest(url: url)
     }
 
 }

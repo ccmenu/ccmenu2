@@ -6,10 +6,9 @@
 
 import Foundation
 
-struct CCTrayProject: Identifiable, Hashable, Decodable {
+struct CCTrayProject: Identifiable, Hashable {
     var id: Int
     var name: String
-    var path: String?
 
     init(name: String) {
         self.id = name.hashValue
@@ -34,8 +33,4 @@ struct CCTrayProject: Identifiable, Hashable, Decodable {
         return !name.isEmpty && !name.starts(with: "(")
     }
 
-}
-
-struct CCTrayProjectContainer: Decodable {
-    var projects: [CCTrayProject]
 }

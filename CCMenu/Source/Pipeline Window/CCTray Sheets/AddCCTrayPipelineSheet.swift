@@ -11,7 +11,7 @@ struct AddCCTrayPipelineSheet: View {
     @Environment(\.presentationMode) @Binding var presentation
     @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
-    @State var displayName: String = ""
+    @StateObject private var pipelineBuilder = CCTrayPipelineBuilder()
 
     var body: some View {
         VStack {
@@ -39,14 +39,14 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .disabled(!projectList.selected.isValid)
                 .onChange(of: projectList.selected) { _ in
-                    displayName = projectList.selected.name
+                    pipelineBuilder.updateName(project: projectList.selected)
                 }
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $displayName)
+                    TextField("Display name:", text: $pipelineBuilder.name)
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        displayName = projectList.selected.name
+                        pipelineBuilder.updateName(project: projectList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -58,10 +58,8 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    var pipeline: Pipeline = Pipeline(name: displayName, feed:Pipeline.Feed(type:.cctray, url: url, name: projectList.selected.name))
-                    pipeline.status = Pipeline.Status(activity: .sleeping)
-                    pipeline.status.lastBuild = Build(result: .unknown)
-                    model.add(pipeline: pipeline)
+                    let p = pipelineBuilder.makePipeline(feedUrl: url, name: projectList.selected.name)
+                    model.add(pipeline: p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

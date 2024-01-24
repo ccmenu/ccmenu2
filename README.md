@@ -29,10 +29,11 @@ For now the roadmap is tracked in this readme file.
 
 - [X] Notifications
 - [ ] Build timer updates every second
-- [ ] Discover project names for CCTray feeds
+- [X] Discover project names for CCTray feeds
 
 ### Pre-release 4 (planned)
 
+- [ ] Store GitHub tokens in Keychain
 - [ ] Basic auth login for CCTray feeds
 - [ ] Optimised CCTray reader requests
 - [ ] Edit pipelines
