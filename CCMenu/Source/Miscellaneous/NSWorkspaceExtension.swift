@@ -10,8 +10,11 @@ extension NSWorkspace {
 
     func activateThisApp() {
         // TODO: There must be a better way...
-        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-        NSApp.activate(ignoringOtherApps: true)
+        if #available(macOS 14.0, *) {
+            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     func openWebPage(pipeline: Pipeline) {

@@ -38,7 +38,7 @@ struct SettingsView: View {
             }
         }
         .frame(width: 350)
-        .onAppear {
+        .onAppear { // TODO: Find a better hook. This is only called the first time the window is opened.
             NSWorkspace.shared.activateThisApp()
         }
     }
