@@ -12,6 +12,7 @@ final class PipelineModel: ObservableObject {
 
     @Published var pipelines: [Pipeline] { didSet { updateSettings() } }
     @Published var lastStatusChange: StatusChange?
+    private var timer: Timer? = nil
 
     init() {
         pipelines = []
@@ -26,6 +27,16 @@ final class PipelineModel: ObservableObject {
         pipelines[idx] = pipeline
         if change.kind != .noChange {
             lastStatusChange = change
+        }
+        let buildingCount = pipelines.filter({ $0.status.activity == .building }).count
+        if (buildingCount > 0) && (timer == nil) {
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.objectWillChange.send()
+            }
+        }
+        if (buildingCount == 0) && (timer != nil) {
+            timer?.invalidate()
+            timer = nil
         }
     }
     
