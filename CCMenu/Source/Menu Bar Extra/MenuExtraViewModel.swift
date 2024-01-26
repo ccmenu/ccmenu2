@@ -17,9 +17,7 @@ struct MenuExtraViewModel {
         guard let pipeline = pipelineForMenuBar() else {
             return NSImage(forPipeline: nil)
         }
-        let useColor = useColorInMenuBar && 
-            (!useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
-        return NSImage(forPipeline: pipeline, asTemplate: !useColor)
+        return NSImage(forPipeline: pipeline, asTemplate: !shouldUseColorForPipeline(pipeline))
     }
 
     var title: String {
@@ -40,7 +38,30 @@ struct MenuExtraViewModel {
         return newText
     }
 
+    var color: Color? {
+        guard let pipeline = pipelineForMenuBar() else {
+            return nil
+        }
+        if !shouldUseColorForPipeline(pipeline) {
+            return nil
+        }
+        let result = pipeline.status.lastBuild?.result ?? BuildResult.other
+        return Color(nsColor: (result == .failure) ? .statusOrange : .statusGreen)
+    }
+
+    var isSleeping: Bool {
+        guard let pipeline = pipelineForMenuBar() else {
+            return false
+        }
+        return pipeline.status.activity == .sleeping
+    }
+
+    private func shouldUseColorForPipeline(_ pipeline: Pipeline) -> Bool {
+        useColorInMenuBar && (!useColorInMenuBarFailedOnly || pipeline.status.lastBuild?.result == .failure)
+    }
+
     private func pipelineForMenuBar() -> Pipeline? {
+        // TODO: consider caching the result
         try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:)).first
     }
 

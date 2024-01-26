@@ -12,13 +12,71 @@ struct MenuBarExtraLabel: View {
     @AppStorage(.useColorInMenuBar) var useColorInMenuBar: Bool = true
     @AppStorage(.useColorInMenuBarFailedOnly) var useColorInMenuBarFailedOnly: Bool = false
     @AppStorage(.showBuildTimerInMenuBar) var showBuildTimerInMenuBar: Bool = false
+    @Environment(\.displayScale) var displayScale   // TODO: Find out why this doesn't work here
 
     var body: some View {
         let viewModel = MenuExtraViewModel(pipelines: model.pipelines, useColorInMenuBar: useColorInMenuBar, useColorInMenuBarFailedOnly: useColorInMenuBarFailedOnly, showBuildTimerInMenuBar: showBuildTimerInMenuBar)
-        Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
-        .labelStyle(.titleAndIcon)
+        HStack {
+            if viewModel.isSleeping || viewModel.title.isEmpty {
+                Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
+                    .labelStyle(.titleAndIcon)
+            } else {
+                renderCapsuleImage(viewModel: viewModel)
+            }
+        }
         .accessibilityIdentifier("CCMenuMenuExtra")
-        .monospacedDigit() // TODO: this doesn't work; why not?
+    }
+
+    @MainActor
+    private func renderCapsuleImage(viewModel: MenuExtraViewModel) -> Image? {
+        let image: NSImage?
+        if let color = viewModel.color {
+            let v = makeTextView(text: viewModel.title, color: color)
+            // TODO: Find out how to type v to avoid the duplicated lines below
+            let renderer = ImageRenderer(content: v)
+            renderer.scale = 2 // This should be displayScale, but that seems broken
+            image = renderer.nsImage
+        } else {
+            let v =  makeTemplateTextView(text: viewModel.title)
+            let renderer = ImageRenderer(content: v)
+            renderer.scale = 2 // This should be displayScale, but that seems broken
+            image = renderer.nsImage
+            image?.isTemplate = true
+        }
+        guard let image else {
+            return nil
+        }
+        return Image(nsImage: image)
+    }
+
+    private func makeTextView(text: String, color: Color) -> some View {
+        Text(text)
+            .monospacedDigit()
+            .foregroundStyle(Color(nsColor: .unemphasizedSelectedContentBackgroundColor))
+            .padding([.top, .bottom], 1)
+            .padding([.leading, .trailing], 6)
+            .background(content: {
+                Capsule()
+                    .foregroundStyle(color)
+            })
+    }
+
+    private func makeTemplateTextView(text: String) -> some View {
+        Text(text)
+            .monospacedDigit()
+            .foregroundStyle(.clear)
+            .padding([.top, .bottom], 1)
+            .padding([.leading, .trailing], 6)
+            .background(content: {
+                Capsule()
+                    .mask(Text(text)
+                        .monospacedDigit()
+                        .padding([.top, .bottom], 1)
+                        .padding([.leading, .trailing], 6)
+                        .background(Color.white)
+                        .compositingGroup()
+                        .luminanceToAlpha())
+            })
     }
 
 }
