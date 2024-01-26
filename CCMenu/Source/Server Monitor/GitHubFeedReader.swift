@@ -24,7 +24,7 @@ class GitHubFeedReader {
         let (newStatus, error) = await fetchStatus(request: request)
 
         // TODO: Find out whether this pattern (also in the sheet lists) can be done with a switch.
-        if let error = error {
+        if let error {
             pipeline.connectionError = error
             return
         }

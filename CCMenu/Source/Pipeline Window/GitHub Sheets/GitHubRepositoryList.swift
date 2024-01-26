@@ -23,7 +23,7 @@ class GitHubRepositoryList: ObservableObject {
             return allRepos
         }
 
-        if let token = token, !token.isEmpty {
+        if let token, !token.isEmpty {
             let privateRepoRequest = GitHubAPI.requestForPrivateRepositories(token: token)
             let privateRepos = await fetchRepositories(request: privateRepoRequest)
             if privateRepos.count > 0 && !privateRepos[0].isValid {

@@ -15,7 +15,7 @@ final class MenuItemModelTests: XCTestCase {
         if activity == .building {
             p.status.currentBuild = Build(result: .unknown)
         }
-        if let lastBuildResult = lastBuildResult {
+        if let lastBuildResult {
             p.status.lastBuild = Build(result: lastBuildResult)
         }
         return p
