@@ -20,9 +20,9 @@ extension NSImage {
         isTemplate = asTemplate
     }
 
-    static func urlOfImage(forResult result: BuildResult) -> URL? {
-        let name = "Icon-" + result.rawValue
-        return Bundle.main.url(forResource: name, withExtension: "png")
+    convenience init(forActivity activity: Pipeline.Activity) {
+        assert(activity == .building)
+        self.init(named: "build-any+building")!
     }
 
     private static func name(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool) -> String {

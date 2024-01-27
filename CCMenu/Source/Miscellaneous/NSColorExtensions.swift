@@ -9,7 +9,9 @@ import AppKit
 extension NSColor
 {
     static let statusGreen  = NSColor(webcolor: "#56932E")
-    static let statusOrange = NSColor(webcolor: "#E48900")
+    static let statusOrange = NSColor(webcolor: "#FF9900")
+    static let statusRed    = NSColor(webcolor: "#DB2A2A")
+    static let statusText   = NSColor(webcolor: "#F0F0F0")
 
     convenience init(webcolor: NSString)
     {

@@ -5,6 +5,7 @@
  */
 
 import XCTest
+import SwiftUI
 @testable import CCMenu
 
 class MenuExtraModelTests: XCTestCase {
@@ -80,6 +81,7 @@ class MenuExtraModelTests: XCTestCase {
         XCTAssertEqual(NSImage(forPipeline: pe), model.icon)
     }
 
+
     func testUseTemplateImageWhenUseColorIsOff() throws {
         let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .success)
         let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
@@ -94,6 +96,34 @@ class MenuExtraModelTests: XCTestCase {
 
         let pe = makePipeline(name: "expected", activity: .sleeping, lastBuildResult: .success)
         XCTAssertEqual(NSImage(forPipeline: pe, asTemplate: true), model.icon)
+    }
+
+    func testUsesGreenColorWhenBuilding() throws {
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .success)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: true, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
+
+        XCTAssertEqual(Color(nsColor: NSColor.statusGreen), model.color)
+    }
+
+    func testUsesOrangeColorWhenFixing() throws {
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .failure)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: true, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
+
+        XCTAssertEqual(Color(nsColor: NSColor.statusOrange), model.color)
+    }
+
+    func testUsesRedColorWhenBroken() throws {
+        let p0 = makePipeline(name: "p0", activity: .sleeping, lastBuildResult: .failure)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: true, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
+
+        XCTAssertEqual(Color(nsColor: NSColor.statusRed), model.color)
+    }
+
+    func testUsesNoColorWhenSettingIsOff() throws {
+        let p0 = makePipeline(name: "p0", activity: .building, lastBuildResult: .failure)
+        let model = MenuExtraViewModel(pipelines: [p0], useColorInMenuBar: false, useColorInMenuBarFailedOnly: false, showBuildTimerInMenuBar: false)
+
+        XCTAssertNil(model.color)
     }
 
     func testDoesNotDisplayBuildingTimerWhenSettingIsOff() throws {

@@ -17,9 +17,8 @@ struct MenuBarExtraLabel: View {
     var body: some View {
         let viewModel = MenuExtraViewModel(pipelines: model.pipelines, useColorInMenuBar: useColorInMenuBar, useColorInMenuBarFailedOnly: useColorInMenuBarFailedOnly, showBuildTimerInMenuBar: showBuildTimerInMenuBar)
         HStack {
-            if viewModel.isSleeping || viewModel.title.isEmpty {
-                Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) })
-                    .labelStyle(.titleAndIcon)
+            if viewModel.title.isEmpty {
+                Image(nsImage: viewModel.icon)
             } else {
                 renderCapsuleImage(viewModel: viewModel)
             }
@@ -31,13 +30,13 @@ struct MenuBarExtraLabel: View {
     private func renderCapsuleImage(viewModel: MenuExtraViewModel) -> Image? {
         let image: NSImage?
         if let color = viewModel.color {
-            let v = makeTextView(text: viewModel.title, color: color)
+            let v = makeTextView(viewModel: viewModel, color: color)
             // TODO: Find out how to type v to avoid the duplicated lines below
             let renderer = ImageRenderer(content: v)
             renderer.scale = 2 // This should be displayScale, but that seems broken
             image = renderer.nsImage
         } else {
-            let v =  makeTemplateTextView(text: viewModel.title)
+            let v =  makeTemplateTextView(viewModel: viewModel)
             let renderer = ImageRenderer(content: v)
             renderer.scale = 2 // This should be displayScale, but that seems broken
             image = renderer.nsImage
@@ -49,34 +48,46 @@ struct MenuBarExtraLabel: View {
         return Image(nsImage: image)
     }
 
-    private func makeTextView(text: String, color: Color) -> some View {
-        Text(text)
-            .monospacedDigit()
-            .foregroundStyle(Color(nsColor: .unemphasizedSelectedContentBackgroundColor))
-            .padding([.top, .bottom], 1)
-            .padding([.leading, .trailing], 6)
-            .background(content: {
-                Capsule()
-                    .foregroundStyle(color)
-            })
+    private func makeTextView(viewModel: MenuExtraViewModel, color: Color) -> some View {
+        ZStack(alignment: .leading) {
+            Text(viewModel.title)
+                .monospacedDigit()
+                .foregroundStyle(Color(nsColor: .statusText))
+                .padding([.top, .bottom], 1)
+                .padding(.trailing, 6)
+                .padding(.leading, 18)
+                .background() {
+                    Capsule()
+                        .foregroundStyle(color)
+                }
+            Image(nsImage: viewModel.icon)
+        }
     }
 
-    private func makeTemplateTextView(text: String) -> some View {
-        Text(text)
-            .monospacedDigit()
-            .foregroundStyle(.clear)
-            .padding([.top, .bottom], 1)
-            .padding([.leading, .trailing], 6)
-            .background(content: {
-                Capsule()
-                    .mask(Text(text)
-                        .monospacedDigit()
-                        .padding([.top, .bottom], 1)
-                        .padding([.leading, .trailing], 6)
-                        .background(Color.white)
-                        .compositingGroup()
-                        .luminanceToAlpha())
-            })
+    private func makeTemplateTextView(viewModel: MenuExtraViewModel) -> some View {
+            Text(viewModel.title)
+                .monospacedDigit()
+                .foregroundStyle(.clear)
+                .padding([.top, .bottom], 1)
+                .padding(.trailing, 6)
+                .padding(.leading, 18)
+                .background() {
+                    Capsule()
+                        .mask(        
+                            ZStack(alignment: .leading) {
+                                Text(viewModel.title)
+                                    .monospacedDigit()
+                                    .padding([.top, .bottom], 1)
+                                    .padding(.trailing, 6)
+                                    .padding(.leading, 18)
+                                    .background(Color.white)
+                                Image(nsImage: NSImage(forActivity: .building))
+                                    .colorInvert()
+                            }
+                            .compositingGroup()
+                            .luminanceToAlpha()
+                        )
+                }
     }
 
 }

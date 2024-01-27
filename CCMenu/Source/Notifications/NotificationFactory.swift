@@ -88,9 +88,6 @@ class NotificationFactory {
             content.title.append(": \(description)")
         }
         content.body = change.pipeline.name
-//        if let build = status.lastBuild {
-//            attachImage(forBuild: build, to: content)
-//        }
     }
 
     private func notificationTypeForBuild(_ build: Build?, previousBuild previous: Build?) -> NotificationType {
@@ -111,18 +108,6 @@ class NotificationFactory {
         case .wasFixed:      return "fixed"
         case .isStillBroken: return "still broken"
         default:             return nil
-        }
-    }
-
-    private func attachImage(forBuild build: Build, to content: UNMutableNotificationContent) {
-        do {
-            guard let imageUrl = NSImage.urlOfImage(forResult: build.result) else {
-                return
-            }
-            let attachment = try UNNotificationAttachment(identifier: build.result.rawValue, url: imageUrl, options: [:])
-            content.attachments = [ attachment ]
-        } catch {
-            debugPrint(error)
         }
     }
 

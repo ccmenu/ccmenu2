@@ -31,7 +31,7 @@ struct MenuExtraViewModel {
             }
         } else {
             let failCount = pipelines.filter({ p in p.status.lastBuild?.result == .failure}).count
-            if failCount > 0 {
+            if failCount > 1 {
                 newText = "\(failCount)"
             }
         }
@@ -46,14 +46,12 @@ struct MenuExtraViewModel {
             return nil
         }
         let result = pipeline.status.lastBuild?.result ?? BuildResult.other
-        return Color(nsColor: (result == .failure) ? .statusOrange : .statusGreen)
-    }
-
-    var isSleeping: Bool {
-        guard let pipeline = pipelineForMenuBar() else {
-            return false
+        if result == .failure {
+            return Color(nsColor: (pipeline.status.activity == .building) ? .statusOrange : .statusRed)
+        } else {
+            // TODO: Reconsider this simplification when an unknown status can have a label
+            return Color(nsColor: .statusGreen)
         }
-        return pipeline.status.activity == .sleeping
     }
 
     private func shouldUseColorForPipeline(_ pipeline: Pipeline) -> Bool {

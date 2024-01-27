@@ -20,8 +20,6 @@
 		03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */; };
 		0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */; };
 		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
-		0362EBF22B54230C0079DEFE /* Icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = 0362EBF02B54230C0079DEFE /* Icon-success.png */; };
-		0362EBF32B54230C0079DEFE /* Icon-failure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0362EBF12B54230C0079DEFE /* Icon-failure.png */; };
 		0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */; };
 		037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserDefaultsExtension.swift */; };
 		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
@@ -110,8 +108,6 @@
 		03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTraySheetModel.swift; sourceTree = "<group>"; };
 		0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactory.swift; sourceTree = "<group>"; };
 		0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactoryTests.swift; sourceTree = "<group>"; };
-		0362EBF02B54230C0079DEFE /* Icon-success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-success.png"; sourceTree = "<group>"; };
-		0362EBF12B54230C0079DEFE /* Icon-failure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-failure.png"; sourceTree = "<group>"; };
 		0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationReceiver.swift; sourceTree = "<group>"; };
 		037AB214297334EE00C33589 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarExtraMenu.swift; sourceTree = "<group>"; };
@@ -384,9 +380,9 @@
 			children = (
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
+				03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */,
 				03BD7EF9259A180C000F9495 /* NSImageExtension.swift */,
 				3C4DEDA12B49AB7A00B85A8C /* NSWorkspaceExtension.swift */,
-				03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -394,8 +390,6 @@
 		03CC11E72652F1B700130833 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0362EBF12B54230C0079DEFE /* Icon-failure.png */,
-				0362EBF02B54230C0079DEFE /* Icon-success.png */,
 				03BD7E942598E57A000F9495 /* Info.plist */,
 				03BD7E952598E57A000F9495 /* CCMenu.entitlements */,
 				03BD7EDA2598ED9B000F9495 /* Credits.rtf */,
@@ -526,8 +520,6 @@
 				03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */,
 				0336DBAA29846EB800E5811C /* README.md in Resources */,
 				03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */,
-				0362EBF22B54230C0079DEFE /* Icon-success.png in Resources */,
-				0362EBF32B54230C0079DEFE /* Icon-failure.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
