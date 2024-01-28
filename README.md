@@ -25,10 +25,10 @@ For now the roadmap is tracked in this readme file.
 - [X] GitHub repository and workflow selection
 - [X] Caching of last-used authentication token
 
-### Pre-release 3 (planned)
+### Version 22 (CCMenu2 pre-release 3)
 
 - [X] Notifications
-- [ ] Build timer updates every second
+- [X] Build timer updates every second
 - [X] Discover project names for CCTray feeds
 
 ### Pre-release 4 (planned)
@@ -48,7 +48,8 @@ For now the roadmap is tracked in this readme file.
 
 - [ ] Improve accessibility
 - [ ] Add support for localisation
-- [ ] Show avatar in notifications (committer or repo owner) 
+- [ ] Show avatar in notifications (committer or repo owner)
+- [ ] Pipeline groups with submenus 
 - [ ] Reduced polling frequency on low data connections
 - [ ] Add Nevergreen-style dashboard (full screen window)
 - [ ] Embed libjq to transform feeds from other CI servers
