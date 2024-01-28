@@ -18,7 +18,7 @@ struct AddCCTrayPipelineSheet: View {
             Text("Add project from CCTray feed")
                 .font(.headline)
                 .padding(.bottom)
-            Text("Please enter the URL for a CCTray feed. If you receive error messages open the URL in a web browser. If the browser does not show an XML document in [cctray format](https://cctray.org/v1/) then the feed URL is incorrect.")
+            Text("Enter the URL of a CCTray feed, and press return to retrieve the project list. If you receive an error message try opening the URL in a web browser. If the browser doesn't show an XML document in [cctray format](https://cctray.org/v1/) then the feed URL is incorrect.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
