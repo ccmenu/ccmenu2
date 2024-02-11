@@ -43,7 +43,7 @@ class GitHubRepositoryList: ObservableObject {
 
     private func fetchRepositories(request: URLRequest) async -> [GitHubRepository] {
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else {
                 throw URLError(.unsupportedURL)
             }

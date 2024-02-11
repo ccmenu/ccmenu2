@@ -34,7 +34,7 @@ class CCTrayFeedReader {
 
     private func fetchStatus(request: URLRequest) async {
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else {
                 throw URLError(.unsupportedURL)
             }
