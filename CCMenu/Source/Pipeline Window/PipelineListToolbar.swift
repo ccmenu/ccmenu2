@@ -64,7 +64,7 @@ struct PipelineListToolbar: ToolbarContent {
                     viewState.isShowingAddSheet = true
                 }
             } label: {
-                Image(systemName: "plus.square")
+                Image(systemName: "plus")
             }
             .menuStyle(.borderlessButton)
             .padding(.bottom, 1)
