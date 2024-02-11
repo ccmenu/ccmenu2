@@ -21,7 +21,7 @@ public enum NotificationType: String {
 class NotificationFactory {
 
     func notificationContent(change: StatusChange) -> UNNotificationContent? {
-        var content = UNMutableNotificationContent()
+        let content = UNMutableNotificationContent()
         switch change.kind {
         case .start:
             if !shouldSendStartNotification(change: change) {
