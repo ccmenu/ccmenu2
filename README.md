@@ -34,7 +34,10 @@ For now the roadmap is tracked in this readme file.
 ### Pre-release 4 (planned)
 
 - [ ] Store GitHub tokens in Keychain
-- [ ] Basic auth login for CCTray feeds
+- [X] Basic auth login for CCTray feeds
+
+### Pre-release 5 (planned)
+
 - [ ] Optimised CCTray reader requests
 - [ ] Edit pipelines
 - [ ] Remaining menu appearance options

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
@@ -98,6 +99,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
+				031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
@@ -592,6 +595,7 @@
 				03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */,
 				037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */,
 				03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */,
+				031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */,
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,

@@ -9,6 +9,7 @@ import SwiftUI
 struct AddCCTrayPipelineSheet: View {
     @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
+    @State var credential = HTTPCredential(user: "", password: "")
     @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
     @StateObject private var pipelineBuilder = CCTrayPipelineBuilder()
@@ -22,15 +23,21 @@ struct AddCCTrayPipelineSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
+                TextField("Authentication:", text: $credential.user, prompt: Text("user"))
+                // TODO: figure out how to put user and password into same row without breaking the layout
+                SecureField("", text: $credential.password, prompt: Text("password"))
+                    .padding(.bottom)
+
                 TextField("Server:", text: $url, prompt: Text("URL"))
-                .autocorrectionDisabled(true)
-                .onSubmit {
-                    if !url.isEmpty {
-                        Task {
-                            await projectList.updateWorkflows(url: $url)
+                    .autocorrectionDisabled(true)
+                    .onSubmit {
+                        if !url.isEmpty {
+                            Task {
+                                let c = !credential.isEmpty ? credential : nil
+                                await projectList.updateProjects(url: $url, credential: c)
+                            }
                         }
                     }
-                }
 
                 Picker("Project:", selection: $projectList.selected) {
                     ForEach(projectList.items) { p in
@@ -58,7 +65,14 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(feedUrl: url, name: projectList.selected.name)
+                    let urlWithUser = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
+                    let keychainHelper = KeychainHelper()
+                    do {
+                        try keychainHelper.setPassword(credential.password, forURL: urlWithUser)
+                    } catch {
+                        // TODO: Figure out what to do here – so many errors...
+                    }
+                    let p = pipelineBuilder.makePipeline(feedUrl: urlWithUser, name: projectList.selected.name)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }

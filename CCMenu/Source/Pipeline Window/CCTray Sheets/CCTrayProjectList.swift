@@ -11,14 +11,16 @@ class CCTrayProjectList: ObservableObject {
     @Published private(set) var items = [CCTrayProject()] { didSet { selected = items[0] }}
     @Published var selected = CCTrayProject()
 
-    func updateWorkflows(url urlBinding: Binding<String>) async {
+    func updateProjects(url urlBinding: Binding<String>, credential: HTTPCredential?) async {
         addSchemeIfNecessary(url: urlBinding)
         guard let baseUrl = URL(string: urlBinding.wrappedValue) else {
             items = [CCTrayProject(message: "The URL is invalid.")]
             return
         }
         items = [CCTrayProject(message: "updating")]
-        items = await fetchProjects(urlList: makeUrlList(baseUrl: baseUrl), urlBinding: urlBinding)
+        var (actualURL, newItems) = await fetchProjects(urlList: makeUrlList(baseUrl: baseUrl), credential: credential)
+        urlBinding.wrappedValue = actualURL.absoluteString
+        items = newItems
     }
 
     private func addSchemeIfNecessary(url urlBinding: Binding<String>) {
@@ -37,28 +39,27 @@ class CCTrayProjectList: ObservableObject {
         return list
     }
 
-    private func fetchProjects(urlList: [URL], urlBinding: Binding<String>) async -> [CCTrayProject] {
+    private func fetchProjects(urlList: [URL], credential: HTTPCredential?) async -> (URL, [CCTrayProject]) {
         var firstResponse: [CCTrayProject]? = nil
         for url in urlList {
-            urlBinding.wrappedValue = url.absoluteString
             let projects: [CCTrayProject]
             do {
-                let request = CCTrayAPI.requestForProjects(url: url)
+                let request = CCTrayAPI.requestForProjects(url: url, credential: credential)
                 projects = try await fetchProjects(request: request)
             } catch {
-                return [CCTrayProject(message: error.localizedDescription)]
+                return (url, [CCTrayProject(message: error.localizedDescription)])
             }
             if projects.count == 0 {
-                return [CCTrayProject()]
+                return (url, [CCTrayProject()])
             } else if projects[0].isValid {
-                return projects
-            } else if firstResponse == nil {
+                return (url, projects)
+            }
+            if firstResponse == nil {
                 firstResponse = projects
             }
         }
-        urlBinding.wrappedValue = urlList[0].absoluteString
         // firstResponse can't be empty at this point
-        return firstResponse ?? [CCTrayProject()]
+        return (urlList[0], firstResponse!)
     }
 
     func fetchProjects(request: URLRequest) async throws -> [CCTrayProject] {
@@ -79,10 +80,6 @@ class CCTrayProjectList: ObservableObject {
         var list = parser.projectList.compactMap({ $0["name"] }).map({ CCTrayProject(name: $0) })
         list.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
         return list
-    }
-
-    func clearWorkflows() {
-        items = [CCTrayProject()]
     }
 
 }

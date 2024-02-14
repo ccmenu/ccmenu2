@@ -6,10 +6,27 @@
 
 import Foundation
 
+
+struct HTTPCredential {
+    var user: String
+    var password: String
+
+    var isEmpty: Bool {
+        user.isEmpty && password.isEmpty
+    }
+}
+
 class CCTrayAPI {
 
-    static func requestForProjects(url: URL) -> URLRequest {
-        return URLRequest(url: url)
+    static func requestForProjects(url: URL, credential: HTTPCredential?) -> URLRequest {
+        var request = URLRequest(url: url)
+
+        if let credential {
+            let v = URLRequest.basicAuthValue(user: credential.user, password: credential.password)
+            request.setValue(v, forHTTPHeaderField: "Authorization")
+        }
+
+        return request
     }
 
 }

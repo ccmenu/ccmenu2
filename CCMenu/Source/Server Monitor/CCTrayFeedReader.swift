@@ -6,6 +6,21 @@
 
 import Foundation
 
+enum CCTrayFeedReaderError: LocalizedError {
+    case invalidURLError
+    case missingPasswordError
+
+    public var errorDescription: String? {
+        switch self {
+        case .invalidURLError:
+            return NSLocalizedString("invalid URL", comment: "")
+        case .missingPasswordError:
+            return NSLocalizedString("no matching password in Keychain", comment: "")
+        }
+    }
+}
+
+
 class CCTrayFeedReader {
 
     private(set) var pipelines: [Pipeline]
@@ -15,42 +30,45 @@ class CCTrayFeedReader {
     }
     
     public func updatePipelineStatus() async {
-        // All pipelines have the same URL.
-        guard let request = requestForFeed(feed: pipelines[0].feed) else {
+        do {
+            // All pipelines have the same URL.
+            let request = try requestForFeed(feed: pipelines[0].feed)
+            try await fetchStatus(request: request)
+        } catch {
             // TODO: Add error to all pipelines
-            pipelines[0].connectionError = "Invalid URL: " + pipelines[0].feed.url
+            pipelines[0].connectionError = error.localizedDescription
+        }
+    }
+
+    func requestForFeed(feed: Pipeline.Feed) throws -> URLRequest {
+        guard let url = URL(string: feed.url) else {
+            throw CCTrayFeedReaderError.invalidURLError
+        }
+        var credential: HTTPCredential?
+        if let user = url.user() {
+            guard let password = try KeychainHelper().getPassword(forURL: url) else {
+                throw CCTrayFeedReaderError.missingPasswordError
+            }
+            credential = HTTPCredential(user: user, password: password)
+        }
+        return CCTrayAPI.requestForProjects(url: url, credential: credential)
+    }
+
+    private func fetchStatus(request: URLRequest) async throws {
+        let (data, response) = try await URLSession.feedSession.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw URLError(.unsupportedURL)
+        }
+        guard response.statusCode == 200 else {
+            let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
+            pipelines[0].connectionError = httpError
             return
         }
-        await fetchStatus(request: request)
-    }
-
-    func requestForFeed(feed: Pipeline.Feed) -> URLRequest? {
-        guard let url = URL(string: feed.url) else {
-            return nil
-        }
-        let request = URLRequest(url: url)
-        return request
-    }
-
-    private func fetchStatus(request: URLRequest) async {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else {
-                throw URLError(.unsupportedURL)
-            }
-            guard response.statusCode == 200 else {
-                let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
-                pipelines[0].connectionError = httpError
-                return
-            }
-            let parser = CCTrayResponseParser()
-            try parser.parseResponse(data)
-            for p in self.pipelines {
-                let status = parser.pipelineStatus(name: p.feed.name ?? "") // TODO: report an error? here?
-                self.updatePipeline(name: p.name, newStatus: status)
-            }
-        } catch {
-            pipelines[0].connectionError = error.localizedDescription
+        let parser = CCTrayResponseParser()
+        try parser.parseResponse(data)
+        for p in self.pipelines {
+            let status = parser.pipelineStatus(name: p.feed.name ?? "") // TODO: Consider throwing an error
+            self.updatePipeline(name: p.name, newStatus: status)
         }
     }
 

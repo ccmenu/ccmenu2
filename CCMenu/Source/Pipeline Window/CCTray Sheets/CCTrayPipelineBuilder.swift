@@ -28,5 +28,19 @@ class CCTrayPipelineBuilder: ObservableObject {
         return p
     }
 
+    static func setUser(_ user: String?, inURL urlString: String) -> String {
+        // TODO: Consider what is the best place for this code
+        guard let user, !user.isEmpty else {
+            return urlString
+        }
+        guard var url = URLComponents(string: urlString) else {
+            return urlString
+        }
+        url.user = user
+        guard let newUrlString = url.string else {
+            return ""
+        }
+        return newUrlString
+    }
 
 }
