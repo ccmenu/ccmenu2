@@ -82,8 +82,7 @@ extension Pipeline {
             return nil
         }
         let feedName = dict["feedName"] ?? ""
-        let authToken = dict["authToken"] ?? ""
-        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName, authToken: authToken.isEmpty ? nil : authToken))
+        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName))
     }
 
     public func asDictionaryForPersisting() -> Dictionary<String, String> {
@@ -91,7 +90,6 @@ extension Pipeline {
           "feedType": String(describing: self.feed.type),
           "feedUrl": self.feed.url,
           "feedName": self.feed.name ?? "",
-          "authToken": self.feed.authToken ?? ""
         ]
     }
 
