@@ -31,6 +31,10 @@ struct PipelineCommands: Commands {
             }
             .keyboardShortcut("E", modifiers: [.command, .shift])
             // TODO: figure out how to implement Transferable on Pipeline
+            // The implementation should skip status and connection error, and it should let the
+            // user know if the pipeline has an associated password or token, which should not be
+            // added to the export, at least not by default
+            // https://developer.apple.com/videos/play/wwdc2022/10062/
 //            .fileExporter(isPresented: $isShowingExporter, item: model.pipelines, contentTypes: [.json]) { result in
 //                switch result {
 //                case .success(let fileurl):

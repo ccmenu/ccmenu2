@@ -62,17 +62,12 @@ extension Pipeline: Hashable {
       
 }
 
-//extension Pipeline: Transferable {
-//    static var transferRepresentation: some TransferRepresentation {
-//        DataRepresentation(contentType: .json) { pipeline in
-//                pipeline
-//            }, importing: { pipeline in
-//                try Layer(data: data)
-//            }
-//        DataRepresentation(exportedContentType: .json) { layer in
-//            layer.pngData()
-//    }
-//}
+extension Pipeline: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        CodableRepresentation(contentType: .json)
+    }
+}
+
 
 extension Pipeline {
 
