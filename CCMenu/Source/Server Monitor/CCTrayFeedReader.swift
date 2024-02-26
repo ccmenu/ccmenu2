@@ -9,6 +9,7 @@ import Foundation
 enum CCTrayFeedReaderError: LocalizedError {
     case invalidURLError
     case missingPasswordError
+    case httpError(Int)
 
     public var errorDescription: String? {
         switch self {
@@ -16,6 +17,8 @@ enum CCTrayFeedReaderError: LocalizedError {
             return NSLocalizedString("invalid URL", comment: "")
         case .missingPasswordError:
             return NSLocalizedString("no matching password in Keychain", comment: "")
+        case .httpError(let statusCode):
+            return CCTrayAPI.localizedString(forStatusCode: statusCode)
         }
     }
 }
@@ -36,6 +39,7 @@ class CCTrayFeedReader {
             try await fetchStatus(request: request)
         } catch {
             // TODO: Add error to all pipelines
+            pipelines[0].status = Pipeline.Status(activity: .other)
             pipelines[0].connectionError = error.localizedDescription
         }
     }
@@ -60,9 +64,7 @@ class CCTrayFeedReader {
             throw URLError(.unsupportedURL)
         }
         guard response.statusCode == 200 else {
-            let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
-            pipelines[0].connectionError = httpError
-            return
+            throw CCTrayFeedReaderError.httpError(response.statusCode)
         }
         let parser = CCTrayResponseParser()
         try parser.parseResponse(data)

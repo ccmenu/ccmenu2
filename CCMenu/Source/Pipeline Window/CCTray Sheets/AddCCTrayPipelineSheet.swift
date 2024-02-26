@@ -65,14 +65,16 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let urlWithUser = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
-                    let keychainHelper = KeychainHelper()
-                    do {
-                        try keychainHelper.setPassword(credential.password, forURL: urlWithUser)
-                    } catch {
-                        // TODO: Figure out what to do here – so many errors...
+                    var feedUrl = url
+                    if !credential.user.isEmpty {
+                        feedUrl = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
+                        do {
+                            try KeychainHelper().setPassword(credential.password, forURL: feedUrl)
+                        } catch {
+                            // TODO: Figure out what to do here – so many errors...
+                        }
                     }
-                    let p = pipelineBuilder.makePipeline(feedUrl: urlWithUser, name: projectList.selected.name)
+                    let p = pipelineBuilder.makePipeline(feedUrl: feedUrl, name: projectList.selected.name)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }

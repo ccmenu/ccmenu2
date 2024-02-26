@@ -18,7 +18,7 @@ class CCTrayProjectList: ObservableObject {
             return
         }
         items = [CCTrayProject(message: "updating")]
-        var (actualURL, newItems) = await fetchProjects(urlList: makeUrlList(baseUrl: baseUrl), credential: credential)
+        let (actualURL, newItems) = await fetchProjects(urlList: makeUrlList(baseUrl: baseUrl), credential: credential)
         urlBinding.wrappedValue = actualURL.absoluteString
         items = newItems
     }
@@ -68,8 +68,7 @@ class CCTrayProjectList: ObservableObject {
             throw URLError(.unsupportedURL)
         }
         guard response.statusCode == 200 else {
-            let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
-            return [CCTrayProject(message: "The server responded: \(httpError)")]
+            return [CCTrayProject(message: CCTrayAPI.localizedString(forStatusCode: response.statusCode))]
         }
         let parser = CCTrayResponseParser()
         do {
