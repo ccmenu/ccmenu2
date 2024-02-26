@@ -32,7 +32,7 @@ class GitHubRepositoryList: ObservableObject {
             allRepos.append(contentsOf: privateRepos)
         }
 
-        allRepos = allRepos.filter({ $0.owner?.login == owner })
+        allRepos = allRepos.filter({ $0.owner?.login.lowercased() == owner.lowercased() })
         if allRepos.count == 0 {
             allRepos = [GitHubRepository()]
         }
@@ -48,7 +48,7 @@ class GitHubRepositoryList: ObservableObject {
                 throw URLError(.unsupportedURL)
             }
             guard response.statusCode == 200 else {
-                return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
+                return [GitHubRepository(message: GitHubAPI.localizedString(forStatusCode: response.statusCode))]
             }
             return try JSONDecoder().decode([GitHubRepository].self, from: data)
         } catch {

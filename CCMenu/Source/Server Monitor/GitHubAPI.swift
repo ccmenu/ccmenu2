@@ -89,6 +89,11 @@ class GitHubAPI {
 
     // MARK: - helper functions
 
+    static func localizedString(forStatusCode code: Int) -> String {
+        let httpError = HTTPURLResponse.localizedString(forStatusCode: code)
+        return "GitHub API response: \(httpError)"
+    }
+    
     private static func makeRequest(method: String = "GET", baseUrl: String = "https://api.github.com", path: String, params: Dictionary<String, String>, token: String? = nil) -> URLRequest {
         var components = URLComponents(string: baseUrl)!
         components.path = path
@@ -104,6 +109,7 @@ class GitHubAPI {
         if let token, !token.isEmpty {
             request.setValue(URLRequest.bearerAuthValue(token: token), forHTTPHeaderField: "Authorization")
         }
+        request.cachePolicy = .reloadRevalidatingCacheData
         return request
     }
 
