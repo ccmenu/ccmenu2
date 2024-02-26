@@ -9,6 +9,7 @@ import SwiftUI
 struct AddCCTrayPipelineSheet: View {
     @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
+    @State var useBasicAuth = false
     @State var credential = HTTPCredential(user: "", password: "")
     @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
@@ -22,12 +23,23 @@ struct AddCCTrayPipelineSheet: View {
             Text("Enter the URL of a CCTray feed, and press return to retrieve the project list. If you receive an error message try opening the URL in a web browser. If the browser doesn't show an XML document in [cctray format](https://cctray.org/v1/) then the feed URL is incorrect.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
-            Form {
-                TextField("Authentication:", text: $credential.user, prompt: Text("user"))
-                // TODO: figure out how to put user and password into same row without breaking the layout
-                SecureField("", text: $credential.password, prompt: Text("password"))
-                    .padding(.bottom)
 
+            GroupBox() {
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $useBasicAuth) {
+                        Text("Use HTTP Basic Authentication")
+                    }
+                    HStack {
+                        TextField("", text: $credential.user, prompt: Text("user"))
+                        SecureField("", text: $credential.password, prompt: Text("password"))
+                    }
+                    .disabled(!useBasicAuth)
+                }
+                .padding(8)
+            }
+            .padding(.bottom)
+
+            Form {
                 TextField("Server:", text: $url, prompt: Text("URL"))
                     .autocorrectionDisabled(true)
                     .onSubmit {
@@ -66,7 +78,7 @@ struct AddCCTrayPipelineSheet: View {
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     var feedUrl = url
-                    if !credential.user.isEmpty {
+                    if useBasicAuth && !credential.user.isEmpty {
                         feedUrl = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
                         do {
                             try KeychainHelper().setPassword(credential.password, forURL: feedUrl)
