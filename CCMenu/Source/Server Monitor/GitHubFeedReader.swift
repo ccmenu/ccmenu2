@@ -6,6 +6,23 @@
 
 import Foundation
 
+enum GithHubFeedReaderError: LocalizedError {
+    case invalidURLError
+    case httpError(Int)
+    case noStatusError
+
+    public var errorDescription: String? {
+        switch self {
+        case .invalidURLError:
+            return NSLocalizedString("invalid URL", comment: "")
+        case .httpError(let statusCode):
+            return GitHubAPI.localizedString(forStatusCode: statusCode)
+        case .noStatusError:
+            return "No status available for this pipeline."
+        }
+    }
+}
+
 
 class GitHubFeedReader {
 
@@ -17,49 +34,40 @@ class GitHubFeedReader {
 
     public func updatePipelineStatus() async {
         // TODO: consider making page size configurable to make sure to get a completed/successful
-        guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, pageSize: 5) else {
-            pipeline.connectionError = "Invalid URL: " + pipeline.feed.url
-            return
+        do {
+            let token = try KeychainHelper().getToken(forService: "GitHub")
+            guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
+                throw GithHubFeedReaderError.invalidURLError
+            }
+            guard let newStatus = try await fetchStatus(request: request) else {
+                throw GithHubFeedReaderError.noStatusError
+            }
+            pipeline.status = newStatus
+            pipeline.connectionError = nil
+        } catch {
+            pipeline.status = Pipeline.Status(activity: .other)
+            pipeline.connectionError = error.localizedDescription
         }
-        let (newStatus, error) = await fetchStatus(request: request)
-
-        // TODO: Find out whether this pattern (also in the sheet lists) can be done with a switch.
-        if let error {
-            pipeline.connectionError = error
-            return
-        }
-        guard let newStatus = newStatus else {
-            pipeline.connectionError = "The server did not provide a status for this pipeline."
-            return
-        }
-        pipeline.connectionError = nil
-        pipeline.status = newStatus
     }
 
 
-    private func fetchStatus(request: URLRequest) async -> (Pipeline.Status?, String?) {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else {
-                throw URLError(.unsupportedURL)
-            }
-            if let rll = response.allHeaderFields["x-ratelimit-limit"] as? String,
-               let rlu = response.allHeaderFields["x-ratelimit-used"] as? String {
-                debugPrint("received response from GitHub; rate limit \(rlu)/\(rll)")
-            } else {
-                debugPrint("received response from GitHub")
-            }
-            guard response.statusCode == 200 else {
-                let httpError = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
-                return (nil, httpError)
-            }
-            let parser = GitHubResponseParser()
-            try parser.parseResponse(data)
-            let status = parser.pipelineStatus(name: pipeline.name)
-            return (status, nil)
-        } catch {
-            return (nil, error.localizedDescription)
+    private func fetchStatus(request: URLRequest) async throws -> Pipeline.Status? {
+        let (data, response) = try await URLSession.feedSession.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw URLError(.unsupportedURL)
         }
+        if let rll = response.allHeaderFields["x-ratelimit-limit"] as? String,
+           let rlu = response.allHeaderFields["x-ratelimit-used"] as? String {
+            debugPrint("received response from GitHub; rate limit \(rlu)/\(rll)")
+        }
+        guard response.statusCode == 200 else {
+            // TODO: Do something here if the rate limit is exceeded
+            throw GithHubFeedReaderError.httpError(response.statusCode)
+        }
+        let parser = GitHubResponseParser()
+        try parser.parseResponse(data)
+        let status = parser.pipelineStatus(name: pipeline.name)
+        return status
     }
 
 }

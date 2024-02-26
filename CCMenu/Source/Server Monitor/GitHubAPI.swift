@@ -78,11 +78,12 @@ class GitHubAPI {
         return components.url!.absoluteString
     }
 
-    static func requestForFeed(feed: Pipeline.Feed, pageSize: Int = 5) -> URLRequest? {
+    static func requestForFeed(feed: Pipeline.Feed, token: String?, pageSize: Int = 5) -> URLRequest? {
+        // TODO: Consider using URLComponents to append page size query parameter properly
         guard let url = URL(string: feed.url + "?per_page=5") else {
             return nil
         }
-        return makeRequest(url: url, token: feed.authToken)
+        return makeRequest(url: url, token: token)
     }
 
 

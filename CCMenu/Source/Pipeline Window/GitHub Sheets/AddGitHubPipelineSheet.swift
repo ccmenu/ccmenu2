@@ -10,7 +10,6 @@ import Combine
 
 struct AddGitHubPipelineSheet: View {
     @ObservedObject var model: PipelineModel
-    @AppStorage(.cachedGitHubToken) var cachedToken: String = ""
     @Environment(\.presentationMode) @Binding var presentation
     @State private var owner = ""
     @StateObject private var repositoryList = GitHubRepositoryList()
@@ -100,7 +99,7 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(owner: owner, authToken: authenticator.token)
+                    let p = pipelineBuilder.makePipeline(owner: owner)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }
@@ -112,12 +111,21 @@ struct AddGitHubPipelineSheet: View {
         .frame(idealWidth: 450)
         .padding()
         .onAppear() {
-            authenticator.token = !cachedToken.isEmpty ? cachedToken : nil
-            authenticator.tokenDescription = cachedToken
+            do {
+                let token = try KeychainHelper().getToken(forService: "GitHub")
+                authenticator.token = token
+                authenticator.tokenDescription = token ?? ""
+            } catch {
+            }
         }
         .onDisappear() {
-            if let token = authenticator.token {
-                cachedToken = token
+            guard let token = authenticator.token else {
+                return
+            }
+            do {
+                try KeychainHelper().setToken(token, forService: "GitHub")
+            } catch {
+                // TODO: Figure out what to do here – so many errors...
             }
         }
     }

@@ -25,10 +25,10 @@ class GitHubPipelineBuilder: ObservableObject {
         self.name = newName
     }
 
-    func makePipeline(owner: String, authToken: String?) -> Pipeline {
+    func makePipeline(owner: String) -> Pipeline {
         // TODO: Consider what is the best place for this code and how much state it should be aware of
         let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename)
-        let feed = Pipeline.Feed(type: .github, url:url, authToken: authToken)
+        let feed = Pipeline.Feed(type: .github, url:url)
         let pipeline = Pipeline(name: name, feed: feed)
         return pipeline
     }
