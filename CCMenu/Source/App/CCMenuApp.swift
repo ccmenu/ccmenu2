@@ -21,19 +21,23 @@ struct CCMenuApp: App {
         notificationSender = NotificationSender(model: pipelineModel)
 
         if UserDefaults.standard.bool(forKey: "ignoreDefaults") {
-            print("Ignoring user defaults from system")
+            print("Ignoring user defaults from system.")
             UserDefaults.active = UserDefaults.transient
         }
 
         if let filename = UserDefaults.standard.string(forKey: "loadPipelines") {
-            print("Loading pipeline definitions from file \(filename)")
+            print("Loading pipeline definitions from file \(filename).")
             pipelineModel.loadPipelinesFromFile(filename)
         } else {
             pipelineModel.loadPipelinesFromUserDefaults()
-            serverMonitor.start()
-            notificationSender.start()
         }
 
+        if !UserDefaults.standard.bool(forKey: "pauseMonitor") {
+            print("Pausing monitor.")
+            serverMonitor.start()
+        }
+        
+        notificationSender.start()
     }
 
     var body: some Scene {

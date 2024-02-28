@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
+		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
@@ -101,6 +102,7 @@
 /* Begin PBXFileReference section */
 		031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
+		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
@@ -198,12 +200,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		032205182B8EA73100205DC6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		0331B3012B3C9A60000FE134 /* GitHub Sheets */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +256,7 @@
 				03BD7E9D2598E57A000F9495 /* CCMenuTests */,
 				03BD7EA82598E57A000F9495 /* CCMenuUITests */,
 				03BD7E862598E578000F9495 /* Products */,
+				032205182B8EA73100205DC6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -306,6 +317,7 @@
 				03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */,
 				03825E9D259FF64A00DEB003 /* TestData.json */,
 				03BD7EAB2598E57A000F9495 /* Info.plist */,
+				0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */,
 			);
 			path = CCMenuUITests;
 			sourceTree = "<group>";
@@ -441,6 +453,8 @@
 			dependencies = (
 			);
 			name = CCMenu;
+			packageProductDependencies = (
+			);
 			productName = CCMenu;
 			productReference = 03BD7E852598E578000F9495 /* CCMenu.app */;
 			productType = "com.apple.product-type.application";
@@ -477,6 +491,9 @@
 				03BD7EA72598E57A000F9495 /* PBXTargetDependency */,
 			);
 			name = CCMenuUITests;
+			packageProductDependencies = (
+				032205192B8EA73100205DC6 /* Hummingbird */,
+			);
 			productName = CCMenuUITests;
 			productReference = 03BD7EA52598E57A000F9495 /* CCMenuUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -512,6 +529,9 @@
 				Base,
 			);
 			mainGroup = 03BD7E7C2598E578000F9495;
+			packageReferences = (
+				032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */,
+			);
 			productRefGroup = 03BD7E862598E578000F9495 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -905,9 +925,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = CCMenuUITests/CCMenuUITests.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -929,9 +950,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = CCMenuUITests/CCMenuUITests.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -989,6 +1011,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hummingbird-project/hummingbird";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		032205192B8EA73100205DC6 /* Hummingbird */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */;
+			productName = Hummingbird;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 03BD7E7D2598E578000F9495 /* Project object */;
 }

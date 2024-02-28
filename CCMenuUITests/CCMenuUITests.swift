@@ -5,50 +5,110 @@
  */
 
 import XCTest
+import Hummingbird
 
 class CCMenuUITests: XCTestCase {
     
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-    }
-  
-    private func pathForBundleFile(_ name: String) -> String {
-        let myBundle = Bundle(for: NSClassFromString(CCMenuUITests.className())!) // TODO: really?!
-        guard let fileUrl = myBundle.url(forResource: name, withExtension:nil) else {
-            fatalError("Couldn't find \(name) in UI test bundle.")
+    var webapp: HBApplication?
+
+
+    // - MARK: Pipeline window, simple cases with static data only
+
+    func testPipelineWindowToolbar() throws {
+        let app = launchApp()
+        let window = app.windows["Pipelines"]
+        let toolbars = window.toolbars
+
+        // Pipeline action buttons when no pipeline is selected
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled == false)
+        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
+
+        // Pipeline action buttons when one pipeline is selected
+        window.tables.staticTexts["connectfour"].click()
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled)
+
+        // Pipeline action buttons when two pipelines are selected
+        XCUIElement.perform(withKeyModifiers: XCUIElement.KeyModifierFlags.shift) {
+            window.tables.staticTexts["ccmenu2 | Build and test"].click()
         }
-        return fileUrl.path
-    }
-    
-    private func launchApp() -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = ["-loadPipelines", pathForBundleFile("TestData.json"), "-ignoreDefaults", "1"]
-        app.launch()
-        return app
+        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
+        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
+
+        // Default state of display menu, which shows pipeline status
+        toolbars.popUpButtons["Display detail menu"].click()
+        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == true)
+        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == true)
+        toolbars.menuItems["Build Status"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists)
+
+        // Selecting hide message hides the messages and changes the menu text
+        toolbars.popUpButtons["Display detail menu"].click()
+        toolbars.menuItems["Hide Messages"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists == false)
+        toolbars.popUpButtons["Display detail menu"].click()
+        XCTAssertTrue(toolbars.menuItems["Show Messages"].exists)
+
+        // Switching display menu to URL shows URL
+        toolbars.menuItems["Pipeline URL"].click()
+        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
+        toolbars.popUpButtons["Display detail menu"].click()
+        XCTAssertTrue(toolbars.menuItems["Show Messages"].isEnabled == false)
+        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
     }
 
-    @discardableResult private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
-        // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
-        let statusItem = app.menuBars.statusItems.element // TODO: workaround because line below doesn't work anymore
-        // let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
-        statusItem.click()
-        return statusItem.children(matching: .menu)
+    func testRemovesPipeline() throws {
+        let app = launchApp()
+        let window = app.windows["Pipelines"]
+
+        window.tables.staticTexts["connectfour"].click()
+        window.toolbars.buttons["Remove pipeline"].click()
+
+        XCTAssertTrue(window.tables.staticTexts["connectfour"].exists == false)
     }
 
-    func testMenuOpenPipeline() throws {
+
+    // - MARK: Pipeline window, loading from embedded server
+
+    func testAddCCTrayProjectPipeline() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/cctray.xml") { _ in
+            """
+            <Projects>
+                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour' webUrl='http://localhost:8086/dashboard/build/detail/connectfour'></Project>
+            </Projects>
+            """
+        }
+
+        let app = launchApp(pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+
+        // First find the pipeline row for connectedfour, which has a build label loaded from the JSON file, which begins with "build."
+        let pipelineRow = window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Label: build.'"))
+
+        // Then make sure it gets updated to the build label we return with the embedded server
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value CONTAINS 'Label: build.888'"), object: pipelineRow)
+        XCTAssert(XCTWaiter().wait(for: [expectation], timeout: 2) == .completed)
+    }
+
+
+    // - MARK: Menu
+
+    func testMenuOpensPipeline() throws {
         let app = launchApp()
         let menu = openMenu(app: app)
 
-        // Make sure expected pipeline present
-        XCTAssert(menu.menuItems["erikdoe/ccmenu"].exists)
-
-        // Make sure broken URLs are not opened
-        menu.menuItems["erikdoe/ccmenu"].click()
+        // Make sure broken URLs result in an alert to be shown
+        menu.menuItems["connectfour"].click()
         XCTAssert(app.dialogs["alert"].staticTexts["Can't open web page"].exists)
         app.dialogs["alert"].buttons["Cancel"].click()
     }
 
-    func testMenuOpenAboutPanel() throws {
+    func testMenuOpensAboutPanel() throws {
         let app = launchApp()
         let menu = openMenu(app: app)
 
@@ -57,20 +117,23 @@ class CCMenuUITests: XCTestCase {
 
         // Make sure version is displayed
         let versionText = app.dialogs.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Version'"))
-        guard let _ = versionText.value as? String else {
+        guard let versionString = versionText.value as? String else {
             XCTFail()
             return
         }
         // TODO: Sometimes version check fails because the script that inserts it isn't run. Why?
-//        let range = versionString.range(of: "^Version [0-9]+ \\([A-Z0-9]+\\)$", options: .regularExpression)
-//        XCTAssertNotNil(range)
+        let range = versionString.range(of: "^Version [0-9]+.[0-9]+ \\([A-Z0-9]+\\)$", options: .regularExpression)
+        XCTAssertNotNil(range)
     }
+
+
+    // - MARK: Settings
 
     func testAppearanceSettings() throws {
         let app = launchApp()
         let menu = openMenu(app: app)
 
-        // Make sure expected menu items are present
+        // Make sure expected pipeline is present
         XCTAssert(menu.menuItems["connectfour"].exists)
 
         // Open settings, chose to display build labels, then close settings
@@ -89,77 +152,57 @@ class CCMenuUITests: XCTestCase {
         openMenu(app: app)
         XCTAssert(menu.menuItems["connectfour \u{2014} \(buildTimeRelative), build.151"].exists)
     }
-    
-    
-    func testPipelineWindowToolbar() throws {
-        let app = launchApp()
-        let menu = openMenu(app: app)
 
-        menu.menuItems["Pipelines"].click()
 
-        let window = app.windows["Pipelines"]
-        let toolbars = window.toolbars
-        
-        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
-        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled == false)
-        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
+    // - MARK: setup and teardown
 
-        window.tables.staticTexts["connectfour"].click()
-        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
-        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
-        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled)
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+    }
 
-        XCUIElement.perform(withKeyModifiers: XCUIElement.KeyModifierFlags.shift) {
-            window.tables.staticTexts["erikdoe/ccmenu"].click()
+    override func tearDownWithError() throws {
+        webapp?.stop()
+    }
+
+
+    // - MARK: helper methods
+
+    private func pathForBundleFile(_ name: String) -> String {
+        let myBundle = Bundle(for: CCMenuUITests.self)
+        guard let fileUrl = myBundle.url(forResource: name, withExtension:nil) else {
+            fatalError("Couldn't find \(name) in UI test bundle.")
         }
-        XCTAssertTrue(toolbars.popUpButtons["Add pipeline menu"].isEnabled)
-        XCTAssertTrue(toolbars.buttons["Remove pipeline"].isEnabled)
-        XCTAssertTrue(toolbars.buttons["Edit pipeline"].isEnabled == false)
-        
-        toolbars.popUpButtons["Display detail menu"].click()
-        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled == true)
-        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == true)
-        toolbars.menuItems["Build Status"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'Started:'")).exists)
-
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists)
-        toolbars.popUpButtons.firstMatch.click()
-        XCTAssertTrue(toolbars.menuItems["Hide Messages"].isEnabled)
-        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled)
-        toolbars.menuItems["Hide Messages"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Testing'")).exists == false)
-
-        toolbars.popUpButtons["Display detail menu"].click()
-        toolbars.menuItems["Pipeline URL"].click()
-        XCTAssertTrue(window.tables.staticTexts.element(matching: NSPredicate(format: "value BEGINSWITH 'https:'")).exists)
-        toolbars.popUpButtons["Display detail menu"].click()
-        XCTAssertTrue(toolbars.menuItems["Show Messages"].isEnabled == false)
-        XCTAssertTrue(toolbars.menuItems["Hide Avatars"].isEnabled == false)
-
-    }
-    
-    // onMove and onDelete are still untested
-    
-    func testRemovesPipeline() throws {
-        let app = launchApp()
-        let menu = openMenu(app: app)
-
-        menu.menuItems["Pipelines"].click()
-
-        let window = app.windows["Pipelines"]
-        window.tables.staticTexts["connectfour"].click()
-        window.toolbars.buttons["Remove pipeline"].click()
-
-        XCTAssertTrue(window.tables.staticTexts["connectfour"].exists == false)
+        return fileUrl.path
     }
 
-    func __testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    private func launchApp(pauseMonitor: Bool = true) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = [
+            "-loadPipelines", pathForBundleFile("TestData.json"),
+            "-ignoreDefaults", "true",
+            "-pauseMonitor", String(pauseMonitor)
+        ]
+        app.launch()
+        return app
     }
+
+    @discardableResult 
+    private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
+        // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
+        let statusItem = app.menuBars.statusItems.element // TODO: workaround because line below doesn't work anymore
+        // let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
+        statusItem.click()
+        return statusItem.children(matching: .menu)
+    }
+
+    private func startEmbeddedServer() throws -> HBApplication {
+        let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086)))
+        // If the following fails with "operation not permitted" see: https://developer.apple.com/forums/thread/114907
+        webapp.middleware.add(HBLogRequestsMiddleware(.info, includeHeaders: false))
+        try webapp.start()
+        self.webapp = webapp
+        return webapp
+    }
+
 
 }
