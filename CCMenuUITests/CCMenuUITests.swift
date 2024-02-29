@@ -74,7 +74,7 @@ class CCMenuUITests: XCTestCase {
 
     // - MARK: Pipeline window, loading from embedded server
 
-    func testAddCCTrayProjectPipeline() throws {
+    func testShowsPipelineStatusFetchedFromServer() throws {
         let webapp = try startEmbeddedServer()
         webapp.router.get("/cctray.xml") { _ in
             """
@@ -84,16 +84,53 @@ class CCMenuUITests: XCTestCase {
             """
         }
 
-        let app = launchApp(pauseMonitor: false)
+        let app = launchApp(pauseMonitor: false) // TODO: pipelines without gh
         let window = app.windows["Pipelines"]
 
-        // First find the pipeline row for connectedfour, which has a build label loaded from the JSON file, which begins with "build."
-        let pipelineRow = window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Label: build.'"))
+        // First find the status for connectedfour, which has a build label that begins with "build."
+        let statusDescription = window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Label: build.'"))
+        // Then make sure it has been updated to the build label we return with the embedded server
+        let value = statusDescription.value
+        XCTAssertEqual("Last build: 11/02/2024, 23:19, Label: build.888", value as? String)
 
-        // Then make sure it gets updated to the build label we return with the embedded server
-        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value CONTAINS 'Label: build.888'"), object: pipelineRow)
-        XCTAssert(XCTWaiter().wait(for: [expectation], timeout: 2) == .completed)
+        // This is how it would be done if we had to wait, which it doesn't seem we have to
+//        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value CONTAINS 'Label: build.888'"), object: statusDescription)
+//        XCTAssert(XCTWaiter().wait(for: [expectation], timeout: 2) == .completed)
     }
+
+    func testAddsPipeline() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/cctray.xml") { _ in
+            """
+            <Projects>
+                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour' webUrl='http://localhost:8086/dashboard/build/detail/connectfour'></Project>
+            </Projects>
+            """
+        }
+
+        let app = launchApp(pipelines: "EmptyPipelines", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let toolbars = window.toolbars
+
+        toolbars.popUpButtons["Add pipeline menu"].click()
+        toolbars.menuItems["Add project from CCTray feed..."].click()
+
+        let sheet = window.sheets.firstMatch
+        sheet.textFields["Server URL text field"].click()
+        sheet.typeText("localhost:8086\n")
+
+        let value = sheet.textFields["Server URL text field"].value
+        XCTAssertEqual("http://localhost:8086/cctray.xml", value as? String)
+
+    }
+
+    // basic headers
+
+    // server stops responding
+
+    // server doesn't send status for project
+
+    // github mixed case owner
 
 
     // - MARK: Menu
@@ -167,6 +204,19 @@ class CCMenuUITests: XCTestCase {
 
     // - MARK: helper methods
 
+    private func launchApp(pipelines: String = "DefaultPipelines", pauseMonitor: Bool = true) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = [
+            "-loadPipelines", pathForBundleFile("\(pipelines).json"),
+            "-ignoreDefaults", "true",
+            "-pauseMonitor", String(pauseMonitor),
+            "-PollInterval", "10",
+            "-GitHubBaseURL", ""
+        ]
+        app.launch()
+        return app
+    }
+
     private func pathForBundleFile(_ name: String) -> String {
         let myBundle = Bundle(for: CCMenuUITests.self)
         guard let fileUrl = myBundle.url(forResource: name, withExtension:nil) else {
@@ -175,18 +225,7 @@ class CCMenuUITests: XCTestCase {
         return fileUrl.path
     }
 
-    private func launchApp(pauseMonitor: Bool = true) -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = [
-            "-loadPipelines", pathForBundleFile("TestData.json"),
-            "-ignoreDefaults", "true",
-            "-pauseMonitor", String(pauseMonitor)
-        ]
-        app.launch()
-        return app
-    }
-
-    @discardableResult 
+    @discardableResult
     private func openMenu(app: XCUIApplication) -> XCUIElementQuery {
         // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
         let statusItem = app.menuBars.statusItems.element // TODO: workaround because line below doesn't work anymore
@@ -203,6 +242,5 @@ class CCMenuUITests: XCTestCase {
         self.webapp = webapp
         return webapp
     }
-
 
 }

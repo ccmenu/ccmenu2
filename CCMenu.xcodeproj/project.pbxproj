@@ -10,6 +10,10 @@
 		031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
+		0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322051C2B8FF20300205DC6 /* EmptyPipelines.json */; };
+		032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */; };
+		032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */; };
+		032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
@@ -32,7 +36,7 @@
 		03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DE7259D005B00DEB003 /* PipelineModel.swift */; };
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
-		03825EA5259FFD1500DEB003 /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* TestData.json */; };
+		03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* DefaultPipelines.json */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
@@ -103,6 +107,10 @@
 		031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
+		0322051C2B8FF20300205DC6 /* EmptyPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyPipelines.json; sourceTree = "<group>"; };
+		032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowsResponse.json; sourceTree = "<group>"; };
+		032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorflowRunsResponse.json; sourceTree = "<group>"; };
+		032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByUserResponse.json; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
@@ -124,7 +132,7 @@
 		03825DE7259D005B00DEB003 /* PipelineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineModel.swift; sourceTree = "<group>"; };
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
-		03825E9D259FF64A00DEB003 /* TestData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
+		03825E9D259FF64A00DEB003 /* DefaultPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultPipelines.json; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
@@ -212,6 +220,25 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0322051E2B9139A700205DC6 /* Pipelines */ = {
+			isa = PBXGroup;
+			children = (
+				03825E9D259FF64A00DEB003 /* DefaultPipelines.json */,
+				0322051C2B8FF20300205DC6 /* EmptyPipelines.json */,
+			);
+			path = Pipelines;
+			sourceTree = "<group>";
+		};
+		0322051F2B913BC900205DC6 /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */,
+				032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */,
+				032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */,
+			);
+			path = Responses;
 			sourceTree = "<group>";
 		};
 		0331B3012B3C9A60000FE134 /* GitHub Sheets */ = {
@@ -314,8 +341,9 @@
 		03BD7EA82598E57A000F9495 /* CCMenuUITests */ = {
 			isa = PBXGroup;
 			children = (
+				0322051F2B913BC900205DC6 /* Responses */,
+				0322051E2B9139A700205DC6 /* Pipelines */,
 				03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */,
-				03825E9D259FF64A00DEB003 /* TestData.json */,
 				03BD7EAB2598E57A000F9495 /* Info.plist */,
 				0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */,
 			);
@@ -566,8 +594,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */,
 				037AB21629733C2500C33589 /* Info.plist in Resources */,
-				03825EA5259FFD1500DEB003 /* TestData.json in Resources */,
+				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
+				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
+				032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */,
+				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

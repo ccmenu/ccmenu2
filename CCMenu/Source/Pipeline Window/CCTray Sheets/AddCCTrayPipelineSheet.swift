@@ -50,6 +50,7 @@ struct AddCCTrayPipelineSheet: View {
                             }
                         }
                     }
+                    .accessibility(label: Text("Server URL text field"))
 
                 Picker("Project:", selection: $projectList.selected) {
                     ForEach(projectList.items) { p in

@@ -1,0 +1,17 @@
+{
+  "total_count": 1,
+  "workflows": [
+    {
+      "id": 62921699,
+      "node_id": "W_kwDOE3GK-c4DwBvj",
+      "name": "Build and test",
+      "path": ".github/workflows/build-and-test.yaml",
+      "state": "active",
+      "created_at": "2023-07-12T10:02:58.000Z",
+      "updated_at": "2023-07-12T10:02:58.000Z",
+      "url": "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/62921699",
+      "html_url": "https://github.com/erikdoe/ccmenu2/blob/main/.github/workflows/build-and-test.yaml",
+      "badge_url": "https://github.com/erikdoe/ccmenu2/workflows/Build%20and%20test/badge.svg"
+    }
+  ]
+}
