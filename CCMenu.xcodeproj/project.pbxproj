@@ -14,6 +14,7 @@
 		032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */; };
 		032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */; };
 		032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */; };
+		032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205262B91C18600205DC6 /* CCTrayPipeline.json */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
@@ -111,6 +112,7 @@
 		032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowsResponse.json; sourceTree = "<group>"; };
 		032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorflowRunsResponse.json; sourceTree = "<group>"; };
 		032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByUserResponse.json; sourceTree = "<group>"; };
+		032205262B91C18600205DC6 /* CCTrayPipeline.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CCTrayPipeline.json; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				03825E9D259FF64A00DEB003 /* DefaultPipelines.json */,
+				032205262B91C18600205DC6 /* CCTrayPipeline.json */,
 				0322051C2B8FF20300205DC6 /* EmptyPipelines.json */,
 			);
 			path = Pipelines;
@@ -600,6 +603,7 @@
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
 				032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */,
 				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
+				032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

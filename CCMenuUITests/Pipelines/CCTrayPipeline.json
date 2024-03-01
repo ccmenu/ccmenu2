@@ -1,0 +1,17 @@
+[{  "name": "connectfour",
+    "feed": {
+        "type": "cctray",
+        "url": "http://localhost:8086/cctray.xml",
+        "name": "connectfour"
+    },
+    "status": {
+        "webUrl": "#broken",
+        "activity": "sleeping",
+        "lastBuild": {
+            "result": "failure",
+            "timestamp": "2020-12-27T21:47:00Z",
+            "label": "build.151",
+        }
+    },
+}]
+

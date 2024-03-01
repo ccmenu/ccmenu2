@@ -84,18 +84,14 @@ class CCMenuUITests: XCTestCase {
             """
         }
 
-        let app = launchApp(pauseMonitor: false) // TODO: pipelines without gh
+        let app = launchApp(pipelines: "CCTrayPipeline", pauseMonitor: false)
         let window = app.windows["Pipelines"]
 
-        // First find the status for connectedfour, which has a build label that begins with "build."
-        let statusDescription = window.tables.staticTexts.element(matching: NSPredicate(format: "value CONTAINS 'Label: build.'"))
-        // Then make sure it has been updated to the build label we return with the embedded server
-        let value = statusDescription.value
-        XCTAssertEqual("Last build: 11/02/2024, 23:19, Label: build.888", value as? String)
-
-        // This is how it would be done if we had to wait, which it doesn't seem we have to
-//        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value CONTAINS 'Label: build.888'"), object: statusDescription)
-//        XCTAssert(XCTWaiter().wait(for: [expectation], timeout: 2) == .completed)
+        // First find the status description field (there's only one because there's only one pipeline)
+        let descriptionText = window.tables.staticTexts["Status description"]
+        // Then wait for the update to the build label we return with the embedded server
+        let exp = self.expectation(for: NSPredicate(format: "value CONTAINS 'Label: build.888'"), evaluatedWith: descriptionText)
+        wait(for: [exp], timeout: 2)
     }
 
     func testAddsPipeline() throws {
@@ -103,7 +99,8 @@ class CCMenuUITests: XCTestCase {
         webapp.router.get("/cctray.xml") { _ in
             """
             <Projects>
-                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour' webUrl='http://localhost:8086/dashboard/build/detail/connectfour'></Project>
+                <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='other-project'></Project>
+                <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour'></Project>
             </Projects>
             """
         }
@@ -116,12 +113,12 @@ class CCMenuUITests: XCTestCase {
         toolbars.menuItems["Add project from CCTray feed..."].click()
 
         let sheet = window.sheets.firstMatch
-        sheet.textFields["Server URL text field"].click()
+        let urlField = sheet.textFields["Server URL text field"]
+        urlField.click()
         sheet.typeText("localhost:8086\n")
 
-        let value = sheet.textFields["Server URL text field"].value
-        XCTAssertEqual("http://localhost:8086/cctray.xml", value as? String)
-
+        expectation(for: NSPredicate(format: "value == 'http://localhost:8086/cctray.xml'"), evaluatedWith: urlField)
+        waitForExpectations(timeout: 2)
     }
 
     // basic headers
@@ -131,6 +128,8 @@ class CCMenuUITests: XCTestCase {
     // server doesn't send status for project
 
     // github mixed case owner
+
+    // github rate limit handling
 
 
     // - MARK: Menu

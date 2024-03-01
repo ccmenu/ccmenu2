@@ -27,6 +27,7 @@ struct PipelineRow: View {
                     if showStatus {
                         Text(viewModel.statusDescription)
                             .adjustedColor(colorScheme: colorScheme)
+                            .accessibilityIdentifier("Status description")
                         if showMessages, let message = viewModel.statusMessage {
                             Text(message)
                                 .adjustedColor(colorScheme: colorScheme)
