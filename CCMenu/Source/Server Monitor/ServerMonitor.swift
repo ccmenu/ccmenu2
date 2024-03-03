@@ -4,12 +4,13 @@
  *  not use these files except in compliance with the License.
  */
 
-import Foundation
+import SwiftUI
 import Combine
 
 @MainActor
 class ServerMonitor {
 
+    @AppStorage(.pollInterval) var pollInterval: Int = 15
     private var model: PipelineModel
     private var subscribers: [AnyCancellable] = []
 
@@ -21,7 +22,8 @@ class ServerMonitor {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
             Task { await self.updateStatus(pipelines: self.model.pipelines) }
         }
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+        // TODO: Later changes to variable will not result in rescheduling of timer
+        Timer.scheduledTimer(withTimeInterval: Double(pollInterval), repeats: true) { _ in
             Task { await self.updateStatus(pipelines: self.model.pipelines) }
         }
         model.$pipelines

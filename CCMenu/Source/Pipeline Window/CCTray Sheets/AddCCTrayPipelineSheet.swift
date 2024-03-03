@@ -41,6 +41,7 @@ struct AddCCTrayPipelineSheet: View {
 
             Form {
                 TextField("Server:", text: $url, prompt: Text("URL"))
+                    .accessibilityIdentifier("Server URL field")
                     .autocorrectionDisabled(true)
                     .onSubmit {
                         if !url.isEmpty {
@@ -50,13 +51,13 @@ struct AddCCTrayPipelineSheet: View {
                             }
                         }
                     }
-                    .accessibility(label: Text("Server URL text field"))
 
                 Picker("Project:", selection: $projectList.selected) {
                     ForEach(projectList.items) { p in
                         Text(p.name).tag(p)
                     }
                 }
+                .accessibilityIdentifier("Project picker")
                 .disabled(!projectList.selected.isValid)
                 .onChange(of: projectList.selected) { _ in
                     pipelineBuilder.updateName(project: projectList.selected)
@@ -65,6 +66,7 @@ struct AddCCTrayPipelineSheet: View {
 
                 HStack {
                     TextField("Display name:", text: $pipelineBuilder.name)
+                        .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
                         pipelineBuilder.updateName(project: projectList.selected)
                     }

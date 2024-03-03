@@ -10,9 +10,8 @@ import SwiftUI
 
 public enum DefaultsKey: String {
     case
-    // TODO: consider moving tokens to keychain, see https://swiftwithmajid.com/2021/08/11/how-to-create-a-property-wrapper-in-swift/
     pipelineList = "pipelines",
-    cachedGitHubToken = "GitHubToken",
+    pollInterval = "PollInterval",
     useColorInMenuBar = "UseColorInMenuBar",
     useColorInMenuBarFailedOnly = "UseColorOnlyForFailedStateInMenuBar",
     showBuildTimerInMenuBar = "ShowTimerInMenu",
@@ -42,6 +41,10 @@ extension UserDefaults {
 extension AppStorage {
 
     public init(wrappedValue: Value, _ key: DefaultsKey) where Value == Bool {
+        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
+    }
+
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == Int {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 

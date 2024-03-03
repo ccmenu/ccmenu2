@@ -23,6 +23,7 @@ struct PipelineRow: View {
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(viewModel.title)
+                        .accessibilityIdentifier("Pipeline title")
                         .font(.system(size: NSFont.systemFontSize + 1, weight: .bold))
                     if showStatus {
                         Text(viewModel.statusDescription)
