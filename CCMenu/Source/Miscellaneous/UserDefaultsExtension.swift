@@ -6,8 +6,6 @@
 
 import SwiftUI
 
-// TODO: consider using https://github.com/sindresorhus/Defaults
-
 public enum DefaultsKey: String {
     case
     pipelineList = "pipelines",

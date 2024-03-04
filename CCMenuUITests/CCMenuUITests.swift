@@ -173,6 +173,72 @@ class CCMenuUITests: XCTestCase {
         waitForExpectations(timeout: 2)
     }
 
+    func testAddsGitHubPipeline() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            try self.contentsOfFile("GitHubReposByUserResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
+            "{ \"total_count\": 0, \"workflows\": [] }"
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
+            try self.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { _ in
+            try self.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = launchApp(pipelines: "EmptyPipelines", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add workflow sheet and enter owner
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let ownerField = sheet.textFields["Owner field"]
+        ownerField.click()
+        sheet.typeText("erikdoe\n")
+
+        // Make sure that the repositories are loaded and sorted
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
+        waitForExpectations(timeout: 2)
+
+        // Open the repositiry picker
+        repositoryPicker.click()
+
+        // Make sure that repositories for different owners are not shown
+        XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
+
+        // Select the ccmenu2 repository
+        repositoryPicker.menuItems["ccmenu2"].click()
+
+        // Make sure that the workflows are loaded and the default display name is set
+        let workflowPicker = sheet.popUpButtons["Workflow picker"]
+        expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
+        let displayNameField = sheet.textFields["Display name field"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2 | Build and test'"), evaluatedWith: displayNameField)
+        waitForExpectations(timeout: 2)
+
+        // Set a custom display name, and close the sheet
+        displayNameField.click()
+        sheet.typeKey("a", modifierFlags: [ .command ])
+        sheet.typeKey(.delete, modifierFlags: [])
+        sheet.typeText("CCMenu")
+        sheet.buttons["Apply"].click()
+
+        // Make sure the pipeline is shown, and that its status is fetched immediately
+        let titleText = window.tables.staticTexts["Pipeline title"]
+        expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
+        waitForExpectations(timeout: 2)
+        let descriptionText = window.tables.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        let messageText = window.tables.staticTexts["Build message"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Push'"), evaluatedWith: messageText)
+        expectation(for: NSPredicate(format: "value CONTAINS 'Improved layout'"), evaluatedWith: messageText)
+        waitForExpectations(timeout: 2)
+    }
+
     // basic headers
 
     // github mixed case owner
@@ -251,22 +317,14 @@ class CCMenuUITests: XCTestCase {
     private func launchApp(pipelines: String = "DefaultPipelines", pauseMonitor: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
-            "-loadPipelines", pathForBundleFile("\(pipelines).json"),
+            "-loadPipelines", pathForResource("\(pipelines).json"),
             "-ignoreDefaults", "true",
             "-pauseMonitor", String(pauseMonitor),
             "-PollInterval", "1",
-            "-GitHubBaseURL", ""
+            "-GitHubBaseURL", "http://localhost:8086"
         ]
         app.launch()
         return app
-    }
-
-    private func pathForBundleFile(_ name: String) -> String {
-        let myBundle = Bundle(for: CCMenuUITests.self)
-        guard let fileUrl = myBundle.url(forResource: name, withExtension:nil) else {
-            fatalError("Couldn't find \(name) in UI test bundle.")
-        }
-        return fileUrl.path
     }
 
     @discardableResult
@@ -278,6 +336,7 @@ class CCMenuUITests: XCTestCase {
         return statusItem.children(matching: .menu)
     }
 
+    @discardableResult
     private func startEmbeddedServer() throws -> HBApplication {
         let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086)))
         // If the following fails with "operation not permitted" see: https://developer.apple.com/forums/thread/114907
@@ -285,6 +344,18 @@ class CCMenuUITests: XCTestCase {
         try webapp.start()
         self.webapp = webapp
         return webapp
+    }
+
+    private func pathForResource(_ name: String) -> String {
+        let myBundle = Bundle(for: CCMenuUITests.self)
+        guard let fileUrl = myBundle.url(forResource: name, withExtension:nil) else {
+            fatalError("Couldn't find \(name) in UI test bundle.")
+        }
+        return fileUrl.path
+    }
+
+    private func contentsOfFile(_ name: String) throws -> String {
+        try String(contentsOfFile: self.pathForResource(name))
     }
 
 }

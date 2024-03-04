@@ -46,7 +46,8 @@ struct AddGitHubPipelineSheet: View {
                 .padding(.bottom)
 
                 TextField("Owner:", text: $owner, prompt: Text("user or organisation"))
-                // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
+                .accessibilityIdentifier("Owner field")
+               // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
                 .onSubmit {
                     if !owner.isEmpty {
@@ -61,6 +62,7 @@ struct AddGitHubPipelineSheet: View {
                         Text(r.name).tag(r)
                     }
                 }
+                .accessibilityIdentifier("Repository picker")
                 .disabled(!repositoryList.selected.isValid)
                 .onChange(of: repositoryList.selected) { _ in
                     pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
@@ -78,6 +80,7 @@ struct AddGitHubPipelineSheet: View {
                         Text(w.name).tag(w)
                     }
                 }
+                .accessibilityIdentifier("Workflow picker")
                 .disabled(!workflowList.selected.isValid)
                 .onChange(of: workflowList.selected) { _ in
                     pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
@@ -86,6 +89,7 @@ struct AddGitHubPipelineSheet: View {
 
                 HStack {
                     TextField("Display name:", text: $pipelineBuilder.name)
+                        .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
                         pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
                     }

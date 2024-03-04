@@ -12,7 +12,7 @@
 		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
 		0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322051C2B8FF20300205DC6 /* EmptyPipelines.json */; };
 		032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */; };
-		032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */; };
+		032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */; };
 		032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */; };
 		032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205262B91C18600205DC6 /* CCTrayPipeline.json */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
@@ -110,7 +110,7 @@
 		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
 		0322051C2B8FF20300205DC6 /* EmptyPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyPipelines.json; sourceTree = "<group>"; };
 		032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowsResponse.json; sourceTree = "<group>"; };
-		032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorflowRunsResponse.json; sourceTree = "<group>"; };
+		032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowRunsResponse.json; sourceTree = "<group>"; };
 		032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByUserResponse.json; sourceTree = "<group>"; };
 		032205262B91C18600205DC6 /* CCTrayPipeline.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CCTrayPipeline.json; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
@@ -239,7 +239,7 @@
 			children = (
 				032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */,
 				032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */,
-				032205222B913CC000205DC6 /* GitHubWorflowRunsResponse.json */,
+				032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -601,7 +601,7 @@
 				037AB21629733C2500C33589 /* Info.plist in Resources */,
 				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
-				032205232B913CC000205DC6 /* GitHubWorflowRunsResponse.json in Resources */,
+				032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */,
 				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
 				032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */,
 			);

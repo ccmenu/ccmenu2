@@ -21,7 +21,7 @@ class GitHubAPI {
             "sort": "pushed",
             "per_page": "100",
         ];
-        return makeRequest(path: path, params: queryParams, token: token)
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
     static func requestForPrivateRepositories(token: String) -> URLRequest {
@@ -31,7 +31,7 @@ class GitHubAPI {
             "sort": "pushed",
             "per_page": "100",
         ];
-        return makeRequest(path: path, params: queryParams, token: token)
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
     static func requestForWorkflows(owner: String, repository: String, token: String?) -> URLRequest {
@@ -40,7 +40,7 @@ class GitHubAPI {
             "sort": "pushed",
             "per_page": "100",
         ];
-        return makeRequest(path: path, params: queryParams, token: token)
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
     
@@ -52,7 +52,7 @@ class GitHubAPI {
             "client_id": clientId,
             "scope": "repo",
         ];
-        return makeRequest(method: "POST", baseUrl: "https://github.com", path: path, params: queryParams)
+        return makeRequest(method: "POST", baseUrl: baseURL(forAPI: false), path: path, params: queryParams)
     }
 
     static func requestForAccessToken(codeResponse: GitHubDeviceCodeResponse) -> URLRequest {
@@ -62,18 +62,18 @@ class GitHubAPI {
             "device_code": codeResponse.deviceCode,
             "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
         ];
-        return makeRequest(method: "POST", baseUrl: "https://github.com", path: path, params: queryParams)
+        return makeRequest(method: "POST", baseUrl: baseURL(forAPI: false), path: path, params: queryParams)
     }
 
     static func applicationsUrl() -> URL {
-        URL(string: "https://github.com/settings/connections/applications/\(GitHubAPI.clientId)")!
+        URL(string: "\(baseURL(forAPI: false))/settings/connections/applications/\(GitHubAPI.clientId)")!
     }
 
 
     // MARK: - feed
 
     static func feedUrl(owner: String, repository: String, workflow: String) -> String {
-        var components = URLComponents(string: "https://api.github.com")!
+        var components = URLComponents(string: baseURL(forAPI: true))!
         components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
         return components.url!.absoluteString
     }
@@ -93,11 +93,19 @@ class GitHubAPI {
         let httpError = HTTPURLResponse.localizedString(forStatusCode: code)
         return "GitHub API response: \(httpError)"
     }
-    
-    private static func makeRequest(method: String = "GET", baseUrl: String = "https://api.github.com", path: String, params: Dictionary<String, String>, token: String? = nil) -> URLRequest {
+
+    private static func baseURL(forAPI: Bool) -> String {
+        if let defaultsBaseURL = UserDefaults.active.string(forKey: "GitHubBaseURL") {
+            return defaultsBaseURL
+        }
+        return forAPI ? "https://api.github.com" : "https://github.com"
+    }
+
+    private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String>, token: String? = nil) -> URLRequest {
         var components = URLComponents(string: baseUrl)!
         components.path = path
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
+        // TODO: Consider filtering token when the URL is overwritten via defaults
         return makeRequest(method: method, url: components.url!, token: token)
     }
 
