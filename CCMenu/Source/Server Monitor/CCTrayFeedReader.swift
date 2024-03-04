@@ -50,7 +50,7 @@ class CCTrayFeedReader {
         }
         var credential: HTTPCredential?
         if let user = url.user() {
-            guard let password = try KeychainHelper().getPassword(forURL: url) else {
+            guard let password = try Keychain().getPassword(forURL: url) else {
                 throw CCTrayFeedReaderError.missingPasswordError
             }
             credential = HTTPCredential(user: user, password: password)

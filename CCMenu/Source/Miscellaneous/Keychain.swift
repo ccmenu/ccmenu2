@@ -16,7 +16,7 @@ enum KeychainAccessError: Error {
     case missingUserErr
 }
 
-class KeychainHelper {
+class Keychain {
 
     public func setPassword(_ password: String, forURL urlString: String) throws {
         let url = try getOrThrow(error: .invalidURLErr) { URL(string: urlString) }
@@ -59,6 +59,9 @@ class KeychainHelper {
     }
 
     public func getToken(forService service: String) throws -> String? {
+        if service == "GitHub", let token = UserDefaults.active.string(forKey: "GitHubToken") {
+            return token
+        }
         let query: [String: Any] = [
             kSecClass as String:        kSecClassGenericPassword,
             kSecAttrService as String:  serviceForKeychain(service: service),

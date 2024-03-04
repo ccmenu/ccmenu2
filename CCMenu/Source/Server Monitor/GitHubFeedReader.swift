@@ -35,7 +35,7 @@ class GitHubFeedReader {
     public func updatePipelineStatus() async {
         // TODO: consider making page size configurable to make sure to get a completed/successful
         do {
-            let token = try KeychainHelper().getToken(forService: "GitHub")
+            let token = try Keychain().getToken(forService: "GitHub")
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
                 throw GithHubFeedReaderError.invalidURLError
             }

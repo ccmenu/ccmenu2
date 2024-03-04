@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */; };
+		031FC8CC2B7929B7005E7F26 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* Keychain.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
 		0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322051C2B8FF20300205DC6 /* EmptyPipelines.json */; };
@@ -15,6 +15,9 @@
 		032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */; };
 		032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */; };
 		032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205262B91C18600205DC6 /* CCTrayPipeline.json */; };
+		032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205282B96677200205DC6 /* GitHubUserReposResponse.json */; };
+		0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */; };
+		0322052E2B96769800205DC6 /* HummingbirdAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0322052D2B96769800205DC6 /* HummingbirdAuth */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
@@ -105,7 +108,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		031FC8CB2B7929B7005E7F26 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
 		0322051C2B8FF20300205DC6 /* EmptyPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyPipelines.json; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 		032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowRunsResponse.json; sourceTree = "<group>"; };
 		032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByUserResponse.json; sourceTree = "<group>"; };
 		032205262B91C18600205DC6 /* CCTrayPipeline.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CCTrayPipeline.json; sourceTree = "<group>"; };
+		032205282B96677200205DC6 /* GitHubUserReposResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubUserReposResponse.json; sourceTree = "<group>"; };
+		0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubPipelineLocalhost.json; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
@@ -211,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */,
+				0322052E2B96769800205DC6 /* HummingbirdAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +235,7 @@
 			children = (
 				03825E9D259FF64A00DEB003 /* DefaultPipelines.json */,
 				032205262B91C18600205DC6 /* CCTrayPipeline.json */,
+				0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */,
 				0322051C2B8FF20300205DC6 /* EmptyPipelines.json */,
 			);
 			path = Pipelines;
@@ -238,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */,
+				032205282B96677200205DC6 /* GitHubUserReposResponse.json */,
 				032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */,
 				032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */,
 			);
@@ -431,7 +439,7 @@
 			isa = PBXGroup;
 			children = (
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
-				031FC8CB2B7929B7005E7F26 /* KeychainHelper.swift */,
+				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
@@ -524,6 +532,7 @@
 			name = CCMenuUITests;
 			packageProductDependencies = (
 				032205192B8EA73100205DC6 /* Hummingbird */,
+				0322052D2B96769800205DC6 /* HummingbirdAuth */,
 			);
 			productName = CCMenuUITests;
 			productReference = 03BD7EA52598E57A000F9495 /* CCMenuUITests.xctest */;
@@ -562,6 +571,7 @@
 			mainGroup = 03BD7E7C2598E578000F9495;
 			packageReferences = (
 				032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */,
+				0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */,
 			);
 			productRefGroup = 03BD7E862598E578000F9495 /* Products */;
 			projectDirPath = "";
@@ -599,6 +609,8 @@
 			files = (
 				032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */,
 				037AB21629733C2500C33589 /* Info.plist in Resources */,
+				032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */,
+				0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */,
 				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
 				032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */,
@@ -651,7 +663,7 @@
 				03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */,
 				037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */,
 				03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */,
-				031FC8CC2B7929B7005E7F26 /* KeychainHelper.swift in Sources */,
+				031FC8CC2B7929B7005E7F26 /* Keychain.swift in Sources */,
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
@@ -1057,6 +1069,14 @@
 				minimumVersion = 1.12.0;
 			};
 		};
+		0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hummingbird-project/hummingbird-auth";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1064,6 +1084,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */;
 			productName = Hummingbird;
+		};
+		0322052D2B96769800205DC6 /* HummingbirdAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */;
+			productName = HummingbirdAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

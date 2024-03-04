@@ -29,9 +29,12 @@ struct AddCCTrayPipelineSheet: View {
                     Toggle(isOn: $useBasicAuth) {
                         Text("Use HTTP Basic Authentication")
                     }
+                    .accessibilityIdentifier("Basic auth toggle")
                     HStack {
                         TextField("", text: $credential.user, prompt: Text("user"))
+                            .accessibilityIdentifier("User field")
                         SecureField("", text: $credential.password, prompt: Text("password"))
+                            .accessibilityIdentifier("Password field")
                     }
                     .disabled(!useBasicAuth)
                 }
@@ -84,7 +87,7 @@ struct AddCCTrayPipelineSheet: View {
                     if useBasicAuth && !credential.user.isEmpty {
                         feedUrl = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
                         do {
-                            try KeychainHelper().setPassword(credential.password, forURL: feedUrl)
+                            try Keychain().setPassword(credential.password, forURL: feedUrl)
                         } catch {
                             // TODO: Figure out what to do here – so many errors...
                         }

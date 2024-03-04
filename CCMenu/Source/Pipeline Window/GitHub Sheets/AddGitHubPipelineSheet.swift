@@ -28,6 +28,7 @@ struct AddGitHubPipelineSheet: View {
             Form {
                 HStack {
                     TextField("Authentication:", text: $authenticator.tokenDescription)
+                        .accessibilityIdentifier("Token field")
                         .truncationMode(.tail)
                         .disabled(true)
                     if authenticator.isWaitingForToken {
@@ -116,7 +117,7 @@ struct AddGitHubPipelineSheet: View {
         .padding()
         .onAppear() {
             do {
-                let token = try KeychainHelper().getToken(forService: "GitHub")
+                let token = try Keychain().getToken(forService: "GitHub")
                 authenticator.token = token
                 authenticator.tokenDescription = token ?? ""
             } catch {
@@ -127,7 +128,7 @@ struct AddGitHubPipelineSheet: View {
                 return
             }
             do {
-                try KeychainHelper().setToken(token, forService: "GitHub")
+                try Keychain().setToken(token, forService: "GitHub")
             } catch {
                 // TODO: Figure out what to do here – so many errors...
             }

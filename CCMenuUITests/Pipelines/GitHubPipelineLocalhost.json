@@ -1,0 +1,19 @@
+[{   "name": "ccmenu2 | Build and test",
+    "feed": {
+        "type": "github",
+        "url": "http://localhost:8086/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"
+    },
+    "status": {
+        "webUrl": "",
+        "activity": "building",
+        "currentBuild": {
+            "result": "unknown",
+            "timestamp": "2023-01-22T10:18:00Z",
+            "message": "Testing"
+        },
+        "lastBuild": {
+            "result": "success",
+            "timestamp": "2020-12-27T21:47:00Z"
+        }
+    },
+}]

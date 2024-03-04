@@ -6,6 +6,7 @@
 
 import XCTest
 import Hummingbird
+import HummingbirdAuth
 
 class CCMenuUITests: XCTestCase {
     
@@ -72,7 +73,7 @@ class CCMenuUITests: XCTestCase {
     }
 
 
-    // - MARK: Pipeline window, loading from embedded server
+    // - MARK: Pipeline window, CCTray
 
     func testShowsPipelineStatusFetchedFromServer() throws {
         let webapp = try startEmbeddedServer()
@@ -82,7 +83,7 @@ class CCMenuUITests: XCTestCase {
             </Projects>
         """}
 
-        let app = launchApp(pipelines: "CCTrayPipeline", pauseMonitor: false)
+        let app = launchApp(pipelines: "CCTrayPipeline.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), then
@@ -106,7 +107,7 @@ class CCMenuUITests: XCTestCase {
             </Projects>
         """}
 
-        let app = launchApp(pipelines: "CCTrayPipeline", pauseMonitor: false)
+        let app = launchApp(pipelines: "CCTrayPipeline.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), then
@@ -120,11 +121,11 @@ class CCMenuUITests: XCTestCase {
     func testShowsErrorForHTTPError() throws {
         try startEmbeddedServer()
 
-        let app = launchApp(pipelines: "CCTrayPipeline", pauseMonitor: false)
+        let app = launchApp(pipelines: "CCTrayPipeline.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), then
-        // wait for the update to the build label to show the label return with the embedded server
+        // wait for the error meesage from the embedded server
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'The server responded: not found'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 2)
@@ -139,7 +140,7 @@ class CCMenuUITests: XCTestCase {
             </Projects>
         """}
 
-        let app = launchApp(pipelines: "EmptyPipelines", pauseMonitor: false)
+        let app = launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
         let sheet = window.sheets.firstMatch
 
@@ -173,10 +174,100 @@ class CCMenuUITests: XCTestCase {
         waitForExpectations(timeout: 2)
     }
 
+
+    func testAddsPipelineWithAuthentication() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/cctray.xml") { request in
+            guard request.authBasic?.username == "dev" && request.authBasic?.password == "rosebud" else {
+                throw HBHTTPError(.unauthorized)
+            }
+            return """
+            <Projects>
+                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour'></Project>
+            </Projects>
+        """}
+
+        let app = launchApp(pipelines: "EmptyPipelines.json")
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add project sheet and enter login data and full feed URL
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add project from CCTray feed..."].click()
+        sheet.checkBoxes["Basic auth toggle"].click()
+        sheet.textFields["User field"].click()
+        sheet.typeText("dev")
+        sheet.secureTextFields["Password field"].click()
+        sheet.typeText("rosebud")
+        sheet.textFields["Server URL field"].click()
+        sheet.typeText("http://localhost:8086/cctray.xml\n")
+
+        // Make sure that the picker shows the first project in alphabetical order
+        let projectPicker = sheet.popUpButtons["Project picker"]
+        expectation(for: NSPredicate(format: "value == 'connectfour'"), evaluatedWith: projectPicker)
+        waitForExpectations(timeout: 2)
+    }
+
+    func testShowsErrorWhenAddingPipelineWithAuthenticationButMissingLogin() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/cctray.xml") { request in
+            guard request.authBasic?.username == "dev" && request.authBasic?.password == "rosebud" else {
+                throw HBHTTPError(.unauthorized)
+            }
+            return ""
+        }
+
+        let app = launchApp(pipelines: "EmptyPipelines.json")
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add project sheet and enter full feed URL
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add project from CCTray feed..."].click()
+        sheet.textFields["Server URL field"].click()
+        sheet.typeText("http://localhost:8086/cctray.xml\n")
+
+        // Make sure that the picker shows an error message containing the word "unauthorized".
+        let projectPicker = sheet.popUpButtons["Project picker"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'unauthorized'"), evaluatedWith: projectPicker)
+        waitForExpectations(timeout: 2)
+    }
+
+
+    // - MARK: Pipeline window, GitHub
+
+    func testShowsWorkflowStatusFetchedFromServer() throws {
+        let webapp = try startEmbeddedServer()
+        var headers: HTTPHeaders = HTTPHeaders()
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { r in
+            headers = r.headers
+            return try self.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+
+        // Find the status description field (there's only one because there's only one pipeline), 
+        // then wait for the update to show relevant information from the response. Make sure the
+        // request headers are set.
+        let descriptionText = window.tables.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        let messageText = window.tables.staticTexts["Build message"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Push'"), evaluatedWith: messageText)
+        expectation(for: NSPredicate(format: "value CONTAINS 'Improved layout'"), evaluatedWith: messageText)
+        waitForExpectations(timeout: 2)
+        XCTAssertEqual("application/vnd.github+json", headers["Accept"].first)
+        XCTAssertEqual("Bearer TEST-TOKEN", headers["Authorization"].first)
+
+    }
+
     func testAddsGitHubPipeline() throws {
         let webapp = try startEmbeddedServer()
         webapp.router.get("/users/erikdoe/repos") { _ in
             try self.contentsOfFile("GitHubReposByUserResponse.json")
+        }
+        webapp.router.get("/user/repos") { _ in
+            return try self.contentsOfFile("GitHubUserReposResponse.json")
         }
         webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
             "{ \"total_count\": 0, \"workflows\": [] }"
@@ -188,18 +279,24 @@ class CCMenuUITests: XCTestCase {
             try self.contentsOfFile("GitHubWorkflowRunsResponse.json")
         }
 
-        let app = launchApp(pipelines: "EmptyPipelines", pauseMonitor: false)
+        let app = launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
         let sheet = window.sheets.firstMatch
 
-        // Navigate to add workflow sheet and enter owner
+        // Navigate to add workflow sheet
         window.toolbars.popUpButtons["Add pipeline menu"].click()
         window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Make sure test token is set
+        let tokenField = sheet.textFields["Token field"]
+        XCTAssertEqual("TEST-TOKEN", tokenField.value as? String)
+
+        // Enter owner
         let ownerField = sheet.textFields["Owner field"]
         ownerField.click()
         sheet.typeText("erikdoe\n")
 
-        // Make sure that the repositories are loaded and sorted
+        // Make sure that the repositories are loaded and sorted, and that token was used
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
         expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
         waitForExpectations(timeout: 2)
@@ -207,8 +304,11 @@ class CCMenuUITests: XCTestCase {
         // Open the repositiry picker
         repositoryPicker.click()
 
-        // Make sure that repositories for different owners are not shown
+        // Make sure that repositories for different owners are not shown, and that a private
+        // repository is shown, and that its shown even when its owner's name uses camel case
         XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
+        XCTAssertFalse(repositoryPicker.menuItems["iEnterpriseArchitect"].exists)
+        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
 
         // Select the ccmenu2 repository
         repositoryPicker.menuItems["ccmenu2"].click()
@@ -233,17 +333,11 @@ class CCMenuUITests: XCTestCase {
         waitForExpectations(timeout: 2)
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        let messageText = window.tables.staticTexts["Build message"]
-        expectation(for: NSPredicate(format: "value CONTAINS 'Push'"), evaluatedWith: messageText)
-        expectation(for: NSPredicate(format: "value CONTAINS 'Improved layout'"), evaluatedWith: messageText)
         waitForExpectations(timeout: 2)
     }
 
-    // basic headers
 
-    // github mixed case owner
-
-    // github rate limit handling
+    // TODO: Add test (and functionality!) to deal with GitHub rate limits
 
 
     // - MARK: Menu
@@ -314,14 +408,15 @@ class CCMenuUITests: XCTestCase {
 
     // - MARK: helper methods
 
-    private func launchApp(pipelines: String = "DefaultPipelines", pauseMonitor: Bool = true) -> XCUIApplication {
+    private func launchApp(pipelines: String = "DefaultPipelines.json", pauseMonitor: Bool = true) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
-            "-loadPipelines", pathForResource("\(pipelines).json"),
+            "-loadPipelines", pathForResource(pipelines),
             "-ignoreDefaults", "true",
             "-pauseMonitor", String(pauseMonitor),
             "-PollInterval", "1",
-            "-GitHubBaseURL", "http://localhost:8086"
+            "-GitHubBaseURL", "http://localhost:8086",
+            "-GitHubToken", "TEST-TOKEN"
         ]
         app.launch()
         return app
