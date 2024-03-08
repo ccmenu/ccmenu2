@@ -9,6 +9,7 @@ import Foundation
 enum GithHubFeedReaderError: LocalizedError {
     case invalidURLError
     case httpError(Int)
+    case rateLimitError(Int)
     case noStatusError
 
     public var errorDescription: String? {
@@ -16,7 +17,10 @@ enum GithHubFeedReaderError: LocalizedError {
         case .invalidURLError:
             return NSLocalizedString("invalid URL", comment: "")
         case .httpError(let statusCode):
-            return GitHubAPI.localizedString(forStatusCode: statusCode)
+            return HTTPURLResponse.localizedString(forStatusCode: statusCode)
+        case .rateLimitError(let timestamp):
+            let date = Date(timeIntervalSince1970: Double(timestamp)).formatted(date: .omitted, time: .shortened)
+            return String(format: NSLocalizedString("Rate limit exceeded. Next update at %@.", comment: ""), date)
         case .noStatusError:
             return "No status available for this pipeline."
         }
@@ -33,9 +37,14 @@ class GitHubFeedReader {
     }
 
     public func updatePipelineStatus() async {
-        // TODO: consider making page size configurable to make sure to get a completed/successful
         do {
             let token = try Keychain().getToken(forService: "GitHub")
+            if let pauseUntil = pipeline.feed.pauseUntil {
+                guard Date().timeIntervalSince1970 >= Double(pauseUntil) else {
+                    return
+                }
+                pipeline.feed.clearPauseUntil()
+            }
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
                 throw GithHubFeedReaderError.invalidURLError
             }
@@ -45,6 +54,9 @@ class GitHubFeedReader {
             pipeline.status = newStatus
             pipeline.connectionError = nil
         } catch {
+            if let error = error as? GithHubFeedReaderError, case .rateLimitError(let pauseUntil) = error {
+                pipeline.feed.setPauseUntil(pauseUntil)
+            }
             pipeline.status = Pipeline.Status(activity: .other)
             pipeline.connectionError = error.localizedDescription
         }
@@ -56,18 +68,21 @@ class GitHubFeedReader {
         guard let response = response as? HTTPURLResponse else {
             throw URLError(.unsupportedURL)
         }
-        if let rll = response.allHeaderFields["x-ratelimit-limit"] as? String,
-           let rlu = response.allHeaderFields["x-ratelimit-used"] as? String {
-            debugPrint("received response from GitHub; rate limit \(rlu)/\(rll)")
+        guard response.statusCode != 403 && response.statusCode != 429 else {
+            guard let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0 else {
+                throw GithHubFeedReaderError.httpError(response.statusCode)
+            }
+            guard let v = response.value(forHTTPHeaderField: "x-ratelimit-reset"), let pauseUntil = Int(v) else {
+                throw GithHubFeedReaderError.httpError(response.statusCode)
+            }
+            throw GithHubFeedReaderError.rateLimitError(pauseUntil)
         }
         guard response.statusCode == 200 else {
-            // TODO: Do something here if the rate limit is exceeded
             throw GithHubFeedReaderError.httpError(response.statusCode)
         }
         let parser = GitHubResponseParser()
         try parser.parseResponse(data)
-        let status = parser.pipelineStatus(name: pipeline.name)
-        return status
+        return parser.pipelineStatus(name: pipeline.name)
     }
 
 }

@@ -78,9 +78,9 @@ class GitHubAPI {
         return components.url!.absoluteString
     }
 
-    static func requestForFeed(feed: Pipeline.Feed, token: String?, pageSize: Int = 5) -> URLRequest? {
+    static func requestForFeed(feed: Pipeline.Feed, token: String?) -> URLRequest? {
         // TODO: Consider using URLComponents to append page size query parameter properly
-        guard let url = URL(string: feed.url + "?per_page=5") else {
+        guard let url = URL(string: feed.url + "?per_page=3") else {
             return nil
         }
         return makeRequest(url: url, token: token)
@@ -88,11 +88,6 @@ class GitHubAPI {
 
 
     // MARK: - helper functions
-
-    static func localizedString(forStatusCode code: Int) -> String {
-        let httpError = HTTPURLResponse.localizedString(forStatusCode: code)
-        return "GitHub API response: \(httpError)"
-    }
 
     private static func baseURL(forAPI: Bool) -> String {
         if let defaultsBaseURL = UserDefaults.active.string(forKey: "GitHubBaseURL") {

@@ -48,7 +48,7 @@ class GitHubRepositoryList: ObservableObject {
                 throw URLError(.unsupportedURL)
             }
             guard response.statusCode == 200 else {
-                return [GitHubRepository(message: GitHubAPI.localizedString(forStatusCode: response.statusCode))]
+                return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
             }
             return try JSONDecoder().decode([GitHubRepository].self, from: data)
         } catch {

@@ -36,7 +36,7 @@ class GitHubWorkflowList: ObservableObject {
                 throw URLError(.unsupportedURL)
             }
             guard response.statusCode == 200 else {
-                return [GitHubWorkflow(message: GitHubAPI.localizedString(forStatusCode: response.statusCode))]
+                return [GitHubWorkflow(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
             }
             let workflowResponse = try JSONDecoder().decode(WorflowResponse.self, from: data)
             return workflowResponse.workflows

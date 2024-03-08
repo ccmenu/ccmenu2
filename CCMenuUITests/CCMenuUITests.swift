@@ -244,7 +244,7 @@ class CCMenuUITests: XCTestCase {
             return try self.contentsOfFile("GitHubWorkflowRunsResponse.json")
         }
 
-        let app = launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
+        let app = launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false, token: "TEST-TOKEN")
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), 
@@ -258,16 +258,45 @@ class CCMenuUITests: XCTestCase {
         waitForExpectations(timeout: 2)
         XCTAssertEqual("application/vnd.github+json", headers["Accept"].first)
         XCTAssertEqual("Bearer TEST-TOKEN", headers["Authorization"].first)
+    }
 
+    func testShowsMessageAndPausesPollingWhileRateLimitWasExceeded() throws {
+        let webapp = try startEmbeddedServer()
+        let limitResetTime = Date().addingTimeInterval(10)
+        var didReceiveRequest = false
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r -> String in
+            didReceiveRequest = true
+            guard Date() >= limitResetTime else {
+                r.response.status = .forbidden
+                r.response.headers.replaceOrAdd(name: "x-ratelimit-remaining", value: "0")
+                r.response.headers.replaceOrAdd(name: "x-ratelimit-reset", value: String(Int(limitResetTime.timeIntervalSince1970)))
+                return "{ \"message\": \"API rate limit exceeded for ...\" } "
+            }
+            return try self.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+
+        // Make sure the status shows that the limit was exceeded
+        let descriptionText = window.tables.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded.'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 2)
+
+        // Make sure there are no requests until the reset time is reached
+        didReceiveRequest = false
+        Thread.sleep(until: limitResetTime)
+        XCTAssertFalse(didReceiveRequest)
+        
+        // Make sure that polling resumes and updates the status
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 2)
     }
 
     func testAddsGitHubPipeline() throws {
         let webapp = try startEmbeddedServer()
         webapp.router.get("/users/erikdoe/repos") { _ in
             try self.contentsOfFile("GitHubReposByUserResponse.json")
-        }
-        webapp.router.get("/user/repos") { _ in
-            return try self.contentsOfFile("GitHubUserReposResponse.json")
         }
         webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
             "{ \"total_count\": 0, \"workflows\": [] }"
@@ -287,30 +316,18 @@ class CCMenuUITests: XCTestCase {
         window.toolbars.popUpButtons["Add pipeline menu"].click()
         window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
 
-        // Make sure test token is set
-        let tokenField = sheet.textFields["Token field"]
-        XCTAssertEqual("TEST-TOKEN", tokenField.value as? String)
-
         // Enter owner
         let ownerField = sheet.textFields["Owner field"]
         ownerField.click()
         sheet.typeText("erikdoe\n")
 
-        // Make sure that the repositories are loaded and sorted, and that token was used
+        // Make sure that the repositories are loaded and sorted
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
         expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
         waitForExpectations(timeout: 2)
 
-        // Open the repositiry picker
+        // Open the repository picker and select the ccmenu2 repository
         repositoryPicker.click()
-
-        // Make sure that repositories for different owners are not shown, and that a private
-        // repository is shown, and that its shown even when its owner's name uses camel case
-        XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
-        XCTAssertFalse(repositoryPicker.menuItems["iEnterpriseArchitect"].exists)
-        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
-
-        // Select the ccmenu2 repository
         repositoryPicker.menuItems["ccmenu2"].click()
 
         // Make sure that the workflows are loaded and the default display name is set
@@ -330,15 +347,57 @@ class CCMenuUITests: XCTestCase {
         // Make sure the pipeline is shown, and that its status is fetched immediately
         let titleText = window.tables.staticTexts["Pipeline title"]
         expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
-        waitForExpectations(timeout: 2)
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 2)
     }
 
+    func testAddGitHubPipelinePrivateRepos() throws {
+        let webapp = try startEmbeddedServer()
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            try self.contentsOfFile("GitHubReposByUserResponse.json")
+        }
+        webapp.router.get("/user/repos") { _ in
+            return try self.contentsOfFile("GitHubUserReposResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
+            "{ \"total_count\": 0, \"workflows\": [] }"
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
+            try self.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
 
-    // TODO: Add test (and functionality!) to deal with GitHub rate limits
+        let app = launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false, token: "TEST-TOKEN")
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
 
+        // Navigate to add workflow sheet
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Make sure the token is shown
+        let tokenField = sheet.textFields["Token field"]
+        XCTAssertEqual("TEST-TOKEN", tokenField.value as? String)
+
+        // Enter owner and wait for the repo list to load
+        let ownerField = sheet.textFields["Owner field"]
+        ownerField.click()
+        sheet.typeText("erikdoe\n")
+
+        // Make sure that the repositories are loaded and sorted
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
+        waitForExpectations(timeout: 2)
+
+        // Open the repository picker
+        repositoryPicker.click()
+
+        // Make sure that repositories for different owners are not shown, and that a private
+        // repository is shown, and that its shown even when its owner's name uses camel case
+        XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
+        XCTAssertFalse(repositoryPicker.menuItems["iEnterpriseArchitect"].exists)
+        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists) // TODO: Split tests and only use token in a test that doesn't click Apply
+    }
 
     // - MARK: Menu
 
@@ -408,7 +467,7 @@ class CCMenuUITests: XCTestCase {
 
     // - MARK: helper methods
 
-    private func launchApp(pipelines: String = "DefaultPipelines.json", pauseMonitor: Bool = true) -> XCUIApplication {
+    private func launchApp(pipelines: String = "DefaultPipelines.json", pauseMonitor: Bool = true, token: String? = nil) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
             "-loadPipelines", pathForResource(pipelines),
@@ -416,8 +475,10 @@ class CCMenuUITests: XCTestCase {
             "-pauseMonitor", String(pauseMonitor),
             "-PollInterval", "1",
             "-GitHubBaseURL", "http://localhost:8086",
-            "-GitHubToken", "TEST-TOKEN"
         ]
+        if let token {
+            app.launchArguments.append(contentsOf: [ "-GitHubToken", token ])
+        }
         app.launch()
         return app
     }
