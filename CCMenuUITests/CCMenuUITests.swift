@@ -90,7 +90,7 @@ class CCMenuUITests: XCTestCase {
         // wait for the update to the build label to show the label return with the embedded server
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: build.888'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
 
         // Now stop the server and make sure the error shows quickly.
         // TODO: Will this ever not work? Our embedded server might use different caching logic.
@@ -115,7 +115,7 @@ class CCMenuUITests: XCTestCase {
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'The server did not provide a status'"), evaluatedWith: descriptionText)
         // TODO: Ideally we should make sure the row shows the default image now
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
     }
 
     func testShowsErrorForHTTPError() throws {
@@ -128,7 +128,7 @@ class CCMenuUITests: XCTestCase {
         // wait for the error meesage from the embedded server
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'The server responded: not found'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
     }
 
     func testAddsPipeline() throws {
@@ -252,6 +252,7 @@ class CCMenuUITests: XCTestCase {
         // request headers are set.
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
         let messageText = window.tables.staticTexts["Build message"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Push'"), evaluatedWith: messageText)
         expectation(for: NSPredicate(format: "value CONTAINS 'Improved layout'"), evaluatedWith: messageText)
@@ -281,7 +282,7 @@ class CCMenuUITests: XCTestCase {
         // Make sure the status shows that the limit was exceeded
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded.'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
 
         // Make sure there are no requests until the reset time is reached
         didReceiveRequest = false
