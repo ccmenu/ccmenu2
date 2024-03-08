@@ -1,5 +1,7 @@
 # CCMenu 2
 
+![Build Status](https://github.com/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/badge.svg?branch=main)
+
 This is a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu).
 
 There will be a number of pre-releases via GitHub before it reaches the AppStore.
@@ -31,10 +33,11 @@ For now the roadmap is tracked in this readme file.
 - [X] Build timer updates every second
 - [X] Discover project names for CCTray feeds
 
-### Pre-release 4 (planned)
+### Version 23 (CCMenu2 pre-release 4)
 
 - [X] Store GitHub tokens in Keychain
 - [X] Basic auth login for CCTray feeds
+- [X] GitHub API rate limit handling
 
 ### Pre-release 5 (planned)
 
