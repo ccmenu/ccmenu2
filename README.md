@@ -55,6 +55,7 @@ For now the roadmap is tracked in this readme file.
 - [ ] Improve accessibility
 - [ ] Add support for localisation
 - [ ] Show avatar in notifications (committer or repo owner)
+- [ ] Support for GitHub apps
 - [ ] Pipeline groups with submenus 
 - [ ] Reduced polling frequency on low data connections
 - [ ] Add Nevergreen-style dashboard (full screen window)
