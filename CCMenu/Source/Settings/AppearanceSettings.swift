@@ -14,6 +14,7 @@ struct AppearanceSettings: View {
     @AppStorage(.showBuildTimerInMenuBar) var showBuildTimerInMenuBar = true
     @AppStorage(.showBuildTimesInMenu) var showBuildTimesInMenu = false
     @AppStorage(.showBuildLabelsInMenu) var showBuildLabelsInMenu = false
+    @AppStorage(.hideSuccessfulBuildsInMenu) var hideSuccessfulBuildsInMenu = false
 
     var body: some View {
         VStack {
@@ -49,6 +50,9 @@ struct AppearanceSettings: View {
                 }
                 Toggle(isOn: $showBuildLabelsInMenu) {
                     Text("Show label of last build")
+                }
+                Toggle(isOn: $hideSuccessfulBuildsInMenu) {
+                    Text("Hide pipelines with successful build")
                 }
                 .padding(.bottom)
             }

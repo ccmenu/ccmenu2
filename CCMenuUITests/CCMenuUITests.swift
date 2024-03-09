@@ -431,21 +431,36 @@ class CCMenuUITests: XCTestCase {
     // - MARK: Settings
 
     func testAppearanceSettings() throws {
-        let app = launchApp()
+        let app = launchApp(pipelines: "ThreePipelines.json")
         let menu = openMenu(app: app)
 
-        // Make sure expected pipeline is present
+        // Make sure expected pipelines are present
         XCTAssert(menu.menuItems["connectfour"].exists)
+        XCTAssert(menu.menuItems["ccmenu"].exists)
+        XCTAssert(menu.menuItems["ccmenu2 | Build and test"].exists)
 
-        // Open settings, chose to display build labels, then close settings
+        // Open settings, chose to hide pipelines with successful build, then close settings
         menu.menuItems["Settings..."].click()
         let window = app.windows["com_apple_SwiftUI_Settings_window"]
         window.toolbars.buttons["Appearance"].click()
+        XCTAssert(window.checkBoxes["Hide pipelines with successful build"].isSelected == false)
+        window.checkBoxes["Hide pipelines with successful build"].click()
+
+        // Make sure the successful pipeline isn't show, and a hint is shown
+        openMenu(app: app)
+        XCTAssert(menu.menuItems["connectfour"].exists)
+        XCTAssert(menu.menuItems["ccmenu2 | Build and test"].exists)
+        XCTAssert(menu.menuItems["ccmenu"].exists == false)
+        let hintItem = menu.menuItems["(1 pipeline hidden)"]
+        XCTAssert(hintItem.exists)
+        XCTAssert(hintItem.isEnabled == false)
+
+        // Open settings, chose to display build labels, then close settings
+        menu.menuItems["Settings..."].click() // otherwise click on first checkbox doesn't work
         XCTAssert(window.checkBoxes["Show label of last build"].isSelected == false)
         window.checkBoxes["Show label of last build"].click()
         XCTAssert(window.checkBoxes["Show time of last build"].isSelected == false)
         window.checkBoxes["Show time of last build"].click()
-        window.buttons[XCUIIdentifierCloseWindow].click()
 
         // Make sure the pipeline menu item now displays the build label and relative time
         let buildTime = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")!

@@ -11,10 +11,12 @@ struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
     @AppStorage(.showBuildTimesInMenu) private var showBuildTimesInMenu = false
     @AppStorage(.showBuildLabelsInMenu) private var showBuildLabelsInMenu = false
+    @AppStorage(.hideSuccessfulBuildsInMenu) private var hideSuccessfulBuildsInMenu = false
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        ForEach(model.pipelines) { p in
+        let filteredPipelines = model.pipelines.filter({ !hideSuccessfulBuildsInMenu || $0.status.currentBuild != nil || $0.status.lastBuild?.result != .success })
+        ForEach(filteredPipelines) { p in
             let viewModel = MenuItemViewModel(pipeline: p, showBuildTimesInMenu: showBuildTimesInMenu, showBuildLabelsInMenu: showBuildLabelsInMenu)
             Button() {
                 NSWorkspace.shared.openWebPage(pipeline: p)
@@ -22,6 +24,12 @@ struct MenuBarExtraMenu: View {
                 Label(title: { Text(viewModel.title) }, icon: { Image(nsImage: viewModel.icon) } )
                 .labelStyle(.titleAndIcon)
             }
+        }
+        let hiddenCount = model.pipelines.count - filteredPipelines.count
+        if hiddenCount > 0 {
+            let text = (hiddenCount == 1) ? "1 pipeline" : "\(hiddenCount) pipelines"
+            Button("(\(text) hidden)") { }
+            .disabled(true)
         }
         Divider()
         Button("Pipelines") {

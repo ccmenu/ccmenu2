@@ -1,0 +1,40 @@
+[{  "name": "connectfour",
+    "feed": {
+        "type": "cctray",
+        "url": "http://localhost:8086/cctray.xml",
+        "name": "connectfour"
+    },
+    "status": {
+        "webUrl": "#broken",
+        "activity": "sleeping",
+        "lastBuild": {
+            "result": "failure",
+            "timestamp": "2020-12-27T21:47:00Z",
+            "label": "build.151",
+        }
+    },
+},
+{  "name": "ccmenu",
+    "feed": {
+        "type": "cctray",
+        "url": "https://api.travis-ci.org/repositories/erikdoe/ccmenu/cc.xml",
+        "name": "ccmenu"
+    },
+    "status": {
+        "webUrl": "",
+        "activity": "sleeping",
+        "lastBuild": {
+            "result": "success",
+        }
+    },
+},
+{   "name": "ccmenu2 | Build and test",
+    "feed": {
+        "type": "github",
+        "url": "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"
+    },
+    "status": {
+        "webUrl": "",
+        "activity": "sleeping"
+    },
+}]

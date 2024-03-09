@@ -15,6 +15,7 @@ public enum DefaultsKey: String {
     showBuildTimerInMenuBar = "ShowTimerInMenu",
     showBuildTimesInMenu = "ShowLastBuildTimes",
     showBuildLabelsInMenu = "ShowLastBuildLabel",
+    hideSuccessfulBuildsInMenu = "HideSuccessfulBuilds",
     showStatusInWindow = "ShowPipelineStatusInWindow",
     showAvatarsInWindow = "ShowAvatarsInWindow",
     showMessagesInWindow = "ShowPipelineMessagesInWindow"
