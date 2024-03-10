@@ -5,6 +5,7 @@
  */
 
 import SwiftUI
+import SettingsAccess
 
 
 struct MenuBarExtraMenu: View {
@@ -41,15 +42,10 @@ struct MenuBarExtraMenu: View {
             NSWorkspace.shared.activateThisApp()
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
-        if #available(macOS 14.0, *) {
-            SettingsLink {
-                Button("Settings...") { }
-            }
-        } else {
-            Button("Settings...") {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-            }
-        }
+        SettingsLink {
+            Text("Settings...")
+        } preAction: { NSWorkspace.shared.activateThisApp()
+        } postAction: { }
         Divider()
         Button("Quit CCMenu") {
             NSApplication.shared.terminate(nil)
