@@ -20,6 +20,11 @@
 		0322052E2B96769800205DC6 /* HummingbirdAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0322052D2B96769800205DC6 /* HummingbirdAuth */; };
 		032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205312B9BDDC300205DC6 /* ThreePipelines.json */; };
 		032205392B9D29DB00205DC6 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 032205382B9D29DB00205DC6 /* SettingsAccess */; };
+		0322053B2B9E5DBB00205DC6 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053A2B9E5DBB00205DC6 /* TestHelper.swift */; };
+		0322053D2B9E5F9A00205DC6 /* MenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053C2B9E5F9A00205DC6 /* MenuTests.swift */; };
+		0322053F2B9E601D00205DC6 /* PipelineWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */; };
+		032205412B9E606600205DC6 /* CCTrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032205402B9E606600205DC6 /* CCTrayTests.swift */; };
+		032205432B9E615800205DC6 /* GitHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032205422B9E615800205DC6 /* GitHubTests.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0329F92725B21FE20043FAB1 /* PipelineCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F92625B21FE20043FAB1 /* PipelineCommands.swift */; };
@@ -54,7 +59,6 @@
 		03BD7E892598E579000F9495 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7E882598E579000F9495 /* AppDelegate.swift */; };
 		03BD7E8D2598E57A000F9495 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8C2598E57A000F9495 /* Assets.xcassets */; };
 		03BD7E902598E57A000F9495 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7E8F2598E57A000F9495 /* Preview Assets.xcassets */; };
-		03BD7EAA2598E57A000F9495 /* CCMenuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */; };
 		03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EDA2598ED9B000F9495 /* Credits.rtf */; };
 		03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EF9259A180C000F9495 /* NSImageExtension.swift */; };
 		03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11E92652F49100130833 /* ServerMonitor.swift */; };
@@ -121,6 +125,11 @@
 		032205282B96677200205DC6 /* GitHubUserReposResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubUserReposResponse.json; sourceTree = "<group>"; };
 		0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubPipelineLocalhost.json; sourceTree = "<group>"; };
 		032205312B9BDDC300205DC6 /* ThreePipelines.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ThreePipelines.json; sourceTree = "<group>"; };
+		0322053A2B9E5DBB00205DC6 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		0322053C2B9E5F9A00205DC6 /* MenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTests.swift; sourceTree = "<group>"; };
+		0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowTests.swift; sourceTree = "<group>"; };
+		032205402B9E606600205DC6 /* CCTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayTests.swift; sourceTree = "<group>"; };
+		032205422B9E615800205DC6 /* GitHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubTests.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0329F92625B21FE20043FAB1 /* PipelineCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineCommands.swift; sourceTree = "<group>"; };
@@ -160,7 +169,6 @@
 		03BD7E9A2598E57A000F9495 /* CCMenuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BD7EA02598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7EA52598E57A000F9495 /* CCMenuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuUITests.swift; sourceTree = "<group>"; };
 		03BD7EAB2598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* NSImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
@@ -357,9 +365,13 @@
 		03BD7EA82598E57A000F9495 /* CCMenuUITests */ = {
 			isa = PBXGroup;
 			children = (
-				0322051F2B913BC900205DC6 /* Responses */,
+				0322053C2B9E5F9A00205DC6 /* MenuTests.swift */,
+				0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */,
+				032205402B9E606600205DC6 /* CCTrayTests.swift */,
+				032205422B9E615800205DC6 /* GitHubTests.swift */,
+				0322053A2B9E5DBB00205DC6 /* TestHelper.swift */,
 				0322051E2B9139A700205DC6 /* Pipelines */,
-				03BD7EA92598E57A000F9495 /* CCMenuUITests.swift */,
+				0322051F2B913BC900205DC6 /* Responses */,
 				03BD7EAB2598E57A000F9495 /* Info.plist */,
 				0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */,
 			);
@@ -734,7 +746,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03BD7EAA2598E57A000F9495 /* CCMenuUITests.swift in Sources */,
+				032205432B9E615800205DC6 /* GitHubTests.swift in Sources */,
+				032205412B9E606600205DC6 /* CCTrayTests.swift in Sources */,
+				0322053F2B9E601D00205DC6 /* PipelineWindowTests.swift in Sources */,
+				0322053D2B9E5F9A00205DC6 /* MenuTests.swift in Sources */,
+				0322053B2B9E5DBB00205DC6 /* TestHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
