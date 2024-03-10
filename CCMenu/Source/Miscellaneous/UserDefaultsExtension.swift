@@ -6,6 +6,17 @@
 
 import SwiftUI
 
+public enum AppIconDefaultValue: String, CaseIterable, Identifiable {
+    case
+    never = "never",
+    sometimes = "sometimes",
+    always = "always"
+
+    // TODO: Wasn't there a way to do without this?
+    public var id: Self { self }
+}
+
+
 public enum DefaultsKey: String {
     case
     pipelineList = "pipelines",
@@ -18,7 +29,9 @@ public enum DefaultsKey: String {
     hideSuccessfulBuildsInMenu = "HideSuccessfulBuilds",
     showStatusInWindow = "ShowPipelineStatusInWindow",
     showAvatarsInWindow = "ShowAvatarsInWindow",
-    showMessagesInWindow = "ShowPipelineMessagesInWindow"
+    showMessagesInWindow = "ShowPipelineMessagesInWindow",
+    showAppIconInPrefs = "ShowAppIconWhenInPrefs", // to convert legacy defaults
+    showAppIcon = "ShowAppIcon"
 
     public static func key(forNotification n: NotificationType) -> String {
         "SendNotification \(n.rawValue)"
@@ -51,4 +64,8 @@ extension AppStorage {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconDefaultValue {
+        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
+    }
+    
 }

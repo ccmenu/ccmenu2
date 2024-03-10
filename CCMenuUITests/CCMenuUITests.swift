@@ -111,10 +111,9 @@ class CCMenuUITests: XCTestCase {
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), then
-        // wait for the update to the build label to show the label return with the embedded server
+        // wait for the update to the status text displaying the error message
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'The server did not provide a status'"), evaluatedWith: descriptionText)
-        // TODO: Ideally we should make sure the row shows the default image now
         waitForExpectations(timeout: 5)
     }
 
@@ -125,7 +124,8 @@ class CCMenuUITests: XCTestCase {
         let window = app.windows["Pipelines"]
 
         // Find the status description field (there's only one because there's only one pipeline), then
-        // wait for the error meesage from the embedded server
+        // wait for the error meesage from the embedded server, which is not found because we didn't
+        // register any routes
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'The server responded: not found'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
@@ -318,8 +318,7 @@ class CCMenuUITests: XCTestCase {
         window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
 
         // Enter owner
-        let ownerField = sheet.textFields["Owner field"]
-        ownerField.click()
+        sheet.textFields["Owner field"].click()
         sheet.typeText("erikdoe\n")
 
         // Make sure that the repositories are loaded and sorted
@@ -341,7 +340,6 @@ class CCMenuUITests: XCTestCase {
         // Set a custom display name, and close the sheet
         displayNameField.click()
         sheet.typeKey("a", modifierFlags: [ .command ])
-        sheet.typeKey(.delete, modifierFlags: [])
         sheet.typeText("CCMenu")
         sheet.buttons["Apply"].click()
 
@@ -443,8 +441,8 @@ class CCMenuUITests: XCTestCase {
         menu.menuItems["Settings..."].click()
         let window = app.windows["com_apple_SwiftUI_Settings_window"]
         window.toolbars.buttons["Appearance"].click()
-        XCTAssert(window.checkBoxes["Hide pipelines with successful build"].isSelected == false)
-        window.checkBoxes["Hide pipelines with successful build"].click()
+        XCTAssert(window.checkBoxes["Hide successful builds"].isSelected == false)
+        window.checkBoxes["Hide successful builds"].click()
 
         // Make sure the successful pipeline isn't show, and a hint is shown
         openMenu(app: app)
@@ -457,10 +455,10 @@ class CCMenuUITests: XCTestCase {
 
         // Open settings, chose to display build labels, then close settings
         menu.menuItems["Settings..."].click() // otherwise click on first checkbox doesn't work
-        XCTAssert(window.checkBoxes["Show label of last build"].isSelected == false)
-        window.checkBoxes["Show label of last build"].click()
-        XCTAssert(window.checkBoxes["Show time of last build"].isSelected == false)
-        window.checkBoxes["Show time of last build"].click()
+        XCTAssert(window.checkBoxes["Show label"].isSelected == false)
+        window.checkBoxes["Show label"].click()
+        XCTAssert(window.checkBoxes["Show time"].isSelected == false)
+        window.checkBoxes["Show time"].click()
 
         // Make sure the pipeline menu item now displays the build label and relative time
         let buildTime = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")!
@@ -486,10 +484,11 @@ class CCMenuUITests: XCTestCase {
     private func launchApp(pipelines: String = "DefaultPipelines.json", pauseMonitor: Bool = true, token: String? = nil) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
-            "-loadPipelines", pathForResource(pipelines),
             "-ignoreDefaults", "true",
+            "-loadPipelines", pathForResource(pipelines),
             "-pauseMonitor", String(pauseMonitor),
             "-PollInterval", "1",
+            "-ShowAppIcon", "always",
             "-GitHubBaseURL", "http://localhost:8086",
         ]
         if let token {

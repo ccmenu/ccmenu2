@@ -8,8 +8,13 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    @AppStorage(.showAppIcon) var showAppIcon: AppIconDefaultValue = .sometimes
+
     func applicationWillFinishLaunching(_ aNotification: Notification) {
         NotificationReceiver.shared.start()
+        if showAppIcon != .always {
+            NSApp.setActivationPolicy(.accessory)
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
