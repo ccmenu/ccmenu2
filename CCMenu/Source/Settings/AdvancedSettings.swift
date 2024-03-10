@@ -35,7 +35,14 @@ struct AdvancedSettings: View {
                         Text(v.rawValue).tag(v)
                     }
                 }
-                // TODO: Show/hide icon when selection changes
+                .onChange(of: showAppIcon) { _ in
+                    if showAppIcon == .always {
+                        NSApp.setActivationPolicy(.regular)
+                    } else {
+                        NSApp.setActivationPolicy(.accessory)
+                        NSWorkspace.shared.activateThisApp()
+                    }
+                }
                 Text("If set to sometimes the app icon is only shown when a pipeline sheet is open. This can help with switching in and out of CCMenu to copy information like feed URLs.")
                     .fixedSize(horizontal: false, vertical: true)
                     .font(.footnote)

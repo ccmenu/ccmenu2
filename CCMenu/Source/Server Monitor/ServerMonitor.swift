@@ -10,7 +10,6 @@ import Combine
 @MainActor
 class ServerMonitor {
 
-    @AppStorage(.pollInterval) var pollInterval: Int = 15
     private var model: PipelineModel
     private var subscribers: [AnyCancellable] = []
 
@@ -19,16 +18,21 @@ class ServerMonitor {
     }
     
     public func start() {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
-            Task { await self.updateStatus(pipelines: self.model.pipelines) }
-        }
-        // TODO: Later changes to variable will not result in rescheduling of timer
-        Timer.scheduledTimer(withTimeInterval: Double(pollInterval), repeats: true) { _ in
-            Task { await self.updateStatus(pipelines: self.model.pipelines) }
-        }
+        scheduleNextPoll(after: 0.1)
         model.$pipelines
             .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
             .store(in: &subscribers)
+    }
+
+    private var pollInterval: Int {
+        let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
+        return (v > 0) ? v : 15
+    }
+
+    private func scheduleNextPoll(after seconds: TimeInterval) {
+        Timer.scheduledTimer(withTimeInterval: seconds, repeats: false) { _ in
+            Task { await self.updateStatus(pipelines: self.model.pipelines) }
+        }
     }
 
     func updateStatusIfPipelineWasAdded(pipelines: [Pipeline]) {
@@ -40,6 +44,7 @@ class ServerMonitor {
     }
 
     private func updateStatus(pipelines: [Pipeline]) async {
+        scheduleNextPoll(after: Double(pollInterval))
         // TODO: Make sure that the request can happen in parallel (maybe they do already?)
         for p in pipelines {
             switch(p.feed.type) {
