@@ -19,15 +19,19 @@ struct AppearanceSettings: View {
     var body: some View {
         VStack {
             Form {
-                Text("Menu bar")
-                    .font(.headline)
+//                Text("Menu bar")
+//                    .font(.headline)
                 Toggle(isOn: $showBuildTimerInMenuBar) {
-                    Text("Show build timer")
+                    Text("Show build timer in menu bar")
                     Text("Negative values represent estimated time to complete based on previous build. Positive values are shown when the build is taking longer than the previous build.")
                         .fixedSize(horizontal: false, vertical: true)
                 }
+
+                Divider()
+                    .padding([ .top, .bottom ], 4)
+
                 Toggle(isOn: $useColorInMenuBar) {
-                    Text("Use colored icons")
+                    Text("Use colored icons in menu bar")
                 }
                 .onChange(of: useColorInMenuBar) { newValue in
                     if newValue == false {
@@ -43,17 +47,19 @@ struct AppearanceSettings: View {
                 Divider()
                     .padding([ .top, .bottom ], 4)
 
-                Text("Menu items")
-                    .font(.headline)
+                Text("Display pipelines in menu:")
                 Toggle(isOn: $showBuildTimesInMenu) {
-                    Text("Show time of last build")
+                    Text("with time of last build")
                 }
+                .accessibilityIdentifier("Show time")
                 Toggle(isOn: $showBuildLabelsInMenu) {
-                    Text("Show label of last build")
+                    Text("with label of last build")
                 }
+                .accessibilityIdentifier("Show label")
                 Toggle(isOn: $hideSuccessfulBuildsInMenu) {
-                    Text("Hide pipelines with successful build")
+                    Text("only when last build was not successful")
                 }
+                .accessibilityIdentifier("Hide successful builds")
                 .padding(.bottom)
             }
         }
