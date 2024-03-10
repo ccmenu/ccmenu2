@@ -67,14 +67,15 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded.'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
 
-        // Make sure there are no requests until the reset time is reached
+        // Make sure there are no requests until the reset time is reached. We subtract a second to avoid
+        // a possible race condition
         didReceiveRequest = false
-        Thread.sleep(until: limitResetTime)
+        Thread.sleep(until: limitResetTime.advanced(by: -1))
         XCTAssertFalse(didReceiveRequest)
 
         // Make sure that polling resumes and updates the status
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
     }
 
     func testAddsGitHubPipeline() throws {
