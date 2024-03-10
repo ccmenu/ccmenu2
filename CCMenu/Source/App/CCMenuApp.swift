@@ -32,11 +32,12 @@ struct CCMenuApp: App {
             pipelineModel.loadPipelinesFromUserDefaults()
         }
 
-        if !UserDefaults.standard.bool(forKey: "pauseMonitor") {
+        if UserDefaults.standard.bool(forKey: "pauseMonitor") {
             print("Pausing monitor.")
+        } else {
             serverMonitor.start()
         }
-        
+
         notificationSender.start()
     }
 
