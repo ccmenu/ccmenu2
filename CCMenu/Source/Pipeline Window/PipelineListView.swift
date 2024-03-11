@@ -17,7 +17,7 @@ final class ListViewState: ObservableObject {
 
 struct PipelineListView: View {
     @ObservedObject var model: PipelineModel
-    @AppStorage(.showAppIcon) var showAppIcon: AppIconDefaultValue = .sometimes
+    @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
     @StateObject var viewState = ListViewState()
 
     var body: some View {
@@ -68,12 +68,8 @@ struct PipelineListView: View {
         }
         .onChange(of: viewState.isShowingAddSheet) { _ in
             guard showAppIcon == .sometimes else { return }
-            if viewState.isShowingAddSheet {
-                NSApp.setActivationPolicy(.regular)
-            } else {
-                NSApp.setActivationPolicy(.accessory)
-                NSWorkspace.shared.activateThisApp()
-            }
+            NSApp.hideApplicationIcon(!viewState.isShowingAddSheet)
+            NSApp.activateThisApp()
         }
         .sheet(isPresented: $viewState.isShowingEditSheet) {
             if let pipeline = model.pipelines.first(where: { viewState.selection.contains($0.id) }) {

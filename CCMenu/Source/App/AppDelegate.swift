@@ -8,22 +8,19 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @AppStorage(.showAppIcon) var showAppIcon: AppIconDefaultValue = .sometimes
+    @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
 
     func applicationWillFinishLaunching(_ aNotification: Notification) {
         NotificationReceiver.shared.start()
-        if showAppIcon != .always {
-            NSApp.setActivationPolicy(.accessory)
-        }
+        NSApp.hideApplicationIcon(showAppIcon != .always)
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
     }
 
-    @IBAction 
+    @IBAction
     func orderFrontAboutPanelWithSourceVersion(_ sender: AnyObject?) {
-        NSWorkspace.shared.activateThisApp()
         let sourceVersion = Bundle.main.infoDictionary?["CCMSourceVersion"] ?? "n/a"
         NSApplication.shared.orderFrontStandardAboutPanel(
             options: [NSApplication.AboutPanelOptionKey.version: sourceVersion]

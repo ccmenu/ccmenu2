@@ -34,17 +34,17 @@ struct MenuBarExtraMenu: View {
         }
         Divider()
         Button("Pipelines") {
-            NSWorkspace.shared.activateThisApp()
+            NSApp.activateThisApp()
             openWindow(id: "pipeline-list")
         }
         Divider()
         Button("About CCMenu") {
-            NSWorkspace.shared.activateThisApp()
+            NSApp.activateThisApp()
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
         SettingsLink {
             Text("Settings...")
-        } preAction: { NSWorkspace.shared.activateThisApp()
+        } preAction: { NSApp.activateThisApp()
         } postAction: { }
         Divider()
         Button("Quit CCMenu") {

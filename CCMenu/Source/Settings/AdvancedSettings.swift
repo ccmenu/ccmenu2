@@ -12,7 +12,7 @@ struct AdvancedSettings: View {
     @State var showBuildTimerInMenuBar = false
     @State var pollIntervalOptions: [Int] = [5, 10, 30, 60, 300, 600]
     @AppStorage(.pollInterval) var pollInterval: Int = 10
-    @AppStorage(.showAppIcon) var showAppIcon: AppIconDefaultValue = .sometimes
+    @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
 
 
     var body: some View {
@@ -31,17 +31,12 @@ struct AdvancedSettings: View {
                 Divider()
                     .padding([ .top, .bottom ], 4)
                 Picker("Show app icon:", selection: $showAppIcon) {
-                    ForEach(AppIconDefaultValue.allCases) { v in
+                    ForEach(AppIconVisibility.allCases) { v in
                         Text(v.rawValue).tag(v)
                     }
                 }
                 .onChange(of: showAppIcon) { _ in
-                    if showAppIcon == .always {
-                        NSApp.setActivationPolicy(.regular)
-                    } else {
-                        NSApp.setActivationPolicy(.accessory)
-                        NSWorkspace.shared.activateThisApp()
-                    }
+                    NSApp.hideApplicationIcon(showAppIcon != .always)
                 }
                 Text("If set to sometimes the app icon is only shown when a pipeline sheet is open. This can help with switching in and out of CCMenu to copy information like feed URLs.")
                     .fixedSize(horizontal: false, vertical: true)

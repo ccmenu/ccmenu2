@@ -8,15 +8,6 @@ import AppKit
 
 extension NSWorkspace {
 
-    func activateThisApp() {
-        // TODO: There must be a better way...
-        if #available(macOS 14.0, *) {
-            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-        } else {
-            NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-
     func openWebPage(pipeline: Pipeline) {
         if let error = pipeline.connectionError {
             // TODO: Consider adding a UI test for this case

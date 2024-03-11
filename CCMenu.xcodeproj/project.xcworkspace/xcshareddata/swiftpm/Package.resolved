@@ -1,4 +1,5 @@
 {
+  "originHash" : "460fc624cb8bc9aeda2dcecf617eb577b090d55b95ddee80d1d32de031547e49",
   "pins" : [
     {
       "identity" : "hummingbird",
@@ -190,5 +191,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

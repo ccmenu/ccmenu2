@@ -6,11 +6,11 @@
 
 import SwiftUI
 
-public enum AppIconDefaultValue: String, CaseIterable, Identifiable {
+public enum AppIconVisibility: String, CaseIterable, Identifiable {
     case
-    never = "never",
-    sometimes = "sometimes",
-    always = "always"
+    never,
+    sometimes,
+    always
 
     // TODO: Wasn't there a way to do without this?
     public var id: Self { self }
@@ -48,6 +48,10 @@ extension UserDefaults {
         return d
     }()
 
+    public func stringRepresentable<T: RawRepresentable>(forKey key: String) -> T? where T.RawValue == String {
+        guard let v = string(forKey: key) else { return nil }
+        return T(rawValue: v)
+    }
 }
 
 extension AppStorage {
@@ -64,7 +68,7 @@ extension AppStorage {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 
-    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconDefaultValue {
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconVisibility {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
     
