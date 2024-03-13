@@ -16,6 +16,16 @@ public enum AppIconVisibility: String, CaseIterable, Identifiable {
     public var id: Self { self }
 }
 
+public enum MenuSortOrder: Int, CaseIterable, Identifiable {
+    case // Int raw values for compatibility with legacy defaults
+    asArranged,
+    sortedAlphabetically,
+    sortedByBuildTime
+
+    // TODO: Wasn't there a way to do without this?
+    public var id: Self { self }
+}
+
 
 public enum DefaultsKey: String {
     case
@@ -24,6 +34,7 @@ public enum DefaultsKey: String {
     useColorInMenuBar = "UseColorInMenuBar",
     useColorInMenuBarFailedOnly = "UseColorOnlyForFailedStateInMenuBar",
     showBuildTimerInMenuBar = "ShowTimerInMenu",
+    orderInMenu = "ProjectOrder",
     showBuildTimesInMenu = "ShowLastBuildTimes",
     showBuildLabelsInMenu = "ShowLastBuildLabel",
     hideSuccessfulBuildsInMenu = "HideSuccessfulBuilds",
@@ -71,5 +82,10 @@ extension AppStorage {
     public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconVisibility {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
+    
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == MenuSortOrder {
+        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
+    }
+
     
 }

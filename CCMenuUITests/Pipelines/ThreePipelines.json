@@ -24,7 +24,7 @@
         "webUrl": "",
         "activity": "sleeping",
         "lastBuild": {
-            "result": "success",
+            "result": "unknown",
         }
     },
 },
@@ -35,6 +35,10 @@
     },
     "status": {
         "webUrl": "",
-        "activity": "sleeping"
-    },
+        "activity": "sleeping",
+        "lastBuild": {
+            "result": "success",
+            "timestamp": "2023-12-27T21:47:00Z"
+        }
+    }
 }]

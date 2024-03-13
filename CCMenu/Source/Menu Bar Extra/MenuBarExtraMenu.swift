@@ -10,13 +10,14 @@ import SettingsAccess
 
 struct MenuBarExtraMenu: View {
     @ObservedObject var model: PipelineModel
+    @AppStorage(.orderInMenu) var orderInMenu = .asArranged
     @AppStorage(.showBuildTimesInMenu) private var showBuildTimesInMenu = false
     @AppStorage(.showBuildLabelsInMenu) private var showBuildLabelsInMenu = false
     @AppStorage(.hideSuccessfulBuildsInMenu) private var hideSuccessfulBuildsInMenu = false
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        let filteredPipelines = model.pipelines.filter({ !hideSuccessfulBuildsInMenu || $0.status.currentBuild != nil || $0.status.lastBuild?.result != .success })
+        let filteredPipelines = filteredAndSortedPipelines(model.pipelines)
         ForEach(filteredPipelines) { p in
             let viewModel = MenuItemViewModel(pipeline: p, showBuildTimesInMenu: showBuildTimesInMenu, showBuildLabelsInMenu: showBuildLabelsInMenu)
             Button() {
@@ -49,6 +50,19 @@ struct MenuBarExtraMenu: View {
         Divider()
         Button("Quit CCMenu") {
             NSApplication.shared.terminate(nil)
+        }
+    }
+    
+    private func filteredAndSortedPipelines(_ pipelines: [Pipeline]) -> [Pipeline] {
+        let filtered = model.pipelines.filter({ !hideSuccessfulBuildsInMenu || $0.status.currentBuild != nil || $0.status.lastBuild?.result != .success })
+        switch orderInMenu {
+        case .asArranged: 
+            return filtered
+        case .sortedAlphabetically:
+            return filtered.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+        case .sortedByBuildTime:
+            return filtered.sorted(by: { $0.status.lastBuild?.timestamp ?? Date.distantPast >
+                $1.status.lastBuild?.timestamp ?? Date.distantPast})
         }
     }
 

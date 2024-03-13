@@ -41,26 +41,44 @@ class MenuTests: XCTestCase {
         let app = TestHelper.launchApp(pipelines: "ThreePipelines.json")
         let menu = TestHelper.openMenu(app: app)
 
-        // Make sure expected pipelines are present
-        XCTAssert(menu.menuItems["connectfour"].exists)
-        XCTAssert(menu.menuItems["ccmenu"].exists)
-        XCTAssert(menu.menuItems["ccmenu2 | Build and test"].exists)
+        // Make sure expected pipelines are present and shown in default order
+        XCTAssertEqual("connectfour", menu.menuItems.element(boundBy: 0).title)
+        XCTAssertEqual("ccmenu", menu.menuItems.element(boundBy: 1).title)
+        XCTAssertEqual("ccmenu2 | Build and test", menu.menuItems.element(boundBy: 2).title)
 
-        // Open settings, chose to hide pipelines with successful build, then close settings
+        // Open settings and set order to alphabetical
         menu.menuItems["Settings..."].click()
         let window = app.windows["com_apple_SwiftUI_Settings_window"]
         window.toolbars.buttons["Appearance"].click()
+        XCTAssert(window.radioButtons["Order as arranged"].isSelected == true)
+        window.radioButtons["Order alphabetically"].click()
+
+        // Make sure the pipelines are shown in desired order
+        TestHelper.openMenu(app: app)
+        XCTAssertEqual("ccmenu", menu.menuItems.element(boundBy: 0).title)
+        XCTAssertEqual("ccmenu2 | Build and test", menu.menuItems.element(boundBy: 1).title)
+        XCTAssertEqual("connectfour", menu.menuItems.element(boundBy: 2).title)
+
+        // Open settings and set order to last build time
+        menu.menuItems["Settings..."].click()
+        window.radioButtons["Order last build time"].click()
+
+        // Make sure the pipelines are shown in desired order
+        TestHelper.openMenu(app: app)
+        XCTAssertEqual("ccmenu2 | Build and test", menu.menuItems.element(boundBy: 0).title)
+        XCTAssertEqual("connectfour", menu.menuItems.element(boundBy: 1).title)
+        XCTAssertEqual("ccmenu", menu.menuItems.element(boundBy: 2).title)
+
+        // Chose to hide pipelines with successful builds
+        menu.menuItems["Settings..."].click()
         XCTAssert(window.checkBoxes["Hide successful builds"].isSelected == false)
         window.checkBoxes["Hide successful builds"].click()
 
         // Make sure the successful pipeline isn't show, and a hint is shown
         TestHelper.openMenu(app: app)
-        XCTAssert(menu.menuItems["connectfour"].exists)
-        XCTAssert(menu.menuItems["ccmenu2 | Build and test"].exists)
-        XCTAssert(menu.menuItems["ccmenu"].exists == false)
-        let hintItem = menu.menuItems["(1 pipeline hidden)"]
-        XCTAssert(hintItem.exists)
-        XCTAssert(hintItem.isEnabled == false)
+        XCTAssert(menu.menuItems["ccmenu2 | Build and test"].exists == false)
+        XCTAssertEqual("(1 pipeline hidden)", menu.menuItems.element(boundBy: 2).title)
+        XCTAssert(menu.menuItems.element(boundBy: 2).isEnabled == false)
 
         // Open settings, chose to display build labels, then close settings
         menu.menuItems["Settings..."].click() // otherwise click on first checkbox doesn't work
