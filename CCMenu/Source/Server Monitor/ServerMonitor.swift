@@ -44,8 +44,8 @@ class ServerMonitor {
     }
 
     private func updateStatus(pipelines: [Pipeline]) async {
+        // TODO: Multiple request will pile up if requests take longer than poll intervall
         scheduleNextPoll(after: Double(pollInterval))
-        // TODO: Make sure that the request can happen in parallel (maybe they do already?)
         for p in pipelines {
             switch(p.feed.type) {
             case .cctray:
