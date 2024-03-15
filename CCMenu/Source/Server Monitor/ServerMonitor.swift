@@ -26,7 +26,7 @@ class ServerMonitor {
 
     private var pollInterval: Int {
         let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
-        return (v > 0) ? v : 15
+        return (v > 0) ? v : 10
     }
 
     private func scheduleNextPoll(after seconds: TimeInterval) {
