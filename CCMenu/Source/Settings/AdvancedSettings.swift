@@ -8,41 +8,68 @@ import SwiftUI
 
 
 struct AdvancedSettings: View {
-
-    @State var showBuildTimerInMenuBar = false
+    
     @State var pollIntervalOptions: [Int] = [5, 10, 30, 60, 300, 600]
     @AppStorage(.pollInterval) var pollInterval: Int = 10
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
-
+    @State var openAtLogin = NSApp.openAtLogin { didSet { NSApp.openAtLogin = openAtLogin } }
 
     var body: some View {
         VStack(alignment: .leading) {
-            Form {
-                Picker("Poll interval:", selection: $pollInterval) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Poll Interval:")
+                Spacer()
+                Picker("", selection: $pollInterval) {
                     ForEach(pollIntervalOptions, id: \.self) { v in
                         if let label = label(forDuration: v) {
                             Text(label).tag(v)
                         }
                     }
                 }
-                Text("How often CCMenu retrieves status information from the servers. Polling frequently can result in high network traffic, and on GitHub you may run into rate limiting if you have many busy workflows and aren't logged in.")
-                    .fixedSize(horizontal: false, vertical: true)
-                    .font(.footnote)
-                Divider()
-                    .padding([ .top, .bottom ], 4)
-                Picker("Show app icon:", selection: $showAppIcon) {
+                .frame(maxWidth: 150)
+                .padding(.bottom, 4)
+            }
+            Text("How often CCMenu retrieves status information from the servers. Polling frequently can result in high network traffic, and on GitHub you may run into rate limiting if you have many busy workflows and aren't logged in.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Divider()
+                .padding([ .top, .bottom ], 4)
+
+            HStack(alignment: .firstTextBaseline) {
+                Text("Show app icon:")
+                Spacer()
+                Picker("", selection: $showAppIcon) {
                     ForEach(AppIconVisibility.allCases) { v in
                         Text(v.rawValue).tag(v)
                     }
                 }
+                .frame(maxWidth: 150)
+                .padding(.bottom, 4)
                 .onChange(of: showAppIcon) { _ in
                     NSApp.hideApplicationIcon(showAppIcon != .always)
+                    NSApp.activateThisApp()
                 }
-                Text("If set to sometimes the app icon is only shown when a pipeline sheet is open. This can help with switching in and out of CCMenu to copy information like feed URLs.")
-                    .fixedSize(horizontal: false, vertical: true)
-                    .font(.footnote)
-               }
+            }
+            Text("If set to _sometimes_ the app icon is only shown when a pipeline sheet is open. This can help with switching in and out of CCMenu to copy information like feed URLs.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
+            Divider()
+                .padding([ .top, .bottom ], 4)
+
+            // We can't use $openAtLogin. That results in didSet not being called. Why?
+            Toggle(isOn: Binding(get: { openAtLogin }, set: { v in openAtLogin = v } )) {
+                Text("Open at login")
+            }
+            .padding(.bottom, 4)
+            Text("Whether CCMenu should open when you log in. This is the same as adding CCMenu in the Login Items section in the System Settings app.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .padding(.bottom)
         }
         .navigationTitle("Advanced")
         .padding()

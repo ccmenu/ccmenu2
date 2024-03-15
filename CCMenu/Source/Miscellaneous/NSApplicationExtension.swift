@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import ServiceManagement
 
 extension NSApplication {
 
@@ -20,5 +21,20 @@ extension NSApplication {
     func hideApplicationIcon(_ flag: Bool) {
         self.setActivationPolicy(flag ? .accessory : .regular)
     }
-
+    
+    var openAtLogin: Bool {
+        get {
+            return SMAppService.mainApp.status == .enabled
+        }
+        set {
+            let status = SMAppService.mainApp.status
+            if newValue && status != .enabled {
+                try? SMAppService.mainApp.register()
+            }
+            if !newValue && status == .enabled {
+                try? SMAppService.mainApp.unregister()
+            }
+        }
+    }
+    
 }
