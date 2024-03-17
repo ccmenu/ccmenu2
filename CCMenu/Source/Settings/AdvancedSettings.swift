@@ -12,12 +12,13 @@ struct AdvancedSettings: View {
     @State var pollIntervalOptions: [Int] = [5, 10, 30, 60, 300, 600]
     @AppStorage(.pollInterval) var pollInterval: Int = 10
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
+    @AppStorage(.acceptInvalidCerts) var acceptInvalidCerts: CertHandling = .never
     @State var openAtLogin = NSApp.openAtLogin { didSet { NSApp.openAtLogin = openAtLogin } }
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .firstTextBaseline) {
-                Text("Poll Interval:")
+                Text("Poll interval:")
                 Spacer()
                 Picker("", selection: $pollInterval) {
                     ForEach(pollIntervalOptions, id: \.self) { v in
@@ -38,9 +39,29 @@ struct AdvancedSettings: View {
                 .padding([ .top, .bottom ], 4)
 
             HStack(alignment: .firstTextBaseline) {
+                Text("Accept invalid certificate:")
+                Spacer()
+                Picker("", selection: $acceptInvalidCerts) {
+                    Text("never").tag(CertHandling.never)
+                    Text("after confirmation").tag(CertHandling.ask)
+                    Text("for localhost").tag(CertHandling.localhost)
+                }
+                .frame(maxWidth: 150)
+                .padding(.bottom, 4)
+            }
+            Text("How to proceed when macOS can't verify the trust for an HTTPS connection. If set to _after confirmation_ CCMenu will ask for confirmation. If set to _for localhost_ CCMenu will accept invalid certificates for localhost only.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Divider()
+                .padding([ .top, .bottom ], 4)
+
+            HStack(alignment: .firstTextBaseline) {
                 Text("Show app icon:")
                 Spacer()
                 Picker("", selection: $showAppIcon) {
+                    // TODO: Don't use rawValue but local text
                     ForEach(AppIconVisibility.allCases) { v in
                         Text(v.rawValue).tag(v)
                     }
@@ -70,6 +91,7 @@ struct AdvancedSettings: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .padding(.bottom)
+
         }
         .navigationTitle("Advanced")
         .padding()

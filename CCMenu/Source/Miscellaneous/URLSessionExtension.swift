@@ -21,24 +21,28 @@ extension URLSession {
 }
 
 class FeedSessionDelegate: NSObject, URLSessionTaskDelegate {
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        
-        let authMethod = challenge.protectionSpace.authenticationMethod
-        guard authMethod == NSURLAuthenticationMethodHTTPBasic else {
-            completionHandler(.performDefaultHandling, nil)
-            return
-        }
 
-        // TODO: figure out what to do if we end up here
-        // We should only end up here if we didn't provide credentials but the server requires
-        // authentication or if the credentials provided are not accepted. Note: Realistically
-        // this is the only place to discover the authentication realm the server uses, should
-        // we need to expose that to the user.
-        
-        debugPrint("received authentication challenge for \(challenge.protectionSpace)")
-        completionHandler(.performDefaultHandling, nil)
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        switch challenge.protectionSpace.authenticationMethod {
+        case NSURLAuthenticationMethodServerTrust:
+            let trust = challenge.protectionSpace.serverTrust
+            let url = task.originalRequest?.url
+            if let trust, let url, TrustManager.shouldContinueWithServerTrust(trust, forURL: url) {
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            } else {
+                completionHandler(.rejectProtectionSpace, nil)
+            }
+        case NSURLAuthenticationMethodHTTPBasic:
+            // TODO: figure out what to do if we end up here
+            // We should only end up here if we didn't provide credentials but the server requires
+            // authentication or if the credentials provided are not accepted. Note: Realistically
+            // this is the only place to discover the authentication realm the server uses, should
+            // we need to expose that to the user.
+            debugPrint("received authentication challenge for \(challenge.protectionSpace)")
+            completionHandler(.performDefaultHandling, nil)
+        default:
+            completionHandler(.performDefaultHandling, nil)
+        }
     }
 
-    
 }

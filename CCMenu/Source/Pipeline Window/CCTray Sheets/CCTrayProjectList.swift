@@ -5,11 +5,13 @@
  */
 
 import SwiftUI
+import SecurityInterface
 
 @MainActor
 class CCTrayProjectList: ObservableObject {
     @Published private(set) var items = [CCTrayProject()] { didSet { selected = items[0] }}
     @Published var selected = CCTrayProject()
+    var invalidServerTrust: SecTrust?
 
     func updateProjects(url urlBinding: Binding<String>, credential: HTTPCredential?) async {
         addSchemeIfNecessary(url: urlBinding)
@@ -21,12 +23,19 @@ class CCTrayProjectList: ObservableObject {
         let (actualURL, newItems) = await fetchProjects(urlList: makeUrlList(baseUrl: baseUrl), credential: credential)
         urlBinding.wrappedValue = actualURL.absoluteString
         items = newItems
+
+        if let trust = invalidServerTrust {
+            invalidServerTrust = nil
+            if TrustManager.showCertificateTrustPanel(forTrust: trust) {
+                await updateProjects(url: urlBinding, credential: credential)
+            }
+        }
     }
 
     private func addSchemeIfNecessary(url urlBinding: Binding<String>) {
         let userInput = urlBinding.wrappedValue
         if !userInput.hasPrefix("http://") && !userInput.hasPrefix("https://") {
-            urlBinding.wrappedValue = "http://" + userInput
+            urlBinding.wrappedValue = "https://" + userInput
         }
     }
 
@@ -47,6 +56,7 @@ class CCTrayProjectList: ObservableObject {
                 let request = CCTrayAPI.requestForProjects(url: url, credential: credential)
                 projects = try await fetchProjects(request: request)
             } catch {
+                invalidServerTrust = TrustManager.includedSSLPeerTrust(forError: error)
                 return (url, [CCTrayProject(message: error.localizedDescription)])
             }
             if projects.count == 0 {

@@ -6,16 +6,6 @@
 
 import SwiftUI
 
-public enum AppIconVisibility: String, CaseIterable, Identifiable {
-    case
-    never,
-    sometimes,
-    always
-
-    // TODO: Wasn't there a way to do without this?
-    public var id: Self { self }
-}
-
 public enum MenuSortOrder: Int, CaseIterable, Identifiable {
     case // Int raw values for compatibility with legacy defaults
     asArranged,
@@ -26,11 +16,33 @@ public enum MenuSortOrder: Int, CaseIterable, Identifiable {
     public var id: Self { self }
 }
 
+public enum CertHandling: String, CaseIterable, Identifiable {
+    case
+    never,
+    ask,
+    localhost
+
+    // TODO: Wasn't there a way to do without this?
+    public var id: Self { self }
+}
+
+
+public enum AppIconVisibility: String, CaseIterable, Identifiable {
+    case
+    never,
+    sometimes,
+    always
+
+    // TODO: Wasn't there a way to do without this?
+    public var id: Self { self }
+}
+
 
 public enum DefaultsKey: String {
     case
     pipelineList = "pipelines",
     pollInterval = "PollInterval",
+    acceptInvalidCerts = "AcceptInvalidCerts",
     useColorInMenuBar = "UseColorInMenuBar",
     useColorInMenuBarFailedOnly = "UseColorOnlyForFailedStateInMenuBar",
     showBuildTimerInMenuBar = "ShowTimerInMenu",
@@ -79,13 +91,17 @@ extension AppStorage {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 
-    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconVisibility {
-        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
-    }
-    
+    // TODO: Find out how to combine the following cases, which are all RawRepresentable
+
     public init(wrappedValue: Value, _ key: DefaultsKey) where Value == MenuSortOrder {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 
-    
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == AppIconVisibility {
+        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
+    }
+
+    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == CertHandling {
+        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
+    }
 }

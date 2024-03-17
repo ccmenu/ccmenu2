@@ -66,6 +66,7 @@
 		03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11ED2652F6B900130833 /* FeedReader.swift */; };
 		03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */; };
 		03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11F1265467C200130833 /* CCTrayResponseParser.swift */; };
+		03CC61CF2BA757050008EE76 /* TrustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC61CE2BA757050008EE76 /* TrustManager.swift */; };
 		03D4BB012659A1120023F4CB /* PipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB002659A1120023F4CB /* PipelineTests.swift */; };
 		03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */; };
 		03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */; };
@@ -178,6 +179,7 @@
 		03CC11ED2652F6B900130833 /* FeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReader.swift; sourceTree = "<group>"; };
 		03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReader.swift; sourceTree = "<group>"; };
 		03CC11F1265467C200130833 /* CCTrayResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParser.swift; sourceTree = "<group>"; };
+		03CC61CE2BA757050008EE76 /* TrustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustManager.swift; sourceTree = "<group>"; };
 		03D4BB002659A1120023F4CB /* PipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineTests.swift; sourceTree = "<group>"; };
 		03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubFeedReader.swift; sourceTree = "<group>"; };
 		03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubResponseParser.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 			children = (
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
 				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
+				03CC61CE2BA757050008EE76 /* TrustManager.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
@@ -714,6 +717,7 @@
 				03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */,
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
 				3CB911D72B78E891009DF781 /* URLRequestExtension.swift in Sources */,
+				03CC61CF2BA757050008EE76 /* TrustManager.swift in Sources */,
 				0336DBAC29848FE200E5811C /* AddCCTrayPipelineSheet.swift in Sources */,
 				0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */,
 				03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */,
