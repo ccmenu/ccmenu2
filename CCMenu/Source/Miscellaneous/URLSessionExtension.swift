@@ -24,14 +24,6 @@ class FeedSessionDelegate: NSObject, URLSessionTaskDelegate {
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         switch challenge.protectionSpace.authenticationMethod {
-        case NSURLAuthenticationMethodServerTrust:
-            let trust = challenge.protectionSpace.serverTrust
-            let url = task.originalRequest?.url
-            if let trust, let url, TrustManager.shouldContinueWithServerTrust(trust, forURL: url) {
-                completionHandler(.useCredential, URLCredential(trust: trust))
-            } else {
-                completionHandler(.rejectProtectionSpace, nil)
-            }
         case NSURLAuthenticationMethodHTTPBasic:
             // TODO: figure out what to do if we end up here
             // We should only end up here if we didn't provide credentials but the server requires

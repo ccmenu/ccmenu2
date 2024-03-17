@@ -16,17 +16,6 @@ public enum MenuSortOrder: Int, CaseIterable, Identifiable {
     public var id: Self { self }
 }
 
-public enum CertHandling: String, CaseIterable, Identifiable {
-    case
-    never,
-    ask,
-    localhost
-
-    // TODO: Wasn't there a way to do without this?
-    public var id: Self { self }
-}
-
-
 public enum AppIconVisibility: String, CaseIterable, Identifiable {
     case
     never,
@@ -101,7 +90,4 @@ extension AppStorage {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
 
-    public init(wrappedValue: Value, _ key: DefaultsKey) where Value == CertHandling {
-        self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
-    }
 }
