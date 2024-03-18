@@ -11,13 +11,16 @@ import Combine
 class ServerMonitor {
 
     private var model: PipelineModel
+    private var networkMonitor: NetworkMonitor
     private var subscribers: [AnyCancellable] = []
 
     init(model: PipelineModel) {
         self.model = model
+        self.networkMonitor = NetworkMonitor()
     }
     
     public func start() {
+        networkMonitor.start()
         scheduleNextPoll(after: 0.1)
         model.$pipelines
             .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
@@ -25,8 +28,14 @@ class ServerMonitor {
     }
 
     private var pollInterval: Int {
-        let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
-        return (v > 0) ? v : 10
+        if networkMonitor.isExpensiveConnection || networkMonitor.isLowDataConnection {
+            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollIntervalLowData.rawValue)
+            // TODO: Figure out how to get back into polling if we honor the value for pause (-1) here and in updateStatus
+            return (v > 0) ? v : 300
+        } else {
+            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
+            return (v > 0) ? v : 10
+        }
     }
 
     private func scheduleNextPoll(after seconds: TimeInterval) {
@@ -40,13 +49,16 @@ class ServerMonitor {
             return
         }
         let newPipelines = Set(pipelines).subtracting(Set(model.pipelines))
-        Task { await self.updateStatus(pipelines: Array(newPipelines)) }
+        Task { await self.updateStatus(pipelines: Array(newPipelines), scheduleNext: false) }
     }
 
-    private func updateStatus(pipelines: [Pipeline]) async {
+    private func updateStatus(pipelines: [Pipeline], scheduleNext: Bool = true) async {
         // TODO: Multiple request will pile up if requests take longer than poll intervall
         scheduleNextPoll(after: Double(pollInterval))
         for p in pipelines {
+            if let url = URL(string: p.feed.url), url.host() != "localhost" && !networkMonitor.isConnected && (p.status.lastBuild != nil || p.connectionError != nil) {
+                continue
+            }
             switch(p.feed.type) {
             case .cctray:
                 let reader = CCTrayFeedReader(for: p)

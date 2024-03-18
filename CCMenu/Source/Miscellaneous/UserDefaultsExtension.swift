@@ -31,6 +31,7 @@ public enum DefaultsKey: String {
     case
     pipelineList = "pipelines",
     pollInterval = "PollInterval",
+    pollIntervalLowData = "PollIntervalLowData",
     acceptInvalidCerts = "AcceptInvalidCerts",
     useColorInMenuBar = "UseColorInMenuBar",
     useColorInMenuBarFailedOnly = "UseColorOnlyForFailedStateInMenuBar",

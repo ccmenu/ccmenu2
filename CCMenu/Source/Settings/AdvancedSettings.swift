@@ -11,6 +11,7 @@ struct AdvancedSettings: View {
     
     @State var pollIntervalOptions: [Int] = [5, 10, 30, 60, 300, 600]
     @AppStorage(.pollInterval) var pollInterval: Int = 10
+    @AppStorage(.pollIntervalLowData) var pollIntervalLowData: Int = 300
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
     @State var openAtLogin = NSApp.openAtLogin { didSet { NSApp.openAtLogin = openAtLogin } }
 
@@ -30,6 +31,29 @@ struct AdvancedSettings: View {
                 .padding(.bottom, 4)
             }
             Text("How often CCMenu retrieves status information from the servers. Polling frequently can result in high network traffic, and on GitHub you may run into rate limiting if you have many busy workflows and aren't logged in.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Divider()
+                .padding([ .top, .bottom ], 4)
+
+            HStack(alignment: .firstTextBaseline) {
+                Text("Low data poll interval:")
+                Spacer()
+                Picker("", selection: $pollIntervalLowData) {
+                    Text("pause").tag(-1)
+                    Divider()
+                    ForEach(pollIntervalOptions, id: \.self) { v in
+                        if let label = label(forDuration: v) {
+                            Text(label).tag(v)
+                        }
+                    }
+                }
+                .frame(maxWidth: 150)
+                .padding(.bottom, 4)
+            }
+            Text("Poll interval for network connections macOS considers expensive, e.g. mobile hotspots, and for connections that are marked explictly as low data.")
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
