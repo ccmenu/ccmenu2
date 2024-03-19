@@ -34,6 +34,12 @@ struct PipelineRow: View {
                                 .accessibilityIdentifier("Build message")
                                 .adjustedColor(colorScheme: colorScheme)
                         }
+                        if let message = viewModel.lastUpdatedMessage {
+                            Text(message)
+                                .accessibilityIdentifier("Last updated message")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
                     } else {
                         HStack(alignment: .top, spacing: 4) {
                             Image(viewModel.feedTypeIconName)
@@ -81,9 +87,9 @@ extension View {
 
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
-        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview()))
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), pollInterval: 5))
         // TODO: Figure out how to set showStatus from here
-        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview()))
+        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), pollInterval: 5))
     }
 
     static func pipelineForPreview() -> Pipeline {

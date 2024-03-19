@@ -13,6 +13,7 @@ struct Pipeline: Identifiable, Codable {
     var feed: Pipeline.Feed
     var status: Pipeline.Status
     var connectionError: String?
+    var lastUpdated: Date?
 
     init(name: String, feed: Feed) {
         self.name = name

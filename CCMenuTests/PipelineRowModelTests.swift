@@ -17,9 +17,9 @@ final class PipelineRowModelTests: XCTestCase {
 
     func testStatusWhenSleepingAndLastBuildNotAvailable() throws {
         let pipeline = makePipeline(activity: .sleeping)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
-        XCTAssertEqual("Waiting for first build", pvm.statusDescription)
+        XCTAssertEqual("No build information available", pvm.statusDescription)
     }
 
     func testStatusWhenSleepingAndLastBuildIsAvailable() throws {
@@ -28,7 +28,7 @@ final class PipelineRowModelTests: XCTestCase {
         pipeline.status.lastBuild!.label = "842"
         pipeline.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.status.lastBuild!.duration = 53
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         // Check some components that should definitely be there in this form
         XCTAssertTrue(pvm.statusDescription.contains("2020")) // timestamp year
@@ -41,7 +41,7 @@ final class PipelineRowModelTests: XCTestCase {
     func testStatusWhenSleepingAndLastBuildIsAvailableButHasNoFurtherInformation() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         XCTAssertEqual("Build finished", pvm.statusDescription)
     }
@@ -50,7 +50,7 @@ final class PipelineRowModelTests: XCTestCase {
         var pipeline = makePipeline(activity: .building)
         let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")!
         pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         let time = date.formatted(date: .omitted, time: .shortened)
         XCTAssertTrue(pvm.statusDescription.contains(time))
@@ -61,7 +61,7 @@ final class PipelineRowModelTests: XCTestCase {
         let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
         pipeline.status.lastBuild = Build(result: .success, duration: 310)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         XCTAssertTrue(pvm.statusDescription.contains("Last build time: 5m 10s"))
     }
@@ -71,7 +71,7 @@ final class PipelineRowModelTests: XCTestCase {
         let date = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         pipeline.status.currentBuild = Build(result: .unknown, timestamp: date)
         pipeline.status.lastBuild = Build(result: .failure, duration: 40)
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         XCTAssertTrue(pvm.statusDescription.contains("Last build time: failed after 40s"))
     }
@@ -80,15 +80,54 @@ final class PipelineRowModelTests: XCTestCase {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.connectionError = "404 Not Found"
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         XCTAssertEqual("\u{1F53A} 404 Not Found", pvm.statusDescription)
     }
 
+    func testLastUpdatedTextIsNilWhenUpdateIsRecentEnough() throws {
+        var pipeline = makePipeline(activity: .sleeping)
+        pipeline.status.lastBuild = Build(result: .success)
+        pipeline.lastUpdated = Date()
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
+
+        XCTAssertNil(pvm.lastUpdatedMessage)
+    }
+
+    func testLastUpdatedTextIsNilWhenNoTimestampIsAvailable() throws {
+        let pipeline = makePipeline(activity: .sleeping)
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
+
+        XCTAssertNil(pvm.lastUpdatedMessage)
+    }
+
+    func testLastUpdatedTextWarnsWhenBuildHasntBeenUpdatedInAWhile() throws {
+        var pipeline = makePipeline(activity: .sleeping)
+        pipeline.status.lastBuild = Build(result: .success)
+        pipeline.lastUpdated = Date(timeIntervalSinceNow: -10*60)
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
+
+        XCTAssertEqual("(status last updated 10 minutes ago)",pvm.lastUpdatedMessage)
+    }
+
+    func testLastUpdatedTextDoesntWarnWhenBuildHasntBeenUpdatedInAWhileButPollIntervalIsEvenLonger() throws {
+        var pipeline = makePipeline(activity: .sleeping)
+        pipeline.status.lastBuild = Build(result: .success)
+        pipeline.lastUpdated = Date(timeIntervalSinceNow: -10*60)
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 10*60)
+
+        XCTAssertNil(pvm.lastUpdatedMessage)
+    }
+
+
     func testUrlWhenCCTrayHasUserAssignedName() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.name = "Connect4"
-        let pvm = PipelineRowViewModel(pipeline: pipeline)
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
         XCTAssertEqual("http://localhost:4567/cc.xml (connectfour)", pvm.feedUrl)
     }

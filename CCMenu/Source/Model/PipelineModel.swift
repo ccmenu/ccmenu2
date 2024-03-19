@@ -25,6 +25,7 @@ final class PipelineModel: ObservableObject {
         }
         let change = StatusChange(pipeline: pipeline, previousStatus: pipelines[idx].status)
         pipelines[idx] = pipeline
+        pipelines[idx].lastUpdated = Date()
         if change.kind != .noChange {
             lastStatusChange = change
         }

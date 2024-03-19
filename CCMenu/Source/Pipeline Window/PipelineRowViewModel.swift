@@ -9,6 +9,7 @@ import SwiftUI
 struct PipelineRowViewModel {
 
     var pipeline: Pipeline
+    var pollInterval: Double
 
     var title: String {
         return pipeline.name
@@ -30,7 +31,7 @@ struct PipelineRowViewModel {
             if let build = pipeline.status.lastBuild {
                 description = statusDescription(finishedBuild: build)
             } else {
-                description = "Waiting for first build"
+                description = "No build information available"
             }
         }
         return description
@@ -86,6 +87,16 @@ struct PipelineRowViewModel {
         pipeline.message
     }
 
+    var lastUpdatedMessage: String? {
+        guard let timestamp = pipeline.lastUpdated else { return nil }
+        // We add a few seconds to avoid possible message flickering on and off
+        if Date().timeIntervalSince(timestamp) > (max(300, pollInterval) + 5) {
+            let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
+            return "(status last updated \(relative))"
+        }
+        return nil
+    }
+
     var feedTypeIconName: String {
         "feed-\(pipeline.feed.type)-template"
     }
@@ -97,5 +108,6 @@ struct PipelineRowViewModel {
         }
         return result
     }
+
 
 }

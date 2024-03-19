@@ -18,12 +18,13 @@ final class ListViewState: ObservableObject {
 struct PipelineListView: View {
     @ObservedObject var model: PipelineModel
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
+    @AppStorage(.pollInterval) var pollInterval = 10
     @StateObject var viewState = ListViewState()
 
     var body: some View {
         List(selection: $viewState.selection) {
             ForEach(model.pipelines) { p in
-                PipelineRow(viewModel: PipelineRowViewModel(pipeline: p))
+                PipelineRow(viewModel: PipelineRowViewModel(pipeline: p, pollInterval: Double(pollInterval)))
             }
             .onMove { (itemsToMove, destination) in
                 withAnimation {
