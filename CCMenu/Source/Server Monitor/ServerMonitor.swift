@@ -13,35 +13,34 @@ class ServerMonitor {
     private var model: PipelineModel
     private var networkMonitor: NetworkMonitor
     private var subscribers: [AnyCancellable] = []
+    private var lastPoll = Date.distantPast
 
     init(model: PipelineModel) {
         self.model = model
         self.networkMonitor = NetworkMonitor()
     }
     
+    private var pollInterval: Double {
+        if networkMonitor.isExpensiveConnection || networkMonitor.isLowDataConnection {
+            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollIntervalLowData.rawValue)
+            return (v != 0) ? Double(v) : 300
+        } else {
+            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
+            return (v > 0) ? Double(v) : 10
+        }
+    }
+
     public func start() {
         networkMonitor.start()
-        scheduleNextPoll(after: 0.1)
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
+            Task { await self.updateStatus(pipelines: self.model.pipelines) }
+        }
+        Timer.scheduledTimer(withTimeInterval: min(pollInterval, 5.0), repeats: true) { _ in
+            Task { await self.updateStatus(pipelines: self.model.pipelines) }
+        }
         model.$pipelines
             .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
             .store(in: &subscribers)
-    }
-
-    private var pollInterval: Int {
-        if networkMonitor.isExpensiveConnection || networkMonitor.isLowDataConnection {
-            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollIntervalLowData.rawValue)
-            // TODO: Figure out how to get back into polling if we honor the value for pause (-1) here and in updateStatus
-            return (v > 0) ? v : 300
-        } else {
-            let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
-            return (v > 0) ? v : 10
-        }
-    }
-
-    private func scheduleNextPoll(after seconds: TimeInterval) {
-        Timer.scheduledTimer(withTimeInterval: seconds, repeats: false) { _ in
-            Task { await self.updateStatus(pipelines: self.model.pipelines) }
-        }
     }
 
     func updateStatusIfPipelineWasAdded(pipelines: [Pipeline]) {
@@ -49,27 +48,47 @@ class ServerMonitor {
             return
         }
         let newPipelines = Set(pipelines).subtracting(Set(model.pipelines))
-        Task { await self.updateStatus(pipelines: Array(newPipelines), scheduleNext: false) }
+        Task { await self.updateStatus(pipelines: Array(newPipelines)) }
     }
 
-    private func updateStatus(pipelines: [Pipeline], scheduleNext: Bool = true) async {
-        // TODO: Multiple request will pile up if requests take longer than poll intervall
-        scheduleNextPoll(after: Double(pollInterval))
-        for p in pipelines {
-            if let url = URL(string: p.feed.url), url.host() != "localhost" && !networkMonitor.isConnected && (p.status.lastBuild != nil || p.connectionError != nil) {
-                continue
-            }
-            switch(p.feed.type) {
-            case .cctray:
-                let reader = CCTrayFeedReader(for: p)
-                await reader.updatePipelineStatus()
-                reader.pipelines.forEach({ model.update(pipeline: $0) })
-            case .github:
-                let reader = GitHubFeedReader(for: p)
-                await reader.updatePipelineStatus()
-                model.update(pipeline: reader.pipeline)
-            }
+    private func updateStatus(pipelines: [Pipeline]) async {
+        if Date().timeIntervalSince(lastPoll).rounded() < pollInterval {
+            return
         }
+        lastPoll = Date()
+        for p in pipelines {
+            await updateStatus(pipeline: p)
+        }
+    }
+
+    private func updateStatus(pipeline p: Pipeline) async {
+        if !networkMonitor.isConnected && pipelineIsRemote(p) && pipelineHasSomeStatus(p) {
+            debugPrint("skipping/down \(p.feed.url)")
+            return
+        }
+        debugPrint("checking \(p.feed.url)")
+        // TODO: Multiple request will pile up if requests take longer than poll intervall
+        switch(p.feed.type) {
+        case .cctray:
+            let reader = CCTrayFeedReader(for: p)
+            await reader.updatePipelineStatus()
+            reader.pipelines.forEach({ model.update(pipeline: $0) })
+        case .github:
+            let reader = GitHubFeedReader(for: p)
+            await reader.updatePipelineStatus()
+            model.update(pipeline: reader.pipeline)
+        }
+    }
+
+    private func pipelineIsRemote(_ p: Pipeline) -> Bool {
+        if let url = URL(string: p.feed.url), url.host() != "localhost" {
+            return true
+        }
+        return false
+    }
+
+    private func pipelineHasSomeStatus(_ p: Pipeline) -> Bool {
+        return (p.status.lastBuild != nil || p.connectionError != nil)
     }
 
 }

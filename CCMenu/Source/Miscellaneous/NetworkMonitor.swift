@@ -26,6 +26,7 @@ public class NetworkMonitor {
         isConnected = (path.status == .satisfied)
         isLowDataConnection = path.isConstrained
         isExpensiveConnection = path.isExpensive
+        debugPrint("network path", path.debugDescription)
     }
 
 }
