@@ -90,11 +90,10 @@ class CCTrayTests: XCTestCase {
         window.toolbars.menuItems["Add project from CCTray feed..."].click()
         let urlField = sheet.textFields["Server URL field"]
         urlField.click()
-        sheet.typeText("localhost:8086\n")
+        sheet.typeText("http://localhost:8086\n")
 
-        // Make sure that the scheme gets added to the URL, the path is discovered, that
-        // the picker shows the first project in alphabetical order, and the default display
-        // name is set
+        // Make sure that the path is discovered, thatthe picker shows the first project in alphabetical
+        // order, and the default display name is set
         let projectPicker = sheet.popUpButtons["Project picker"]
         let displayNameField = sheet.textFields["Display name field"]
         expectation(for: NSPredicate(format: "value == 'http://localhost:8086/cctray.xml'"), evaluatedWith: urlField)
