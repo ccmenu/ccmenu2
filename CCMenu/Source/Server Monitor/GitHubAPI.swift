@@ -112,7 +112,6 @@ class GitHubAPI {
         if let token, !token.isEmpty {
             request.setValue(URLRequest.bearerAuthValue(token: token), forHTTPHeaderField: "Authorization")
         }
-        request.cachePolicy = .reloadRevalidatingCacheData
         return request
     }
 

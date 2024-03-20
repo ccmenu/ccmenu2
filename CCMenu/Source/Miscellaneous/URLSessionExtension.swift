@@ -11,10 +11,10 @@ extension URLSession {
     public static var feedSession = makeFeedSession()
 
     private static func makeFeedSession() -> URLSession {
-        let config = URLSessionConfiguration.default
+        let config = URLSessionConfiguration.ephemeral
         // TODO: Figure out why it uses permanent credential storage here
         // p credentialStorage?.allCredentials.values.first?.values.first?.persistence
-        config.urlCache = URLCache(memoryCapacity: 10*1024*1024, diskCapacity: 0)
+        config.urlCache = URLCache(memoryCapacity: 20*1024*1024, diskCapacity: 0)
         let session = URLSession(configuration: config, delegate: FeedSessionDelegate(), delegateQueue: nil)
         return session
     }
