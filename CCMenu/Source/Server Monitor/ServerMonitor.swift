@@ -48,7 +48,7 @@ class ServerMonitor {
             return
         }
         let newPipelines = Set(pipelines).subtracting(Set(model.pipelines))
-        Task { await self.updateStatus(pipelines: Array(newPipelines)) }
+        newPipelines.forEach({ p in Task { await updateStatus(pipeline: p) } })
     }
 
     private func updateStatus(pipelines: [Pipeline]) async {
