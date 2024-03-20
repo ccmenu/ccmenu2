@@ -20,7 +20,7 @@ enum GithHubFeedReaderError: LocalizedError {
             return HTTPURLResponse.localizedString(forStatusCode: statusCode)
         case .rateLimitError(let timestamp):
             let date = Date(timeIntervalSince1970: Double(timestamp)).formatted(date: .omitted, time: .shortened)
-            return String(format: NSLocalizedString("Rate limit exceeded. Next update at %@.", comment: ""), date)
+            return String(format: NSLocalizedString("Rate limit exceeded, next update at %@.", comment: ""), date)
         case .noStatusError:
             return "No status available for this pipeline."
         }
@@ -55,20 +55,19 @@ class GitHubFeedReader {
             pipeline.connectionError = nil
         } catch {
             if let error = error as? GithHubFeedReaderError, case .rateLimitError(let pauseUntil) = error {
-                pipeline.feed.setPauseUntil(pauseUntil)
+                pipeline.feed.setPauseUntil(pauseUntil, reason: error.localizedDescription)
+            } else {
+                pipeline.status = Pipeline.Status(activity: .other)
+                pipeline.connectionError = error.localizedDescription
             }
-            pipeline.status = Pipeline.Status(activity: .other)
-            pipeline.connectionError = error.localizedDescription
         }
     }
 
 
     private func fetchStatus(request: URLRequest) async throws -> Pipeline.Status? {
-        let (data, response) = try await URLSession.feedSession.data(for: request)
-        guard let response = response as? HTTPURLResponse else {
-            throw URLError(.unsupportedURL)
-        }
-        guard response.statusCode != 403 && response.statusCode != 429 else {
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        if response.statusCode == 403 || response.statusCode == 429 {
             guard let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0 else {
                 throw GithHubFeedReaderError.httpError(response.statusCode)
             }
@@ -77,7 +76,7 @@ class GitHubFeedReader {
             }
             throw GithHubFeedReaderError.rateLimitError(pauseUntil)
         }
-        guard response.statusCode == 200 else {
+        if response.statusCode != 200 {
             throw GithHubFeedReaderError.httpError(response.statusCode)
         }
         let parser = GitHubResponseParser()

@@ -88,13 +88,20 @@ struct PipelineRowViewModel {
     }
 
     var lastUpdatedMessage: String? {
-        guard let timestamp = pipeline.lastUpdated else { return nil }
+        var messageParts: [String] = []
         // We add a few seconds to avoid possible message flickering on and off
-        if Date().timeIntervalSince(timestamp) > (max(300, pollInterval) + 5) {
+        if let timestamp = pipeline.lastUpdated, Date().timeIntervalSince(timestamp) > (max(300, pollInterval) + 5) {
             let relative = timestamp.formatted(Date.RelativeFormatStyle(presentation: .named))
-            return "(status last updated \(relative))"
+            messageParts.append("Status last updated \(relative)")
         }
-        return nil
+        if let pauseReason = pipeline.feed.pauseReason {
+            messageParts.append(pauseReason)
+        }
+        if messageParts.isEmpty {
+            return nil
+        }
+        let message = messageParts.joined(separator: ". ")
+        return "(\(message))"
     }
 
     var feedTypeIconName: String {

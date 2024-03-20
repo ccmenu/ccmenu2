@@ -63,8 +63,8 @@ class GitHubTests: XCTestCase {
         let window = app.windows["Pipelines"]
 
         // Make sure the status shows that the limit was exceeded
-        let descriptionText = window.tables.staticTexts["Status description"]
-        expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded.'"), evaluatedWith: descriptionText)
+        let lastUpdatedText = window.tables.staticTexts["Last updated message"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
         waitForExpectations(timeout: 5)
 
         // Make sure there are no requests until the reset time is reached. We subtract a second to avoid
@@ -74,6 +74,7 @@ class GitHubTests: XCTestCase {
         XCTAssertFalse(didReceiveRequest)
 
         // Make sure that polling resumes and updates the status
+        let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
     }

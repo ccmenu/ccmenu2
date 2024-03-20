@@ -95,7 +95,7 @@ final class PipelineRowModelTests: XCTestCase {
         XCTAssertNil(pvm.lastUpdatedMessage)
     }
 
-    func testLastUpdatedTextIsNilWhenNoTimestampIsAvailable() throws {
+    func testLastUpdatedMessageIsNilWhenNoTimestampIsAvailable() throws {
         let pipeline = makePipeline(activity: .sleeping)
 
         let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
@@ -103,17 +103,17 @@ final class PipelineRowModelTests: XCTestCase {
         XCTAssertNil(pvm.lastUpdatedMessage)
     }
 
-    func testLastUpdatedTextWarnsWhenBuildHasntBeenUpdatedInAWhile() throws {
+    func testLastUpdatedMessageWarnsWhenBuildHasntBeenUpdatedInAWhile() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.lastUpdated = Date(timeIntervalSinceNow: -10*60)
 
         let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
 
-        XCTAssertEqual("(status last updated 10 minutes ago)",pvm.lastUpdatedMessage)
+        XCTAssertEqual("(Status last updated 10 minutes ago)",pvm.lastUpdatedMessage)
     }
 
-    func testLastUpdatedTextDoesntWarnWhenBuildHasntBeenUpdatedInAWhileButPollIntervalIsEvenLonger() throws {
+    func testLastUpdatedMessageDoesntWarnWhenBuildHasntBeenUpdatedInAWhileButPollIntervalIsEvenLonger() throws {
         var pipeline = makePipeline(activity: .sleeping)
         pipeline.status.lastBuild = Build(result: .success)
         pipeline.lastUpdated = Date(timeIntervalSinceNow: -10*60)
@@ -122,6 +122,27 @@ final class PipelineRowModelTests: XCTestCase {
 
         XCTAssertNil(pvm.lastUpdatedMessage)
     }
+
+    func testLastUpdatedIncludesPauseReasonIfAvailable() throws {
+        var pipeline = makePipeline(activity: .sleeping)
+        pipeline.status.lastBuild = Build(result: .success)
+        pipeline.lastUpdated = Date(timeIntervalSinceNow: -10*60)
+        pipeline.feed.pauseReason = "Rate limit exceeded, next update at 12:34."
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
+
+        XCTAssertEqual("(Status last updated 10 minutes ago. Rate limit exceeded, next update at 12:34.)",pvm.lastUpdatedMessage)
+    }
+
+    func testLastUpdatedIsShownWhenNeverUpdatedButPauseReasonIfAvailable() throws {
+        var pipeline = makePipeline(activity: .sleeping)
+        pipeline.feed.pauseReason = "Rate limit exceeded, next update at 12:34."
+
+        let pvm = PipelineRowViewModel(pipeline: pipeline, pollInterval: 5)
+
+        XCTAssertEqual("(Rate limit exceeded, next update at 12:34.)",pvm.lastUpdatedMessage)
+    }
+
 
 
     func testUrlWhenCCTrayHasUserAssignedName() throws {
