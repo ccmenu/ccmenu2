@@ -36,9 +36,8 @@ class TestHelper {
 
     @discardableResult
     static func startEmbeddedServer() throws -> HBApplication {
-        let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086)))
+        let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086), logLevel: .info))
         // If the following fails with "operation not permitted" see: https://developer.apple.com/forums/thread/114907
-        webapp.middleware.add(HBLogRequestsMiddleware(.info, includeHeaders: false))
         try webapp.start()
         return webapp
     }
