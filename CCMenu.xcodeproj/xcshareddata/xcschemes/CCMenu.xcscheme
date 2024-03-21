@@ -23,13 +23,17 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Testing"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO">
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-ignoreDefaults 1"
+            argument = "-ignoreDefaults true"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-pauseMonitor true"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -41,6 +45,16 @@
                BlueprintIdentifier = "03BD7E992598E57A000F9495"
                BuildableName = "CCMenuTests.xctest"
                BlueprintName = "CCMenuTests"
+               ReferencedContainer = "container:CCMenu.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3C95D34D2BAC601C007AED1E"
+               BuildableName = "CCMenuIntegrationTests.xctest"
+               BlueprintName = "CCMenuIntegrationTests"
                ReferencedContainer = "container:CCMenu.xcodeproj">
             </BuildableReference>
          </TestableReference>

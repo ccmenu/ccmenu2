@@ -39,12 +39,6 @@ class GitHubFeedReader {
     public func updatePipelineStatus() async {
         do {
             let token = try Keychain().getToken(forService: "GitHub")
-            if let pauseUntil = pipeline.feed.pauseUntil {
-                guard Date().timeIntervalSince1970 >= Double(pauseUntil) else {
-                    return
-                }
-                pipeline.feed.clearPauseUntil()
-            }
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
                 throw GithHubFeedReaderError.invalidURLError
             }

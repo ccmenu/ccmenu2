@@ -44,35 +44,6 @@ class CCTrayTests: XCTestCase {
         waitForExpectations(timeout: 2)
     }
 
-    func testShowsErrorWhenFeedDoesntContainProject() throws {
-        webapp.router.get("/cctray.xml") { _ in """
-            <Projects>
-                <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='other-project'></Project>
-            </Projects>
-        """}
-
-        let app = TestHelper.launchApp(pipelines: "CCTrayPipeline.json", pauseMonitor: false)
-        let window = app.windows["Pipelines"]
-
-        // Find the status description field (there's only one because there's only one pipeline), then
-        // wait for the update to the status text displaying the error message
-        let descriptionText = window.tables.staticTexts["Status description"]
-        expectation(for: NSPredicate(format: "value CONTAINS 'The server did not provide a status'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 5)
-    }
-
-    func testShowsErrorForHTTPError() throws {
-        let app = TestHelper.launchApp(pipelines: "CCTrayPipeline.json", pauseMonitor: false)
-        let window = app.windows["Pipelines"]
-
-        // Find the status description field (there's only one because there's only one pipeline), then
-        // wait for the error meesage from the embedded server, which is not found because we didn't
-        // register any routes
-        let descriptionText = window.tables.staticTexts["Status description"]
-        expectation(for: NSPredicate(format: "value CONTAINS 'The server responded: not found'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 5)
-    }
-
     func testAddsPipeline() throws {
         webapp.router.get("/cctray.xml") { _ in """
             <Projects>

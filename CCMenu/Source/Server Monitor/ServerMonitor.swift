@@ -51,7 +51,7 @@ class ServerMonitor {
         newPipelines.forEach({ p in Task { await updateStatus(pipeline: p) } })
     }
 
-    private func updateStatus(pipelines: [Pipeline]) async {
+    func updateStatus(pipelines: [Pipeline]) async {
         if Date().timeIntervalSince(lastPoll).rounded() < pollInterval {
             return
         }
@@ -63,10 +63,15 @@ class ServerMonitor {
 
     private func updateStatus(pipeline p: Pipeline) async {
         if !networkMonitor.isConnected && pipelineIsRemote(p) && pipelineHasSomeStatus(p) {
-            debugPrint("skipping/down \(p.feed.url)")
             return
         }
-        debugPrint("checking \(p.feed.url)")
+        var p = p
+        if let pauseUntil = p.feed.pauseUntil {
+            if Date().timeIntervalSince1970 <= Double(pauseUntil) {
+                return
+            }
+            p.feed.clearPauseUntil()
+        }
         // TODO: Multiple request will pile up if requests take longer than poll intervall
         switch(p.feed.type) {
         case .cctray:
