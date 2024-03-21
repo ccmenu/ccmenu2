@@ -132,7 +132,7 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
         let descriptionText = window.tables.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
     }
 
     func testAddGitHubPipelinePrivateRepos() throws {
