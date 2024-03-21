@@ -43,7 +43,8 @@ For now the roadmap is tracked in this readme file.
 
 - [ ] Optimised CCTray reader requests
 - [ ] Edit pipelines
-- [ ] Remaining menu appearance options
+- [X] Remaining menu appearance options
+- [X] Reduced polling frequency on low data connections
 
 ### Later
 
@@ -57,6 +58,5 @@ For now the roadmap is tracked in this readme file.
 - [ ] Show avatar in notifications (committer or repo owner)
 - [ ] Support for GitHub apps
 - [ ] Pipeline groups with submenus 
-- [ ] Reduced polling frequency on low data connections
 - [ ] Add Nevergreen-style dashboard (full screen window)
 - [ ] Embed libjq to transform feeds from other CI servers
