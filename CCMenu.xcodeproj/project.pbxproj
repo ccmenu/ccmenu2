@@ -92,7 +92,6 @@
 		3C4DEDA22B49AB7A00B85A8C /* NSWorkspaceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4DEDA12B49AB7A00B85A8C /* NSWorkspaceExtension.swift */; };
 		3C95D3512BAC601C007AED1E /* ServerMonitorIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95D3502BAC601C007AED1E /* ServerMonitorIntegrationTests.swift */; };
 		3C95D3582BAC651A007AED1E /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 3C95D3572BAC651A007AED1E /* Hummingbird */; };
-		3C95D35A2BAC651A007AED1E /* HummingbirdAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3C95D3592BAC651A007AED1E /* HummingbirdAuth */; };
 		3C9E0E532B9F143A00327CB9 /* NSApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9E0E522B9F143A00327CB9 /* NSApplicationExtension.swift */; };
 		3CB911D52B7142A0009DF781 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */; };
 		3CB911D72B78E891009DF781 /* URLRequestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB911D62B78E891009DF781 /* URLRequestExtension.swift */; };
@@ -249,7 +248,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C95D3582BAC651A007AED1E /* Hummingbird in Frameworks */,
-				3C95D35A2BAC651A007AED1E /* HummingbirdAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,7 +601,6 @@
 			name = CCMenuIntegrationTests;
 			packageProductDependencies = (
 				3C95D3572BAC651A007AED1E /* Hummingbird */,
-				3C95D3592BAC651A007AED1E /* HummingbirdAuth */,
 			);
 			productName = CCMenuIntegrationTests;
 			productReference = 3C95D34E2BAC601C007AED1E /* CCMenuIntegrationTests.xctest */;
@@ -1461,11 +1458,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */;
 			productName = Hummingbird;
-		};
-		3C95D3592BAC651A007AED1E /* HummingbirdAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */;
-			productName = HummingbirdAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
