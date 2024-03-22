@@ -7,9 +7,9 @@
 import AppKit
 import SecurityInterface
 
-public class TrustManager {
+class TrustManager {
 
-    public static func includedSSLPeerTrust(forError error: Error) -> SecTrust? {
+    static func includedSSLPeerTrust(forError error: Error) -> SecTrust? {
         let error = error as NSError
         if error.domain == NSURLErrorDomain && error.code == NSURLErrorServerCertificateUntrusted {
             if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError {
@@ -21,7 +21,7 @@ public class TrustManager {
         return nil
     }
 
-    public static func showCertificateTrustPanel(forTrust trust: SecTrust) -> Bool {
+    static func showCertificateTrustPanel(forTrust trust: SecTrust) -> Bool {
         let panel: SFCertificateTrustPanel = SFCertificateTrustPanel.shared()
         panel.setInformativeText("The certificate used by the server is not trusted. You can inspect it below.\n\nIf you want to connect anyway, click the \"Show Certificate\" button and tick the \"Always trust\" checkbox before continuing.")
         panel.setAlternateButtonTitle("Cancel")

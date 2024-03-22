@@ -12,7 +12,7 @@ enum GithHubFeedReaderError: LocalizedError {
     case rateLimitError(Int)
     case noStatusError
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .invalidURLError:
             return NSLocalizedString("invalid URL", comment: "")
@@ -32,11 +32,11 @@ class GitHubFeedReader {
 
     private(set) var pipeline: Pipeline
 
-    public init(for pipeline: Pipeline) {
+    init(for pipeline: Pipeline) {
         self.pipeline = pipeline
     }
 
-    public func updatePipelineStatus() async {
+    func updatePipelineStatus() async {
         do {
             let token = try Keychain().getToken(forService: "GitHub")
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {

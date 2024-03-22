@@ -72,7 +72,7 @@ extension Pipeline: Transferable {
 
 extension Pipeline {
 
-    public static func fromPersistedDictionary(dict: Dictionary<String, String>) -> Pipeline? {
+    static func fromPersistedDictionary(dict: Dictionary<String, String>) -> Pipeline? {
         // TODO: this looks ugly and isn't helpful
         guard
             let name = dict["name"],
@@ -86,7 +86,7 @@ extension Pipeline {
         return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName))
     }
 
-    public func asDictionaryForPersisting() -> Dictionary<String, String> {
+    func asDictionaryForPersisting() -> Dictionary<String, String> {
         [ "name": self.name,
           "feedType": String(describing: self.feed.type),
           "feedUrl": self.feed.url,

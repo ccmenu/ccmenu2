@@ -8,7 +8,7 @@ import Foundation
 
 extension URLRequest {
     
-    public static func basicAuthValue(user: String, password: String) -> String {
+    static func basicAuthValue(user: String, password: String) -> String {
         let credentialString = "\(user):\(password)"
         guard let credentialData = credentialString.data(using: .utf8) else {
             // TODO: Consider adding error handling here
@@ -18,7 +18,7 @@ extension URLRequest {
         return "Basic \(credentialAsBase64)"
     }
     
-    public static func bearerAuthValue(token: String) -> String {
+    static func bearerAuthValue(token: String) -> String {
         return "Bearer \(token)"
     }
     

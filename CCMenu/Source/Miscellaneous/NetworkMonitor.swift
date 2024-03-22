@@ -7,7 +7,7 @@
 import Foundation
 import Network
 
-public class NetworkMonitor {
+class NetworkMonitor {
     private let monitor = NWPathMonitor()
     private(set) var isConnected = false
     private(set) var isLowDataConnection = false

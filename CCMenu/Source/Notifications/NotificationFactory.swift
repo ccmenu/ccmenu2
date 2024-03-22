@@ -8,7 +8,7 @@ import AppKit
 import UserNotifications
 
 
-public enum NotificationType: String {
+enum NotificationType: String {
     case // raw values for compatibility with legacy defaults
     started = "Starting",
     wasSuccessful = "Successful",

@@ -8,7 +8,7 @@ import AppKit
 
 extension URLSession {
 
-    public static var feedSession = makeFeedSession()
+    static var feedSession = makeFeedSession()
 
     private static func makeFeedSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral

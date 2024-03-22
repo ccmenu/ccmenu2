@@ -30,7 +30,7 @@ class ServerMonitor {
         }
     }
 
-    public func start() {
+    func start() {
         networkMonitor.start()
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
             Task { await self.updateStatusIfPollTimeHasBeenReached() }

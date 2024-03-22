@@ -12,7 +12,7 @@ enum CCTrayFeedReaderError: LocalizedError {
     case missingPasswordError
     case httpError(Int)
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .invalidURLError:
             return NSLocalizedString("invalid URL", comment: "")
@@ -31,11 +31,11 @@ class CCTrayFeedReader {
 
     private(set) var pipelines: [Pipeline]
 
-    public init(for pipelines: [Pipeline]) {
+    init(for pipelines: [Pipeline]) {
         self.pipelines = pipelines
     }
     
-    public func updatePipelineStatus() async {
+    func updatePipelineStatus() async {
         do {
             // All pipelines have the same URL.
             let request = try requestForFeed(feed: pipelines[0].feed)

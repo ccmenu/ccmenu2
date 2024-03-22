@@ -18,7 +18,7 @@ enum KeychainAccessError: Error {
 
 class Keychain {
 
-    public func setPassword(_ password: String, forURL urlString: String) throws {
+    func setPassword(_ password: String, forURL urlString: String) throws {
         let url = try getOrThrow(error: .invalidURLErr) { URL(string: urlString) }
         let query: [String: Any] = [
             kSecClass as String:        kSecClassInternetPassword,
@@ -34,7 +34,7 @@ class Keychain {
         try setItem(item, forQuery: query)
     }
 
-    public func getPassword(forURL url: URL) throws -> String? {
+    func getPassword(forURL url: URL) throws -> String? {
         let query: [String: Any] = [
             kSecClass as String:        kSecClassInternetPassword,
             kSecAttrServer as String:   try getOrThrow(error: .missingHostErr) { url.host() },
@@ -46,7 +46,7 @@ class Keychain {
     }
 
 
-    public func setToken(_ token: String, forService service: String) throws {
+    func setToken(_ token: String, forService service: String) throws {
         let query: [String: Any] = [
             kSecClass as String:        kSecClassGenericPassword,
             kSecAttrService as String:  serviceForKeychain(service: service)
@@ -58,7 +58,7 @@ class Keychain {
         try setItem(item, forQuery: query)
     }
 
-    public func getToken(forService service: String) throws -> String? {
+    func getToken(forService service: String) throws -> String? {
         if service == "GitHub", let token = UserDefaults.active.string(forKey: "GitHubToken") {
             return token
         }

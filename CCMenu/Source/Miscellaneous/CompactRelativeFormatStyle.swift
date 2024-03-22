@@ -6,10 +6,10 @@
 
 import Foundation
 
-public struct CompactRelativeFormatStyle : FormatStyle, Sendable {
+struct CompactRelativeFormatStyle : FormatStyle, Sendable {
 
-    public typealias FormatInput = Date
-    public typealias FormatOutput = String
+    typealias FormatInput = Date
+    typealias FormatOutput = String
 
     private var reference: Date
 
@@ -17,7 +17,7 @@ public struct CompactRelativeFormatStyle : FormatStyle, Sendable {
         self.reference = reference
     }
 
-    public func format(_ value: Date) -> String {
+    func format(_ value: Date) -> String {
         let interval = value.timeIntervalSince(reference)
         let sign = (interval < 0) ? "-" : "+"
         let seconds = Int(abs(interval))
@@ -38,7 +38,7 @@ public struct CompactRelativeFormatStyle : FormatStyle, Sendable {
 
 extension FormatStyle where Self == CompactRelativeFormatStyle {
 
-    public static func compactRelative(reference: Date = Date.now) -> Self {
+    static func compactRelative(reference: Date = Date.now) -> Self {
         return CompactRelativeFormatStyle(reference: reference)
     }
 
