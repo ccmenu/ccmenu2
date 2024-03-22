@@ -88,7 +88,7 @@ class CCTrayTests: XCTestCase {
 
     func testAddsPipelineWithAuthentication() throws {
         webapp.router.get("/cctray.xml") { request in
-            guard request.authBasic?.username == "dev" && request.authBasic?.password == "rosebud" else {
+            if request.authBasic?.username != "dev" || request.authBasic?.password != "rosebud" {
                 throw HBHTTPError(.unauthorized)
             }
             return """
@@ -120,7 +120,7 @@ class CCTrayTests: XCTestCase {
 
     func testShowsErrorWhenAddingPipelineWithAuthenticationButMissingLogin() throws {
         webapp.router.get("/cctray.xml") { request in
-            guard request.authBasic?.username == "dev" && request.authBasic?.password == "rosebud" else {
+            if request.authBasic?.username != "dev" || request.authBasic?.password != "rosebud" {
                 throw HBHTTPError(.unauthorized)
             }
             return ""

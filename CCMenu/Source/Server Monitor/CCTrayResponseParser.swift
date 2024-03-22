@@ -29,9 +29,7 @@ class CCTrayResponseParser {
     }
 
     func pipelineStatus(name: String) -> Pipeline.Status? {
-        guard let project = projectList.first(where: { $0["name"] == name }) else {
-            return nil
-        }
+        guard let project = projectList.first(where: { $0["name"] == name }) else { return nil }
         var status = Pipeline.Status(activity: activityForString(project["activity"]))
         status.webUrl = project["webUrl"]
 

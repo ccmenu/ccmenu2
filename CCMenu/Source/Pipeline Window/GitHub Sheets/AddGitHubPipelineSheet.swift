@@ -124,9 +124,7 @@ struct AddGitHubPipelineSheet: View {
             }
         }
         .onDisappear() {
-            guard let token = authenticator.token else {
-                return
-            }
+            guard let token = authenticator.token else { return }
             do {
                 try Keychain().setToken(token, forService: "GitHub")
             } catch {

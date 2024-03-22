@@ -76,7 +76,7 @@ class Keychain {
         if status == errSecDuplicateItem {
             status = SecItemUpdate(query as CFDictionary, item as CFDictionary)
         }
-        guard status == errSecSuccess else {
+        if status != errSecSuccess {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
         }
     }
@@ -89,19 +89,15 @@ class Keychain {
         if status == errSecItemNotFound {
             return nil
         }
-        guard status == errSecSuccess else {
+        if status != errSecSuccess {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
         }
-        guard let data = result as? Data else {
-            return nil
-        }
+        guard let data = result as? Data else { return nil }
         return String(data: data, encoding: .utf8)
     }
     
     private func getOrThrow<T>(error: KeychainAccessError, _ getter: () -> T?) throws -> T {
-        guard let v = getter() else {
-            throw error
-        }
+        guard let v = getter() else { throw error }
         return v
     }
     

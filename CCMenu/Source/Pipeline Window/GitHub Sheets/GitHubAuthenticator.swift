@@ -64,10 +64,8 @@ class GitHubAuthenticator: ObservableObject {
     private func fetchDeviceCode(request: URLRequest) async -> GitHubDeviceCodeResponse? {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            guard let response = response as? HTTPURLResponse else {
-                throw URLError(.unsupportedURL)
-            }
-            guard response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            if response.statusCode != 200 {
                 return nil
             }
             let decoder = JSONDecoder()
@@ -81,10 +79,8 @@ class GitHubAuthenticator: ObservableObject {
     private func fetchAccessToken(codeResponse: GitHubDeviceCodeResponse, request: URLRequest) async -> (String?, String?) {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            guard let response = response as? HTTPURLResponse else {
-                throw URLError(.unsupportedURL)
-            }
-            guard response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            if response.statusCode != 200 {
                 return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
             }
             let json = try JSONDecoder().decode(Dictionary<String, String>.self, from: data)

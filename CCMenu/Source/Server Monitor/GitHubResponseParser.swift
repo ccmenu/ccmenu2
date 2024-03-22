@@ -19,10 +19,7 @@ class GitHubResponseParser {
     }
 
     func pipelineStatus(name: String) -> Pipeline.Status? {
-        guard let latest = runList.first else {
-            return nil
-        }
-
+        guard let latest = runList.first else { return nil }
         var status = Pipeline.Status(activity: .other)
         status.webUrl = latest["html_url"] as? String
         if let wfStatus = latest["status"] as? String {

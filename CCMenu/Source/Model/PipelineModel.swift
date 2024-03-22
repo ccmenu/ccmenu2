@@ -43,7 +43,7 @@ final class PipelineModel: ObservableObject {
     
     @discardableResult
     func add(pipeline newPipeline: Pipeline) -> Bool {
-        guard !pipelines.contains(where: {$0.id == newPipeline.id}) else {
+        if pipelines.contains(where: {$0.id == newPipeline.id}){
             return false
         }
         pipelines.append(newPipeline)
@@ -68,9 +68,7 @@ final class PipelineModel: ObservableObject {
     }
 
     private func loadPipelinesFromLegacyDefaults() {
-        guard let legacyProjects = UserDefaults.active.array(forKey: "Projects") as? Array<Dictionary<String, String>> else {
-            return
-        }
+        guard let legacyProjects = UserDefaults.active.array(forKey: "Projects") as? Array<Dictionary<String, String>> else { return }
         for project in legacyProjects {
             if let projectName = project["projectName"], let serverUrl = project["serverUrl"] {
                 let name = project["displayName"] ?? projectName

@@ -29,8 +29,4 @@ class CCTrayAPI {
         return request
     }
 
-    static func localizedString(forStatusCode code: Int) -> String {
-        let httpError = HTTPURLResponse.localizedString(forStatusCode: code)
-        return "The server responded: \(httpError)"
-    }
 }

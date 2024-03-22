@@ -80,9 +80,7 @@ class GitHubAPI {
 
     static func requestForFeed(feed: Pipeline.Feed, token: String?) -> URLRequest? {
         // TODO: Consider using URLComponents to append page size query parameter properly
-        guard let url = URL(string: feed.url + "?per_page=3") else {
-            return nil
-        }
+        guard let url = URL(string: feed.url + "?per_page=3") else { return nil }
         return makeRequest(url: url, token: token)
     }
 

@@ -74,11 +74,9 @@ class CCTrayProjectList: ObservableObject {
 
     func fetchProjects(request: URLRequest) async throws -> [CCTrayProject] {
         let (data, response) = try await URLSession.feedSession.data(for: request)
-        guard let response = response as? HTTPURLResponse else {
-            throw URLError(.unsupportedURL)
-        }
-        guard response.statusCode == 200 else {
-            return [CCTrayProject(message: CCTrayAPI.localizedString(forStatusCode: response.statusCode))]
+        guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        if response.statusCode != 200 {
+            return [CCTrayProject(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
         }
         let parser = CCTrayResponseParser()
         do {

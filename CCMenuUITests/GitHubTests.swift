@@ -50,7 +50,7 @@ class GitHubTests: XCTestCase {
         var didReceiveRequest = false
         webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r -> String in
             didReceiveRequest = true
-            guard Date() >= limitResetTime else {
+            if Date() < limitResetTime {
                 r.response.status = .forbidden
                 r.response.headers.replaceOrAdd(name: "x-ratelimit-remaining", value: "0")
                 r.response.headers.replaceOrAdd(name: "x-ratelimit-reset", value: String(Int(limitResetTime.timeIntervalSince1970)))

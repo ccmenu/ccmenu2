@@ -18,7 +18,7 @@ enum CCTrayFeedReaderError: LocalizedError {
         case .missingPasswordError:
             return NSLocalizedString("no matching password in Keychain", comment: "")
         case .httpError(let statusCode):
-            return CCTrayAPI.localizedString(forStatusCode: statusCode)
+            return HTTPURLResponse.localizedString(forStatusCode: statusCode)
         }
     }
 }
@@ -46,9 +46,7 @@ class CCTrayFeedReader {
     }
 
     func requestForFeed(feed: Pipeline.Feed) throws -> URLRequest {
-        guard let url = URL(string: feed.url) else {
-            throw CCTrayFeedReaderError.invalidURLError
-        }
+        guard let url = URL(string: feed.url) else { throw CCTrayFeedReaderError.invalidURLError }
         var credential: HTTPCredential?
         if let user = url.user() {
             guard let password = try Keychain().getPassword(forURL: url) else {
@@ -61,10 +59,8 @@ class CCTrayFeedReader {
 
     private func fetchStatus(request: URLRequest) async throws {
         let (data, response) = try await URLSession.feedSession.data(for: request)
-        guard let response = response as? HTTPURLResponse else {
-            throw URLError(.unsupportedURL)
-        }
-        guard response.statusCode == 200 else {
+        guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        if response.statusCode != 200 {
             throw CCTrayFeedReaderError.httpError(response.statusCode)
         }
         let parser = CCTrayResponseParser()
@@ -76,9 +72,7 @@ class CCTrayFeedReader {
     }
 
     func updatePipeline(name: String, newStatus: Pipeline.Status?) {
-        guard let idx = pipelines.firstIndex(where: { p in p.name == name }) else {
-            return
-        }
+        guard let idx = pipelines.firstIndex(where: { p in p.name == name }) else { return }
         var pipeline = pipelines[idx]
         guard let newStatus else {
             pipeline.connectionError = "The server did not provide a status for this pipeline."

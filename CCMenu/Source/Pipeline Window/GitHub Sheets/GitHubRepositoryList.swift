@@ -44,10 +44,8 @@ class GitHubRepositoryList: ObservableObject {
     private func fetchRepositories(request: URLRequest) async -> [GitHubRepository] {
         do {
             let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else {
-                throw URLError(.unsupportedURL)
-            }
-            guard response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            if response.statusCode != 200 {
                 return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
             }
             return try JSONDecoder().decode([GitHubRepository].self, from: data)

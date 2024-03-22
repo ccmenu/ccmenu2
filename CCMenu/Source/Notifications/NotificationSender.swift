@@ -35,7 +35,7 @@ class NotificationSender {
         let center = UNUserNotificationCenter.current()
         try await center.requestAuthorization(options: [.alert])
         let settings = await center.notificationSettings()
-        guard settings.authorizationStatus == .authorized && settings.alertSetting == .enabled else {
+        if settings.authorizationStatus != .authorized || settings.alertSetting != .enabled {
             return
         }
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)

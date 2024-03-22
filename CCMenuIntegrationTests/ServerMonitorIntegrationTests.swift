@@ -41,7 +41,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
 
-        XCTAssertEqual("The server responded: not found", model.pipelines.first?.connectionError)
+        XCTAssertEqual("not found", model.pipelines.first?.connectionError)
     }
     
     func testShowsErrorWhenFeedDoesntContainProject() async throws {

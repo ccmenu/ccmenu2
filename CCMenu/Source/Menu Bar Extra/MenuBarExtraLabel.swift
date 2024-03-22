@@ -42,9 +42,7 @@ struct MenuBarExtraLabel: View {
             image = renderer.nsImage
             image?.isTemplate = true
         }
-        guard let image else {
-            return nil
-        }
+        guard let image else { return nil }
         return Image(nsImage: image)
     }
 
