@@ -61,7 +61,6 @@
 		03BD7EDB2598ED9B000F9495 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EDA2598ED9B000F9495 /* Credits.rtf */; };
 		03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BD7EF9259A180C000F9495 /* NSImageExtension.swift */; };
 		03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11E92652F49100130833 /* ServerMonitor.swift */; };
-		03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11ED2652F6B900130833 /* FeedReader.swift */; };
 		03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */; };
 		03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC11F1265467C200130833 /* CCTrayResponseParser.swift */; };
 		03CC61CF2BA757050008EE76 /* TrustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CC61CE2BA757050008EE76 /* TrustManager.swift */; };
@@ -182,7 +181,6 @@
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* NSImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
 		03CC11E92652F49100130833 /* ServerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMonitor.swift; sourceTree = "<group>"; };
-		03CC11ED2652F6B900130833 /* FeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReader.swift; sourceTree = "<group>"; };
 		03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayFeedReader.swift; sourceTree = "<group>"; };
 		03CC11F1265467C200130833 /* CCTrayResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayResponseParser.swift; sourceTree = "<group>"; };
 		03CC61CE2BA757050008EE76 /* TrustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustManager.swift; sourceTree = "<group>"; };
@@ -507,7 +505,6 @@
 			isa = PBXGroup;
 			children = (
 				03CC11E92652F49100130833 /* ServerMonitor.swift */,
-				03CC11ED2652F6B900130833 /* FeedReader.swift */,
 				03CC11EF2652F70800130833 /* CCTrayFeedReader.swift */,
 				03CC11F1265467C200130833 /* CCTrayResponseParser.swift */,
 				03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */,
@@ -767,7 +764,6 @@
 				037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */,
 				0336DBAE2984903B00E5811C /* AddGitHubPipelineSheet.swift in Sources */,
 				03412ADF2B5DCC8A00EFDFCB /* CCTrayProjectList.swift in Sources */,
-				03CC11EE2652F6B900130833 /* FeedReader.swift in Sources */,
 				03825DE8259D005B00DEB003 /* PipelineModel.swift in Sources */,
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03B263F22B50968800CA989A /* StatusChange.swift in Sources */,
