@@ -35,6 +35,9 @@ struct PipelineCommands: Commands {
             // user know if the pipeline has an associated password or token, which should not be
             // added to the export, at least not by default
             // https://developer.apple.com/videos/play/wwdc2022/10062/
+            //
+            // While at it review the code in Pipeline.fromPersistedDictionary()
+            
 //            .fileExporter(isPresented: $isShowingExporter, item: model.pipelines, contentTypes: [.json]) { result in
 //                switch result {
 //                case .success(let fileurl):

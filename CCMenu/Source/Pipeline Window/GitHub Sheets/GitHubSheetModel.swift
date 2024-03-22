@@ -95,7 +95,7 @@ struct GitHubWorkflow: Identifiable, Hashable, Decodable {
         guard let path = path else {
             return ""
         }
-        return (path as NSString).lastPathComponent // TODO: is this the way to do it, really?
+        return (path as NSString).lastPathComponent // TODO: Consider using URL's lastPathComponent instead
     }
 
 }

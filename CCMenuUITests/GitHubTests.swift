@@ -179,7 +179,7 @@ class GitHubTests: XCTestCase {
         // repository is shown, and that its shown even when its owner's name uses camel case
         XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
         XCTAssertFalse(repositoryPicker.menuItems["iEnterpriseArchitect"].exists)
-        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists) // TODO: Split tests and only use token in a test that doesn't click Apply
+        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
     }
 
 }

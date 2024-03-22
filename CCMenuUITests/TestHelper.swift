@@ -28,8 +28,7 @@ class TestHelper {
     @discardableResult
     static func openMenu(app: XCUIApplication) -> XCUIElementQuery {
         // If this drops you into the debugger see https://stackoverflow.com/a/64375512/409663
-        let statusItem = app.menuBars.statusItems.element // TODO: workaround because line below doesn't work anymore
-        // let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
+        let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
         statusItem.click()
         return statusItem.children(matching: .menu)
     }

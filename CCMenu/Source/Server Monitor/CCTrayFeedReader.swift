@@ -8,6 +8,7 @@ import Foundation
 
 enum CCTrayFeedReaderError: LocalizedError {
     case invalidURLError
+    case noProjectName
     case missingPasswordError
     case httpError(Int)
 
@@ -15,6 +16,8 @@ enum CCTrayFeedReaderError: LocalizedError {
         switch self {
         case .invalidURLError:
             return NSLocalizedString("invalid URL", comment: "")
+        case .noProjectName:
+            return NSLocalizedString("no project name in CCTray pipeline", comment: "")
         case .missingPasswordError:
             return NSLocalizedString("no matching password in Keychain", comment: "")
         case .httpError(let statusCode):
@@ -66,7 +69,8 @@ class CCTrayFeedReader {
         let parser = CCTrayResponseParser()
         try parser.parseResponse(data)
         for p in self.pipelines {
-            let status = parser.pipelineStatus(name: p.feed.name ?? "") // TODO: Consider throwing an error
+            guard let name = p.feed.name else { throw CCTrayFeedReaderError.noProjectName }
+            let status = parser.pipelineStatus(name: name)
             self.updatePipeline(name: p.name, newStatus: status)
         }
     }

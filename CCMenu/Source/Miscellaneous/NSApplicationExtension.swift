@@ -10,7 +10,6 @@ import ServiceManagement
 extension NSApplication {
 
     func activateThisApp() {
-        // TODO: There must be a better way...
         if #available(macOS 14.0, *) {
             NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
         } else {

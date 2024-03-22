@@ -10,7 +10,6 @@ extension NSWorkspace {
 
     func openWebPage(pipeline: Pipeline) {
         if let error = pipeline.connectionError {
-            // TODO: Consider adding a UI test for this case
             alertPipelineFeedError(error)
         } else {
             openPipelineWebPage(pipeline.status.webUrl)
