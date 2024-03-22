@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,7 +39,6 @@
 		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
 		0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */; };
 		037AB215297334EE00C33589 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB214297334EE00C33589 /* UserDefaultsExtension.swift */; };
-		037AB21629733C2500C33589 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03BD7EAB2598E57A000F9495 /* Info.plist */; };
 		037AB2182979E30300C33589 /* MenuBarExtraMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB2172979E30300C33589 /* MenuBarExtraMenu.swift */; };
 		037AB21A297B1DCD00C33589 /* MenuBarExtraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB219297B1DCD00C33589 /* MenuBarExtraLabel.swift */; };
 		037AB21C297B4D5F00C33589 /* PipelineModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037AB21B297B4D5F00C33589 /* PipelineModelTests.swift */; };
@@ -179,9 +178,7 @@
 		03BD7E942598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7E952598E57A000F9495 /* CCMenu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenu.entitlements; sourceTree = "<group>"; };
 		03BD7E9A2598E57A000F9495 /* CCMenuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03BD7EA02598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7EA52598E57A000F9495 /* CCMenuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CCMenuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03BD7EAB2598E57A000F9495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03BD7EDA2598ED9B000F9495 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		03BD7EF9259A180C000F9495 /* NSImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
 		03CC11E92652F49100130833 /* ServerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMonitor.swift; sourceTree = "<group>"; };
@@ -384,7 +381,6 @@
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				3CB911D82B78EB3F009DF781 /* URLRequestExtensionTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* NSImageExtensionTests.swift */,
-				03BD7EA02598E57A000F9495 /* Info.plist */,
 			);
 			path = CCMenuTests;
 			sourceTree = "<group>";
@@ -399,7 +395,6 @@
 				0322053A2B9E5DBB00205DC6 /* TestHelper.swift */,
 				0322051E2B9139A700205DC6 /* Pipelines */,
 				0322051F2B913BC900205DC6 /* Responses */,
-				03BD7EAB2598E57A000F9495 /* Info.plist */,
 				0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */,
 			);
 			path = CCMenuUITests;
@@ -644,7 +639,7 @@
 				};
 			};
 			buildConfigurationList = 03BD7E802598E578000F9495 /* Build configuration list for PBXProject "CCMenu" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -693,7 +688,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */,
-				037AB21629733C2500C33589 /* Info.plist in Resources */,
 				032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */,
 				0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */,
 				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
@@ -1042,7 +1036,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuTests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1067,7 +1062,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuTests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1092,7 +1088,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuUITests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1117,7 +1113,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuUITests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1295,7 +1291,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuTests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1352,7 +1349,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = CCMenuUITests/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
