@@ -28,8 +28,8 @@ class CCTrayFeedReader {
 
     private(set) var pipelines: [Pipeline]
 
-    public init(for pipeline: Pipeline) {
-        self.pipelines = [pipeline]
+    public init(for pipelines: [Pipeline]) {
+        self.pipelines = pipelines
     }
     
     public func updatePipelineStatus() async {
@@ -38,9 +38,10 @@ class CCTrayFeedReader {
             let request = try requestForFeed(feed: pipelines[0].feed)
             try await fetchStatus(request: request)
         } catch {
-            // TODO: Add error to all pipelines
-            pipelines[0].status = Pipeline.Status(activity: .other)
-            pipelines[0].connectionError = error.localizedDescription
+            for i in 0..<pipelines.count {
+                pipelines[i].status = Pipeline.Status(activity: .other)
+                pipelines[i].connectionError = error.localizedDescription
+            }
         }
     }
 
@@ -76,11 +77,10 @@ class CCTrayFeedReader {
 
     func updatePipeline(name: String, newStatus: Pipeline.Status?) {
         guard let idx = pipelines.firstIndex(where: { p in p.name == name }) else {
-            debugPrint("Attempt to update pipeline '\(name)', which reader for '\(pipelines[0].feed.url)' does not monitor.")
             return
         }
         var pipeline = pipelines[idx]
-        guard let newStatus = newStatus else {
+        guard let newStatus else {
             pipeline.connectionError = "The server did not provide a status for this pipeline."
             pipelines[idx] = pipeline
             return

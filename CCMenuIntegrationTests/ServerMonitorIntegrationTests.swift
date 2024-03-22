@@ -22,44 +22,6 @@ final class ServerMonitorIntegrationTests: XCTestCase {
     }
     
 
-    func testDoesntPollWhenPipelineIsPaused() async throws {
-        var requestCounter = 0
-        webapp.router.get("/runs", options: .editResponse) { r -> String in
-            requestCounter += 1
-            r.response.status = .forbidden
-            return "{ }"
-        }
-
-        let model = PipelineModel()
-        var pipeline = Pipeline(name: "CCMenu2", feed: Pipeline.Feed(type: .github, url: "http://localhost:8086/runs", name: nil))
-        pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: +600).timeIntervalSince1970)
-        model.add(pipeline: pipeline)
-
-        let monitor = await ServerMonitor(model: model)
-        await monitor.updateStatus(pipelines: model.pipelines)
-
-        XCTAssertEqual(0, requestCounter)
-    }
-    
-    func testPollsAndClearsPausedIfPausedUntilIsInThePast() async throws {
-        webapp.router.get("/cctray.xml") { _ in """
-            <Projects>
-                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour'></Project>
-            </Projects>
-        """}
-
-        let model = PipelineModel()
-        var pipeline = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "connectfour"))
-        pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: -5).timeIntervalSince1970)
-        model.add(pipeline: pipeline)
-        
-        let monitor = await ServerMonitor(model: model)
-        await monitor.updateStatus(pipelines: model.pipelines)
-    
-        XCTAssertNil(model.pipelines.first?.feed.pauseUntil)
-        XCTAssertEqual("build.888", model.pipelines.first?.status.lastBuild?.label)
-    }
-    
     func testShowsErrorWhenConnectionFails() async throws {
         webapp.stop()
 
@@ -67,8 +29,8 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "connectfour")))
         
         let monitor = await ServerMonitor(model: model)
-        await monitor.updateStatus(pipelines: model.pipelines)
-    
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
         XCTAssertEqual("Could not connect to the server.", model.pipelines.first?.connectionError)
     }
 
@@ -77,7 +39,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "connectfour")))
 
         let monitor = await ServerMonitor(model: model)
-        await monitor.updateStatus(pipelines: model.pipelines)
+        await monitor.updateStatusIfPollTimeHasBeenReached()
 
         XCTAssertEqual("The server responded: not found", model.pipelines.first?.connectionError)
     }
@@ -93,9 +55,75 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "connectfour")))
         
         let monitor = await ServerMonitor(model: model)
-        await monitor.updateStatus(pipelines: model.pipelines)
-    
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
         XCTAssertEqual("The server did not provide a status for this pipeline.", model.pipelines.first?.connectionError)
+    }
+
+    func testOnlyMakesOneRequestForProjectsInTheSameCCTrayFeed() async throws {
+        var requestCounter = 0
+        webapp.router.get("/cctray.xml") { _ in
+            requestCounter += 1
+            return """
+            <Projects>
+                <Project activity='Sleeping' lastBuildLabel='build.123' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='other-project'></Project>
+                <Project activity='Sleeping' lastBuildLabel='build.888' lastBuildStatus='Success' lastBuildTime='2024-02-11T23:19:26+01:00' name='connectfour'></Project>
+            </Projects>
+        """}
+
+        let model = PipelineModel()
+        model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "other-project", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/cctray.xml", name: "other-project")))
+
+        let monitor = await ServerMonitor(model: model)
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
+        XCTAssertEqual("build.888", model.pipelines.first(where: { $0.name == "connectfour" })?.status.lastBuild?.label)
+        XCTAssertEqual("build.123", model.pipelines.first(where: { $0.name == "other-project" })?.status.lastBuild?.label)
+        XCTAssertEqual(1, requestCounter)
+    }
+
+    func testDoesntPollWhenGitHubPipelineIsPaused() async throws {
+        var requestCounter = 0
+        webapp.router.get("/runs", options: .editResponse) { r -> String in
+            requestCounter += 1
+            r.response.status = .forbidden
+            return "{ }"
+        }
+
+        let model = PipelineModel()
+        var pipeline = Pipeline(name: "CCMenu2", feed: Pipeline.Feed(type: .github, url: "http://localhost:8086/runs"))
+        pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: +600).timeIntervalSince1970)
+        model.add(pipeline: pipeline)
+
+        let monitor = await ServerMonitor(model: model)
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
+        XCTAssertEqual(0, requestCounter)
+    }
+
+    func testPollsAndClearsPausedOnGitHubPipelineIfPausedUntilIsInThePast() async throws {
+        webapp.router.get("/runs") { _ in """
+            { "workflow_runs": [{
+                "display_title" : "Just testing",
+                "run_number": 17,
+                "status": "completed",
+                "conclusion": "success",
+                "created_at": "2021-05-14T12:04:23Z",
+                "updated_at": "2021-05-14T12:06:57Z",
+            }]}
+        """}
+
+        let model = PipelineModel()
+        var pipeline = Pipeline(name: "CCMenu2", feed: Pipeline.Feed(type: .github, url: "http://localhost:8086/runs"))
+        pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: -5).timeIntervalSince1970)
+        model.add(pipeline: pipeline)
+
+        let monitor = await ServerMonitor(model: model)
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
+        XCTAssertNil(model.pipelines.first?.feed.pauseUntil)
+        XCTAssertEqual("17", model.pipelines.first?.status.lastBuild?.label)
     }
 
 }

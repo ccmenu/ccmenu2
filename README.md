@@ -41,7 +41,7 @@ For now the roadmap is tracked in this readme file.
 
 ### Pre-release 5 (planned)
 
-- [ ] Optimised CCTray reader requests
+- [X] Optimised CCTray reader requests
 - [ ] Edit pipelines
 - [X] Remaining menu appearance options
 - [X] Reduced polling frequency on low data connections

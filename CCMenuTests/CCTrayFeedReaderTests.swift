@@ -17,7 +17,7 @@ class CCTrayFeedReaderTests: XCTestCase {
 
     func testUpdatesAllRelevantFieldsOnPipelineWithNoBuildsWhenSleeping() throws {
         let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .sleeping)
         status.webUrl = "http://localhost/"
@@ -38,7 +38,7 @@ class CCTrayFeedReaderTests: XCTestCase {
 
     func testUpdatesAllRelevantFieldsOnPipelineWithNoBuildsWhenBuilding() throws {
         let basePipeline = makePipeline(name: "connectfour", activity: .building)
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .building)
         status.lastBuild = Build(result: .failure)
@@ -61,7 +61,7 @@ class CCTrayFeedReaderTests: XCTestCase {
 
     func testSetsBuildTimestampOnCurrentBuildWhenTransitioningToBuilding() throws {
         let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .building)
         status.currentBuild = Build(result: .unknown)
@@ -78,7 +78,7 @@ class CCTrayFeedReaderTests: XCTestCase {
         basePipeline.status.lastBuild = Build(result: .unknown)
         basePipeline.status.currentBuild = Build(result: .unknown)
         basePipeline.status.currentBuild!.timestamp = Date.now
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .building)
         status.lastBuild = Build(result: .success)
@@ -95,7 +95,7 @@ class CCTrayFeedReaderTests: XCTestCase {
         var basePipeline = makePipeline(name: "connectfour", activity: .building)
         basePipeline.status.currentBuild = Build(result: .unknown)
         basePipeline.status.currentBuild!.timestamp = Date.now
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .sleeping)
         status.lastBuild = Build(result: .success)
@@ -112,7 +112,7 @@ class CCTrayFeedReaderTests: XCTestCase {
         basePipeline.status.lastBuild = Build(result: .success)
         basePipeline.status.lastBuild!.label = "label.1"
         basePipeline.status.lastBuild!.duration = 90
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         var status = Pipeline.Status(activity: .sleeping)
         status.lastBuild = Build(result: .success)
@@ -128,7 +128,7 @@ class CCTrayFeedReaderTests: XCTestCase {
 
     func testSetsErrorWhenNoStatusIsProvided() throws {
         let basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         reader.updatePipeline(name: basePipeline.name, newStatus: nil)
         let pipeline = reader.pipelines[0]
@@ -139,7 +139,7 @@ class CCTrayFeedReaderTests: XCTestCase {
     func testClearsErrorWhenUpdatedWithStatus() throws {
         var basePipeline = makePipeline(name: "connectfour", activity: .sleeping)
         basePipeline.connectionError = "error message for testing"
-        let reader = CCTrayFeedReader(for: basePipeline)
+        let reader = CCTrayFeedReader(for: [basePipeline])
 
         let status = Pipeline.Status(activity: .building)
 
