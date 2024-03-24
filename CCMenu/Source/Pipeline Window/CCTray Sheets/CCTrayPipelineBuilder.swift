@@ -10,26 +10,28 @@ import Foundation
 class CCTrayPipelineBuilder: ObservableObject {
     @Published var name: String = ""
 
-    func updateName(project: CCTrayProject) {
-        var newName = ""
-        if project.isValid {
-            newName.append(project.name)
-        }
-        name = newName
+    func setDefaultName(project: CCTrayProject) {
+        name = project.isValid ? project.name : ""
     }
 
-    func makePipeline(feedUrl: String, name: String) -> Pipeline {
-        // TODO: Consider what is the best place for this code and how much state it should be aware of
-        // (and see same comment in GitHubPipelineBuilder)
-        let feed = Pipeline.Feed(type:.cctray, url: feedUrl, name: name)
-        var p: Pipeline = Pipeline(name: self.name, feed: feed)
+    func makePipeline(feedUrl: String, credential: HTTPCredential?, project: CCTrayProject) -> Pipeline {
+        var feedUrl = feedUrl
+        if let credential {
+            feedUrl = setUser(credential.user, inURL: feedUrl)
+            do {
+                try Keychain().setPassword(credential.password, forURL: feedUrl)
+            } catch {
+                // TODO: Figure out what to do here – so many errors...
+            }
+        }
+        let feed = Pipeline.Feed(type: .cctray, url: feedUrl, name: project.name)
+        var p: Pipeline = Pipeline(name: name, feed: feed)
         p.status = Pipeline.Status(activity: .sleeping)
         p.status.lastBuild = Build(result: .unknown)
         return p
     }
 
-    static func setUser(_ user: String?, inURL urlString: String) -> String {
-        // TODO: Consider what is the best place for this code
+    private func setUser(_ user: String?, inURL urlString: String) -> String {
         guard let user, !user.isEmpty else {
             return urlString
         }

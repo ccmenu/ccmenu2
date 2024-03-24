@@ -8,7 +8,8 @@ import SwiftUI
 
 
 struct EditPipelineSheet: View {
-    var pipeline: Pipeline
+    @State var pipeline: Pipeline
+    @State var name: String = ""
     @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
 
@@ -16,40 +17,31 @@ struct EditPipelineSheet: View {
         VStack {
             Text("Edit Pipeline")
                 .font(.headline)
-            Text("missing")
+                .padding(.bottom)
+            Form {
+                TextField("Name:", text: $name)
+                    .accessibilityIdentifier("Name field")
+            }
+            .padding(.bottom)
             HStack {
                 Button("Cancel") {
                     presentation.dismiss()
                 }
+                .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-//                    var p = Pipeline(name: "erikdoe/ocmock", feedUrl: "http://localhost:4567/cc.xml")
-//                    p.status = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success))
-//                    model.pipelines[editIndex] = p
+                    pipeline.name = name
+                    model.update(pipeline: pipeline)
                     presentation.dismiss()
                 }
-                .buttonStyle(DefaultButtonStyle())
+                .keyboardShortcut(.defaultAction)
+                .disabled(pipeline.name.isEmpty)
+            }
+            .onAppear() {
+                name = pipeline.name
             }
         }
-        .padding(EdgeInsets(top: 10, leading:10, bottom: 10, trailing: 10))
+        .frame(minWidth: 400)
+        .frame(idealWidth: 450)
+        .padding()
     }
 }
-
-
-struct EditPipelineSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-//            AddPipelineSheet(model: makeViewModel())
-        }
-    }
-    
-    static func makeViewModel() -> PipelineModel {
-        let model = PipelineModel()
-
-        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:4567/cctray.xml"))
-        p0.status = Pipeline.Status(activity: .building, lastBuild: Build(result: .failure))
-        model.pipelines = [p0]
-        return model
-    }
-
-}
-

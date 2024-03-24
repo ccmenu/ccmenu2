@@ -8,11 +8,9 @@ import Foundation
 import SwiftUI
 
 class GitHubPipelineBuilder: ObservableObject {
-    private var repository = GitHubRepository()
-    private var workflow = GitHubWorkflow()
     @Published var name: String = ""
 
-    func updateName(repository: GitHubRepository, workflow: GitHubWorkflow) {
+    func setDefaultName(repository: GitHubRepository, workflow: GitHubWorkflow) {
         var newName = ""
         if repository.isValid {
             newName.append(repository.name)
@@ -20,13 +18,10 @@ class GitHubPipelineBuilder: ObservableObject {
                 newName.append(String(format: " | %@", workflow.name))
             }
         }
-        self.repository = repository
-        self.workflow = workflow
         self.name = newName
     }
 
-    func makePipeline(owner: String) -> Pipeline {
-        // TODO: Consider what is the best place for this code and how much state it should be aware of
+    func makePipeline(owner: String, repository: GitHubRepository, workflow: GitHubWorkflow) -> Pipeline {
         let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename)
         let feed = Pipeline.Feed(type: .github, url:url)
         let pipeline = Pipeline(name: name, feed: feed)

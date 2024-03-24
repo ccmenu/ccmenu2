@@ -48,10 +48,7 @@ struct AddCCTrayPipelineSheet: View {
                     .autocorrectionDisabled(true)
                     .onSubmit {
                         if !url.isEmpty {
-                            Task {
-                                let c = !credential.isEmpty ? credential : nil
-                                await projectList.updateProjects(url: $url, credential: c)
-                            }
+                            Task { await projectList.updateProjects(url: $url, credential: credentialOptional()) }
                         }
                     }
 
@@ -63,7 +60,7 @@ struct AddCCTrayPipelineSheet: View {
                 .accessibilityIdentifier("Project picker")
                 .disabled(!projectList.selected.isValid)
                 .onChange(of: projectList.selected) { _ in
-                    pipelineBuilder.updateName(project: projectList.selected)
+                    pipelineBuilder.setDefaultName(project: projectList.selected)
                 }
                 .padding(.bottom)
 
@@ -71,7 +68,7 @@ struct AddCCTrayPipelineSheet: View {
                     TextField("Display name:", text: $pipelineBuilder.name)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        pipelineBuilder.updateName(project: projectList.selected)
+                        pipelineBuilder.setDefaultName(project: projectList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -83,16 +80,7 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    var feedUrl = url
-                    if useBasicAuth && !credential.user.isEmpty {
-                        feedUrl = CCTrayPipelineBuilder.setUser(credential.user, inURL: url)
-                        do {
-                            try Keychain().setPassword(credential.password, forURL: feedUrl)
-                        } catch {
-                            // TODO: Figure out what to do here – so many errors...
-                        }
-                    }
-                    let p = pipelineBuilder.makePipeline(feedUrl: feedUrl, name: projectList.selected.name)
+                    let p = pipelineBuilder.makePipeline(feedUrl: url, credential: credentialOptional(), project: projectList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }
@@ -104,6 +92,11 @@ struct AddCCTrayPipelineSheet: View {
         .frame(idealWidth: 450)
         .padding()
     }
+
+    private func credentialOptional() -> HTTPCredential? {
+        (useBasicAuth && !credential.isEmpty) ? credential : nil
+    }
+    
 }
 
 

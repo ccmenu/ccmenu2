@@ -42,20 +42,24 @@ For now the roadmap is tracked in this readme file.
 ### Pre-release 5 (planned)
 
 - [X] Optimised CCTray reader requests
-- [ ] Edit pipelines
+- [X] Edit pipelines
 - [X] Remaining menu appearance options
 - [X] Reduced polling frequency on low data connections
 
-### Later
+### Pre-release 6 (planned)
+
+- [ ] Import and export of pipeline config
+- [ ] Set user/password for CCTray pipelines
+- [ ] Refresh GitHub token
+
+### To consider 
 
 - [ ] Sounds
-- [ ] Import and export of pipeline config
-
-### To consider
-
+- [ ] Support for workflow-specific GitHub tokens
 - [ ] Improve accessibility
 - [ ] Add support for localisation
 - [ ] Show avatar in notifications (committer or repo owner)
+- [ ] Support for log in with GitHub (is this even possible?)
 - [ ] Support for GitHub apps
 - [ ] Pipeline groups with submenus 
 - [ ] Add Nevergreen-style dashboard (full screen window)

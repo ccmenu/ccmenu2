@@ -117,4 +117,24 @@ class GitHubAuthenticator: ObservableObject {
         NSWorkspace.shared.open(GitHubAPI.applicationsUrl())
     }
 
+    func fetchTokenFromKeychain() {
+        do {
+            token = try Keychain().getToken(forService: "GitHub")
+        } catch {
+            // TODO: Figure out what to do here – so many errors...
+            token = nil
+        }
+        tokenDescription = token ?? ""
+    }
+
+
+    func storeTokenInKeychain() {
+        guard let token else { return }
+        do {
+            try Keychain().setToken(token, forService: "GitHub")
+        } catch {
+            // TODO: Figure out what to do here – so many errors...
+        }
+    }
+
 }

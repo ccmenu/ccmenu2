@@ -72,6 +72,7 @@ struct PipelineListToolbar: ToolbarContent {
             .frame(height: 28)
             .opacity(0.7)
             .background() {
+                // TODO: Fix transparency in dark mode
                 Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverAddMenu ? 0.45 : 0)
             }
             .onHover {
@@ -92,7 +93,7 @@ struct PipelineListToolbar: ToolbarContent {
 
             Button() {
                 withAnimation {
-                    model.pipelines.removeAll(where: { viewState.selection.contains($0.id) })
+                    viewState.selection.forEach({ model.remove(pipelineId: $0) })
                     viewState.selection.removeAll()
                 }
             } label: {

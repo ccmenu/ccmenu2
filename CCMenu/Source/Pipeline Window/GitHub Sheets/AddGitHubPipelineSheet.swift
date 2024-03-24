@@ -66,11 +66,9 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Repository picker")
                 .disabled(!repositoryList.selected.isValid)
                 .onChange(of: repositoryList.selected) { _ in
-                    pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     if repositoryList.selected.isValid {
-                        Task {
-                            await workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
-                        }
+                        Task { await workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token) }
                     } else {
                         workflowList.clearWorkflows()
                     }
@@ -84,7 +82,7 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Workflow picker")
                 .disabled(!workflowList.selected.isValid)
                 .onChange(of: workflowList.selected) { _ in
-                    pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                 }
                 .padding(.bottom)
 
@@ -92,7 +90,7 @@ struct AddGitHubPipelineSheet: View {
                     TextField("Display name:", text: $pipelineBuilder.name)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        pipelineBuilder.updateName(repository: repositoryList.selected, workflow: workflowList.selected)
+                        pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -104,7 +102,7 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(owner: owner)
+                    let p = pipelineBuilder.makePipeline(owner: owner, repository: repositoryList.selected, workflow: workflowList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }
@@ -116,20 +114,10 @@ struct AddGitHubPipelineSheet: View {
         .frame(idealWidth: 450)
         .padding()
         .onAppear() {
-            do {
-                let token = try Keychain().getToken(forService: "GitHub")
-                authenticator.token = token
-                authenticator.tokenDescription = token ?? ""
-            } catch {
-            }
+            authenticator.fetchTokenFromKeychain()
         }
         .onDisappear() {
-            guard let token = authenticator.token else { return }
-            do {
-                try Keychain().setToken(token, forService: "GitHub")
-            } catch {
-                // TODO: Figure out what to do here – so many errors...
-            }
+            authenticator.storeTokenInKeychain()
         }
     }
 

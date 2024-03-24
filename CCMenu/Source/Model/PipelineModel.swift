@@ -19,10 +19,7 @@ final class PipelineModel: ObservableObject {
     }
 
     func update(pipeline: Pipeline) {
-        guard let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) else {
-            debugPrint("trying to update unknown pipeline \(pipelines.debugDescription)")
-            return
-        }
+        guard let idx = pipelines.firstIndex(where: { $0.id == pipeline.id }) else { return }
         let change = StatusChange(pipeline: pipeline, previousStatus: pipelines[idx].status)
         pipelines[idx] = pipeline
         pipelines[idx].lastUpdated = Date()
@@ -43,11 +40,16 @@ final class PipelineModel: ObservableObject {
     
     @discardableResult
     func add(pipeline newPipeline: Pipeline) -> Bool {
-        if pipelines.contains(where: {$0.id == newPipeline.id}){
+        if pipelines.contains(where: { $0.id == newPipeline.id }) {
             return false
         }
         pipelines.append(newPipeline)
         return true
+    }
+
+    func remove(pipelineId: String) {
+        guard let idx = pipelines.firstIndex(where: { $0.id == pipelineId }) else { return }
+        pipelines.remove(at: idx)
     }
 
     private func updateSettings() {
@@ -78,7 +80,7 @@ final class PipelineModel: ObservableObject {
     }
 
     private func addCCMenu2Pipeline() {
-        let p0 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
+        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(p0)
     }
 
