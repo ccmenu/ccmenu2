@@ -80,7 +80,7 @@ final class PipelineModel: ObservableObject {
     }
 
     private func addCCMenu2Pipeline() {
-        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
+        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
         pipelines.append(p0)
     }
 

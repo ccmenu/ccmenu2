@@ -39,7 +39,7 @@ For now the roadmap is tracked in this readme file.
 - [X] Basic auth login for CCTray feeds
 - [X] GitHub API rate limit handling
 
-### Pre-release 5 (planned)
+### Version 24 (CCMenu2 pre-release 5)
 
 - [X] Optimised CCTray reader requests
 - [X] Edit pipelines
