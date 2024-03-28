@@ -10,19 +10,19 @@ import Combine
 
 struct AddGitHubPipelineSheet: View {
     @ObservedObject var model: PipelineModel
+    @EnvironmentObject private var authenticator: GitHubAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
     @State private var owner = ""
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var pipelineBuilder = GitHubPipelineBuilder()
-    @StateObject private var authenticator = GitHubAuthenticator()
 
     var body: some View {
         VStack {
             Text("Add GitHub Actions workflow")
                 .font(.headline)
                 .padding(.bottom)
-            Text("Press return in the owner field to fetch repositories and workflows. If there are many entries only the most recently updated will be shown. Sign into GitHub to access private repositories.")
+            Text("Press return in the owner field to fetch repositories and workflows. If there are many entries only the most recently updated will be shown.\n\nSign into GitHub to access private repositories. The token you set here will be used for all GitHub pipelines.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
@@ -37,7 +37,11 @@ struct AddGitHubPipelineSheet: View {
                         }
                     } else {
                         Button(authenticator.token == nil ? "Sign in" : "Refresh") {
-                            Task { await authenticator.signInAtGitHub() }
+                            Task {
+                                if await authenticator.signInAtGitHub() {
+                                    await authenticator.waitForToken()
+                                }
+                            }
                         }
                     }
                     Button("Review") {

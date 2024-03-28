@@ -24,22 +24,7 @@ struct AddCCTrayPipelineSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
 
-            GroupBox() {
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $useBasicAuth) {
-                        Text("Use HTTP Basic Authentication")
-                    }
-                    .accessibilityIdentifier("Basic auth toggle")
-                    HStack {
-                        TextField("", text: $credential.user, prompt: Text("user"))
-                            .accessibilityIdentifier("User field")
-                        SecureField("", text: $credential.password, prompt: Text("password"))
-                            .accessibilityIdentifier("Password field")
-                    }
-                    .disabled(!useBasicAuth)
-                }
-                .padding(8)
-            }
+            CCTrayAuthView(useBasicAuth: $useBasicAuth, credential: $credential)
             .padding(.bottom)
 
             Form {

@@ -35,6 +35,9 @@
 		03412ADF2B5DCC8A00EFDFCB /* CCTrayProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */; };
 		03412AE12B5DCD5100EFDFCB /* CCTrayAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */; };
 		03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */; };
+		035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */; };
+		035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87012BB3829300AD1D68 /* PipelineListMenu.swift */; };
+		035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */; };
 		0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */; };
 		0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */; };
 		0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */; };
@@ -149,6 +152,9 @@
 		03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayProjectList.swift; sourceTree = "<group>"; };
 		03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAPI.swift; sourceTree = "<group>"; };
 		03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTraySheetModel.swift; sourceTree = "<group>"; };
+		035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAuthView.swift; sourceTree = "<group>"; };
+		035F87012BB3829300AD1D68 /* PipelineListMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListMenu.swift; sourceTree = "<group>"; };
+		035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAtGitHubSheet.swift; sourceTree = "<group>"; };
 		0362EBEC2B521BD50079DEFE /* NotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactory.swift; sourceTree = "<group>"; };
 		0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFactoryTests.swift; sourceTree = "<group>"; };
 		0362EBF42B548C1D0079DEFE /* NotificationReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationReceiver.swift; sourceTree = "<group>"; };
@@ -288,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				0336DBAD2984903A00E5811C /* AddGitHubPipelineSheet.swift */,
+				035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */,
 				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
 				03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */,
 				03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */,
@@ -301,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */,
+				035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */,
 				03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */,
 				03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */,
 				03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */,
@@ -452,6 +460,7 @@
 				03825DF1259D01C600DEB003 /* PipelineRow.swift */,
 				03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */,
 				03F6830A25C743F2005D56D9 /* PipelineListToolbar.swift */,
+				035F87012BB3829300AD1D68 /* PipelineListMenu.swift */,
 				03F682FC25C73584005D56D9 /* EditPipelineSheet.swift */,
 				03412ADD2B5DCC1600EFDFCB /* CCTray Sheets */,
 				0331B3012B3C9A60000FE134 /* GitHub Sheets */,
@@ -613,7 +622,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					03BD7E842598E578000F9495 = {
 						CreatedOnToolsVersion = 12.3;
@@ -766,11 +775,14 @@
 				03B263F22B50968800CA989A /* StatusChange.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
 				3C9E0E532B9F143A00327CB9 /* NSApplicationExtension.swift in Sources */,
+				035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */,
 				03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */,
+				035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */,
 				03DA98DC2B4498BB0073F5BB /* GitHubRepositoryList.swift in Sources */,
 				03F9B898297D4D8F00FA866E /* MenuItemViewModel.swift in Sources */,
 				03D4BB05265EE6B50023F4CB /* GitHubResponseParser.swift in Sources */,
 				03CC11F02652F70800130833 /* CCTrayFeedReader.swift in Sources */,
+				035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */,
 				3CB911D72B78E891009DF781 /* URLRequestExtension.swift in Sources */,
 				03CC61CF2BA757050008EE76 /* TrustManager.swift in Sources */,
 				0336DBAC29848FE200E5811C /* AddCCTrayPipelineSheet.swift in Sources */,
@@ -971,12 +983,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"CCMenu/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = LL62P32G5C;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CCMenu/Resources/Info.plist;
@@ -998,12 +1011,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"CCMenu/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = LL62P32G5C;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CCMenu/Resources/Info.plist;
@@ -1253,12 +1267,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenuTesting.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"CCMenu/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = LL62P32G5C;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CCMenu/Resources/Info.plist;

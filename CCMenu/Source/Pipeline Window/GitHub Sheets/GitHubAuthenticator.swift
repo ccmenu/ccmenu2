@@ -11,22 +11,24 @@ class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
     @Published var tokenDescription: String = ""
     @Published private(set) var isWaitingForToken: Bool = false
+    private var codeResponse: GitHubDeviceCodeResponse? = nil
 
-    func signInAtGitHub() async {
+    func signInAtGitHub() async -> Bool {
         isWaitingForToken = true
         tokenDescription = "Preparing to sign in..."
 
         let codeRequest = GitHubAPI.requestForDeviceCode()
-        guard let codeResponse = await fetchDeviceCode(request: codeRequest) else {
+        codeResponse = await fetchDeviceCode(request: codeRequest)
+        guard let codeResponse, startDeviceFlowOnWebsite(response: codeResponse) else {
             // TODO: Consider adding error handling in fetchDeviceCode
             cancelSignIn()
-            return
+            return false
         }
-        if !startDeviceFlowOnWebsite(response: codeResponse) {
-            cancelSignIn()
-            return
-        }
+        return true
+    }
 
+    func waitForToken() async {
+        guard let codeResponse else { return }
         tokenDescription = "Waiting for token..."
 
         let tokenRequest = GitHubAPI.requestForAccessToken(codeResponse: codeResponse)
@@ -42,7 +44,7 @@ class GitHubAuthenticator: ObservableObject {
 
     private func startDeviceFlowOnWebsite(response: GitHubDeviceCodeResponse) -> Bool {
         let alert = NSAlert()
-        alert.messageText = "GitHub sign in"
+        alert.messageText = "Sign in at GitHub"
         alert.informativeText = "The process will continue on the GitHub website in your default web browser. You will have to enter the code shown below.\n\n\(response.userCode)\n\nWhen you return to CCMenu please wait for a token to appear."
         alert.alertStyle = .informational
         alert.addButton(withTitle: "Copy code and continue")

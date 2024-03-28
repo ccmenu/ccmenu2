@@ -6,12 +6,19 @@
 
 import SwiftUI
 
+enum PipelListViewSheet {
+    case
+    noSheet,
+    editPipelineSheet,
+    addCCTrayPipelineSheet,
+    addGitHubPipelineSheet,
+    signInAtGitHubSheet
+}
 
 final class ListViewState: ObservableObject {
     @Published var selection: Set<String> = Set()
-    @Published var isShowingAddSheet: Bool = false
-    @Published var isShowingEditSheet: Bool = false
-    @Published var sheetType: Pipeline.FeedType = .cctray
+    @Published var pipelineToEdit: Pipeline? = nil
+    @Published var showSheet: PipelListViewSheet = .noSheet
 }
 
 
@@ -20,6 +27,7 @@ struct PipelineListView: View {
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
     @AppStorage(.pollInterval) var pollInterval = 10
     @StateObject var viewState = ListViewState()
+    @StateObject private var ghAuthenticator = GitHubAuthenticator()
 
     var body: some View {
         List(selection: $viewState.selection) {
@@ -39,47 +47,38 @@ struct PipelineListView: View {
             }
         }
         .frame(minWidth: 500)
-        .contextMenu(forSelectionType: String.self) { selection in
-            Button("Copy Feed URL") {
-                let value = model.pipelines
-                    .filter({ selection.contains($0.id) })
-                    .map({ $0.feed.url })
-                    .joined(separator: "\n")
-                NSPasteboard.general.prepareForNewContents()
-                NSPasteboard.general.setString(value, forType: .string)
-            }
-            Divider()
-            Button("Open Web Page") {
-                model.pipelines
-                    .filter({ selection.contains($0.id) })
-                    .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
-            }
-        } primaryAction: { selection in
-                model.pipelines
-                    .filter({ selection.contains($0.id) })
-                    .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
-        }
-        .sheet(isPresented: $viewState.isShowingAddSheet) {
-            switch viewState.sheetType {
-            case .cctray:
-                AddCCTrayPipelineSheet(model: model)
-            case .github:
-                AddGitHubPipelineSheet(model: model)
-            }
-        }
-        .onChange(of: viewState.isShowingAddSheet) { _ in
-            guard showAppIcon == .sometimes else { return }
-            NSApp.hideApplicationIcon(!viewState.isShowingAddSheet)
-            NSApp.activateThisApp()
-        }
-        .sheet(isPresented: $viewState.isShowingEditSheet) {
-            if let pipeline = model.pipelines.first(where: { viewState.selection.contains($0.id) }) {
-                EditPipelineSheet(pipeline: pipeline, model: model)
-            }
-        }
         .toolbar {
             PipelineListToolbar(model: model, viewState: viewState)
         }
+        .contextMenu(forSelectionType: String.self) { selection in
+            PipelineListMenu(model: model, viewState: viewState, contextSelection: selection)
+        } primaryAction: { selection in
+            model.pipelines
+                .filter({ selection.contains($0.id) })
+                .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
+        }
+        .sheet(isPresented: Binding(get: { viewState.showSheet != .noSheet }, set: { v in if !v { viewState.showSheet = .noSheet }})) {
+            switch viewState.showSheet {
+            case .noSheet:
+                Text("") // TODO: Figure out what else to do here; case must be exhaustive but we can't get here
+            case .editPipelineSheet:
+                if let pipeline = viewState.pipelineToEdit {
+                    EditPipelineSheet(pipeline: pipeline, model: model)
+                }
+            case .addCCTrayPipelineSheet:
+                AddCCTrayPipelineSheet(model: model)
+            case .addGitHubPipelineSheet:
+                AddGitHubPipelineSheet(model: model)
+            case .signInAtGitHubSheet:
+                SignInAtGitHubSheet()
+            }
+        }
+        .onChange(of: viewState.showSheet) { _ in
+            guard showAppIcon == .sometimes else { return }
+            NSApp.hideApplicationIcon(viewState.showSheet != .noSheet)
+            NSApp.activateThisApp()
+        }
+        .environmentObject(ghAuthenticator)
     }
 
 }

@@ -16,6 +16,7 @@ struct PipelineListToolbar: ToolbarContent {
     @AppStorage(.showMessagesInWindow) var showMessages = true
     @State var isHoveringOverDetailMenu = false
     @State var isHoveringOverAddMenu = false
+    @State var isHoveringOverOverflowMenu = false
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .principal) {
@@ -56,12 +57,10 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItemGroup(placement: .principal) {
             Menu() {
                 Button("Add project from CCTray feed...") {
-                    viewState.sheetType = .cctray
-                    viewState.isShowingAddSheet = true
+                    viewState.showSheet = .addCCTrayPipelineSheet
                 }
                 Button("Add GitHub Actions workflow...") {
-                    viewState.sheetType = .github
-                    viewState.isShowingAddSheet = true
+                    viewState.showSheet = .addGitHubPipelineSheet
                 }
             } label: {
                 Image(systemName: "plus")
@@ -83,7 +82,8 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add a pipeline")
 
             Button() {
-                viewState.isShowingEditSheet = true
+                viewState.pipelineToEdit = model.pipelines.first(where: { viewState.selection.contains($0.id) })
+                viewState.showSheet = .editPipelineSheet
             } label: {
                 Label("Edit", systemImage: "gearshape")
             }
@@ -102,16 +102,29 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Remove pipeline")
             .accessibility(label: Text("Remove pipeline"))
             .disabled(viewState.selection.isEmpty)
+
+            Menu() {
+                PipelineListMenu(model: model, viewState: viewState)
+            } label: {
+                Image(systemName: "ellipsis.circle")
+            }
+            .menuStyle(.borderlessButton)
+            .padding(.bottom, 1)
+            .padding([.leading, .trailing], 8)
+            .frame(height: 28)
+            .opacity(0.7)
+            .background() {
+                // TODO: Fix transparency in dark mode
+                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverOverflowMenu ? 0.45 : 0)
+            }
+            .onHover {
+                isHoveringOverOverflowMenu = $0
+            }
+            .cornerRadius(6)
+            .accessibility(label: Text("Additional actions menu"))
+            .help("Additional actions")
         }
 
-//        ToolbarItem(placement: .principal) {
-//            Button() {
-//                model.reloadPipelineStatus()
-//            } label: {
-//                Label("Reload", systemImage: "arrow.clockwise")
-//            }
-//            .help("Update status of all pipelines")
-//        }
     }
 
 }
