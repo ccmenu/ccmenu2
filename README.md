@@ -50,7 +50,8 @@ For now the roadmap is tracked in this readme file.
 
 - [ ] Import and export of pipeline config
 - [ ] Set user/password for CCTray pipelines
-- [ ] Refresh GitHub token
+- [X] Refresh GitHub token
+- [X] Allow selection of branch on GitHub
 
 ### To consider 
 

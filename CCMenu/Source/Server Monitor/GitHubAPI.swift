@@ -12,7 +12,7 @@ class GitHubAPI {
     
     static let clientId = "4eafcf49451c588fbeac"
 
-    // MARK: - repositories and workflows
+    // MARK: - repositories, workflows, and branches
 
     static func requestForRepositories(owner: String, token: String?) -> URLRequest {
         let path = String(format: "/users/%@/repos", owner)
@@ -37,13 +37,20 @@ class GitHubAPI {
     static func requestForWorkflows(owner: String, repository: String, token: String?) -> URLRequest {
         let path = String(format: "/repos/%@/%@/actions/workflows", owner, repository)
         let queryParams = [
-            "sort": "pushed",
             "per_page": "100",
         ];
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    
+    static func requestForBranches(owner: String, repository: String, token: String?) -> URLRequest {
+        let path = String(format: "/repos/%@/%@/branches", owner, repository)
+        let queryParams = [
+            "per_page": "100",
+        ];
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
+    }
+
+
     // MARK: - device flow and applications
 
     static func requestForDeviceCode() -> URLRequest {
@@ -72,16 +79,19 @@ class GitHubAPI {
 
     // MARK: - feed
 
-    static func feedUrl(owner: String, repository: String, workflow: String) -> String {
+    static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> String {
         var components = URLComponents(string: baseURL(forAPI: true))!
         components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+        if let branch {
+            components.appendQueryItem(URLQueryItem(name: "branch", value: branch))
+        }
         return components.url!.absoluteString
     }
 
     static func requestForFeed(feed: Pipeline.Feed, token: String?) -> URLRequest? {
-        // TODO: Consider using URLComponents to append page size query parameter properly
-        guard let url = URL(string: feed.url + "?per_page=3") else { return nil }
-        return makeRequest(url: url, token: token)
+        guard var components = URLComponents(string: feed.url) else { return nil }
+        components.appendQueryItem(URLQueryItem(name: "per_page", value: "3"))
+        return makeRequest(url: components.url!.absoluteURL, token: token)
     }
 
 

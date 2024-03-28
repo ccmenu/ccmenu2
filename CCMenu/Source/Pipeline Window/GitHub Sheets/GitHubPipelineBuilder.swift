@@ -21,8 +21,9 @@ class GitHubPipelineBuilder: ObservableObject {
         self.name = newName
     }
 
-    func makePipeline(owner: String, repository: GitHubRepository, workflow: GitHubWorkflow) -> Pipeline {
-        let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename)
+    func makePipeline(owner: String, repository: GitHubRepository, workflow: GitHubWorkflow, branch: GitHubBranch) -> Pipeline {
+        let branchName = branch.isAllBranchPlaceholder ? nil : branch.name
+        let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename, branch: branchName)
         let feed = Pipeline.Feed(type: .github, url:url)
         let pipeline = Pipeline(name: name, feed: feed)
         return pipeline

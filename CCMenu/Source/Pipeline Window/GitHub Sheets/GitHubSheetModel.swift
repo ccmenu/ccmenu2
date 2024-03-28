@@ -100,6 +100,40 @@ struct GitHubWorkflow: Identifiable, Hashable, Decodable {
 
 }
 
+struct GitHubBranch: Identifiable, Hashable, Decodable {
+    var name: String
+
+    init(name: String?) {
+        self.name = name ?? "all branches"
+    }
+
+    init(message: String) {
+        self.name = "(" + message + ")"
+    }
+
+    init() {
+        self.name = ""
+    }
+
+    var id: Int {
+        name.hashValue
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    var isAllBranchPlaceholder: Bool {
+        return name == "all branches"
+    }
+
+    var isValid: Bool {
+        return !name.isEmpty && !name.starts(with: "(")
+    }
+
+}
+
+
 
 struct GitHubDeviceCodeResponse: Decodable {
     var deviceCode: String

@@ -50,6 +50,10 @@
 		03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF1259D01C600DEB003 /* PipelineRow.swift */; };
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
 		03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* DefaultPipelines.json */; };
+		038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */; };
+		038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */; };
+		038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */; };
+		038FF7182BB631CB0017CD4C /* URLComponentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
@@ -167,6 +171,10 @@
 		03825DF1259D01C600DEB003 /* PipelineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRow.swift; sourceTree = "<group>"; };
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* DefaultPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultPipelines.json; sourceTree = "<group>"; };
+		038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBranchList.swift; sourceTree = "<group>"; };
+		038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubBranchesResponse.json; sourceTree = "<group>"; };
+		038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubReposByUserCCM2OnlyResponse.json; sourceTree = "<group>"; };
+		038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponentsExtension.swift; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
@@ -282,10 +290,12 @@
 		0322051F2B913BC900205DC6 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
+				032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */,
 				032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */,
+				038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */,
 				032205282B96677200205DC6 /* GitHubUserReposResponse.json */,
 				032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */,
-				032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */,
+				038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -298,6 +308,7 @@
 				0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */,
 				03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */,
 				03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */,
+				038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */,
 				03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */,
 				03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */,
 			);
@@ -486,6 +497,7 @@
 				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
 				03CC61D02BA783EE0008EE76 /* NetworkMonitor.swift */,
 				03CC61CE2BA757050008EE76 /* TrustManager.swift */,
+				038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
@@ -694,7 +706,9 @@
 				032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */,
 				0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */,
 				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
+				038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */,
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
+				038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */,
 				032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */,
 				032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */,
 				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
@@ -742,6 +756,7 @@
 				03DD697E2B646E3800D7AD9D /* NSColorExtensions.swift in Sources */,
 				03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
+				038FF7182BB631CB0017CD4C /* URLComponentsExtension.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
 				0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */,
 				03CC61D12BA783EE0008EE76 /* NetworkMonitor.swift in Sources */,
@@ -790,6 +805,7 @@
 				03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */,
 				03B1D7612A607DD0007BCB8A /* PipelineRowViewModel.swift in Sources */,
 				03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */,
+				038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
 				0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */,
 				03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */,

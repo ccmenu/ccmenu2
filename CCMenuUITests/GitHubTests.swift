@@ -82,13 +82,13 @@ class GitHubTests: XCTestCase {
 
     func testAddsGitHubPipeline() throws {
         webapp.router.get("/users/erikdoe/repos") { _ in
-            try TestHelper.contentsOfFile("GitHubReposByUserResponse.json")
-        }
-        webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
-            "{ \"total_count\": 0, \"workflows\": [] }"
+            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
         }
         webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
             try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
+            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
         }
         webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { _ in
             try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
@@ -106,16 +106,9 @@ class GitHubTests: XCTestCase {
         sheet.textFields["Owner field"].click()
         sheet.typeText("erikdoe\n")
 
-        // Make sure that the repositories are loaded and sorted
+        // Make sure that the repositories and workflows are loaded and the default display name is set
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
-        waitForExpectations(timeout: 2)
-
-        // Open the repository picker and select the ccmenu2 repository
-        repositoryPicker.click()
-        repositoryPicker.menuItems["ccmenu2"].click()
-
-        // Make sure that the workflows are loaded and the default display name is set
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
         let workflowPicker = sheet.popUpButtons["Workflow picker"]
         expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
         let displayNameField = sheet.textFields["Display name field"]
@@ -136,18 +129,59 @@ class GitHubTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
+    func testAddsGitHubPipelineWithBranch() throws {
+        var branchParam: String?
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
+            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
+            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { r in
+            branchParam = r.uri.queryParameters.get("branch")
+            return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add workflow sheet
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("erikdoe\n")
+
+        // Make sure that the repositories and branches are loaded
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
+        let branchPicker = sheet.popUpButtons["Branch picker"]
+        expectation(for: NSPredicate(format: "value == 'all branches'"), evaluatedWith: branchPicker)
+        waitForExpectations(timeout: 2)
+
+        // Open the branch picker, select the main branch, and close the sheet
+        branchPicker.click()
+        branchPicker.menuItems["main"].click()
+        sheet.buttons["Apply"].click()
+
+        // Make sure the status is fetched and the request uses the branch
+        let descriptionText = window.tables.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+        XCTAssertEqual("main", branchParam)
+    }
+
     func testAddGitHubPipelinePrivateRepos() throws {
         webapp.router.get("/users/erikdoe/repos") { _ in
             try TestHelper.contentsOfFile("GitHubReposByUserResponse.json")
         }
         webapp.router.get("/user/repos") { _ in
             return try TestHelper.contentsOfFile("GitHubUserReposResponse.json")
-        }
-        webapp.router.get("/repos/erikdoe/ccmenu/actions/workflows") { _ in
-            "{ \"total_count\": 0, \"workflows\": [] }"
-        }
-        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
-            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
         }
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false, token: "TEST-TOKEN")

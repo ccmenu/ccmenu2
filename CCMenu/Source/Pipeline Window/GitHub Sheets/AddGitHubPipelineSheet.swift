@@ -15,6 +15,7 @@ struct AddGitHubPipelineSheet: View {
     @State private var owner = ""
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
+    @StateObject private var branchList = GitHubBranchList()
     @StateObject private var pipelineBuilder = GitHubPipelineBuilder()
 
     var body: some View {
@@ -62,7 +63,7 @@ struct AddGitHubPipelineSheet: View {
                     }
                 }
 
-                Picker("Repository", selection: $repositoryList.selected) {
+                Picker("Repository:", selection: $repositoryList.selected) {
                     ForEach(repositoryList.items) { r in
                         Text(r.name).tag(r)
                     }
@@ -72,13 +73,18 @@ struct AddGitHubPipelineSheet: View {
                 .onChange(of: repositoryList.selected) { _ in
                     pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     if repositoryList.selected.isValid {
-                        Task { await workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token) }
+                        Task {
+                            async let r1: Void = workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
+                            async let r2: Void = branchList.updateBranches(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
+                            _ = await [r1, r2]
+                        }
                     } else {
                         workflowList.clearWorkflows()
+                        branchList.clearBranches()
                     }
                 }
 
-                Picker("Workflow", selection: $workflowList.selected) {
+                Picker("Workflow:", selection: $workflowList.selected) {
                     ForEach(workflowList.items) { w in
                         Text(w.name).tag(w)
                     }
@@ -88,6 +94,14 @@ struct AddGitHubPipelineSheet: View {
                 .onChange(of: workflowList.selected) { _ in
                     pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                 }
+
+                Picker("Branch:", selection: $branchList.selected) {
+                    ForEach(branchList.items) { b in
+                        Text(b.name).tag(b)
+                    }
+                }
+                .accessibilityIdentifier("Branch picker")
+                .disabled(!branchList.selected.isValid)
                 .padding(.bottom)
 
                 HStack {
@@ -106,7 +120,7 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(owner: owner, repository: repositoryList.selected, workflow: workflowList.selected)
+                    let p = pipelineBuilder.makePipeline(owner: owner, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }
