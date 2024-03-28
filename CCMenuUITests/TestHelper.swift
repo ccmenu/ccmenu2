@@ -17,10 +17,8 @@ class TestHelper {
             "-PollInterval", "1",
             "-ShowAppIcon", "always",
             "-GitHubBaseURL", "http://localhost:8086",
+            "-GitHubToken", token ?? ""
         ]
-        if let token {
-            app.launchArguments.append(contentsOf: [ "-GitHubToken", token ])
-        }
         app.launch()
         return app
     }
@@ -36,6 +34,7 @@ class TestHelper {
     @discardableResult
     static func startEmbeddedServer() throws -> HBApplication {
         let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086), logLevel: .info))
+        webapp.middleware.add(HBLogRequestsMiddleware(.info, includeHeaders: false))
         // If the following fails with "operation not permitted" see: https://developer.apple.com/forums/thread/114907
         try webapp.start()
         return webapp
