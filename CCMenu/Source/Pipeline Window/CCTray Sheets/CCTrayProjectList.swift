@@ -35,7 +35,7 @@ class CCTrayProjectList: ObservableObject {
     private func addSchemeIfNecessary(url urlBinding: Binding<String>) {
         let userInput = urlBinding.wrappedValue
         if !userInput.hasPrefix("http://") && !userInput.hasPrefix("https://") {
-            urlBinding.wrappedValue = "https://" + userInput
+            urlBinding.wrappedValue = "http://" + userInput
         }
     }
 

@@ -68,7 +68,7 @@ struct PipelineRow: View {
                 .resizable()
                 .clipShape(Circle())
         } placeholder: {
-            Image(systemName: "person.circle.fill")
+            Image(systemName: "person.crop.circle.fill")
                 .resizable()
                 .foregroundColor(.gray)
         }

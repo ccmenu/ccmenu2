@@ -69,23 +69,4 @@ class PipelineWindowTests: XCTestCase {
         XCTAssertTrue(window.tables.staticTexts["connectfour"].exists == false)
     }
 
-    func testRenamesPipeline() throws {
-        let app = TestHelper.launchApp(pipelines: "CCTrayPipeline.json")
-        let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        window.tables.staticTexts["connectfour"].click()
-        window.toolbars.buttons["Edit pipeline"].click()
-
-        let nameField = sheet.textFields["Name field"]
-        nameField.click()
-        sheet.typeKey("a", modifierFlags: [ .command ])
-        sheet.typeText("TEST-TEST-TEST")
-        sheet.buttons["Apply"].click()
-
-        let titleText = window.tables.staticTexts["Pipeline title"]
-        expectation(for: NSPredicate(format: "value == 'TEST-TEST-TEST'"), evaluatedWith: titleText)
-        waitForExpectations(timeout: 2)
- }
-
 }

@@ -42,6 +42,7 @@ class GitHubFeedReader {
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
                 throw GithHubFeedReaderError.invalidURLError
             }
+            debugPrint(Date(), "fetching", request.url ?? "")
             guard let newStatus = try await fetchStatus(request: request) else {
                 throw GithHubFeedReaderError.noStatusError
             }

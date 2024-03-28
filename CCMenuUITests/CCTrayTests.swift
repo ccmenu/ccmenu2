@@ -61,7 +61,7 @@ class CCTrayTests: XCTestCase {
         window.toolbars.menuItems["Add project from CCTray feed..."].click()
         let urlField = sheet.textFields["Server URL field"]
         urlField.click()
-        sheet.typeText("http://localhost:8086\n")
+        sheet.typeText("localhost:8086\n")
 
         // Make sure that the path is discovered, thatthe picker shows the first project in alphabetical
         // order, and the default display name is set
@@ -141,5 +141,24 @@ class CCTrayTests: XCTestCase {
         expectation(for: NSPredicate(format: "value CONTAINS 'unauthorized'"), evaluatedWith: projectPicker)
         waitForExpectations(timeout: 2)
     }
+
+    func testRenamesPipeline() throws {
+        let app = TestHelper.launchApp(pipelines: "CCTrayPipeline.json")
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        window.tables.staticTexts["connectfour"].click()
+        window.toolbars.buttons["Edit pipeline"].click()
+
+        let nameField = sheet.textFields["Name field"]
+        nameField.click()
+        sheet.typeKey("a", modifierFlags: [ .command ])
+        sheet.typeText("TEST-TEST-TEST")
+        sheet.buttons["Apply"].click()
+
+        let titleText = window.tables.staticTexts["Pipeline title"]
+        expectation(for: NSPredicate(format: "value == 'TEST-TEST-TEST'"), evaluatedWith: titleText)
+        waitForExpectations(timeout: 2)
+ }
 
 }

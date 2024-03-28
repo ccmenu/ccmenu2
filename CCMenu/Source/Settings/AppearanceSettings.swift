@@ -51,12 +51,13 @@ struct AppearanceSettings: View {
                 Picker("", selection: $orderInMenu) {
                     Text("as arranged in pipeline window").tag(MenuSortOrder.asArranged)
                         .accessibilityIdentifier("Order as arranged")
-                 Text("alphabetically").tag(MenuSortOrder.sortedAlphabetically)
+                    Text("alphabetically").tag(MenuSortOrder.sortedAlphabetically)
                         .accessibilityIdentifier("Order alphabetically")
-                 Text("ordered by last build time").tag(MenuSortOrder.sortedByBuildTime)
+                    Text("ordered by last build time").tag(MenuSortOrder.sortedByBuildTime)
                         .accessibilityIdentifier("Order last build time")
                 }
                 .pickerStyle(.radioGroup)
+                .labelsHidden()
                 .padding(.bottom, 8)
                 
                 Toggle(isOn: $showBuildTimesInMenu) {
