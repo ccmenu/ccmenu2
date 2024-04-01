@@ -67,6 +67,8 @@ final class PipelineModel: ObservableObject {
             loadPipelinesFromLegacyDefaults()
             addCCMenu2Pipeline()
         }
+        // TODO: Remove before App Store release
+        UserDefaults.active.removeObject(forKey: "GitHubToken")
     }
 
     private func loadPipelinesFromLegacyDefaults() {
@@ -80,7 +82,7 @@ final class PipelineModel: ObservableObject {
     }
 
     private func addCCMenu2Pipeline() {
-        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs"))
+        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main"))
         pipelines.append(p0)
     }
 
