@@ -47,7 +47,7 @@ class GitHubResponseParser {
             build.label = String(runNumber)
         }
 
-        if let createdAt = run["created_at"] as? String , let createdAtDate = dateForString(createdAt) {
+        if let startedAt = run["run_started_at"] as? String , let createdAtDate = dateForString(startedAt) {
             build.timestamp = createdAtDate
             if let updatedAt = run["updated_at"] as? String, let updatedAtDate = dateForString(updatedAt) {
                 build.duration = updatedAtDate.timeIntervalSince(createdAtDate)

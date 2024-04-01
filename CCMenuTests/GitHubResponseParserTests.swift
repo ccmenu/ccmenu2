@@ -41,7 +41,8 @@ class GitHubResponseParserTests: XCTestCase {
                 "actor": {
                     "login": "erikdoe",
                     "avatar_url": "https://test.org/avatar.jpg"
-                }
+                },
+                "run_started_at": "2021-05-14T12:04:25Z"
             }]}
         """
         let parser = GitHubResponseParser()
@@ -54,8 +55,8 @@ class GitHubResponseParserTests: XCTestCase {
         guard let build = status.lastBuild else { XCTFail(); return }
         XCTAssertEqual(.success, build.result)
         XCTAssertEqual("17", build.label)
-        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), build.timestamp)
-        XCTAssertEqual(154, build.duration)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:25Z"), build.timestamp)
+        XCTAssertEqual(152, build.duration)
         XCTAssertEqual("Push \u{22EE} Just testing", build.message)
         XCTAssertEqual("erikdoe", build.user)
         XCTAssertEqual("https://test.org/avatar.jpg", build.avatar?.absoluteString)
@@ -76,7 +77,8 @@ class GitHubResponseParserTests: XCTestCase {
                 "actor": {
                     "login": "erikdoe",
                     "avatar_url": "https://test.org/avatar.jpg"
-                }
+                },
+                "run_started_at": "2021-07-01T18:42:19Z"
               }, {
                 "name": "Rust",
                 "display_title" : "Just testing",
@@ -90,7 +92,8 @@ class GitHubResponseParserTests: XCTestCase {
                 "actor": {
                     "login": "erikdoe",
                     "avatar_url": "https://test.org/avatar.jpg"
-                }
+                },
+                "run_started_at": "2021-05-14T12:04:25Z"
               }
             ]}
         """
@@ -105,8 +108,8 @@ class GitHubResponseParserTests: XCTestCase {
         guard let current = status.currentBuild else { XCTFail(); return }
         XCTAssertEqual(.unknown, current.result)
         XCTAssertEqual("18", current.label)
-        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-07-01T18:42:17Z"), current.timestamp)
-        XCTAssertEqual(157, current.duration)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-07-01T18:42:19Z"), current.timestamp)
+        XCTAssertEqual(155, current.duration)
         XCTAssertEqual("Pull Request \u{22EE} Merge this", current.message)
         XCTAssertEqual("erikdoe", current.user)
         XCTAssertEqual("https://test.org/avatar.jpg", current.avatar?.absoluteString)
@@ -114,8 +117,8 @@ class GitHubResponseParserTests: XCTestCase {
         guard let last = status.lastBuild else { XCTFail(); return }
         XCTAssertEqual(.success, last.result)
         XCTAssertEqual("17", last.label)
-        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:23Z"), last.timestamp)
-        XCTAssertEqual(154, last.duration)
+        XCTAssertEqual(ISO8601DateFormatter().date(from: "2021-05-14T12:04:25Z"), last.timestamp)
+        XCTAssertEqual(152, last.duration)
         XCTAssertEqual("Push \u{22EE} Just testing", last.message)
         XCTAssertEqual("erikdoe", last.user)
         XCTAssertEqual("https://test.org/avatar.jpg", last.avatar?.absoluteString)
