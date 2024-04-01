@@ -15,7 +15,7 @@ jobs:
     - name: Setup
       run: sudo xcode-select -s /Applications/Xcode_15.2.app
     - name: Build
-      run: xcodebuild build -scheme CCMenu -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -scheme CCMenu -destination 'platform=macOS'
     - name: Run unit tests
       run: xcodebuild test -scheme CCMenu -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
   run-uitests:
