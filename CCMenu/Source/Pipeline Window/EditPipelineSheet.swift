@@ -9,6 +9,8 @@ import SwiftUI
 
 struct EditPipelineSheet: View {
     @State var pipeline: Pipeline
+    @State var useBasicAuth = false
+    @State var credential = HTTPCredential(user: "", password: "")
     @State var name: String = ""
     @ObservedObject var model: PipelineModel
     @Environment(\.presentationMode) @Binding var presentation
@@ -18,6 +20,12 @@ struct EditPipelineSheet: View {
             Text("Edit Pipeline")
                 .font(.headline)
                 .padding(.bottom)
+
+            if pipeline.feed.type == .cctray {
+                CCTrayAuthView(useBasicAuth: $useBasicAuth, credential: $credential)
+                .padding(.bottom)
+            }
+
             Form {
                 TextField("Name:", text: $name)
                     .accessibilityIdentifier("Name field")
