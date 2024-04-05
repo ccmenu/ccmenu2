@@ -66,7 +66,7 @@ struct AdvancedSettings: View {
                 Spacer()
                 Picker("", selection: $showAppIcon) {
                     Text("never").tag(AppIconVisibility.never)
-                    Text("aways").tag(AppIconVisibility.always)
+                    Text("always").tag(AppIconVisibility.always)
                     Text("sometimes").tag(AppIconVisibility.sometimes)
                 }
                 .frame(maxWidth: 150)
