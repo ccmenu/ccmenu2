@@ -63,7 +63,7 @@ struct PipelineListView: View {
         .sheet(isPresented: Binding(get: { viewState.showSheet != .noSheet }, set: { v in if !v { viewState.showSheet = .noSheet }})) {
             switch viewState.showSheet {
             case .noSheet:
-                Text("") // TODO: Figure out what else to do here; case must be exhaustive but we can't get here
+                Text("") // TODO: Figure out what else to do here; switch must be exhaustive but we can't get here
             case .editPipelineSheet:
                 if let pipeline = viewState.pipelineToEdit {
                     EditPipelineSheet(pipeline: pipeline, model: model)
@@ -78,7 +78,7 @@ struct PipelineListView: View {
         }
         .onChange(of: viewState.showSheet) { _ in
             guard showAppIcon == .sometimes else { return }
-            NSApp.hideApplicationIcon(viewState.showSheet != .noSheet)
+            NSApp.hideApplicationIcon(viewState.showSheet == .noSheet)
             NSApp.activateThisApp()
         }
         .fileImporter(isPresented: $viewState.isShowingImporter, allowedContentTypes: [.json]) { result in
