@@ -60,7 +60,7 @@ class Keychain {
 
     func getToken(forService service: String) throws -> String? {
         if service == "GitHub", let token = UserDefaults.active.string(forKey: "GitHubToken") {
-            return token
+            return token.isEmpty ? nil : token
         }
         let query: [String: Any] = [
             kSecClass as String:        kSecClassGenericPassword,
