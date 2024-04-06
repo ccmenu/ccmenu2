@@ -19,6 +19,9 @@ final class ListViewState: ObservableObject {
     @Published var selection: Set<String> = Set()
     @Published var pipelineToEdit: Pipeline? = nil
     @Published var showSheet: PipelListViewSheet = .noSheet
+    @Published var errorMessage: String? = nil
+    @Published var isShowingImporter: Bool = false
+    @Published var isShowingExporter: Bool = false
 }
 
 
@@ -77,6 +80,26 @@ struct PipelineListView: View {
             guard showAppIcon == .sometimes else { return }
             NSApp.hideApplicationIcon(viewState.showSheet != .noSheet)
             NSApp.activateThisApp()
+        }
+        .fileImporter(isPresented: $viewState.isShowingImporter, allowedContentTypes: [.json]) { result in
+            switch result {
+            case .success(let fileurl):
+                if let error = model.importPipelinesFromFile(url: fileurl) {
+                    self.viewState.errorMessage = error.localizedDescription
+                }
+            case .failure(let error):
+                self.viewState.errorMessage = error.localizedDescription
+            }
+        }
+        .fileExporter(isPresented: $viewState.isShowingExporter, document: model.exportPipelinesToDocument(selection: viewState.selection), contentType: .json, defaultFilename: "pipelines") { result in
+            if case .failure(let error) = result {
+                self.viewState.errorMessage = error.localizedDescription
+            }
+        }
+        .alert("Error", isPresented: Binding(get: { viewState.errorMessage != nil }, set: { v in if !v { viewState.errorMessage = nil }})) {
+            Button("OK") { }
+        } message: {
+            Text(viewState.errorMessage ?? "unknown error")
         }
         .environmentObject(ghAuthenticator)
     }

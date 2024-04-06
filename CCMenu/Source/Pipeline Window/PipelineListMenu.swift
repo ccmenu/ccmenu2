@@ -44,6 +44,13 @@ struct PipelineListMenu: View {
            }
         }
         Divider()
+        Button("Import pipelines...") {
+            viewState.isShowingImporter = true
+        }
+        Button("Export pipelines...") {
+            viewState.isShowingExporter = true
+        }
+        Divider()
         Button("Sign In at GitHub...") {
             Task { 
                 if await ghAuthenticator.signInAtGitHub() {

@@ -54,62 +54,54 @@ final class PipelineModel: ObservableObject {
 
     private func updateSettings() {
         // TODO: this is called, too, every time the status gets updated...
-        let list = pipelines.map({ $0.asDictionaryForPersisting() })
-        UserDefaults.active.set(list, forKey: DefaultsKey.pipelineList.rawValue)
+        savePipelinesToUserDefaults()
     }
 
 
     func loadPipelinesFromUserDefaults() {
-        if let list = UserDefaults.active.array(forKey: DefaultsKey.pipelineList.rawValue) as? Array<Dictionary<String, String>>, !list.isEmpty  {
-            pipelines = list.compactMap(Pipeline.fromPersistedDictionary)
+        if let references = UserDefaults.active.array(forKey: DefaultsKey.pipelineList.rawValue) as? [[String : String]] {
+            pipelines = references.compactMap({ Pipeline(reference: $0) })
+        }
+        else if let references = UserDefaults.active.array(forKey: "Projects") as? [[String : String]]  {
+            pipelines = references.compactMap({ Pipeline(legacyReference: $0) })
         }
         else {
-            loadPipelinesFromLegacyDefaults()
-            addCCMenu2Pipeline()
+            pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main")) ]
         }
         // TODO: Remove before App Store release
         UserDefaults.active.removeObject(forKey: "GitHubToken")
     }
 
-    private func loadPipelinesFromLegacyDefaults() {
-        guard let legacyProjects = UserDefaults.active.array(forKey: "Projects") as? Array<Dictionary<String, String>> else { return }
-        for project in legacyProjects {
-            if let projectName = project["projectName"], let serverUrl = project["serverUrl"] {
-                let name = project["displayName"] ?? projectName
-                pipelines.append(Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: serverUrl, name: projectName)))
-            }
-        }
+    private func savePipelinesToUserDefaults() {
+        let references = pipelines.map({ $0.reference() })
+        UserDefaults.active.set(references, forKey: DefaultsKey.pipelineList.rawValue)
     }
-
-    private func addCCMenu2Pipeline() {
-        let p0 = Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main"))
-        pipelines.append(p0)
-    }
-
 
     func loadPipelinesFromFile(_ filename: String) {
-        let data: Data
-
         do {
-            data = try Data(contentsOf: URL(fileURLWithPath: filename))
-        } catch {
-            fatalError("Couldn't load test data from \(filename):\n\(error)")
-        }
-
-        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: filename))
             let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .custom { decoder in
-                let container = try decoder.singleValueContainer()
-                let string = try container.decode(String.self)
-                if let date = ISO8601DateFormatter().date(from: string) {
-                    return date
-                }
-                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date string \(string)")
-            }
+            decoder.dateDecodingStrategy = .iso8601
             pipelines = try decoder.decode([Pipeline].self, from: data)
         } catch {
-            fatalError("Couldn't parse \(filename) as [Pipeline]:\n\(error)")
+            fatalError("Couldn't load pipelines from \(filename): \(error)")
         }
+    }
+    
+    func importPipelinesFromFile(url: URL) -> Error? {
+        do {
+            let document = try PipelineDocument(url: url)
+            document.pipelines.forEach({ add(pipeline: $0) })
+            return nil
+        }
+        catch {
+            return error
+        }
+    }
+    
+    func exportPipelinesToDocument(selection: Set<String>) -> PipelineDocument {
+        let pipelines = selection.isEmpty ? pipelines : pipelines.filter({ selection.contains($0.id )})
+        return PipelineDocument(pipelines: pipelines)
     }
 
 }

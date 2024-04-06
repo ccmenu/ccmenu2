@@ -48,7 +48,7 @@ For now the roadmap is tracked in this readme file.
 
 ### Pre-release 6 (planned)
 
-- [ ] Import and export of pipeline config
+- [X] Import and export of pipelines
 - [ ] Set user/password for CCTray pipelines
 - [X] Refresh GitHub token
 - [X] Allow selection of branch on GitHub

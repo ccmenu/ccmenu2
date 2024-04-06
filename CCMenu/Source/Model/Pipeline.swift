@@ -7,7 +7,7 @@
 import SwiftUI
 
 
-struct Pipeline: Identifiable, Codable {
+struct Pipeline: Identifiable, Decodable {
 
     var name: String
     var feed: Pipeline.Feed
@@ -63,35 +63,39 @@ extension Pipeline: Hashable {
       
 }
 
-extension Pipeline: Transferable {
-    static var transferRepresentation: some TransferRepresentation {
-        CodableRepresentation(contentType: .json)
-    }
-}
-
 
 extension Pipeline {
 
-    static func fromPersistedDictionary(dict: Dictionary<String, String>) -> Pipeline? {
-        // TODO: this looks ugly and isn't helpful
+    init?(reference r: Dictionary<String, String>) {
         guard
-            let name = dict["name"],
-            let feedTypeString = dict["feedType"],
+            let name = r["name"],
+            let feedTypeString = r["feedType"],
             let feedType = Pipeline.FeedType(rawValue: feedTypeString),
-            let feedUrl = dict["feedUrl"]
+            let feedUrl = r["feedUrl"],
+            let feedName = r["feedName"]
         else {
             return nil
         }
-        let feedName = dict["feedName"] ?? ""
-        return Pipeline(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: feedName.isEmpty ? nil : feedName))
+        self.init(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: !feedName.isEmpty ? feedName : nil))
     }
-
-    func asDictionaryForPersisting() -> Dictionary<String, String> {
+    
+    func reference() -> Dictionary<String, String> {
         [ "name": self.name,
-          "feedType": String(describing: self.feed.type),
+          "feedType": self.feed.type.rawValue,
           "feedUrl": self.feed.url,
           "feedName": self.feed.name ?? "",
         ]
+    }
+    
+    init?(legacyReference r: Dictionary<String, String>) {
+        guard
+            let projectName = r["projectName"],
+            let serverUrl = r["serverUrl"]
+        else {
+            return nil
+        }
+        let name = r["displayName"] ?? projectName
+        self.init(name: name, feed: Pipeline.Feed(type: .cctray, url: serverUrl, name: projectName))
     }
 
 }
