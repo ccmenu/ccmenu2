@@ -15,6 +15,7 @@ class TestHelper {
             "-loadPipelines", pathForResource(pipelines),
             "-pauseMonitor", String(pauseMonitor),
             "-PollInterval", "1",
+            "-PollIntervalLowData", "1",
             "-ShowAppIcon", "always",
             "-GitHubBaseURL", "http://localhost:8086",
             "-GitHubToken", token ?? ""
