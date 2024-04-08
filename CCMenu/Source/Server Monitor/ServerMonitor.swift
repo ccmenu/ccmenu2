@@ -60,16 +60,22 @@ class ServerMonitor {
     }
 
     private func updateStatus(pipelines: [Pipeline]) async {
-        for g in Dictionary(grouping: pipelines.filter({ $0.feed.type == .cctray }), by: { $0.feed.url }).values {
-            await updateCCTrayPipelines(group: g)
-        }
-        for p in pipelines.filter({ $0.feed.type == .github }) {
-            await updateGitHubPipeline(pipeline: p)
+        await withTaskGroup(of: Void.self) { taskGroup in
+            self.updatePipelines_CCTray(pipelines.filter({ $0.feed.type == .cctray }), taskGroup: &taskGroup)
+            self.updatePipelines_GitHub(pipelines.filter({ $0.feed.type == .github }), taskGroup: &taskGroup)
+            await taskGroup.waitForAll()
         }
     }
 
-    // TODO: Consider moving the following methods to the reader and an abstract reader base class
+    // TODO: Consider moving the following methods to the reader, with a protocol and base class
+    // TODO: Consider adding a limit to the number of parallel requests (see https://stackoverflow.com/questions/70976323/)
 
+    private func updatePipelines_CCTray(_ pipelines: [Pipeline], taskGroup: inout TaskGroup<Void>) {
+        for pg in Dictionary(grouping: pipelines, by: { $0.feed.url }).values {
+            taskGroup.addTask { await self.updateCCTrayPipelines(group: pg) }
+        }
+    }
+    
     private func updateCCTrayPipelines(group: [Pipeline]) async {
         var group = group
         guard let pipeline = group.first else { return }
@@ -82,6 +88,13 @@ class ServerMonitor {
         let reader = CCTrayFeedReader(for: group)
         await reader.updatePipelineStatus()
         reader.pipelines.forEach({ model.update(pipeline: $0) })
+    }
+    
+    
+    private func updatePipelines_GitHub(_ pipelines: [Pipeline], taskGroup: inout TaskGroup<Void>) {
+        for p in pipelines {
+            taskGroup.addTask { await self.updateGitHubPipeline(pipeline: p) }
+        }
     }
 
     private func updateGitHubPipeline(pipeline: Pipeline) async {
@@ -100,6 +113,7 @@ class ServerMonitor {
         model.update(pipeline: reader.pipeline)
     }
 
+    
     private func pipelineIsRemote(_ p: Pipeline) -> Bool {
         if let url = URL(string: p.feed.url), url.host() != "localhost" {
             return true

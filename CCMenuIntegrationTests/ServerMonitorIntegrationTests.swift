@@ -82,6 +82,32 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         XCTAssertEqual("build.123", model.pipelines.first(where: { $0.name == "other-project" })?.status.lastBuild?.label)
         XCTAssertEqual(1, requestCounter)
     }
+    
+    func testMakesRequestsForCCTrayFeedsInParallel() async throws {
+        var processingFirstRequest = false
+        var sawProcessingFirstRequestInSecondRequest = false
+        webapp.router.get("/1/cctray.xml") { _ in
+            processingFirstRequest = true
+            // TODO: It's crude to sleep but we can't use DispatchSemaphore in async method
+            Thread.sleep(forTimeInterval: 1)
+            processingFirstRequest = false
+            return "<Projects></Projects>"
+        }
+        webapp.router.get("/2/cctray.xml") { _ in
+            sawProcessingFirstRequestInSecondRequest = processingFirstRequest
+            return "<Projects></Projects>"
+        }
+
+        let model = PipelineModel()
+        model.add(pipeline: Pipeline(name: "connectfour-1", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/1/cctray.xml", name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour-2", feed: Pipeline.Feed(type: .cctray, url: "http://localhost:8086/2/cctray.xml", name: "connectfour")))
+
+        let monitor = await ServerMonitor(model: model)
+        await monitor.updateStatusIfPollTimeHasBeenReached()
+
+        XCTAssertTrue(sawProcessingFirstRequestInSecondRequest)
+    }
+
 
     func testDoesntPollWhenGitHubPipelineIsPaused() async throws {
         var requestCounter = 0
