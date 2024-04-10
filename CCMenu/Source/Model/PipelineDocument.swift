@@ -17,8 +17,7 @@ struct PipelineDocument: FileDocument {
     }
     
     init(url: URL) throws {
-        // TODO: Check whether this is really the best error to throw
-        guard url.startAccessingSecurityScopedResource() else { throw NSError(domain: NSCocoaErrorDomain, code: 257) }
+        guard url.startAccessingSecurityScopedResource() else { throw NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError) }
         defer { url.stopAccessingSecurityScopedResource() }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
