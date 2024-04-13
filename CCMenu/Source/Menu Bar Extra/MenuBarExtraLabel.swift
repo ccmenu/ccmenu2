@@ -12,7 +12,7 @@ struct MenuBarExtraLabel: View {
     @AppStorage(.useColorInMenuBar) var useColorInMenuBar: Bool = true
     @AppStorage(.useColorInMenuBarFailedOnly) var useColorInMenuBarFailedOnly: Bool = false
     @AppStorage(.showBuildTimerInMenuBar) var showBuildTimerInMenuBar: Bool = false
-    @Environment(\.displayScale) var displayScale   // TODO: Find out why this doesn't work here
+    @Environment(\.displayScale) var displayScale
 
     var body: some View {
         let viewModel = MenuExtraViewModel(pipelines: model.pipelines, useColorInMenuBar: useColorInMenuBar, useColorInMenuBarFailedOnly: useColorInMenuBarFailedOnly, showBuildTimerInMenuBar: showBuildTimerInMenuBar)
@@ -26,27 +26,32 @@ struct MenuBarExtraLabel: View {
         .accessibilityIdentifier("CCMenuMenuExtra")
     }
 
-    @MainActor
     private func renderCapsuleImage(viewModel: MenuExtraViewModel) -> Image? {
-        let image: NSImage?
-        if let color = viewModel.color {
-            let v = makeTextView(viewModel: viewModel, color: color)
-            // TODO: Find out how to type v to avoid the duplicated lines below
-            let renderer = ImageRenderer(content: v)
-            renderer.scale = 2 // This should be displayScale, but that seems broken
-            image = renderer.nsImage
-        } else {
-            let v =  makeTemplateTextView(viewModel: viewModel)
-            let renderer = ImageRenderer(content: v)
-            renderer.scale = 2 // This should be displayScale, but that seems broken
-            image = renderer.nsImage
-            image?.isTemplate = true
+        let view = makeTextView(viewModel: viewModel)
+        let renderer = ImageRenderer(content: view)
+        renderer.scale = displayScale
+        if #unavailable(macOS 14.0)  {
+            // In Ventura displayScale always seems to be 1, which looks bad on hidpi displays.
+            // So we hardcode to 2, which should look okay enough on regular displays, too.
+            renderer.scale = 2
         }
-        guard let image else { return nil }
+        guard let image = renderer.nsImage else { return nil }
+        if viewModel.color == nil {
+            image.isTemplate = true
+        }
         return Image(nsImage: image)
     }
 
-    private func makeTextView(viewModel: MenuExtraViewModel, color: Color) -> some View {
+    @ViewBuilder
+    private func makeTextView(viewModel: MenuExtraViewModel) -> some View {
+        if let color = viewModel.color {
+            makeRegularTextView(viewModel: viewModel, color: color)
+        } else {
+            makeTemplateTextView(viewModel: viewModel)
+        }
+    }
+
+    private func makeRegularTextView(viewModel: MenuExtraViewModel, color: Color) -> some View {
         ZStack(alignment: .leading) {
             Text(viewModel.title)
                 .monospacedDigit()
