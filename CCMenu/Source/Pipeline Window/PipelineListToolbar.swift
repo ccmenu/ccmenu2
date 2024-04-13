@@ -14,9 +14,6 @@ struct PipelineListToolbar: ToolbarContent {
     @AppStorage(.showStatusInWindow) var showStatus = true
     @AppStorage(.showAvatarsInWindow) var showAvatars = true
     @AppStorage(.showMessagesInWindow) var showMessages = true
-    @State var isHoveringOverDetailMenu = false
-    @State var isHoveringOverAddMenu = false
-    @State var isHoveringOverOverflowMenu = false
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .principal) {
@@ -38,18 +35,7 @@ struct PipelineListToolbar: ToolbarContent {
             } label: {
                 Image(systemName: "list.dash.header.rectangle")
             }
-            .menuStyle(.borderlessButton)
-            .padding(.bottom, 1)
-            .padding([.leading, .trailing], 8)
-            .frame(height: 28)
-            .opacity(0.7)
-            .background() {
-                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverDetailMenu ? 0.45 : 0)
-            }
-            .onHover {
-                isHoveringOverDetailMenu = $0
-            }
-            .cornerRadius(6)
+            .menuStyle(.button)
             .accessibility(label: Text("Display detail menu"))
             .help("Select which details to show for the pipelines")
         }
@@ -65,19 +51,7 @@ struct PipelineListToolbar: ToolbarContent {
             } label: {
                 Image(systemName: "plus")
             }
-            .menuStyle(.borderlessButton)
-            .padding(.bottom, 1)
-            .padding([.leading, .trailing], 8)
-            .frame(height: 28)
-            .opacity(0.7)
-            .background() {
-                // TODO: Fix transparency in dark mode
-                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverAddMenu ? 0.45 : 0)
-            }
-            .onHover {
-                isHoveringOverAddMenu = $0
-            }
-            .cornerRadius(6)
+            .menuStyle(.button)
             .accessibility(label: Text("Add pipeline menu"))
             .help("Add a pipeline")
 
@@ -108,19 +82,7 @@ struct PipelineListToolbar: ToolbarContent {
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
-            .menuStyle(.borderlessButton)
-            .padding(.bottom, 1)
-            .padding([.leading, .trailing], 8)
-            .frame(height: 28)
-            .opacity(0.7)
-            .background() {
-                // TODO: Fix transparency in dark mode
-                Color(.unemphasizedSelectedContentBackgroundColor).opacity(isHoveringOverOverflowMenu ? 0.45 : 0)
-            }
-            .onHover {
-                isHoveringOverOverflowMenu = $0
-            }
-            .cornerRadius(6)
+            .menuStyle(.button)
             .accessibility(label: Text("Additional actions menu"))
             .help("Additional actions")
         }
