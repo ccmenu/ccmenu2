@@ -88,8 +88,6 @@ extension View {
 struct PipelineRow_Previews: PreviewProvider {
     static var previews: some View {
         PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), pollInterval: 5))
-        // TODO: Figure out how to set showStatus from here
-        PipelineRow(viewModel: PipelineRowViewModel(pipeline: pipelineForPreview(), pollInterval: 5))
     }
 
     static func pipelineForPreview() -> Pipeline {

@@ -59,7 +59,6 @@ struct MenuExtraViewModel {
     }
 
     private func pipelineForMenuBar() -> Pipeline? {
-        // TODO: consider caching the result
         try! pipelines.sorted(by: compareMenuBarPriority(lhs:rhs:)).first
     }
 

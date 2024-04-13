@@ -63,7 +63,7 @@ struct PipelineListView: View {
         .sheet(isPresented: Binding(get: { viewState.showSheet != .noSheet }, set: { v in if !v { viewState.showSheet = .noSheet }})) {
             switch viewState.showSheet {
             case .noSheet:
-                Text("") // TODO: Figure out what else to do here; switch must be exhaustive but we can't get here
+                EmptyView() // We can't really get here
             case .editPipelineSheet:
                 if let pipeline = viewState.pipelineToEdit {
                     EditPipelineSheet(pipeline: pipeline, model: model)
