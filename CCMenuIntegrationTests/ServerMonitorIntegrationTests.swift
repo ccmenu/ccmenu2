@@ -94,6 +94,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
             return "<Projects></Projects>"
         }
         webapp.router.get("/2/cctray.xml") { _ in
+            Thread.sleep(forTimeInterval: 0.2)
             sawProcessingFirstRequestInSecondRequest = processingFirstRequest
             return "<Projects></Projects>"
         }
