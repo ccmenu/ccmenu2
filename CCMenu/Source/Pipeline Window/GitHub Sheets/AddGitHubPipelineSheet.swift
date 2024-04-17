@@ -5,14 +5,13 @@
  */
 
 import SwiftUI
-import Combine
 
 
 struct AddGitHubPipelineSheet: View {
     @ObservedObject var model: PipelineModel
     @EnvironmentObject private var authenticator: GitHubAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
-    @State private var owner = ""
+    @StateObject private var owner = DebouncedText()
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var branchList = GitHubBranchList()
@@ -51,16 +50,21 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .padding(.bottom)
 
-                TextField("Owner:", text: $owner, prompt: Text("user or organisation"))
+                TextField("Owner:", text: $owner.input, prompt: Text("user or organisation"))
                 .accessibilityIdentifier("Owner field")
-               // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
+                // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
-                .onSubmit {
-                    if !owner.isEmpty {
+                .onReceive(owner.$text) { val in
+                    if val.isEmpty {
+                        repositoryList.clearRepositories()
+                    } else {
                         Task {
-                            await repositoryList.updateRepositories(owner: owner, token: authenticator.token)
+                            await repositoryList.updateRepositories(owner: val, token: authenticator.token)
                         }
                     }
+                }
+                .onSubmit {
+                    owner.takeText()
                 }
 
                 Picker("Repository:", selection: $repositoryList.selected) {
@@ -74,8 +78,8 @@ struct AddGitHubPipelineSheet: View {
                     pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     if repositoryList.selected.isValid {
                         Task {
-                            async let r1: Void = workflowList.updateWorkflows(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
-                            async let r2: Void = branchList.updateBranches(owner: owner, repository: repositoryList.selected.name, token: authenticator.token)
+                            async let r1: Void = workflowList.updateWorkflows(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
+                            async let r2: Void = branchList.updateBranches(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
                             _ = await [r1, r2]
                         }
                     } else {
@@ -120,7 +124,7 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(owner: owner, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
+                    let p = pipelineBuilder.makePipeline(owner: owner.text, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }

@@ -216,4 +216,8 @@ class GitHubTests: XCTestCase {
         XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
     }
 
+    func testDoesntDoubleFetchWhenPressingEnter() throws {
+
+    }
+
 }

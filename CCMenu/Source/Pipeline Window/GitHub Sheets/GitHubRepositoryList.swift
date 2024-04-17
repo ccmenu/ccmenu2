@@ -53,4 +53,8 @@ class GitHubRepositoryList: ObservableObject {
             return [GitHubRepository(message: error.localizedDescription)]
         }
     }
+
+    func clearRepositories() {
+        items = [GitHubRepository()]
+    }
 }
