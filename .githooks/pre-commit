@@ -7,11 +7,11 @@
 # Redirect output to stderr.
 exec 1>&2
 
-# Check for presence of the Thoughtworks team identifier, which should
+# Check for presence of a development team identifier, which should
 # not be checked in. Trying to build with it will fail for everyone
 # who doesn't have a corresponding private key, and this includes the
 # GitHub Actions runner.
-if git grep --cached -q 'LL62P32G5C' CCMenu.xcodeproj/project.pbxproj; then
-    echo 'Project file contains Thoughtworks code-signing team identifier, which should not be checked in.'
+if git grep --cached -q -E '\"DEVELOPMENT_TEAM.*\" = [A-Z0-9]+;' CCMenu.xcodeproj/project.pbxproj; then
+    echo 'Project file contains development team identifier, which should not be checked in.'
     exit 1
 fi
