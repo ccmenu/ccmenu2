@@ -11,21 +11,21 @@ class DebouncedText : ObservableObject {
     @Published var input = ""
     @Published var text = ""
 
-    private var subscriptions = Set<AnyCancellable>()
+    private var subscriber = Set<AnyCancellable>()
 
     init() {
         $input
-            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] t in
-                self?.takeText(t)
+            .debounce(for: .milliseconds(750), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                self?.takeInput(val)
             })
-            .store(in: &subscriptions)
+            .store(in: &subscriber)
     }
 
-    func takeText(_ val: String? = nil) {
-        let newVal = val ?? input
-        if newVal != text {
-            text = newVal
+    func takeInput(_ val: String? = nil) {
+        let val = val ?? input
+        if val != text {
+            text = val
         }
     }
 }

@@ -104,7 +104,7 @@ class GitHubTests: XCTestCase {
 
         // Enter owner
         sheet.textFields["Owner field"].click()
-        sheet.typeText("erikdoe\n")
+        sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories and workflows are loaded and the default display name is set
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
@@ -155,7 +155,7 @@ class GitHubTests: XCTestCase {
 
         // Enter owner
         sheet.textFields["Owner field"].click()
-        sheet.typeText("erikdoe\n")
+        sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories and branches are loaded
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
@@ -199,7 +199,7 @@ class GitHubTests: XCTestCase {
         // Enter owner and wait for the repo list to load
         let ownerField = sheet.textFields["Owner field"]
         ownerField.click()
-        sheet.typeText("erikdoe\n")
+        sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories are loaded and sorted
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
@@ -216,8 +216,38 @@ class GitHubTests: XCTestCase {
         XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
     }
 
-    func testDoesntDoubleFetchWhenPressingEnter() throws {
+    func testDoesntDoubleFetchRepositories() throws {
+        var fetchCount = 0
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            fetchCount += 1
+            return try TestHelper.contentsOfFile("GitHubReposByUserResponse.json")
+        }
 
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json")
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add workflow sheet
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Enter owner and wait for the repo list to load
+        let ownerField = sheet.textFields["Owner field"]
+        ownerField.click()
+        sheet.typeText("erikdoe") // Note: not pressing return here
+
+        // Make sure that the repositories are loaded and sorted
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
+        waitForExpectations(timeout: 3)
+
+        // Now press return and wait for a little while
+        sheet.typeText("\n")
+        Thread.sleep(forTimeInterval: 1)
+        
+        // Assert that no further fetch occured
+        XCTAssertEqual(1, fetchCount)
+        
     }
 
 }

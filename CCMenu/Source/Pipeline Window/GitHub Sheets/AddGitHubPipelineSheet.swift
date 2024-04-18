@@ -54,17 +54,17 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Owner field")
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
-                .onReceive(owner.$text) { val in
-                    if val.isEmpty {
+                .onReceive(owner.$text) { t in
+                    if t.isEmpty {
                         repositoryList.clearRepositories()
                     } else {
                         Task {
-                            await repositoryList.updateRepositories(owner: val, token: authenticator.token)
+                            await repositoryList.updateRepositories(owner: t, token: authenticator.token)
                         }
                     }
                 }
                 .onSubmit {
-                    owner.takeText()
+                    owner.takeInput()
                 }
 
                 Picker("Repository:", selection: $repositoryList.selected) {
