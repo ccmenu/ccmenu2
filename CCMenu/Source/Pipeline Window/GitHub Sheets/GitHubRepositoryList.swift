@@ -6,6 +6,7 @@
 
 import Foundation
 
+// TODO: Refactor the list classes (repo, workflow, branch) to use some common code
 @MainActor
 class GitHubRepositoryList: ObservableObject {
     @Published private(set) var items = [GitHubRepository()] { didSet { selected = items[0] }}
@@ -45,6 +46,15 @@ class GitHubRepositoryList: ObservableObject {
         do {
             let (data, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            // TODO: Somehow refactor this to use the same code as feed reader
+            if response.statusCode == 403 || response.statusCode == 429 {
+                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
+                    // HTTPURLResponse doesn't have a specific message for code 429
+                    return [GitHubRepository(message: "too many requests")]
+                } else {
+                    return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
+                }
+            }
             if response.statusCode != 200 {
                 return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
             }

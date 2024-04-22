@@ -216,6 +216,33 @@ class GitHubTests: XCTestCase {
         XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
     }
 
+    func testShowsRateLimitExceededForRepositories() throws {
+        webapp.router.get("/users/erikdoe/repos", options: .editResponse) { r -> String in
+            r.response.status = .forbidden
+            r.response.headers.replaceOrAdd(name: "x-ratelimit-remaining", value: "0")
+            return "{ \"message\": \"API rate limit exceeded for ...\" } "
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add workflow sheet
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("erikdoe" + "\n")
+
+        // Make sure that the repository list shows rate limit exceeded message
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == '(too many requests)'"), evaluatedWith: repositoryPicker)
+        waitForExpectations(timeout: 2)
+
+        // TODO: The other pickers should also show the error
+    }
+
     func testDoesntDoubleFetchRepositories() throws {
         var fetchCount = 0
         webapp.router.get("/users/erikdoe/repos") { _ in
