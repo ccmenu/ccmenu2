@@ -7,14 +7,9 @@
 
 import Foundation
 
-class CCTrayPipelineBuilder: ObservableObject {
-    @Published var name: String = ""
+class CCTrayPipelineBuilder {
 
-    func setDefaultName(project: CCTrayProject) {
-        name = project.isValid ? project.name : ""
-    }
-
-    func makePipeline(feedUrl: String, credential: HTTPCredential?, project: CCTrayProject) -> Pipeline {
+    func makePipeline(name: String, feedUrl: String, credential: HTTPCredential?, project: CCTrayProject) -> Pipeline {
         var feedUrl = feedUrl
         if let credential {
             feedUrl = setUser(credential.user, inURL: feedUrl)

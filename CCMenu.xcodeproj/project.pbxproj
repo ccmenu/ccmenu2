@@ -50,6 +50,8 @@
 		03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03825DF9259D0ACF00DEB003 /* PipelineListView.swift */; };
 		03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* DefaultPipelines.json */; };
 		0386E93D2BD07C9F006F7988 /* DebouncedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0386E93C2BD07C9F006F7988 /* DebouncedText.swift */; };
+		0386E93F2BD859E8006F7988 /* GitHubPipelineName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0386E93E2BD859E8006F7988 /* GitHubPipelineName.swift */; };
+		0386E9412BD85BF9006F7988 /* CCTrayPipelineName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0386E9402BD85BF9006F7988 /* CCTrayPipelineName.swift */; };
 		038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */; };
 		038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */; };
 		038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */; };
@@ -172,6 +174,8 @@
 		03825DF9259D0ACF00DEB003 /* PipelineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListView.swift; sourceTree = "<group>"; };
 		03825E9D259FF64A00DEB003 /* DefaultPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultPipelines.json; sourceTree = "<group>"; };
 		0386E93C2BD07C9F006F7988 /* DebouncedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedText.swift; sourceTree = "<group>"; };
+		0386E93E2BD859E8006F7988 /* GitHubPipelineName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPipelineName.swift; sourceTree = "<group>"; };
+		0386E9402BD85BF9006F7988 /* CCTrayPipelineName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayPipelineName.swift; sourceTree = "<group>"; };
 		038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBranchList.swift; sourceTree = "<group>"; };
 		038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubBranchesResponse.json; sourceTree = "<group>"; };
 		038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubReposByUserCCM2OnlyResponse.json; sourceTree = "<group>"; };
@@ -311,8 +315,9 @@
 				03DA98DB2B4498BB0073F5BB /* GitHubRepositoryList.swift */,
 				03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */,
 				038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */,
-				03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */,
+				0386E93E2BD859E8006F7988 /* GitHubPipelineName.swift */,
 				03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */,
+				03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */,
 			);
 			path = "GitHub Sheets";
 			sourceTree = "<group>";
@@ -322,8 +327,9 @@
 			children = (
 				0336DBAB29848FE200E5811C /* AddCCTrayPipelineSheet.swift */,
 				035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */,
-				03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */,
 				03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */,
+				03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */,
+				0386E9402BD85BF9006F7988 /* CCTrayPipelineName.swift */,
 				03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */,
 			);
 			path = "CCTray Sheets";
@@ -811,6 +817,8 @@
 				03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */,
 				038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */,
 				03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */,
+				0386E9412BD85BF9006F7988 /* CCTrayPipelineName.swift in Sources */,
+				0386E93F2BD859E8006F7988 /* GitHubPipelineName.swift in Sources */,
 				0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */,
 				03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */,
 			);
@@ -1111,7 +1119,7 @@
 				CODE_SIGN_ENTITLEMENTS = CCMenuUITests/CCMenuUITests.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1136,7 +1144,7 @@
 				CODE_SIGN_ENTITLEMENTS = CCMenuUITests/CCMenuUITests.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1162,7 +1170,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1194,7 +1202,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1342,7 +1350,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1373,7 +1381,7 @@
 				CODE_SIGN_ENTITLEMENTS = CCMenuUITests/CCMenuUITests.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";

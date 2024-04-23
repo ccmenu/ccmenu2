@@ -13,7 +13,7 @@ struct AddCCTrayPipelineSheet: View {
     @State var credential = HTTPCredential(user: "", password: "")
     @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
-    @StateObject private var pipelineBuilder = CCTrayPipelineBuilder()
+    @StateObject private var name = CCTrayPipelineName()
 
     var body: some View {
         VStack {
@@ -45,15 +45,15 @@ struct AddCCTrayPipelineSheet: View {
                 .accessibilityIdentifier("Project picker")
                 .disabled(!projectList.selected.isValid)
                 .onChange(of: projectList.selected) { _ in
-                    pipelineBuilder.setDefaultName(project: projectList.selected)
+                    name.setDefaultName(project: projectList.selected)
                 }
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $pipelineBuilder.name)
+                    TextField("Display name:", text: $name.value)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        pipelineBuilder.setDefaultName(project: projectList.selected)
+                        name.setDefaultName(project: projectList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -65,7 +65,7 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(feedUrl: url, credential: credentialOptional(), project: projectList.selected)
+                    let p = CCTrayPipelineBuilder().makePipeline(name: name.value, feedUrl: url, credential: credentialOptional(), project: projectList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }

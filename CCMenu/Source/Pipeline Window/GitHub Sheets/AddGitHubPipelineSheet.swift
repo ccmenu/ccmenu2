@@ -15,7 +15,7 @@ struct AddGitHubPipelineSheet: View {
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var branchList = GitHubBranchList()
-    @StateObject private var pipelineBuilder = GitHubPipelineBuilder()
+    @StateObject private var name = GitHubPipelineName()
 
     var body: some View {
         VStack {
@@ -75,7 +75,7 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Repository picker")
                 .disabled(!repositoryList.selected.isValid)
                 .onChange(of: repositoryList.selected) { _ in
-                    pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     if repositoryList.selected.isValid {
                         Task {
                             async let r1: Void = workflowList.updateWorkflows(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
@@ -96,7 +96,7 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Workflow picker")
                 .disabled(!workflowList.selected.isValid)
                 .onChange(of: workflowList.selected) { _ in
-                    pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                 }
 
                 Picker("Branch:", selection: $branchList.selected) {
@@ -109,10 +109,10 @@ struct AddGitHubPipelineSheet: View {
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $pipelineBuilder.name)
+                    TextField("Display name:", text: $name.value)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        pipelineBuilder.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                        name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
                     }
                 }
                 .padding(.bottom)
@@ -124,12 +124,12 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = pipelineBuilder.makePipeline(owner: owner.text, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
+                    let p = GitHubPipelineBuilder().makePipeline(name: name.value, owner: owner.text, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
                     model.add(pipeline: p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(pipelineBuilder.name.isEmpty || !repositoryList.selected.isValid || !workflowList.selected.isValid)
+                .disabled(name.value.isEmpty || !repositoryList.selected.isValid || !workflowList.selected.isValid)
             }
         }
         .frame(minWidth: 400)

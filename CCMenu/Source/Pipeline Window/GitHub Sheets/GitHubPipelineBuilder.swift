@@ -5,23 +5,10 @@
  */
 
 import Foundation
-import SwiftUI
 
-class GitHubPipelineBuilder: ObservableObject {
-    @Published var name: String = ""
+class GitHubPipelineBuilder {
 
-    func setDefaultName(repository: GitHubRepository, workflow: GitHubWorkflow) {
-        var newName = ""
-        if repository.isValid {
-            newName.append(repository.name)
-            if workflow.isValid {
-                newName.append(String(format: " | %@", workflow.name))
-            }
-        }
-        self.name = newName
-    }
-
-    func makePipeline(owner: String, repository: GitHubRepository, workflow: GitHubWorkflow, branch: GitHubBranch) -> Pipeline {
+    func makePipeline(name: String, owner: String, repository: GitHubRepository, workflow: GitHubWorkflow, branch: GitHubBranch) -> Pipeline {
         let branchName = branch.isAllBranchPlaceholder ? nil : branch.name
         let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename, branch: branchName)
         let feed = Pipeline.Feed(type: .github, url:url)
