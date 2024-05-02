@@ -6,22 +6,16 @@
 
 import SwiftUI
 
-enum PipelListViewSheet {
-    case
-    noSheet,
-    editPipelineSheet,
-    addCCTrayPipelineSheet,
-    addGitHubPipelineSheet,
-    signInAtGitHubSheet
-}
 
 final class ListViewState: ObservableObject {
     @Published var selection: Set<String> = Set()
-    @Published var pipelineToEdit: Pipeline? = nil
-    @Published var showSheet: PipelListViewSheet = .noSheet
-    @Published var errorMessage: String? = nil
+    @Published var addCCTrayPipelineSheetConfig = PipelineSheetConfig()
+    @Published var addGitHubPipelineSheetConfig = PipelineSheetConfig()
+    @Published var editPipelineSheetConfig = PipelineSheetConfig()
+    @Published var isShowingSignInAtGitHubSheet: Bool = false
     @Published var isShowingImporter: Bool = false
     @Published var isShowingExporter: Bool = false
+    @Published var errorMessage: String? = nil
 }
 
 
@@ -60,27 +54,36 @@ struct PipelineListView: View {
                 .filter({ selection.contains($0.id) })
                 .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
         }
-        .sheet(isPresented: Binding(get: { viewState.showSheet != .noSheet }, set: { v in if !v { viewState.showSheet = .noSheet }})) {
-            switch viewState.showSheet {
-            case .noSheet:
-                EmptyView() // We can't really get here
-            case .editPipelineSheet:
-                if let pipeline = viewState.pipelineToEdit {
-                    EditPipelineSheet(pipeline: pipeline, model: model)
-                }
-            case .addCCTrayPipelineSheet:
-                AddCCTrayPipelineSheet(model: model)
-            case .addGitHubPipelineSheet:
-                AddGitHubPipelineSheet(model: model)
-            case .signInAtGitHubSheet:
-                SignInAtGitHubSheet()
+       .sheet(isPresented: $viewState.addCCTrayPipelineSheetConfig.isPresented) {
+            if let p = viewState.addCCTrayPipelineSheetConfig.pipeline {
+                model.add(pipeline: p)
             }
+        } content: {
+            AddCCTrayPipelineSheet(config: $viewState.addCCTrayPipelineSheetConfig)
         }
-        .onChange(of: viewState.showSheet) { _ in
-            guard showAppIcon == .sometimes else { return }
-            NSApp.hideApplicationIcon(viewState.showSheet == .noSheet)
-            NSApp.activateThisApp()
+        .sheet(isPresented: $viewState.addGitHubPipelineSheetConfig.isPresented) {
+            if let p = viewState.addGitHubPipelineSheetConfig.pipeline {
+                model.add(pipeline: p)
+            }
+        } content: {
+            AddGitHubPipelineSheet(config: $viewState.addGitHubPipelineSheetConfig)
         }
+        .sheet(isPresented: $viewState.editPipelineSheetConfig.isPresented) {
+            if let p = viewState.editPipelineSheetConfig.pipeline {
+                model.update(pipeline: p)
+            }
+        } content: {
+            EditPipelineSheet(config: $viewState.editPipelineSheetConfig)
+        }
+        .sheet(isPresented: $viewState.isShowingSignInAtGitHubSheet) {
+        } content: {
+            SignInAtGitHubSheet()
+        }
+//        .onChange(of: viewState.showSheet) { _ in
+//            guard showAppIcon == .sometimes else { return }
+//            NSApp.hideApplicationIcon(viewState.showSheet == .noSheet)
+//            NSApp.activateThisApp()
+//        }
         .fileImporter(isPresented: $viewState.isShowingImporter, allowedContentTypes: [.json]) { result in
             switch result {
             case .success(let fileurl):
@@ -102,6 +105,12 @@ struct PipelineListView: View {
             Text(viewState.errorMessage ?? "unknown error")
         }
         .environmentObject(ghAuthenticator)
+    }
+    
+    private func showOrHideAppIcon(_ flag: Bool) {
+        guard showAppIcon == .sometimes else { return }
+        NSApp.hideApplicationIcon(!flag)
+        NSApp.activateThisApp()
     }
 
 }

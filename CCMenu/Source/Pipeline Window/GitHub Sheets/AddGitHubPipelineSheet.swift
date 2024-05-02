@@ -8,14 +8,14 @@ import SwiftUI
 
 
 struct AddGitHubPipelineSheet: View {
-    @ObservedObject var model: PipelineModel
+    @Binding var config: PipelineSheetConfig
     @EnvironmentObject private var authenticator: GitHubAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
     @StateObject private var owner = DebouncedText()
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var branchList = GitHubBranchList()
-    @StateObject private var name = GitHubPipelineName()
+    @StateObject private var builder = GitHubPipelineBuilder()
 
     var body: some View {
         VStack {
@@ -55,6 +55,7 @@ struct AddGitHubPipelineSheet: View {
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work
                 .autocorrectionDisabled(true)
                 .onReceive(owner.$text) { t in
+                    builder.owner = t
                     if t.isEmpty {
                         repositoryList.clearRepositories()
                     } else {
@@ -75,7 +76,7 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Repository picker")
                 .disabled(!repositoryList.selected.isValid)
                 .onChange(of: repositoryList.selected) { _ in
-                    name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    builder.repository = repositoryList.selected
                     if repositoryList.selected.isValid {
                         Task {
                             async let r1: Void = workflowList.updateWorkflows(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
@@ -96,7 +97,7 @@ struct AddGitHubPipelineSheet: View {
                 .accessibilityIdentifier("Workflow picker")
                 .disabled(!workflowList.selected.isValid)
                 .onChange(of: workflowList.selected) { _ in
-                    name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                    builder.workflow = workflowList.selected
                 }
 
                 Picker("Branch:", selection: $branchList.selected) {
@@ -106,13 +107,16 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .accessibilityIdentifier("Branch picker")
                 .disabled(!branchList.selected.isValid)
+                .onChange(of: branchList.selected) { _ in
+                    builder.branch = branchList.selected
+                }
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $name.value)
+                    TextField("Display name:", text: $builder.name)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        name.setDefaultName(repository: repositoryList.selected, workflow: workflowList.selected)
+                        builder.setDefaultName()
                     }
                 }
                 .padding(.bottom)
@@ -124,12 +128,13 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = GitHubPipelineBuilder().makePipeline(name: name.value, owner: owner.text, repository: repositoryList.selected, workflow: workflowList.selected, branch: branchList.selected)
-                    model.add(pipeline: p)
-                    presentation.dismiss()
+                    if let p = builder.makePipeline() {
+                        config.setPipeline(p)
+                        presentation.dismiss()
+                    }
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(name.value.isEmpty || !repositoryList.selected.isValid || !workflowList.selected.isValid)
+                .disabled(!builder.canMakePipeline)
             }
         }
         .frame(minWidth: 400)
@@ -149,7 +154,7 @@ struct AddGitHubPipelineSheet: View {
 struct AddGithubPipelineSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-//            AddGithubPipelineSheet(model: ViewModel())
+//            AddGitHubPipelineSheet(config: $config)
         }
     }
 }

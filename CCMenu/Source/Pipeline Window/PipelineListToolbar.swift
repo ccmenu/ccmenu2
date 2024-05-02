@@ -43,10 +43,10 @@ struct PipelineListToolbar: ToolbarContent {
         ToolbarItemGroup(placement: .principal) {
             Menu() {
                 Button("Add project from CCTray feed...") {
-                    viewState.showSheet = .addCCTrayPipelineSheet
+                    viewState.addCCTrayPipelineSheetConfig.isPresented = true
                 }
                 Button("Add GitHub Actions workflow...") {
-                    viewState.showSheet = .addGitHubPipelineSheet
+                    viewState.addGitHubPipelineSheetConfig.isPresented = true
                 }
             } label: {
                 Image(systemName: "plus")
@@ -56,8 +56,9 @@ struct PipelineListToolbar: ToolbarContent {
             .help("Add a pipeline")
 
             Button() {
-                viewState.pipelineToEdit = model.pipelines.first(where: { viewState.selection.contains($0.id) })
-                viewState.showSheet = .editPipelineSheet
+                let p = model.pipelines.first(where: { viewState.selection.contains($0.id) })
+                viewState.editPipelineSheetConfig.pipeline = p
+                viewState.editPipelineSheetConfig.isPresented = true
             } label: {
                 Label("Edit", systemImage: "gearshape")
             }

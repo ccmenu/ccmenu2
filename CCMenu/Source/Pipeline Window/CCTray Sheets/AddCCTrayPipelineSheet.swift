@@ -7,13 +7,13 @@
 import SwiftUI
 
 struct AddCCTrayPipelineSheet: View {
-    @ObservedObject var model: PipelineModel
+    @Binding var config: PipelineSheetConfig
     @Environment(\.presentationMode) @Binding var presentation
     @State var useBasicAuth = false
     @State var credential = HTTPCredential(user: "", password: "")
     @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
-    @StateObject private var name = CCTrayPipelineName()
+    @StateObject private var builder = CCTrayPipelineBuilder()
 
     var body: some View {
         VStack {
@@ -45,15 +45,15 @@ struct AddCCTrayPipelineSheet: View {
                 .accessibilityIdentifier("Project picker")
                 .disabled(!projectList.selected.isValid)
                 .onChange(of: projectList.selected) { _ in
-                    name.setDefaultName(project: projectList.selected)
+                    builder.project = projectList.selected
                 }
                 .padding(.bottom)
 
                 HStack {
-                    TextField("Display name:", text: $name.value)
+                    TextField("Display name:", text: $builder.name)
                         .accessibilityIdentifier("Display name field")
                     Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        name.setDefaultName(project: projectList.selected)
+                        builder.setDefaultName()
                     }
                 }
                 .padding(.bottom)
@@ -65,12 +65,12 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = CCTrayPipelineBuilder().makePipeline(name: name.value, feedUrl: url, credential: credentialOptional(), project: projectList.selected)
-                    model.add(pipeline: p)
+                    let p = builder.makePipeline(feedUrl: url, credential: credentialOptional())
+                    config.setPipeline(p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(!projectList.selected.isValid)
+                .disabled(!projectList.selected.isValid) // TODO: should ask builder
             }
         }
         .frame(minWidth: 400)
@@ -88,7 +88,7 @@ struct AddCCTrayPipelineSheet: View {
 struct AddCCTrayPipelineSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddCCTrayPipelineSheet(model: PipelineModel())
+//            AddCCTrayPipelineSheet(model: PipelineModel())
         }
     }
 }

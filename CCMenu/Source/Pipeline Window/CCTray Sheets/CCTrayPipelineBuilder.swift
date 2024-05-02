@@ -7,9 +7,21 @@
 
 import Foundation
 
-class CCTrayPipelineBuilder {
+class CCTrayPipelineBuilder: ObservableObject {
 
-    func makePipeline(name: String, feedUrl: String, credential: HTTPCredential?, project: CCTrayProject) -> Pipeline {
+    @Published var name: String = ""
+    var project: CCTrayProject? { didSet { setDefaultName() }}
+
+    func setDefaultName() {
+        var newName = ""
+        if let project, project.isValid {
+            newName = project.name
+        }
+        name = newName
+    }
+    
+    
+    func makePipeline(feedUrl: String, credential: HTTPCredential?) -> Pipeline? {
         var feedUrl = feedUrl
         if let credential {
             feedUrl = setUser(credential.user, inURL: feedUrl)
@@ -19,6 +31,7 @@ class CCTrayPipelineBuilder {
                 // TODO: Figure out what to do here – so many errors...
             }
         }
+        guard let project else { return nil }
         let feed = Pipeline.Feed(type: .cctray, url: feedUrl, name: project.name)
         var p: Pipeline = Pipeline(name: name, feed: feed)
         p.status = Pipeline.Status(activity: .sleeping)

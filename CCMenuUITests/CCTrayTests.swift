@@ -86,7 +86,7 @@ class CCTrayTests: XCTestCase {
     }
 
 
-    func testAddsPipelineWithAuthentication() throws {
+    func testShowsProjectsOnPipelineWithAuthentication() throws {
         webapp.router.get("/cctray.xml") { request in
             if request.authBasic?.username != "dev" || request.authBasic?.password != "rosebud" {
                 throw HBHTTPError(.unauthorized)

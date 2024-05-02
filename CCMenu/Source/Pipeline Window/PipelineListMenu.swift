@@ -32,8 +32,9 @@ struct PipelineListMenu: View {
         if !contextSelection.isEmpty {
             Divider()
             Button("Edit...") {
-                viewState.pipelineToEdit = model.pipelines.first(where: { contextSelection.contains($0.id) })
-                viewState.showSheet = .editPipelineSheet
+                let p = model.pipelines.first(where: { viewState.selection.contains($0.id) })
+                viewState.editPipelineSheetConfig.pipeline = p
+                viewState.editPipelineSheetConfig.isPresented = true
             }
             .disabled(contextSelection.count != 1)
             Button("Remove") {
@@ -54,7 +55,7 @@ struct PipelineListMenu: View {
         Button("Sign In at GitHub...") {
             Task { 
                 if await ghAuthenticator.signInAtGitHub() {
-                    viewState.showSheet = .signInAtGitHubSheet
+                    viewState.isShowingSignInAtGitHubSheet = true
                     await ghAuthenticator.waitForToken()
                 }
             }

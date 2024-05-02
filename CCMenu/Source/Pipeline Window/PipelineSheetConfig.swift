@@ -4,13 +4,13 @@
  *  not use these files except in compliance with the License.
  */
 
-import SwiftUI
+import Foundation
 
-class CCTrayPipelineName: ObservableObject {
-    @Published var value: String = ""
-
-    func setDefaultName(project: CCTrayProject) {
-        value = project.isValid ? project.name : ""
+struct PipelineSheetConfig {
+    var isPresented: Bool = false
+    var pipeline: Pipeline?
+    
+    mutating func setPipeline(_ pipeline: Pipeline?) {
+        self.pipeline = pipeline
     }
 }
-

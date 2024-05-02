@@ -8,12 +8,11 @@ import SwiftUI
 
 
 struct EditPipelineSheet: View {
-    @State var pipeline: Pipeline
+    @Binding var config: PipelineSheetConfig
+    @Environment(\.presentationMode) @Binding var presentation
     @State var useBasicAuth = false
     @State var credential = HTTPCredential(user: "", password: "")
     @State var name: String = ""
-    @ObservedObject var model: PipelineModel
-    @Environment(\.presentationMode) @Binding var presentation
 
     var body: some View {
         VStack {
@@ -21,7 +20,7 @@ struct EditPipelineSheet: View {
                 .font(.headline)
                 .padding(.bottom)
 
-            if pipeline.feed.type == .cctray {
+            if let p = config.pipeline, p.feed.type == .cctray {
                 CCTrayAuthView(useBasicAuth: $useBasicAuth, credential: $credential)
                 .padding(.bottom)
             }
@@ -33,19 +32,35 @@ struct EditPipelineSheet: View {
             .padding(.bottom)
             HStack {
                 Button("Cancel") {
+                    config.setPipeline(nil)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    pipeline.name = name
-                    model.update(pipeline: pipeline)
+                    config.pipeline?.name = name
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(pipeline.name.isEmpty)
+                .disabled(name.isEmpty)
             }
             .onAppear() {
-                name = pipeline.name
+                name = config.pipeline?.name ?? ""
+//                if pipeline.feed.type == .cctray {
+//                    if let url = URLComponents(string: pipeline.feed.url) {
+//                        if let user = url.user {
+//                            useBasicAuth = true
+//                            credential.user = user
+//                            do {
+//                                if let url = url.url, let password = try Keychain().getPassword(forURL: url) {
+//                                    credential.password = password
+//                                }
+//                            }
+//                            catch {
+//                                // TODO: What to do here?
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
         .frame(minWidth: 400)
