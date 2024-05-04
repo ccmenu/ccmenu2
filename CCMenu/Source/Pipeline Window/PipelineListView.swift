@@ -12,7 +12,7 @@ final class ListViewState: ObservableObject {
     @Published var addCCTrayPipelineSheetConfig = PipelineSheetConfig()
     @Published var addGitHubPipelineSheetConfig = PipelineSheetConfig()
     @Published var editPipelineSheetConfig = PipelineSheetConfig()
-    @Published var isShowingSignInAtGitHubSheet: Bool = false
+    @Published var signInAtGitHubSheetSheetConfig = PipelineSheetConfig()
     @Published var isShowingImporter: Bool = false
     @Published var isShowingExporter: Bool = false
     @Published var errorMessage: String? = nil
@@ -21,7 +21,6 @@ final class ListViewState: ObservableObject {
 
 struct PipelineListView: View {
     @ObservedObject var model: PipelineModel
-    @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
     @AppStorage(.pollInterval) var pollInterval = 10
     @StateObject var viewState = ListViewState()
     @StateObject private var ghAuthenticator = GitHubAuthenticator()
@@ -75,15 +74,10 @@ struct PipelineListView: View {
         } content: {
             EditPipelineSheet(config: $viewState.editPipelineSheetConfig)
         }
-        .sheet(isPresented: $viewState.isShowingSignInAtGitHubSheet) {
+        .sheet(isPresented: $viewState.signInAtGitHubSheetSheetConfig.isPresented) {
         } content: {
             SignInAtGitHubSheet()
         }
-//        .onChange(of: viewState.showSheet) { _ in
-//            guard showAppIcon == .sometimes else { return }
-//            NSApp.hideApplicationIcon(viewState.showSheet == .noSheet)
-//            NSApp.activateThisApp()
-//        }
         .fileImporter(isPresented: $viewState.isShowingImporter, allowedContentTypes: [.json]) { result in
             switch result {
             case .success(let fileurl):
@@ -105,12 +99,6 @@ struct PipelineListView: View {
             Text(viewState.errorMessage ?? "unknown error")
         }
         .environmentObject(ghAuthenticator)
-    }
-    
-    private func showOrHideAppIcon(_ flag: Bool) {
-        guard showAppIcon == .sometimes else { return }
-        NSApp.hideApplicationIcon(!flag)
-        NSApp.activateThisApp()
     }
 
 }

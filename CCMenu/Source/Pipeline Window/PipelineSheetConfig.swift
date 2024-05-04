@@ -4,13 +4,28 @@
  *  not use these files except in compliance with the License.
  */
 
-import Foundation
+import SwiftUI
 
 struct PipelineSheetConfig {
-    var isPresented: Bool = false
-    var pipeline: Pipeline?
-    
+    @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
+    var isPresented: Bool = false { didSet { setAppIconVisibility() } }
+    var pipelines: [Pipeline] = []
+
+
+    var pipeline: Pipeline? {
+        return (pipelines.count == 1) ? pipelines[0] : nil
+    }
+
     mutating func setPipeline(_ pipeline: Pipeline?) {
-        self.pipeline = pipeline
+        self.pipelines.removeAll()
+        if let pipeline {
+            self.pipelines.append(pipeline)
+        }
+    }
+
+    func setAppIconVisibility() {
+        guard showAppIcon == .sometimes else { return }
+        NSApp.hideApplicationIcon(!isPresented)
+        NSApp.activateThisApp()
     }
 }

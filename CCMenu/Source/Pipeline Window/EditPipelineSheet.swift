@@ -37,7 +37,10 @@ struct EditPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    config.pipeline?.name = name
+                    if var p = config.pipeline {
+                        p.name = name
+                        config.setPipeline(p)
+                    }
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

@@ -57,7 +57,7 @@ struct PipelineListToolbar: ToolbarContent {
 
             Button() {
                 let p = model.pipelines.first(where: { viewState.selection.contains($0.id) })
-                viewState.editPipelineSheetConfig.pipeline = p
+                viewState.editPipelineSheetConfig.setPipeline(p)
                 viewState.editPipelineSheetConfig.isPresented = true
             } label: {
                 Label("Edit", systemImage: "gearshape")
