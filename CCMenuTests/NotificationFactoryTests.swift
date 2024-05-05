@@ -15,7 +15,7 @@ class NotificationFactoryTests: XCTestCase {
 
     override func setUp() {
         factory = NotificationFactory()
-        pipeline = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: ""))
+        pipeline = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!))
         UserDefaults.active = UserDefaults.transient
         defaults = UserDefaults.active
     }

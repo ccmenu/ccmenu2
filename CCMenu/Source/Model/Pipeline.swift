@@ -22,7 +22,7 @@ struct Pipeline: Identifiable, Decodable {
     }
 
     var id: String {
-        (feed.name == nil) ? feed.url : "\(feed.url)|\(feed.name!)"
+        (feed.name == nil) ? feed.url.absoluteString : "\(feed.url.absoluteString)|\(feed.name!)"
     }
 
     var message: String? {
@@ -71,7 +71,7 @@ extension Pipeline {
             let name = r["name"],
             let feedTypeString = r["feedType"],
             let feedType = Pipeline.FeedType(rawValue: feedTypeString),
-            let feedUrl = r["feedUrl"],
+            let urlString = r["feedUrl"], let feedUrl = URL(string: urlString),
             let feedName = r["feedName"]
         else {
             return nil
@@ -82,7 +82,7 @@ extension Pipeline {
     func reference() -> Dictionary<String, String> {
         [ "name": self.name,
           "feedType": self.feed.type.rawValue,
-          "feedUrl": self.feed.url,
+          "feedUrl": self.feed.url.absoluteString,
           "feedName": self.feed.name ?? "",
         ]
     }
@@ -90,7 +90,7 @@ extension Pipeline {
     init?(legacyReference r: Dictionary<String, String>) {
         guard
             let projectName = r["projectName"],
-            let serverUrl = r["serverUrl"]
+            let urlString = r["serverUrl"], let serverUrl = URL(string: urlString)
         else {
             return nil
         }

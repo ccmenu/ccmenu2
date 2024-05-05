@@ -79,17 +79,17 @@ class GitHubAPI {
 
     // MARK: - feed
 
-    static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> String {
+    static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {
         var components = URLComponents(string: baseURL(forAPI: true))!
         components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
         if let branch {
             components.appendQueryItem(URLQueryItem(name: "branch", value: branch))
         }
-        return components.url!.absoluteString
+        return components.url!.absoluteURL
     }
 
     static func requestForFeed(feed: Pipeline.Feed, token: String?) -> URLRequest? {
-        guard var components = URLComponents(string: feed.url) else { return nil }
+        guard var components = URLComponents(url: feed.url, resolvingAgainstBaseURL: false) else { return nil }
         components.appendQueryItem(URLQueryItem(name: "per_page", value: "3"))
         return makeRequest(url: components.url!.absoluteURL, token: token)
     }

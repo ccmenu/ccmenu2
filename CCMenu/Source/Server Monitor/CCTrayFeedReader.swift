@@ -50,15 +50,14 @@ class CCTrayFeedReader {
     }
 
     func requestForFeed(feed: Pipeline.Feed) throws -> URLRequest {
-        guard let url = URL(string: feed.url) else { throw CCTrayFeedReaderError.invalidURLError }
         var credential: HTTPCredential?
-        if let user = url.user() {
-            guard let password = try Keychain().getPassword(forURL: url) else {
+        if let user = feed.url.user() {
+            guard let password = try Keychain().getPassword(forURL: feed.url) else {
                 throw CCTrayFeedReaderError.missingPasswordError
             }
             credential = HTTPCredential(user: user, password: password)
         }
-        return CCTrayAPI.requestForProjects(url: url, credential: credential)
+        return CCTrayAPI.requestForProjects(url: feed.url, credential: credential)
     }
 
     private func fetchStatus(request: URLRequest) async throws {

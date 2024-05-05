@@ -15,7 +15,7 @@ class MenuExtraModelTests: XCTestCase {
     }
 
     private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
-        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "", name: ""))
+        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p.status.activity = activity
         if activity == .building {
             p.status.currentBuild = Build(result: .unknown)

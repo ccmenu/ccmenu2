@@ -17,7 +17,7 @@ struct PipelineListMenu: View {
         Button("Copy Feed URL") {
             let value = model.pipelines
                 .filter({ selection.contains($0.id) })
-                .map({ $0.feed.url })
+                .map({ $0.feed.url.absoluteString })
                 .joined(separator: "\n")
             NSPasteboard.general.prepareForNewContents()
             NSPasteboard.general.setString(value, forType: .string)

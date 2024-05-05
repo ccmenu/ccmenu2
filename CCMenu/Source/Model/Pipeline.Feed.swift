@@ -17,7 +17,7 @@ extension Pipeline {
 
     struct Feed: Codable, Equatable {
         var type: FeedType
-        var url: String
+        var url: URL
         var name: String?       // for cctray only: name of the project in the feed
         var pauseUntil: Int?    // for GitHub only (so far): when to try polling again
         var pauseReason: String?

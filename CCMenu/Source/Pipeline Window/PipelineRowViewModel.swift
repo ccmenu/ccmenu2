@@ -109,7 +109,7 @@ struct PipelineRowViewModel {
     }
 
     var feedUrl: String {
-        var result = pipeline.feed.url
+        var result = pipeline.feed.url.absoluteString
         if pipeline.feed.type == .cctray, let name = pipeline.feed.name, name != pipeline.name {
             result.append(" (\(name))")
         }

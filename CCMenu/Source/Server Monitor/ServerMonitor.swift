@@ -115,7 +115,7 @@ class ServerMonitor {
 
     
     private func pipelineIsRemote(_ p: Pipeline) -> Bool {
-        if let url = URL(string: p.feed.url), url.host() != "localhost" {
+        if p.feed.url.host() != "localhost" {
             return true
         }
         return false

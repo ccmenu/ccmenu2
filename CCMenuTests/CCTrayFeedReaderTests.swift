@@ -10,7 +10,7 @@ import XCTest
 class CCTrayFeedReaderTests: XCTestCase {
 
     private func makePipeline(name: String, activity: Pipeline.Activity = .other) -> Pipeline {
-        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: "", name: name))
+        var p = Pipeline(name: name, feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!, name: name))
         p.status.activity = activity
         return p
     }
