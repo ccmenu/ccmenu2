@@ -22,36 +22,33 @@ class CCTrayPipelineBuilder: ObservableObject {
     
     
     func makePipeline(feedUrl: String, credential: HTTPCredential?) -> Pipeline? {
-        var feedUrl = feedUrl
-        if let credential {
-            feedUrl = setUser(credential.user, inURL: feedUrl)
-            do {
-                try Keychain().setPassword(credential.password, forURL: feedUrl)
-            } catch {
-                // TODO: Figure out what to do here – so many errors...
-            }
-        }
+        guard var feedUrl = URL(string: feedUrl) else { return nil }
+        feedUrl = Self.applyCredential(credential, toURL: feedUrl)
         guard let project else { return nil }
-        guard let url = URL(string: feedUrl) else { return nil }
-        let feed = Pipeline.Feed(type: .cctray, url: url, name: project.name)
+        let feed = Pipeline.Feed(type: .cctray, url: feedUrl, name: project.name)
         var p: Pipeline = Pipeline(name: name, feed: feed)
         p.status = Pipeline.Status(activity: .sleeping)
         p.status.lastBuild = Build(result: .unknown)
         return p
     }
 
-    private func setUser(_ user: String?, inURL urlString: String) -> String {
-        guard let user, !user.isEmpty else {
-            return urlString
+
+    static func applyCredential(_ credential: HTTPCredential?, toURL url: URL) -> URL {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return url }
+        if let credential, !credential.isEmpty {
+            components.user = credential.user
+            if !credential.password.isEmpty {
+                do {
+                    try Keychain().setPassword(credential.password, forURL: url.absoluteString)
+                } catch {
+                    // TODO: Figure out what to do here – so many errors...
+                }
+            }
+        } else {
+            components.user = nil
         }
-        guard var url = URLComponents(string: urlString) else {
-            return urlString
-        }
-        url.user = user
-        guard let newUrlString = url.string else {
-            return ""
-        }
-        return newUrlString
+        let newUrl = components.url?.absoluteURL ?? url
+        return newUrl
     }
 
 }

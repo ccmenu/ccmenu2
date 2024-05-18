@@ -33,7 +33,7 @@ struct AddCCTrayPipelineSheet: View {
                     .autocorrectionDisabled(true)
                     .onSubmit {
                         if !url.isEmpty {
-                            Task { await projectList.updateProjects(url: $url, credential: credentialOptional()) }
+                            Task { await projectList.updateProjects(url: $url, credential: credentialOptional) }
                         }
                     }
 
@@ -65,7 +65,7 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = builder.makePipeline(feedUrl: url, credential: credentialOptional())
+                    let p = builder.makePipeline(feedUrl: url, credential: credentialOptional)
                     config.setPipeline(p)
                     presentation.dismiss()
                 }
@@ -78,7 +78,7 @@ struct AddCCTrayPipelineSheet: View {
         .padding()
     }
 
-    private func credentialOptional() -> HTTPCredential? {
+    private var credentialOptional: HTTPCredential? {
         (useBasicAuth && !credential.isEmpty) ? credential : nil
     }
     

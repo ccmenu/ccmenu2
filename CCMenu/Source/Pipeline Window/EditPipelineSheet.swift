@@ -10,8 +10,6 @@ import SwiftUI
 struct EditPipelineSheet: View {
     @Binding var config: PipelineSheetConfig
     @Environment(\.presentationMode) @Binding var presentation
-    @State var useBasicAuth = false
-    @State var credential = HTTPCredential(user: "", password: "")
     @State var name: String = ""
 
     var body: some View {
@@ -19,12 +17,6 @@ struct EditPipelineSheet: View {
             Text("Edit Pipeline")
                 .font(.headline)
                 .padding(.bottom)
-
-            if let p = config.pipeline, p.feed.type == .cctray {
-                CCTrayAuthView(useBasicAuth: $useBasicAuth, credential: $credential)
-                .padding(.bottom)
-            }
-
             Form {
                 TextField("Name:", text: $name)
                     .accessibilityIdentifier("Name field")
@@ -48,26 +40,11 @@ struct EditPipelineSheet: View {
             }
             .onAppear() {
                 name = config.pipeline?.name ?? ""
-//                if pipeline.feed.type == .cctray {
-//                    if let url = URLComponents(string: pipeline.feed.url) {
-//                        if let user = url.user {
-//                            useBasicAuth = true
-//                            credential.user = user
-//                            do {
-//                                if let url = url.url, let password = try Keychain().getPassword(forURL: url) {
-//                                    credential.password = password
-//                                }
-//                            }
-//                            catch {
-//                                // TODO: What to do here?
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
         .frame(minWidth: 400)
         .frame(idealWidth: 450)
         .padding()
     }
+
 }

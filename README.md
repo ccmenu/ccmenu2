@@ -49,7 +49,6 @@ For now the roadmap is tracked in this readme file.
 ### Pre-release 6 (planned)
 
 - [X] Import and export of pipelines
-- [ ] Set user/password for CCTray pipelines
 - [X] Refresh GitHub token
 - [X] Allow selection of branch on GitHub
 
@@ -57,6 +56,7 @@ For now the roadmap is tracked in this readme file.
 
 - [ ] Sounds
 - [ ] Support for workflow-specific GitHub tokens
+- [ ] Update password for CCTray pipelines
 - [ ] Improve accessibility
 - [ ] Add support for localisation
 - [ ] Show avatar in notifications (committer or repo owner)
