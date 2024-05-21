@@ -121,7 +121,7 @@ class GitHubAuthenticator: ObservableObject {
 
     func fetchTokenFromKeychain() {
         do {
-            token = try Keychain().getToken(forService: "GitHub")
+            token = try Keychain.standard.getToken(forService: "GitHub")
         } catch {
             // TODO: Figure out what to do here – so many errors...
             token = nil
@@ -133,7 +133,7 @@ class GitHubAuthenticator: ObservableObject {
     func storeTokenInKeychain() {
         guard let token else { return }
         do {
-            try Keychain().setToken(token, forService: "GitHub")
+            try Keychain.standard.setToken(token, forService: "GitHub")
         } catch {
             // TODO: Figure out what to do here – so many errors...
         }

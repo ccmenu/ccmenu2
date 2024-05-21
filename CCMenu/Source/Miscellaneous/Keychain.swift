@@ -14,88 +14,122 @@ enum KeychainAccessError: Error {
     case missingSchemeErr
     case missingHostErr
     case missingUserErr
+    case invalidKeychainType
 }
 
 class Keychain {
 
+    static let standard = Keychain()
+
+    private let lock: NSLock
+    private var cache: [String: String]
+
+    private init() {
+        lock = NSLock()
+        cache = Dictionary()
+    }
+
     func setPassword(_ password: String, forURL urlString: String) throws {
         let url = try getOrThrow(error: .invalidURLErr) { URL(string: urlString) }
-        let query: [String: Any] = [
-            kSecClass as String:        kSecClassInternetPassword,
-            kSecAttrServer as String:   try getOrThrow(error: .missingHostErr) { url.host() },
-            kSecAttrPort as String:     url.port ?? 80,
-            kSecAttrAccount as String:  try getOrThrow(error: .missingUserErr) { url.user }
-        ]
-        var item: [String: Any] = [
-            kSecAttrProtocol as String: try getOrThrow(error: .missingSchemeErr) { url.scheme },
-            kSecValueData as String:    try getOrThrow(error: .passwordEncodingErr) { password.data(using: .utf8) }
-        ]
-        item.merge(query) { i, q in i }
+        let query = [
+            kSecClass:        kSecClassInternetPassword,
+            kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
+            kSecAttrPort:     url.port ?? 80,
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user }
+        ] as NSDictionary
+        let item = [
+            kSecClass:        kSecClassInternetPassword,
+            kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
+            kSecAttrPort:     url.port ?? 80,
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user },
+            kSecAttrProtocol: try getOrThrow(error: .missingSchemeErr) { url.scheme },
+            kSecValueData:    try getOrThrow(error: .passwordEncodingErr) { password.data(using: .utf8) }
+        ] as NSDictionary
         try setItem(item, forQuery: query)
+        cache[urlString] = nil
     }
 
     func getPassword(forURL url: URL) throws -> String? {
-        let query: [String: Any] = [
-            kSecClass as String:        kSecClassInternetPassword,
-            kSecAttrServer as String:   try getOrThrow(error: .missingHostErr) { url.host() },
-            kSecAttrPort as String:     url.port ?? 80,
-            kSecAttrAccount as String:  try getOrThrow(error: .missingUserErr) { url.user },
-            kSecReturnData as String:   true
-        ]
-        return try getStringForQuery(query)
+        if let password = cache[url.absoluteString] {
+            return password
+        }
+        let query = [
+            kSecClass:        kSecClassInternetPassword,
+            kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
+            kSecAttrPort:     url.port ?? 80,
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user },
+            kSecMatchLimit:   kSecMatchLimitOne,
+            kSecReturnData:   true
+        ] as NSDictionary
+        let password = try getStringForQuery(query)
+        cache[url.absoluteString] = password
+        return password
     }
 
 
     func setToken(_ token: String, forService service: String) throws {
-        let query: [String: Any] = [
-            kSecClass as String:        kSecClassGenericPassword,
-            kSecAttrService as String:  serviceForKeychain(service: service)
-        ]
-        var item: [String: Any] = [
-            kSecValueData as String:    try getOrThrow(error: .passwordEncodingErr) { token.data(using: .utf8) }
-        ]
-        item.merge(query) { i, q in i }
+        let query = [
+            kSecClass:        kSecClassGenericPassword,
+            kSecAttrService:  serviceForKeychain(service: service)
+        ] as NSDictionary
+        let item = [
+            kSecClass:        kSecClassGenericPassword,
+            kSecAttrService:  serviceForKeychain(service: service),
+            kSecValueData:    try getOrThrow(error: .passwordEncodingErr) { token.data(using: .utf8) }
+        ] as NSDictionary
         try setItem(item, forQuery: query)
+        cache[service] = nil
     }
 
     func getToken(forService service: String) throws -> String? {
         if service == "GitHub", let token = UserDefaults.active.string(forKey: "GitHubToken") {
             return token.isEmpty ? nil : token
         }
-        let query: [String: Any] = [
-            kSecClass as String:        kSecClassGenericPassword,
-            kSecAttrService as String:  serviceForKeychain(service: service),
-            kSecReturnData as String:   true
-        ]
-        return try getStringForQuery(query)
-     }
+        if let token = cache[service] {
+            return token
+        }
+        let query = [
+            kSecClass:        kSecClassGenericPassword,
+            kSecAttrService:  serviceForKeychain(service: service),
+            kSecMatchLimit:   kSecMatchLimitOne,
+            kSecReturnData:   true
+        ] as NSDictionary
+        let token = try getStringForQuery(query)
+        cache[service] = token
+        return token
+    }
+
     
-    
-    private func setItem(_ item: [String: Any], forQuery query: [String: Any]) throws {
-        var status = SecItemAdd(item as CFDictionary, nil)
+    private func setItem(_ item: NSDictionary, forQuery query: NSDictionary) throws {
+        lock.lock()
+        defer { lock.unlock() }
+
+        var status = SecItemAdd(item, nil)
         if status == errSecDuplicateItem {
-            status = SecItemUpdate(query as CFDictionary, item as CFDictionary)
+            status = SecItemUpdate(query, item)
         }
         if status != errSecSuccess {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
         }
     }
     
-    private func getStringForQuery(_ query: [String: Any]) throws -> String? {
-        var result: AnyObject?
-        let status = withUnsafeMutablePointer(to: &result) {
-            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
-        }
+    private func getStringForQuery(_ query: NSDictionary) throws -> String? {
+        lock.lock()
+        defer { lock.unlock() }
+
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query, &result)
         if status == errSecItemNotFound {
             return nil
         }
         if status != errSecSuccess {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
         }
-        guard let data = result as? Data else { return nil }
+        guard let data = result as? Data else { throw KeychainAccessError.invalidKeychainType }
         return String(data: data, encoding: .utf8)
     }
     
+
     private func getOrThrow<T>(error: KeychainAccessError, _ getter: () -> T?) throws -> T {
         guard let v = getter() else { throw error }
         return v

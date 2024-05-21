@@ -38,7 +38,7 @@ class GitHubFeedReader {
 
     func updatePipelineStatus() async {
         do {
-            let token = try Keychain().getToken(forService: "GitHub")
+            let token = try Keychain.standard.getToken(forService: "GitHub")
             guard let request = GitHubAPI.requestForFeed(feed: pipeline.feed, token: token) else {
                 throw GithHubFeedReaderError.invalidURLError
             }
