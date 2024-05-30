@@ -11,7 +11,6 @@ struct AddCCTrayPipelineSheet: View {
     @Environment(\.presentationMode) @Binding var presentation
     @State var useBasicAuth = false
     @State var credential = HTTPCredential(user: "", password: "")
-    @State var url: String = ""
     @StateObject private var projectList = CCTrayProjectList()
     @StateObject private var builder = CCTrayPipelineBuilder()
 
@@ -28,12 +27,12 @@ struct AddCCTrayPipelineSheet: View {
             .padding(.bottom)
 
             Form {
-                TextField("Server:", text: $url, prompt: Text("URL"))
+                TextField("Server:", text: $builder.feedUrl, prompt: Text("URL"))
                     .accessibilityIdentifier("Server URL field")
                     .autocorrectionDisabled(true)
                     .onSubmit {
-                        if !url.isEmpty {
-                            Task { await projectList.updateProjects(url: $url, credential: credentialOptional) }
+                        if !builder.feedUrl.isEmpty {
+                            Task { await projectList.updateProjects(url: $builder.feedUrl, credential: credentialOptional) }
                         }
                     }
 
@@ -65,12 +64,12 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = builder.makePipeline(feedUrl: url, credential: credentialOptional)
+                    let p = builder.makePipeline(credential: credentialOptional)
                     config.setPipeline(p)
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(!projectList.selected.isValid) // TODO: should ask builder
+                .disabled(!builder.canMakePipeline)
             }
         }
         .frame(minWidth: 400)

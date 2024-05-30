@@ -10,6 +10,7 @@ import Foundation
 class CCTrayPipelineBuilder: ObservableObject {
 
     @Published var name: String = ""
+    var feedUrl: String = ""
     var project: CCTrayProject? { didSet { setDefaultName() }}
 
     func setDefaultName() {
@@ -20,8 +21,14 @@ class CCTrayPipelineBuilder: ObservableObject {
         name = newName
     }
     
-    
-    func makePipeline(feedUrl: String, credential: HTTPCredential?) -> Pipeline? {
+    var canMakePipeline: Bool {
+        // We're not calling makePipeline, even though that would reduce some
+        // duplication, because makePipeline interacts with the keychin.
+        return (URL(string: feedUrl) != nil) && (project != nil)
+    }
+
+
+    func makePipeline(credential: HTTPCredential?) -> Pipeline? {
         guard var feedUrl = URL(string: feedUrl) else { return nil }
         feedUrl = Self.applyCredential(credential, toURL: feedUrl)
         guard let project else { return nil }
