@@ -39,7 +39,9 @@ class CCTrayFeedReader {
         do {
             // All pipelines have the same URL.
             let request = try requestForFeed(feed: pipelines[0].feed)
+            #if DEBUG
             debugPrint(Date(), "fetching", request.url ?? "")
+            #endif
             try await fetchStatus(request: request)
         } catch {
             for i in 0..<pipelines.count {
