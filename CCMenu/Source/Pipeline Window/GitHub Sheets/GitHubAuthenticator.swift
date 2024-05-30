@@ -20,7 +20,6 @@ class GitHubAuthenticator: ObservableObject {
         let codeRequest = GitHubAPI.requestForDeviceCode()
         codeResponse = await fetchDeviceCode(request: codeRequest)
         guard let codeResponse, startDeviceFlowOnWebsite(response: codeResponse) else {
-            // TODO: Consider adding error handling in fetchDeviceCode
             cancelSignIn()
             return false
         }
