@@ -18,9 +18,9 @@ class GitHubResponseParser {
         }
     }
 
-    func pipelineStatus(name: String) -> Pipeline.Status? {
+    func pipelineStatus(name: String) -> PipelineStatus? {
         guard let latest = runList.first else { return nil }
-        var status = Pipeline.Status(activity: .other)
+        var status = PipelineStatus(activity: .other)
         status.webUrl = latest["html_url"] as? String
         if let wfStatus = latest["status"] as? String {
             status.activity = activityForString(wfStatus)
@@ -86,7 +86,7 @@ class GitHubResponseParser {
         return isCompleted(run: run) && resultForString(run["conclusion"] as? String) == .success
     }
 
-    func activityForString(_ string: String?) -> Pipeline.Activity {
+    func activityForString(_ string: String?) -> PipelineStatus.Activity {
         switch string {
             case "completed": return .sleeping
             case "in_progress": return .building

@@ -43,7 +43,7 @@ class CCTrayFeedReader {
             try await fetchStatus(request: request)
         } catch {
             for i in 0..<pipelines.count {
-                pipelines[i].status = Pipeline.Status(activity: .other)
+                pipelines[i].status = PipelineStatus(activity: .other)
                 pipelines[i].connectionError = error.localizedDescription
             }
         }
@@ -75,7 +75,7 @@ class CCTrayFeedReader {
         }
     }
 
-    func updatePipeline(name: String, newStatus: Pipeline.Status?) {
+    func updatePipeline(name: String, newStatus: PipelineStatus?) {
         guard let idx = pipelines.firstIndex(where: { p in p.name == name }) else { return }
         var pipeline = pipelines[idx]
         guard let newStatus else {

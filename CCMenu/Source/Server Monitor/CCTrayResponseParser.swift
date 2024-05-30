@@ -28,9 +28,9 @@ class CCTrayResponseParser {
         }
     }
 
-    func pipelineStatus(name: String) -> Pipeline.Status? {
+    func pipelineStatus(name: String) -> PipelineStatus? {
         guard let project = projectList.first(where: { $0["name"] == name }) else { return nil }
-        var status = Pipeline.Status(activity: activityForString(project["activity"]))
+        var status = PipelineStatus(activity: activityForString(project["activity"]))
         status.webUrl = project["webUrl"]
 
         var build = Build(result: resultForString(project["lastBuildStatus"]))
@@ -47,7 +47,7 @@ class CCTrayResponseParser {
         return status
     }
 
-    func activityForString(_ string: String?) -> Pipeline.Activity {
+    func activityForString(_ string: String?) -> PipelineStatus.Activity {
         switch string {
             case "Sleeping": return .sleeping
             case "Building": return .building

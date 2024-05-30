@@ -52,14 +52,14 @@ class GitHubFeedReader {
             if let error = error as? GithHubFeedReaderError, case .rateLimitError(let pauseUntil) = error {
                 pipeline.feed.setPauseUntil(pauseUntil, reason: error.localizedDescription)
             } else {
-                pipeline.status = Pipeline.Status(activity: .other)
+                pipeline.status = PipelineStatus(activity: .other)
                 pipeline.connectionError = error.localizedDescription
             }
         }
     }
 
 
-    private func fetchStatus(request: URLRequest) async throws -> Pipeline.Status? {
+    private func fetchStatus(request: URLRequest) async throws -> PipelineStatus? {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
         if response.statusCode == 403 || response.statusCode == 429 {

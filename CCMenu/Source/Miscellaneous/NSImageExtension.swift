@@ -10,22 +10,22 @@ extension NSImage {
 
     convenience init(forPipeline pipeline: Pipeline?, asTemplate: Bool = false) {
         let result = pipeline?.status.lastBuild?.result ?? BuildResult.other
-        let activity = pipeline?.status.activity ?? Pipeline.Activity.other
+        let activity = pipeline?.status.activity ?? PipelineStatus.Activity.other
         self.init(forResult: result, activity: activity, asTemplate: asTemplate)
     }
 
-    convenience init(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool = false) {
+    convenience init(forResult result: BuildResult, activity: PipelineStatus.Activity, asTemplate: Bool = false) {
         self.init(named: Self.name(forResult: result, activity: activity, asTemplate: asTemplate))!
         // not strictly necessary; it's automatically set for names ending with "template"
         isTemplate = asTemplate
     }
 
-    convenience init(forActivity activity: Pipeline.Activity) {
+    convenience init(forActivity activity: PipelineStatus.Activity) {
         assert(activity == .building)
         self.init(named: "build-any+building")!
     }
 
-    private static func name(forResult result: BuildResult, activity: Pipeline.Activity, asTemplate: Bool) -> String {
+    private static func name(forResult result: BuildResult, activity: PipelineStatus.Activity, asTemplate: Bool) -> String {
         var name = "build"
         switch result {
         case .success:

@@ -17,7 +17,7 @@ struct StatusChange {
     }
 
     var pipeline: Pipeline
-    var previousStatus: Pipeline.Status
+    var previousStatus: PipelineStatus
 
     var kind: Kind {
         if previousStatus.activity == .sleeping && pipeline.status.activity != .sleeping {

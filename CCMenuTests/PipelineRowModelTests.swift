@@ -9,7 +9,7 @@ import XCTest
 
 final class PipelineRowModelTests: XCTestCase {
 
-    private func makePipeline(name: String = "connectfour", activity: Pipeline.Activity = .other) -> Pipeline {
+    private func makePipeline(name: String = "connectfour", activity: PipelineStatus.Activity = .other) -> Pipeline {
         let url = URL(string: "http://localhost:4567/cc.xml")!
         var p = Pipeline(name: name, feed: PipelineFeed(type: .cctray, url: url, name: name))
         p.status.activity = activity

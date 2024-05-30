@@ -9,7 +9,7 @@ import XCTest
 
 final class MenuItemModelTests: XCTestCase {
 
-    private func makePipeline(name: String, activity: Pipeline.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
+    private func makePipeline(name: String, activity: PipelineStatus.Activity = .other, lastBuildResult: BuildResult? = nil) -> Pipeline {
         var p = Pipeline(name: name, feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p.status.activity = activity
         if activity == .building {

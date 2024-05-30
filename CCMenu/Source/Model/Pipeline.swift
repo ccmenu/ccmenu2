@@ -11,14 +11,14 @@ struct Pipeline: Identifiable, Decodable {
 
     var name: String
     var feed: PipelineFeed
-    var status: Pipeline.Status
+    var status: PipelineStatus
     var connectionError: String?
     var lastUpdated: Date?
 
     init(name: String, feed: PipelineFeed) {
         self.name = name
         self.feed = feed
-        status = Status(activity: .other)
+        status = PipelineStatus(activity: .other)
     }
 
     var id: String {
@@ -40,7 +40,7 @@ struct Pipeline: Identifiable, Decodable {
         return nil
     }
 
-    mutating func update(status newStatus: Pipeline.Status) {
+    mutating func update(status newStatus: PipelineStatus) {
         status = newStatus
     }
 

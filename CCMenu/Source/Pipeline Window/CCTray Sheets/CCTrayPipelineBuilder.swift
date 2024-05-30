@@ -27,7 +27,7 @@ class CCTrayPipelineBuilder: ObservableObject {
         guard let project else { return nil }
         let feed = PipelineFeed(type: .cctray, url: feedUrl, name: project.name)
         var p: Pipeline = Pipeline(name: name, feed: feed)
-        p.status = Pipeline.Status(activity: .sleeping)
+        p.status = PipelineStatus(activity: .sleeping)
         p.status.lastBuild = Build(result: .unknown)
         return p
     }

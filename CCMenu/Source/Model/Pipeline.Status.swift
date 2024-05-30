@@ -6,9 +6,8 @@
 
 import Foundation
 
-extension Pipeline {
+struct PipelineStatus: Codable {
 
-    // TODO: Should this be inside Status?
     enum Activity: String, Codable {
         case
         building,
@@ -16,11 +15,8 @@ extension Pipeline {
         other
     }
 
-    struct Status: Codable {
-        var activity: Activity
-        var currentBuild: Build? // build if pipeline is currently building
-        var lastBuild: Build?    // last completed build
-        var webUrl: String?
-    }
-
+    var activity: Activity
+    var currentBuild: Build? // build if pipeline is currently building
+    var lastBuild: Build?    // last completed build
+    var webUrl: String?
 }

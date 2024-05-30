@@ -9,7 +9,7 @@ import XCTest
 
 class StatusChangeTests: XCTestCase {
 
-    private func makeStatusChange(previous: Pipeline.Status, current: Pipeline.Status) -> StatusChange {
+    private func makeStatusChange(previous: PipelineStatus, current: PipelineStatus) -> StatusChange {
         var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p.status = current
         return StatusChange(pipeline: p, previousStatus: previous)
@@ -18,49 +18,49 @@ class StatusChangeTests: XCTestCase {
     // MARK: - no change
 
     func testKindIsNoChangeWhenPreviousWasSleepingAndCurrentIsSleeping() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .sleeping), current: Pipeline.Status(activity: .sleeping))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .sleeping), current: PipelineStatus(activity: .sleeping))
         XCTAssertEqual(.noChange, change.kind)
     }
 
     func testKindIsNoChangeWhenPreviousWasBuildingAndCurrentIsBuilding() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .building), current: Pipeline.Status(activity: .building))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .building), current: PipelineStatus(activity: .building))
         XCTAssertEqual(.noChange, change.kind)
     }
 
     func testKindIsNoChangeWhenPreviousWasOtherAndCurrentIsOther() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .other), current: Pipeline.Status(activity: .other))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .other), current: PipelineStatus(activity: .other))
         XCTAssertEqual(.noChange, change.kind)
     }
 
     // MARK: - start
 
     func testKindIsStartWhenPreviousWasSleepingAndCurrentIsBuilding() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .sleeping), current: Pipeline.Status(activity: .building))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .sleeping), current: PipelineStatus(activity: .building))
         XCTAssertEqual(.start, change.kind)
     }
 
     func testKindIsStartWhenPreviousWasSleepingAndCurrentIsOther() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .sleeping), current: Pipeline.Status(activity: .other))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .sleeping), current: PipelineStatus(activity: .other))
         XCTAssertEqual(.start, change.kind)
     }
 
     // MARK: - completion
 
     func testKindIsCompletionWhenPreviousWasBuildingAndCurrentIsSleeping() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .building), current: Pipeline.Status(activity: .sleeping))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .building), current: PipelineStatus(activity: .sleeping))
         XCTAssertEqual(.completion, change.kind)
     }
 
     func testKindIsCompletionWhenPreviousWasSleepingAndCurrentIsSleepingButBuildIsDifferent() throws {
-        let previous = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success, label: "1"))
-        let current = Pipeline.Status(activity: .sleeping, lastBuild: Build(result: .success, label: "2"))
+        let previous = PipelineStatus(activity: .sleeping, lastBuild: Build(result: .success, label: "1"))
+        let current = PipelineStatus(activity: .sleeping, lastBuild: Build(result: .success, label: "2"))
         let change = makeStatusChange(previous: previous, current: current)
         XCTAssertEqual(.completion, change.kind)
     }
 
     func testKindIsCompletionWhenPreviousWasBuildingAndCurrentIsBuildingButBuildIsDifferent() throws {
-        let previous = Pipeline.Status(activity: .building, lastBuild: Build(result: .success, label: "1"))
-        let current = Pipeline.Status(activity: .building, lastBuild: Build(result: .success, label: "2"))
+        let previous = PipelineStatus(activity: .building, lastBuild: Build(result: .success, label: "1"))
+        let current = PipelineStatus(activity: .building, lastBuild: Build(result: .success, label: "2"))
         let change = makeStatusChange(previous: previous, current: current)
         XCTAssertEqual(.completion, change.kind)
     }
@@ -68,17 +68,17 @@ class StatusChangeTests: XCTestCase {
     // MARK: other
 
     func testKindIsOtherWhenPreviousWasBuildingAndCurrentIsOther() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .building), current: Pipeline.Status(activity: .other))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .building), current: PipelineStatus(activity: .other))
         XCTAssertEqual(.other, change.kind)
     }
 
     func testKindIsOtherWhenPreviousWasOtherAndCurrentIsBuilding() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .other), current: Pipeline.Status(activity: .building))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .other), current: PipelineStatus(activity: .building))
         XCTAssertEqual(.other, change.kind)
     }
 
     func testKindIsOtherWhenPreviousWasOtherAndCurrentIsSleeping() throws {
-        let change = makeStatusChange(previous: Pipeline.Status(activity: .other), current: Pipeline.Status(activity: .sleeping))
+        let change = makeStatusChange(previous: PipelineStatus(activity: .other), current: PipelineStatus(activity: .sleeping))
         XCTAssertEqual(.other, change.kind)
     }
 

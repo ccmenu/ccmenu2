@@ -56,11 +56,11 @@ class PipelineModelTests: XCTestCase {
     func testSetsStatusChangeWhenPipelineStatusChanged() throws {
         let model = PipelineModel()
         var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
-        p.status = Pipeline.Status(activity: .building)
+        p.status = PipelineStatus(activity: .building)
         model.add(pipeline: p)
         XCTAssertNil(model.lastStatusChange)
 
-        p.status = Pipeline.Status(activity: .sleeping)
+        p.status = PipelineStatus(activity: .sleeping)
         model.update(pipeline: p)
         let change = model.lastStatusChange
 
@@ -72,11 +72,11 @@ class PipelineModelTests: XCTestCase {
     func testDoesNotSetStatusChangeWhenPipelineStatusIsNotChanged() throws {
         let model = PipelineModel()
         var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
-        p.status = Pipeline.Status(activity: .building)
+        p.status = PipelineStatus(activity: .building)
         model.add(pipeline: p)
         XCTAssertNil(model.lastStatusChange)
 
-        p.status = Pipeline.Status(activity: .building)
+        p.status = PipelineStatus(activity: .building)
         model.update(pipeline: p)
         let change = model.lastStatusChange
 
