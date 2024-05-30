@@ -6,36 +6,33 @@
 
 import Foundation
 
-extension Pipeline {
+struct PipelineFeed: Codable, Equatable {
 
-    // TODO: Should this be inside Feed?
     enum FeedType: String, Codable {
         case
         cctray,
         github
     }
 
-    struct Feed: Codable, Equatable {
-        var type: FeedType
-        var url: URL
-        var name: String?       // for cctray only: name of the project in the feed
-        var pauseUntil: Int?    // for GitHub only (so far): when to try polling again
-        var pauseReason: String?
+    var type: FeedType
+    var url: URL
+    var name: String?       // for cctray only: name of the project in the feed
+    var pauseUntil: Int?    // for GitHub only (so far): when to try polling again
+    var pauseReason: String?
 
-        static func == (lhs: Pipeline.Feed, rhs: Pipeline.Feed) -> Bool {
-            (lhs.type == rhs.type) && (lhs.url == rhs.url) && (lhs.name == rhs.name)
-        }
-
-        mutating func setPauseUntil(_ epochSeconds: Int, reason: String) {
-            pauseUntil = epochSeconds
-            pauseReason = reason
-        }
-
-        mutating func clearPauseUntil() {
-            pauseUntil = nil
-            pauseReason = nil
-        }
-
+    static func == (lhs: PipelineFeed, rhs: PipelineFeed) -> Bool {
+        (lhs.type == rhs.type) && (lhs.url == rhs.url) && (lhs.name == rhs.name)
     }
-    
+
+    mutating func setPauseUntil(_ epochSeconds: Int, reason: String) {
+        pauseUntil = epochSeconds
+        pauseReason = reason
+    }
+
+    mutating func clearPauseUntil() {
+        pauseUntil = nil
+        pauseReason = nil
+    }
+
 }
+

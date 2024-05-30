@@ -14,11 +14,11 @@ class PipelineModelTests: XCTestCase {
     func testDoesntAddPipelineIfItsInTheModelAlready() throws {
         let model = PipelineModel()
 
-        let p0 = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        let p0 = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         model.add(pipeline: p0)
         XCTAssertEqual(1, model.pipelines.count)
 
-        let p1 = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        let p1 = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         let success = model.add(pipeline: p1)
         
         XCTAssert(!success)
@@ -28,11 +28,11 @@ class PipelineModelTests: XCTestCase {
     func testDoesntAddPipelineIfItsInTheModelAlreadyEvenIfDisplayNameDiffers() throws {
         let model = PipelineModel()
 
-        let p0 = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        let p0 = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         model.add(pipeline: p0)
         XCTAssertEqual(1, model.pipelines.count)
 
-        let p1 = Pipeline(name: "foo2", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        let p1 = Pipeline(name: "foo2", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         let success = model.add(pipeline: p1)
 
         XCTAssert(!success)
@@ -42,11 +42,11 @@ class PipelineModelTests: XCTestCase {
     func testAddsPipelineIfAnotherPipelineWithTheSameUrlButDifferentNameIsInTheModel() throws {
         let model = PipelineModel()
 
-        let p0 = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        let p0 = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         model.add(pipeline: p0)
         XCTAssertEqual(1, model.pipelines.count)
 
-        let p1 = Pipeline(name: "bar", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "bar"))
+        let p1 = Pipeline(name: "bar", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "bar"))
         let success = model.add(pipeline: p1)
         
         XCTAssert(success)
@@ -55,7 +55,7 @@ class PipelineModelTests: XCTestCase {
 
     func testSetsStatusChangeWhenPipelineStatusChanged() throws {
         let model = PipelineModel()
-        var p = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         p.status = Pipeline.Status(activity: .building)
         model.add(pipeline: p)
         XCTAssertNil(model.lastStatusChange)
@@ -71,7 +71,7 @@ class PipelineModelTests: XCTestCase {
 
     func testDoesNotSetStatusChangeWhenPipelineStatusIsNotChanged() throws {
         let model = PipelineModel()
-        var p = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: Self.feedURL, name: "foo"))
+        var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: Self.feedURL, name: "foo"))
         p.status = Pipeline.Status(activity: .building)
         model.add(pipeline: p)
         XCTAssertNil(model.lastStatusChange)

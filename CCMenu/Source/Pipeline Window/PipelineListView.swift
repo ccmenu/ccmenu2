@@ -114,12 +114,12 @@ struct PipelineListView_Previews: PreviewProvider {
     static func makeViewModel() -> PipelineModel {
         let model = PipelineModel()
 
-        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:4567/cc.xml")!, name: "connectfour"))
+        var p0 = Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:4567/cc.xml")!, name: "connectfour"))
         p0.status.activity = .building
         p0.status.lastBuild = Build(result: .failure)
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
 
-        var p1 = Pipeline(name: "ccmenu2 (build-and-test)", feed: Pipeline.Feed(type: .github, url: URL(string: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs")!, name: nil))
+        var p1 = Pipeline(name: "ccmenu2 (build-and-test)", feed: PipelineFeed(type: .github, url: URL(string: "https://api.github.com/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs")!, name: nil))
         p1.status.activity = .sleeping
         p1.status.lastBuild = Build(result: .success)
         p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")

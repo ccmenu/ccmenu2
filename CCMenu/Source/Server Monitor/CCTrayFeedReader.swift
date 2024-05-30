@@ -49,7 +49,7 @@ class CCTrayFeedReader {
         }
     }
 
-    func requestForFeed(feed: Pipeline.Feed) throws -> URLRequest {
+    func requestForFeed(feed: PipelineFeed) throws -> URLRequest {
         var credential: HTTPCredential?
         if let user = feed.url.user() {
             guard let password = try Keychain.standard.getPassword(forURL: feed.url) else {

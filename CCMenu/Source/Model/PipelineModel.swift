@@ -67,7 +67,7 @@ final class PipelineModel: ObservableObject {
         }
         else {
             let url = URL(string: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main")!
-            pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: Pipeline.Feed(type: .github, url: url)) ]
+            pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: PipelineFeed(type: .github, url: url)) ]
         }
         // TODO: Remove before App Store release
         UserDefaults.active.removeObject(forKey: "GitHubToken")

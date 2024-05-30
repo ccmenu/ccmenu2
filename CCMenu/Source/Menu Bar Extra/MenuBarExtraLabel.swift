@@ -104,7 +104,7 @@ struct MenuBarExtraLabel_Previews: PreviewProvider {
     static func viewModelForPreview() -> PipelineModel {
         let model = PipelineModel()
 
-        var p0 = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
+        var p0 = Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p0.status.activity = .building
         p0.status.currentBuild = Build(result: .unknown)
         p0.status.currentBuild?.timestamp = Date.now
@@ -112,7 +112,7 @@ struct MenuBarExtraLabel_Previews: PreviewProvider {
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
         p0.status.lastBuild!.duration = 90
 
-        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
+        var p1 = Pipeline(name: "erikdoe/ccmenu", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p1.status.activity = .sleeping
         p1.status.lastBuild = Build(result: .success)
         p1.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")

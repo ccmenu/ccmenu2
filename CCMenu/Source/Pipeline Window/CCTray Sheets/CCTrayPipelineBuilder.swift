@@ -25,7 +25,7 @@ class CCTrayPipelineBuilder: ObservableObject {
         guard var feedUrl = URL(string: feedUrl) else { return nil }
         feedUrl = Self.applyCredential(credential, toURL: feedUrl)
         guard let project else { return nil }
-        let feed = Pipeline.Feed(type: .cctray, url: feedUrl, name: project.name)
+        let feed = PipelineFeed(type: .cctray, url: feedUrl, name: project.name)
         var p: Pipeline = Pipeline(name: name, feed: feed)
         p.status = Pipeline.Status(activity: .sleeping)
         p.status.lastBuild = Build(result: .unknown)

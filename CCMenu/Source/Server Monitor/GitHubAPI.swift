@@ -88,7 +88,7 @@ class GitHubAPI {
         return components.url!.absoluteURL
     }
 
-    static func requestForFeed(feed: Pipeline.Feed, token: String?) -> URLRequest? {
+    static func requestForFeed(feed: PipelineFeed, token: String?) -> URLRequest? {
         guard var components = URLComponents(url: feed.url, resolvingAgainstBaseURL: true) else { return nil }
         components.appendQueryItem(URLQueryItem(name: "per_page", value: "3"))
         return makeRequest(url: components.url!.absoluteURL, token: token)

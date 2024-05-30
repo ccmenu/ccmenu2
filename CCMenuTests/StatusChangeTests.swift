@@ -10,7 +10,7 @@ import XCTest
 class StatusChangeTests: XCTestCase {
 
     private func makeStatusChange(previous: Pipeline.Status, current: Pipeline.Status) -> StatusChange {
-        var p = Pipeline(name: "foo", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
+        var p = Pipeline(name: "foo", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
         p.status = current
         return StatusChange(pipeline: p, previousStatus: previous)
     }

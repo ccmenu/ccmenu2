@@ -91,7 +91,7 @@ struct PipelineRow_Previews: PreviewProvider {
     }
 
     static func pipelineForPreview() -> Pipeline {
-        var p = Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:4567/cc.xml")!, name: "connectfour"))
+        var p = Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:4567/cc.xml")!, name: "connectfour"))
         p.status.lastBuild = Build(result: .success)
         p.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:34Z")
         p.status.lastBuild!.duration = 12*60 + 34

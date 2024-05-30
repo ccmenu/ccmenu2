@@ -10,12 +10,12 @@ import SwiftUI
 struct Pipeline: Identifiable, Decodable {
 
     var name: String
-    var feed: Pipeline.Feed
+    var feed: PipelineFeed
     var status: Pipeline.Status
     var connectionError: String?
     var lastUpdated: Date?
 
-    init(name: String, feed: Feed) {
+    init(name: String, feed: PipelineFeed) {
         self.name = name
         self.feed = feed
         status = Status(activity: .other)
@@ -70,13 +70,13 @@ extension Pipeline {
         guard
             let name = r["name"],
             let feedTypeString = r["feedType"],
-            let feedType = Pipeline.FeedType(rawValue: feedTypeString),
+            let feedType = PipelineFeed.FeedType(rawValue: feedTypeString),
             let urlString = r["feedUrl"], let feedUrl = URL(string: urlString),
             let feedName = r["feedName"]
         else {
             return nil
         }
-        self.init(name: name, feed: Pipeline.Feed(type: feedType, url: feedUrl, name: !feedName.isEmpty ? feedName : nil))
+        self.init(name: name, feed: PipelineFeed(type: feedType, url: feedUrl, name: !feedName.isEmpty ? feedName : nil))
     }
     
     func reference() -> Dictionary<String, String> {
@@ -95,7 +95,7 @@ extension Pipeline {
             return nil
         }
         let name = r["displayName"] ?? projectName
-        self.init(name: name, feed: Pipeline.Feed(type: .cctray, url: serverUrl, name: projectName))
+        self.init(name: name, feed: PipelineFeed(type: .cctray, url: serverUrl, name: projectName))
     }
 
 }

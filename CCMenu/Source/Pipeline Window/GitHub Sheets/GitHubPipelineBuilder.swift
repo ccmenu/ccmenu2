@@ -36,7 +36,7 @@ class GitHubPipelineBuilder: ObservableObject {
         guard let branch, branch.isValid else { return nil }
         let branchName = branch.isAllBranchPlaceholder ? nil : branch.name
         let url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: workflow.filename, branch: branchName)
-        let feed = Pipeline.Feed(type: .github, url:url)
+        let feed = PipelineFeed(type: .github, url:url)
         let pipeline = Pipeline(name: name, feed: feed)
         return pipeline
     }

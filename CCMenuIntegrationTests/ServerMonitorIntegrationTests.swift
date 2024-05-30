@@ -26,7 +26,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         webapp.stop()
 
         let model = PipelineModel()
-        model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
 
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
@@ -36,7 +36,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
 
     func testShowsErrorForHTTPError() async throws {
         let model = PipelineModel()
-        model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
 
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
@@ -52,7 +52,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         """}
 
         let model = PipelineModel()
-        model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
 
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
@@ -72,8 +72,8 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         """}
 
         let model = PipelineModel()
-        model.add(pipeline: Pipeline(name: "connectfour", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
-        model.add(pipeline: Pipeline(name: "other-project", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "other-project")))
+        model.add(pipeline: Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "other-project", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/cctray.xml")!, name: "other-project")))
 
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
@@ -100,8 +100,8 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         }
 
         let model = PipelineModel()
-        model.add(pipeline: Pipeline(name: "connectfour-1", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/1/cctray.xml")!, name: "connectfour")))
-        model.add(pipeline: Pipeline(name: "connectfour-2", feed: Pipeline.Feed(type: .cctray, url: URL(string: "http://localhost:8086/2/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour-1", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/1/cctray.xml")!, name: "connectfour")))
+        model.add(pipeline: Pipeline(name: "connectfour-2", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost:8086/2/cctray.xml")!, name: "connectfour")))
 
         let monitor = await ServerMonitor(model: model)
         await monitor.updateStatusIfPollTimeHasBeenReached()
@@ -119,7 +119,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         }
 
         let model = PipelineModel()
-        var pipeline = Pipeline(name: "CCMenu2", feed: Pipeline.Feed(type: .github, url: URL(string: "http://localhost:8086/runs")!))
+        var pipeline = Pipeline(name: "CCMenu2", feed: PipelineFeed(type: .github, url: URL(string: "http://localhost:8086/runs")!))
         pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: +600).timeIntervalSince1970)
         model.add(pipeline: pipeline)
 
@@ -142,7 +142,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         """}
 
         let model = PipelineModel()
-        var pipeline = Pipeline(name: "CCMenu2", feed: Pipeline.Feed(type: .github, url: URL(string: "http://localhost:8086/runs")!))
+        var pipeline = Pipeline(name: "CCMenu2", feed: PipelineFeed(type: .github, url: URL(string: "http://localhost:8086/runs")!))
         pipeline.feed.pauseUntil = Int(Date(timeIntervalSinceNow: -5).timeIntervalSince1970)
         model.add(pipeline: pipeline)
 
