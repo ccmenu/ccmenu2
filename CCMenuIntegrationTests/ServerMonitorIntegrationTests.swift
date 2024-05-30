@@ -88,7 +88,7 @@ final class ServerMonitorIntegrationTests: XCTestCase {
         var sawProcessingFirstRequestInSecondRequest = false
         webapp.router.get("/1/cctray.xml") { _ in
             processingFirstRequest = true
-            // TODO: It's crude to sleep but we can't use DispatchSemaphore in async method
+            // It's crude to sleep but we can't use DispatchSemaphore in async method.
             Thread.sleep(forTimeInterval: 1)
             processingFirstRequest = false
             return "<Projects></Projects>"

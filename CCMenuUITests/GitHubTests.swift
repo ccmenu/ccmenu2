@@ -239,8 +239,6 @@ class GitHubTests: XCTestCase {
         let repositoryPicker = sheet.popUpButtons["Repository picker"]
         expectation(for: NSPredicate(format: "value == '(too many requests)'"), evaluatedWith: repositoryPicker)
         waitForExpectations(timeout: 2)
-
-        // TODO: The other pickers should also show the error
     }
 
     func testDoesntDoubleFetchRepositories() throws {
