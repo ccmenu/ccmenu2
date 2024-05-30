@@ -71,18 +71,19 @@ struct MenuBarExtraMenu: View {
 
 struct MenuBarExtraContent_Previews: PreviewProvider {
     static var previews: some View {
-        VStack(alignment: .leading) { // TODO: Can I render this as a menu somehow?
+        Menu("menu") {
             MenuBarExtraMenu(model: viewModelForPreview())
         }
-        .buttonStyle(.borderless)
-        .padding(4)
-        .frame(maxWidth: 300)
+        .menuStyle(.borderlessButton)
+        .padding(8)
+        .frame(width: 300)
+
     }
 
     static func viewModelForPreview() -> PipelineModel {
         let model = PipelineModel()
 
-        var p0 = Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: ""))
+        var p0 = Pipeline(name: "connectfour", feed: PipelineFeed(type: .cctray, url: URL(string: "http://localhost")!, name: "connectfour"))
         p0.status.activity = .building
         p0.status.lastBuild = Build(result: .failure)
         p0.status.lastBuild!.timestamp = ISO8601DateFormatter().date(from: "2020-12-27T21:47:00Z")
