@@ -46,7 +46,7 @@ For now the roadmap is tracked in this readme file.
 - [X] Remaining menu appearance options
 - [X] Reduced polling frequency on low data connections
 
-### Pre-release 6 (planned)
+### Version 25 (CCMenu pre-release 6)
 
 - [X] Import and export of pipelines
 - [X] Refresh GitHub token
