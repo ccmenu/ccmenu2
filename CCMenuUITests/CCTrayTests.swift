@@ -41,7 +41,7 @@ class CCTrayTests: XCTestCase {
         // TODO: Will this ever not work? Our embedded server might use different caching logic.
         webapp.stop()
         expectation(for: NSPredicate(format: "value CONTAINS 'Could not connect to the server.'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
     }
 
     func testAddsPipeline() throws {

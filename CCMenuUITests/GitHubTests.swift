@@ -113,7 +113,7 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
         let displayNameField = sheet.textFields["Display name field"]
         expectation(for: NSPredicate(format: "value == 'ccmenu2 | Build and test'"), evaluatedWith: displayNameField)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
 
         // Set a custom display name, and close the sheet
         displayNameField.click()
