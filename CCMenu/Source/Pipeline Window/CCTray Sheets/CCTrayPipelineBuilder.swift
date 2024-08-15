@@ -46,7 +46,8 @@ class CCTrayPipelineBuilder: ObservableObject {
             components.user = credential.user
             if !credential.password.isEmpty {
                 do {
-                    try Keychain.standard.setPassword(credential.password, forURL: url.absoluteString)
+                    let newUrl = components.url?.absoluteURL ?? url
+                    try Keychain.standard.setPassword(credential.password, forURL: newUrl.absoluteString)
                 } catch {
                     // TODO: Figure out what to do here – so many errors...
                 }
