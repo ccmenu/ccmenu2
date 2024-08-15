@@ -1,67 +1,48 @@
-# CCMenu 2
+![Build Status](https://github.com/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/badge.svg?branch=main)
 
-![Build Status](https://github.com/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/badge.svg?branch=main)
+# CCMenu
 
-This is a complete rewrite of [CCMenu](https://github.com/erikdoe/ccmenu).
+CCMenu shows the status of builds on CI/CD servers in the menu bar.
 
-There will be a number of pre-releases via GitHub before it reaches the AppStore.
+This repository holds the new version of CCMenu, rewritten from the group up using Swift and Swift UI.
 
-Significant known issues are filed as bugs.
-
-For now the roadmap is tracked in this readme file.
+Please visit [ccmenu.org](https://ccmenu.org) for a detailed description of CCMenu.
 
 
-## Roadmap
+## Downloads
 
-### Version 20 (CCMenu2 pre-release 1)
+The recommended download is [CCMenu on the App Store](https://apps.apple.com/de/app/ccmenu/id603117688).
 
-- [X] Monitor hard-coded pipelines
-- [X] Read legacy config
-- [X] Support for GitHub Actions workflows
-- [X] Add pipelines 
-- [X] Persistent sorting of pipelines
-- [X] Sign in at GitHub
+You can also download all versions of CCMenu from the respective GitHub release. Please bear in mind, though, that CCMenu doesn't have an update check built in. If you download CCMenu from GitHub you have to check for updates manually.
 
-### Version 21 (CCMenu2 pre-release 2)
+The "classic" versions of CCMenu, i.e. all versions below 20, are available from the [release list of the original repository](https://github.com/ccmenu/ccmenu/releases). All newer versions, i.e. version 20 and above, are available from the [release list of this repository](https://github.com/ccmenu/ccmenu2/releases).
 
-- [X] GitHub repository and workflow selection
-- [X] Caching of last-used authentication token
 
-### Version 22 (CCMenu2 pre-release 3)
+## Bugs / Contributing / Help
 
-- [X] Notifications
-- [X] Build timer updates every second
-- [X] Discover project names for CCTray feeds
+You can ask for help or contribute to the future development of CCMenu by discussing or suggesting features in the GitHub [discussions](https://github.com/ccmenu/ccmenu2/discussions).
 
-### Version 23 (CCMenu2 pre-release 4)
+If you suspect that you have found a bug, please open an [issue](https://github.com/ccmenu/ccmenu2/issues). For now there is no template, but please try to include as much information as possible. The easier it is to reproduce the bug, the more likely it is to be fixed.
 
-- [X] Store GitHub tokens in Keychain
-- [X] Basic auth login for CCTray feeds
-- [X] GitHub API rate limit handling
+Pull requests that fix known bugs are welcome. Please try to add a unit test that demonstrates that the bug was fixed. Of course, you can also open a PR with a new feature, but please keep in mind that adding new features may need some discussion. In such cases, new unit tests as well as integration and UI tests (where applicable) should be added.
 
-### Version 24 (CCMenu2 pre-release 5)
 
-- [X] Optimised CCTray reader requests
-- [X] Edit pipelines
-- [X] Remaining menu appearance options
-- [X] Reduced polling frequency on low data connections
+## Feature ideas
 
-### Version 25 (CCMenu pre-release 6)
+Below are some ideas for future features. There's no roadmap for their implementation, and some are probably never going to be implemented. 
 
-- [X] Import and export of pipelines
-- [X] Refresh GitHub token
-- [X] Allow selection of branch on GitHub
+- Sounds (was a feature in the class CCMenu)
+- Workflow-specific GitHub tokens
+- Support for updating passwords of cctray pipelines
+- Improved accessibility
+- Support for localisation / localisation
+- Avatar in notifications (committer or repo owner)
+- Support for log in with GitHub (is this even possible?)
+- GitHub API access as a GitHub app (currently CCMenu uses OAuth)
+- Pipeline groups with submenus 
+- [Nevergreen](https://github.com/build-canaries/nevergreen)-style dashboard (full screen window)
+- Embedded libjq to transform feeds from other CI servers
 
-### To consider 
+Please start a [discussion](https://github.com/ccmenu/ccmenu2/discussions) or open an issue to let us know what features you'd like to see in CCMenu.
 
-- [ ] Sounds
-- [ ] Support for workflow-specific GitHub tokens
-- [ ] Update password for CCTray pipelines
-- [ ] Improve accessibility
-- [ ] Add support for localisation
-- [ ] Show avatar in notifications (committer or repo owner)
-- [ ] Support for log in with GitHub (is this even possible?)
-- [ ] Support for GitHub apps
-- [ ] Pipeline groups with submenus 
-- [ ] Add Nevergreen-style dashboard (full screen window)
-- [ ] Embed libjq to transform feeds from other CI servers
+Join the [discussion on servers](https://github.com/ccmenu/ccmenu2/discussions/10) to add your voice on which server types should be supported.
