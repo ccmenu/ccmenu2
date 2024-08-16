@@ -4,8 +4,8 @@
  *  not use these files except in compliance with the License.
  */
 
-
 import Foundation
+import os
 
 class CCTrayPipelineBuilder: ObservableObject {
 
@@ -49,7 +49,8 @@ class CCTrayPipelineBuilder: ObservableObject {
                     let newUrl = components.url?.absoluteURL ?? url
                     try Keychain.standard.setPassword(credential.password, forURL: newUrl.absoluteString)
                 } catch {
-                    // TODO: Figure out what to do here – so many errors...
+                    let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "keychain")
+                    logger.error("Error when storing password in keychain: \(error.localizedDescription)")
                 }
             }
         } else {

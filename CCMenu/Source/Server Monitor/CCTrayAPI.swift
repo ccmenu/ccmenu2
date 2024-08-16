@@ -5,7 +5,7 @@
  */
 
 import Foundation
-
+import os
 
 struct HTTPCredential {
     var user: String
@@ -19,11 +19,16 @@ struct HTTPCredential {
 class CCTrayAPI {
 
     static func requestForProjects(url: URL, credential: HTTPCredential?) -> URLRequest {
+        let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "network")
         var request = URLRequest(url: url)
 
         if let credential {
             let v = URLRequest.basicAuthValue(user: credential.user, password: credential.password)
             request.setValue(v, forHTTPHeaderField: "Authorization")
+            let redacted = v.replacingOccurrences(of: "[A-Za-z0-9=]", with: "*", options: [.regularExpression])
+            logger.log("Making request for url \(url) with authorization \(redacted)")
+        } else {
+            logger.log("Making request for url \(url)")
         }
 
         return request
