@@ -52,10 +52,10 @@ class Keychain {
     func getPassword(forURL url: URL) throws -> String? {
         let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "keychain")
         if let password = cache[url.absoluteString] {
-            logger.log("Using cached password for \(url)")
+            logger.log("Using cached password for \(url, privacy: .public)")
             return password
         }
-        logger.log("Retrieving password for \(url) from keychain")
+        logger.log("Retrieving password for \(url, privacy: .public) from keychain")
         let query = [
             kSecClass:        kSecClassInternetPassword,
             kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
@@ -66,7 +66,7 @@ class Keychain {
         ] as NSDictionary
         let password = try getStringForQuery(query)
         if let password {
-            logger.log("Got password (length = \(password.count))")
+            logger.log("Got password (length = \(password.count, privacy: .public))")
         } else {
             logger.log("Didn't get a password")
         }

@@ -26,9 +26,9 @@ class CCTrayAPI {
             let v = URLRequest.basicAuthValue(user: credential.user, password: credential.password)
             request.setValue(v, forHTTPHeaderField: "Authorization")
             let redacted = v.replacingOccurrences(of: "[A-Za-z0-9=]", with: "*", options: [.regularExpression])
-            logger.log("Making request for url \(url) with authorization \(redacted)")
+            logger.log("Making request for url \(url, privacy: .public) with authorization \(redacted, privacy: .public)")
         } else {
-            logger.log("Making request for url \(url)")
+            logger.log("Making request for url \(url, privacy: .public)")
         }
 
         return request

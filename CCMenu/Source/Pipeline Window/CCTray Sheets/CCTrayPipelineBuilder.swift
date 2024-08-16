@@ -50,7 +50,7 @@ class CCTrayPipelineBuilder: ObservableObject {
                     try Keychain.standard.setPassword(credential.password, forURL: newUrl.absoluteString)
                 } catch {
                     let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "keychain")
-                    logger.error("Error when storing password in keychain: \(error.localizedDescription)")
+                    logger.error("Error when storing password in keychain: \(error.localizedDescription, privacy: .public)")
                 }
             }
         } else {
