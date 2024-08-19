@@ -13,6 +13,7 @@ struct AdvancedSettings: View {
     @AppStorage(.pollInterval) var pollInterval: Int = 10
     @AppStorage(.pollIntervalLowData) var pollIntervalLowData: Int = 300
     @AppStorage(.showAppIcon) var showAppIcon: AppIconVisibility = .sometimes
+    @AppStorage(.openWindowAtLaunch) var openWindowAtLaunch: Bool = false
     @State var openAtLogin = NSApp.openAtLogin { didSet { NSApp.openAtLogin = openAtLogin } }
 
     var body: some View {
@@ -93,8 +94,19 @@ struct AdvancedSettings: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .padding(.bottom)
 
+            Divider()
+                .padding([ .top, .bottom ], 4)
+
+            Toggle(isOn: $openWindowAtLaunch) {
+                Text("Show pipelines when opened")
+            }
+            .padding(.bottom, 4)
+            Text("Whether the pipelines window should be shown when CCMenu is opened.")
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .padding(.bottom)
         }
         .navigationTitle("Advanced")
         .padding()

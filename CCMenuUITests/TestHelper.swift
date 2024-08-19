@@ -17,6 +17,7 @@ class TestHelper {
             "-PollInterval", "1",
             "-PollIntervalLowData", "1",
             "-ShowAppIcon", "always",
+            "-OpenWindowAtLaunch", "true",
             "-GitHubBaseURL", "http://localhost:8086",
             "-GitHubToken", token ?? ""
         ]
@@ -30,6 +31,13 @@ class TestHelper {
         let statusItem = app.menuBars.statusItems["CCMenuMenuExtra"]
         statusItem.click()
         return statusItem.children(matching: .menu)
+    }
+
+    @discardableResult
+    static func openPipelineWindow(app: XCUIApplication) -> XCUIElement {
+        let menu = openMenu(app: app)
+        menu.menuItems["Pipelines"].click()
+        return app.windows["Pipelines"]
     }
 
     @discardableResult

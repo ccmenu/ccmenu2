@@ -44,7 +44,8 @@ enum DefaultsKey: String {
     showAvatarsInWindow = "ShowAvatarsInWindow",
     showMessagesInWindow = "ShowPipelineMessagesInWindow",
     showAppIconInPrefs = "ShowAppIconWhenInPrefs", // to convert legacy defaults
-    showAppIcon = "ShowAppIcon"
+    showAppIcon = "ShowAppIcon",
+    openWindowAtLaunch = "OpenWindowAtLaunch"
 
     static func key(forNotification n: NotificationType) -> String {
         "SendNotification \(n.rawValue)"
