@@ -35,13 +35,13 @@ class Keychain {
             kSecClass:        kSecClassInternetPassword,
             kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
             kSecAttrPort:     url.port ?? 80,
-            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user }
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user(percentEncoded: false) }
         ] as NSDictionary
         let item = [
             kSecClass:        kSecClassInternetPassword,
             kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
             kSecAttrPort:     url.port ?? 80,
-            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user },
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user(percentEncoded: false) },
             kSecAttrProtocol: try getOrThrow(error: .missingSchemeErr) { url.scheme },
             kSecValueData:    try getOrThrow(error: .passwordEncodingErr) { password.data(using: .utf8) }
         ] as NSDictionary
@@ -60,7 +60,7 @@ class Keychain {
             kSecClass:        kSecClassInternetPassword,
             kSecAttrServer:   try getOrThrow(error: .missingHostErr) { url.host() },
             kSecAttrPort:     url.port ?? 80,
-            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user },
+            kSecAttrAccount:  try getOrThrow(error: .missingUserErr) { url.user(percentEncoded: false) },
             kSecMatchLimit:   kSecMatchLimitOne,
             kSecReturnData:   true
         ] as NSDictionary
