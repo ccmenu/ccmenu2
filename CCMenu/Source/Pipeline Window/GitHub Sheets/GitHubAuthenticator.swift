@@ -5,6 +5,7 @@
  */
 
 import SwiftUI
+import os
 
 @MainActor
 class GitHubAuthenticator: ObservableObject {
@@ -122,8 +123,9 @@ class GitHubAuthenticator: ObservableObject {
         do {
             token = try Keychain.standard.getToken(forService: "GitHub")
         } catch {
-            // TODO: Figure out what to do here – so many errors...
             token = nil
+            let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
+            logger.error("Error when retrieving token from keychain: \(error.localizedDescription, privacy: .public)")
         }
         tokenDescription = token ?? ""
     }
@@ -134,7 +136,8 @@ class GitHubAuthenticator: ObservableObject {
         do {
             try Keychain.standard.setToken(token, forService: "GitHub")
         } catch {
-            // TODO: Figure out what to do here – so many errors...
+            let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
+            logger.error("Error when storing token in keychain: \(error.localizedDescription, privacy: .public)")
         }
     }
 

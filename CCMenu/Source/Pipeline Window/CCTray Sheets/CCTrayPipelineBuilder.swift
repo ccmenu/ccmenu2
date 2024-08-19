@@ -49,7 +49,7 @@ class CCTrayPipelineBuilder: ObservableObject {
                     let newUrl = components.url?.absoluteURL ?? url
                     try Keychain.standard.setPassword(credential.password, forURL: newUrl.absoluteString)
                 } catch {
-                    let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "keychain")
+                    let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
                     logger.error("Error when storing password in keychain: \(error.localizedDescription, privacy: .public)")
                 }
             }
