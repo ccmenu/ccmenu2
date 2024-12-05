@@ -68,12 +68,16 @@ class GitHubAuthenticator: ObservableObject {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
             if response.statusCode != 200 {
+                let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
+                logger.error("Error when initiating device flow: \(response, privacy: .public)")
                 return nil
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             return try decoder.decode(GitHubDeviceCodeResponse.self, from: data)
         } catch {
+            let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
+            logger.error("Error when initiating device flow: \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }
