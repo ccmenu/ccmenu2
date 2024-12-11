@@ -129,6 +129,52 @@ class GitHubTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
+    func testAddsGitHubPipelineByIdIfNeccessary() throws {
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
+            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
+            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r in
+            r.response.status = .notFound
+            return "{ } "
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/62921699/runs") { _ in
+            try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+
+        // Navigate to add workflow sheet
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("erikdoe" + "\n")
+
+        let repositoryPicker = sheet.popUpButtons["Repository picker"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
+        let workflowPicker = sheet.popUpButtons["Workflow picker"]
+        expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
+        waitForExpectations(timeout: 5)
+
+        sheet.buttons["Apply"].click()
+
+        // Make sure the pipeline is shown, and that its status is fetched immediately
+        let titleText = window.tables.staticTexts["Pipeline title"]
+        expectation(for: NSPredicate(format: "value BEGINSWITH 'ccmenu2'"), evaluatedWith: titleText)
+        let descriptionText = window.tables.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+    }
+
     func testAddsGitHubPipelineWithBranch() throws {
         var branchParam: String?
         webapp.router.get("/users/erikdoe/repos") { _ in

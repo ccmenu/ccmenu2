@@ -128,9 +128,12 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    if let p = builder.makePipeline() {
-                        config.setPipeline(p)
-                        presentation.dismiss()
+                    Task {
+                        if let p = await builder.makePipeline() {
+                            config.setPipeline(p)
+                            presentation.dismiss()
+                        }
+                        // TODO: show error
                     }
                 }
                 .keyboardShortcut(.defaultAction)

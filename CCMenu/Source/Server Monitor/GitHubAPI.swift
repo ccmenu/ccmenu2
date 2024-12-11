@@ -80,6 +80,7 @@ class GitHubAPI {
     // MARK: - feed
 
     static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {
+        // see https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
         var components = URLComponents(string: baseURL(forAPI: true))!
         components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
         if let branch {
