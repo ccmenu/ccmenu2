@@ -6,6 +6,7 @@
 
 import Foundation
 import Combine
+import os
 
 
 class GitHubAPI {
@@ -127,6 +128,10 @@ class GitHubAPI {
         if let token, !token.isEmpty {
             request.setValue(URLRequest.bearerAuthValue(token: token), forHTTPHeaderField: "Authorization")
         }
+
+        let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
+        logger.trace("Request: \(method, privacy: .public) \(url.absoluteString, privacy: .public)")
+
         return request
     }
 
