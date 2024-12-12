@@ -9,8 +9,13 @@ import Combine
 
 
 class GitHubAPI {
-    
-    static let clientId = "4eafcf49451c588fbeac"
+
+    static var clientId: String {
+        if let defaultsId = UserDefaults.active.string(forKey: "GitHubClientID") {
+            return defaultsId
+        }
+        return "4eafcf49451c588fbeac"
+    }
 
     // MARK: - repositories, workflows, and branches
 
@@ -99,7 +104,8 @@ class GitHubAPI {
     // MARK: - helper functions
 
     private static func baseURL(forAPI: Bool) -> String {
-        if let defaultsBaseURL = UserDefaults.active.string(forKey: "GitHubBaseURL") {
+        let defaultsKey = forAPI ? "GitHubAPIBaseURL" : "GitHubBaseURL"
+        if let defaultsBaseURL = UserDefaults.active.string(forKey: defaultsKey) {
             return defaultsBaseURL
         }
         return forAPI ? "https://api.github.com" : "https://github.com"
