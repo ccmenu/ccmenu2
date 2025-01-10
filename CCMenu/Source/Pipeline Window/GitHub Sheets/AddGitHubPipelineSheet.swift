@@ -12,6 +12,7 @@ struct AddGitHubPipelineSheet: View {
     @EnvironmentObject private var authenticator: GitHubAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
     @StateObject private var owner = DebouncedText()
+    @StateObject private var repository = DebouncedText()
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
     @StateObject private var branchList = GitHubBranchList()
@@ -68,25 +69,29 @@ struct AddGitHubPipelineSheet: View {
                     owner.takeInput()
                 }
 
-                Picker("Repository:", selection: $repositoryList.selected) {
-                    ForEach(repositoryList.items) { r in
-                        Text(r.name).tag(r)
-                    }
-                }
-                .accessibilityIdentifier("Repository picker")
-                .disabled(!repositoryList.selected.isValid)
-                .onChange(of: repositoryList.selected) { _ in
-                    builder.repository = repositoryList.selected
-                    if repositoryList.selected.isValid {
-                        Task {
-                            async let r1: Void = workflowList.updateWorkflows(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
-                            async let r2: Void = branchList.updateBranches(owner: owner.text, repository: repositoryList.selected.name, token: authenticator.token)
-                            _ = await [r1, r2]
+                LabeledContent("Repository:") {
+                    ComboBox(items: repositoryList.items.map({ $0.name }), text: $repository.input)
+                        .accessibilityIdentifier("Repository combo box")
+                        .disabled(owner.text.isEmpty || repository.text.starts(with: "("))
+                        .onReceive(repository.$text) { t in
+                            builder.repository = t.starts(with: "(") ? nil : t
+                            if !t.isEmpty && !t.starts(with: "(") {
+                                Task {
+                                    async let r1: Void = workflowList.updateWorkflows(owner: owner.text, repository: t, token: authenticator.token)
+                                    async let r2: Void = branchList.updateBranches(owner: owner.text, repository: t, token: authenticator.token)
+                                    _ = await [r1, r2]
+                                }
+                            } else {
+                                workflowList.clearWorkflows()
+                                branchList.clearBranches()
+                            }
                         }
-                    } else {
-                        workflowList.clearWorkflows()
-                        branchList.clearBranches()
-                    }
+                        .onReceive(repositoryList.$items) { items in
+                            repository.text = items.first?.name ?? ""
+                        }
+                        .onSubmit {
+                            repository.takeInput()
+                        }
                 }
 
                 Picker("Workflow:", selection: $workflowList.selected) {

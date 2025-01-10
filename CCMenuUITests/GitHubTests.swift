@@ -107,13 +107,13 @@ class GitHubTests: XCTestCase {
         sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories and workflows are loaded and the default display name is set
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
         let workflowPicker = sheet.popUpButtons["Workflow picker"]
         expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
         let displayNameField = sheet.textFields["Display name field"]
         expectation(for: NSPredicate(format: "value == 'ccmenu2 | Build and test'"), evaluatedWith: displayNameField)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 3)
 
         // Set a custom display name, and close the sheet
         displayNameField.click()
@@ -159,8 +159,8 @@ class GitHubTests: XCTestCase {
         sheet.textFields["Owner field"].click()
         sheet.typeText("erikdoe" + "\n")
 
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
         let workflowPicker = sheet.popUpButtons["Workflow picker"]
         expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
         waitForExpectations(timeout: 5)
@@ -204,11 +204,11 @@ class GitHubTests: XCTestCase {
         sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories and branches are loaded
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
         let branchPicker = sheet.popUpButtons["Branch picker"]
         expectation(for: NSPredicate(format: "value == 'all branches'"), evaluatedWith: branchPicker)
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 5)
 
         // Open the branch picker, select the main branch, and close the sheet
         branchPicker.click()
@@ -248,18 +248,18 @@ class GitHubTests: XCTestCase {
         sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repositories are loaded and sorted
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryBox)
         waitForExpectations(timeout: 2)
 
-        // Open the repository picker
-        repositoryPicker.click()
+        // Open the combox box drop down
+        repositoryBox.descendants(matching: .button).firstMatch.click()
 
         // Make sure that repositories for different owners are not shown, and that a private
         // repository is shown, and that its shown even when its owner's name uses camel case
-        XCTAssertFalse(repositoryPicker.menuItems["tw2021-screensaver"].exists)
-        XCTAssertFalse(repositoryPicker.menuItems["iEnterpriseArchitect"].exists)
-        XCTAssertTrue(repositoryPicker.menuItems["jekyll-site-test"].exists)
+        XCTAssertFalse(repositoryBox.textFields["tw2021-screensaver"].exists)
+        XCTAssertFalse(repositoryBox.textFields["iEnterpriseArchitect"].exists)
+        XCTAssertTrue(repositoryBox.textFields["jekyll-site-test"].exists)
     }
 
     func testShowsRateLimitExceededForRepositories() throws {
@@ -282,8 +282,8 @@ class GitHubTests: XCTestCase {
         sheet.typeText("erikdoe" + "\n")
 
         // Make sure that the repository list shows rate limit exceeded message
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == '(too many requests)'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == '(too many requests)'"), evaluatedWith: repositoryBox)
         waitForExpectations(timeout: 2)
     }
 
@@ -308,8 +308,8 @@ class GitHubTests: XCTestCase {
         sheet.typeText("erikdoe") // Note: not pressing return here
 
         // Make sure that the repositories are loaded and sorted
-        let repositoryPicker = sheet.popUpButtons["Repository picker"]
-        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryPicker)
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryBox)
         waitForExpectations(timeout: 3)
 
         // Now press return and wait for a little while

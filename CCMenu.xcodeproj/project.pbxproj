@@ -80,6 +80,7 @@
 		03DA98E22B44CE1A0073F5BB /* GitHubAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */; };
 		03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */; };
 		03DD697E2B646E3800D7AD9D /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */; };
+		03DF19072D025292007D1A64 /* ComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF19062D025292007D1A64 /* ComboBox.swift */; };
 		03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E6A9F62B2651C200284138 /* GitHubAPI.swift */; };
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
@@ -207,6 +208,7 @@
 		03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAuthenticator.swift; sourceTree = "<group>"; };
 		03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayPipelineBuilder.swift; sourceTree = "<group>"; };
 		03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
+		03DF19062D025292007D1A64 /* ComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBox.swift; sourceTree = "<group>"; };
 		03E6A9F62B2651C200284138 /* GitHubAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 		03CC11E52652F0F200130833 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				03DF19062D025292007D1A64 /* ComboBox.swift */,
 				03F9B88D297C5D5B00FA866E /* CompactRelativeFormatStyle.swift */,
 				0386E93C2BD07C9F006F7988 /* DebouncedText.swift */,
 				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
@@ -792,6 +795,7 @@
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03B263F22B50968800CA989A /* StatusChange.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
+				03DF19072D025292007D1A64 /* ComboBox.swift in Sources */,
 				3C9E0E532B9F143A00327CB9 /* NSApplicationExtension.swift in Sources */,
 				035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */,
 				03D4BB03265EE5840023F4CB /* GitHubFeedReader.swift in Sources */,
@@ -1003,7 +1007,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1031,7 +1035,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenu.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1287,7 +1291,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CCMenu/Resources/CCMenuTesting.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;

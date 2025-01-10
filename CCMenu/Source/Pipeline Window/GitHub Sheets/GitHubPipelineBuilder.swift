@@ -9,14 +9,14 @@ import Foundation
 class GitHubPipelineBuilder: ObservableObject {
     @Published var name: String = ""
     var owner: String?
-    var repository: GitHubRepository? { didSet { setDefaultName() } }
+    var repository: String? { didSet { setDefaultName() } }
     var workflow: GitHubWorkflow? { didSet { setDefaultName() } }
     var branch: GitHubBranch? { didSet { setDefaultName() } }
 
     func setDefaultName() {
         var newName = ""
-        if let repository, repository.isValid {
-            newName.append(repository.name)
+        if let repository, !repository.isEmpty {
+            newName.append(repository)
             if let workflow, workflow.isValid {
                 newName.append(String(format: " | %@", workflow.name))
             }
@@ -27,7 +27,7 @@ class GitHubPipelineBuilder: ObservableObject {
     var canMakePipeline: Bool {
         guard !name.isEmpty else { return false }
         guard let owner else { return false }
-        guard let repository, repository.isValid else { return false }
+        guard let repository else { return false }
         guard let workflow, workflow.isValid else { return false }
         guard let branch, branch.isValid else { return false }
         return true
@@ -36,7 +36,7 @@ class GitHubPipelineBuilder: ObservableObject {
     func makePipeline() async -> Pipeline? {
         guard !name.isEmpty else { return nil }
         guard let owner else { return nil }
-        guard let repository, repository.isValid else { return nil }
+        guard let repository else { return nil }
         guard let workflow, workflow.isValid else { return nil }
         guard let branch, branch.isValid else { return nil }
         let branchName = branch.isAllBranchPlaceholder ? nil : branch.name
@@ -44,7 +44,7 @@ class GitHubPipelineBuilder: ObservableObject {
         var url: URL? = nil
         let workflowPathComponents = [ workflow.filename, String(workflow.id) ]
         for wfid in workflowPathComponents {
-            url = GitHubAPI.feedUrl(owner: owner, repository: repository.name, workflow: wfid, branch: branchName)
+            url = GitHubAPI.feedUrl(owner: owner, repository: repository, workflow: wfid, branch: branchName)
             if let url, let result = await fetchRuns(url: url), result == 200 {
                 break
             }

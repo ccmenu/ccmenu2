@@ -9,8 +9,7 @@ import Foundation
 // TODO: Refactor the list classes (repo, workflow, branch) to use some common code
 @MainActor
 class GitHubRepositoryList: ObservableObject {
-    @Published private(set) var items = [GitHubRepository()] { didSet { selected = items[0] }}
-    @Published var selected = GitHubRepository()
+    @Published private(set) var items = [GitHubRepository()]
 
     func updateRepositories(owner: String, token: String?) async {
         items = [GitHubRepository(message: "updating")]

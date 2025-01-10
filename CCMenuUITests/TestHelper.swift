@@ -45,6 +45,8 @@ class TestHelper {
     static func startEmbeddedServer() throws -> HBApplication {
         let webapp = HBApplication(configuration: .init(address: .hostname("localhost", port: 8086), logLevel: .info))
         webapp.middleware.add(HBLogRequestsMiddleware(.info, includeHeaders: false))
+        // This should't be neccessary but it greatly reduces flakiness of the tests
+        webapp.middleware.add(DelayRequestProcessingMiddleware())
         // If the following fails with "operation not permitted" see: https://developer.apple.com/forums/thread/114907
         try webapp.start()
         return webapp
@@ -59,6 +61,14 @@ class TestHelper {
     }
 
     static func contentsOfFile(_ name: String) throws -> String {
-        try String(contentsOfFile: self.pathForResource(name))
+        return try String(contentsOfFile: self.pathForResource(name))
+    }
+}
+
+
+public struct DelayRequestProcessingMiddleware: HBMiddleware {
+    public func apply(to request: HBRequest, next: HBResponder) -> EventLoopFuture<HBResponse> {
+        Thread.sleep(forTimeInterval: 0.05)
+        return next.respond(to: request)
     }
 }
