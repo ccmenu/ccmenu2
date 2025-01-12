@@ -81,6 +81,9 @@ class GitHubTests: XCTestCase {
     }
 
     func testAddsGitHubPipeline() throws {
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
         webapp.router.get("/users/erikdoe/repos") { _ in
             try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
         }
@@ -130,6 +133,9 @@ class GitHubTests: XCTestCase {
     }
 
     func testAddsGitHubPipelineByIdIfNeccessary() throws {
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
         webapp.router.get("/users/erikdoe/repos") { _ in
             try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
         }
@@ -177,6 +183,9 @@ class GitHubTests: XCTestCase {
 
     func testAddsGitHubPipelineWithBranch() throws {
         var branchParam: String?
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
         webapp.router.get("/users/erikdoe/repos") { _ in
             try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
         }
@@ -223,6 +232,9 @@ class GitHubTests: XCTestCase {
     }
 
     func testAddGitHubPipelinePrivateRepos() throws {
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
         webapp.router.get("/users/erikdoe/repos") { _ in
             try TestHelper.contentsOfFile("GitHubReposByUserResponse.json")
         }
@@ -263,7 +275,7 @@ class GitHubTests: XCTestCase {
     }
 
     func testShowsRateLimitExceededForRepositories() throws {
-        webapp.router.get("/users/erikdoe/repos", options: .editResponse) { r -> String in
+        webapp.router.get("/users/erikdoe", options: .editResponse) { r -> String in
             r.response.status = .forbidden
             r.response.headers.replaceOrAdd(name: "x-ratelimit-remaining", value: "0")
             return "{ \"message\": \"API rate limit exceeded for ...\" } "
@@ -289,6 +301,9 @@ class GitHubTests: XCTestCase {
 
     func testDoesntDoubleFetchRepositories() throws {
         var fetchCount = 0
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
         webapp.router.get("/users/erikdoe/repos") { _ in
             fetchCount += 1
             return try TestHelper.contentsOfFile("GitHubReposByUserResponse.json")
@@ -318,7 +333,6 @@ class GitHubTests: XCTestCase {
         
         // Assert that no further fetch occured
         XCTAssertEqual(1, fetchCount)
-        
     }
 
 }

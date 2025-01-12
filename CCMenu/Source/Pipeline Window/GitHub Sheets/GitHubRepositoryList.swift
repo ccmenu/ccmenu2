@@ -17,14 +17,25 @@ class GitHubRepositoryList: ObservableObject {
     }
 
     private func fetchRepositories(owner: String, token: String?) async -> [GitHubRepository] {
-        let ownerRepoRequest = GitHubAPI.requestForRepositories(owner: owner, token: token)
+        let userRequest = GitHubAPI.requestForUser(user: owner, token: token)
+        let (user, error) = await fetchUser(request: userRequest)
+        guard let user else {
+            return [GitHubRepository(message: error)]
+        }
+
+        let ownerRepoRequest: URLRequest
+        if user.isOrganization {
+            ownerRepoRequest = GitHubAPI.requestForAllRepositories(org: owner, token: token)
+        } else {
+            ownerRepoRequest = GitHubAPI.requestForAllPublicRepositories(user: owner, token: token)
+        }
         var allRepos = await fetchRepositories(request: ownerRepoRequest)
         if allRepos.count > 0 && !allRepos[0].isValid {
             return allRepos
         }
 
-        if let token, !token.isEmpty {
-            let privateRepoRequest = GitHubAPI.requestForPrivateRepositories(token: token)
+        if !user.isOrganization, let token, !token.isEmpty {
+            let privateRepoRequest = GitHubAPI.requestForAllPrivateRepositories(token: token)
             let privateRepos = await fetchRepositories(request: privateRepoRequest)
             if privateRepos.count > 0 && !privateRepos[0].isValid {
                 return privateRepos
@@ -39,6 +50,28 @@ class GitHubRepositoryList: ObservableObject {
         allRepos.sort(by: { r1, r2 in r1.name.lowercased().compare(r2.name.lowercased()) == .orderedAscending })
         
         return allRepos
+    }
+
+    private func fetchUser(request: URLRequest) async -> (GitHubUser?, String) {
+        do {
+            let (data, response) = try await URLSession.feedSession.data(for: request)
+            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            // TODO: Somehow refactor this to use the same code as fetchRepositories
+            if response.statusCode == 403 || response.statusCode == 429 {
+                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
+                    // HTTPURLResponse doesn't have a specific message for code 429
+                    return (nil, "too many requests")
+                } else {
+                    return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
+                }
+            }
+            if response.statusCode != 200 {
+                return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
+            }
+            return (try JSONDecoder().decode(GitHubUser.self, from: data), "OK")
+        } catch {
+            return (nil, error.localizedDescription)
+        }
     }
 
     private func fetchRepositories(request: URLRequest) async -> [GitHubRepository] {

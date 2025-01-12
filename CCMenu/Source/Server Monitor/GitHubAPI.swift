@@ -18,10 +18,15 @@ class GitHubAPI {
         return "4eafcf49451c588fbeac"
     }
 
-    // MARK: - repositories, workflows, and branches
+    // MARK: - user, repositories, workflows, and branches
 
-    static func requestForRepositories(owner: String, token: String?) -> URLRequest {
-        let path = String(format: "/users/%@/repos", owner)
+    static func requestForUser(user: String, token: String?) -> URLRequest {
+        let path = String(format: "/users/%@", user)
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, token: token)
+    }
+
+    static func requestForAllPublicRepositories(user: String, token: String?) -> URLRequest {
+        let path = String(format: "/users/%@/repos", user)
         let queryParams = [
             "type": "all",
             "sort": "pushed",
@@ -30,7 +35,17 @@ class GitHubAPI {
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    static func requestForPrivateRepositories(token: String) -> URLRequest {
+    static func requestForAllRepositories(org: String, token: String?) -> URLRequest {
+        let path = String(format: "/orgs/%@/repos", org)
+        let queryParams = [
+            "type": "all",
+            "sort": "pushed",
+            "per_page": "100",
+        ];
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
+    }
+
+    static func requestForAllPrivateRepositories(token: String) -> URLRequest {
         let path = String(format: "/user/repos")
         let queryParams = [
             "type": "private",
@@ -112,7 +127,7 @@ class GitHubAPI {
         return forAPI ? "https://api.github.com" : "https://github.com"
     }
 
-    private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String>, token: String? = nil) -> URLRequest {
+    private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
         var components = URLComponents(string: baseUrl)!
         components.path = path
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })

@@ -7,6 +7,16 @@
 
 import Foundation
 
+struct GitHubUser: Identifiable, Decodable {
+    var id: Int
+    var type: String
+
+    var isOrganization: Bool {
+        return type == "Organization"
+    }
+}
+
+
 struct GitHubRepository: Identifiable, Hashable, Decodable {
 
     var id: Int
