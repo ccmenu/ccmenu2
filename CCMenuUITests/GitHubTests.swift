@@ -99,11 +99,7 @@ class GitHubTests: XCTestCase {
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Enter owner
         sheet.textFields["Owner field"].click()
@@ -155,11 +151,7 @@ class GitHubTests: XCTestCase {
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Enter owner
         sheet.textFields["Owner field"].click()
@@ -202,11 +194,7 @@ class GitHubTests: XCTestCase {
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Enter owner
         sheet.textFields["Owner field"].click()
@@ -231,7 +219,7 @@ class GitHubTests: XCTestCase {
         XCTAssertEqual("main", branchParam)
     }
 
-    func testAddGitHubPipelinePrivateRepos() throws {
+    func testFindsPrivateReposForUser() throws {
         webapp.router.get("/users/erikdoe") { _ in
             try TestHelper.contentsOfFile("GitHubUserResponse.json")
         }
@@ -243,23 +231,17 @@ class GitHubTests: XCTestCase {
         }
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false, token: "TEST-TOKEN")
-        let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Make sure the token is shown
         let tokenField = sheet.textFields["Token field"]
         XCTAssertEqual("TEST-TOKEN", tokenField.value as? String)
 
         // Enter owner and wait for the repo list to load
-        let ownerField = sheet.textFields["Owner field"]
-        ownerField.click()
+        sheet.textFields["Owner field"].click()
         sheet.typeText("erikdoe" + "\n")
 
-        // Make sure that the repositories are loaded and sorted
+        // Make sure that the repositories are loaded
         let repositoryBox = sheet.comboBoxes["Repository combo box"]
         expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryBox)
         waitForExpectations(timeout: 2)
@@ -274,6 +256,27 @@ class GitHubTests: XCTestCase {
         XCTAssertTrue(repositoryBox.textFields["jekyll-site-test"].exists)
     }
 
+    func testRetrievesReposForOrg() throws {
+        webapp.router.get("/users/ccmenu") { _ in
+            try TestHelper.contentsOfFile("GitHubUserOrgResponse.json")
+        }
+        webapp.router.get("/orgs/ccmenu/repos") { _ in
+            try TestHelper.contentsOfFile("GitHubReposByOrgResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let sheet = openAddGitHubPipelineSheet(app: app)
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("ccmenu" + "\n")
+
+        // Make sure that the repositories and workflows are loaded and the default display name is set
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu'"), evaluatedWith: repositoryBox)
+        waitForExpectations(timeout: 3)
+    }
+
     func testShowsRateLimitExceededForRepositories() throws {
         webapp.router.get("/users/erikdoe", options: .editResponse) { r -> String in
             r.response.status = .forbidden
@@ -282,12 +285,7 @@ class GitHubTests: XCTestCase {
         }
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
-        let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Enter owner
         sheet.textFields["Owner field"].click()
@@ -310,16 +308,10 @@ class GitHubTests: XCTestCase {
         }
 
         let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json")
-        let window = app.windows["Pipelines"]
-        let sheet = window.sheets.firstMatch
-
-        // Navigate to add workflow sheet
-        window.toolbars.popUpButtons["Add pipeline menu"].click()
-        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        let sheet = openAddGitHubPipelineSheet(app: app)
 
         // Enter owner and wait for the repo list to load
-        let ownerField = sheet.textFields["Owner field"]
-        ownerField.click()
+        sheet.textFields["Owner field"].click()
         sheet.typeText("erikdoe") // Note: not pressing return here
 
         // Make sure that the repositories are loaded and sorted
@@ -330,9 +322,18 @@ class GitHubTests: XCTestCase {
         // Now press return and wait for a little while
         sheet.typeText("\n")
         Thread.sleep(forTimeInterval: 1)
-        
+
         // Assert that no further fetch occured
         XCTAssertEqual(1, fetchCount)
+
+    }
+
+    private func openAddGitHubPipelineSheet(app: XCUIApplication) -> XCUIElement {
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
+        return sheet
     }
 
 }
