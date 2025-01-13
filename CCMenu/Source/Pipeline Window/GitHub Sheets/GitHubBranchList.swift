@@ -27,18 +27,13 @@ class GitHubBranchList: ObservableObject {
     }
 
     private func fetchBranches(request: URLRequest) async -> [GitHubBranch] {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
-            if response.statusCode != 200 {
-                return [GitHubBranch(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
-            }
-            return try JSONDecoder().decode([GitHubBranch].self, from: data)
-        } catch {
-            return [GitHubBranch(message: error.localizedDescription)]
+        let (repos, message): ([GitHubBranch]?, String) = await GitHubAPI.sendRequest(request: request)
+        guard let repos else {
+            return [GitHubBranch(message: message)]
         }
+        return repos
     }
-
+ 
     func clearBranches() {
         items = [GitHubBranch()]
     }

@@ -53,47 +53,15 @@ class GitHubRepositoryList: ObservableObject {
     }
 
     private func fetchUser(request: URLRequest) async -> (GitHubUser?, String) {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
-            // TODO: Somehow refactor this to use the same code as fetchRepositories
-            if response.statusCode == 403 || response.statusCode == 429 {
-                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
-                    // HTTPURLResponse doesn't have a specific message for code 429
-                    return (nil, "too many requests")
-                } else {
-                    return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
-                }
-            }
-            if response.statusCode != 200 {
-                return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
-            }
-            return (try JSONDecoder().decode(GitHubUser.self, from: data), "OK")
-        } catch {
-            return (nil, error.localizedDescription)
-        }
+        return await GitHubAPI.sendRequest(request: request)
     }
 
     private func fetchRepositories(request: URLRequest) async -> [GitHubRepository] {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
-            // TODO: Somehow refactor this to use the same code as feed reader
-            if response.statusCode == 403 || response.statusCode == 429 {
-                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
-                    // HTTPURLResponse doesn't have a specific message for code 429
-                    return [GitHubRepository(message: "too many requests")]
-                } else {
-                    return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
-                }
-            }
-            if response.statusCode != 200 {
-                return [GitHubRepository(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
-            }
-            return try JSONDecoder().decode([GitHubRepository].self, from: data)
-        } catch {
-            return [GitHubRepository(message: error.localizedDescription)]
+        let (repos, message): ([GitHubRepository]?, String) = await GitHubAPI.sendRequest(request: request)
+        guard let repos else {
+            return [GitHubRepository(message: message)]
         }
+        return repos
     }
 
     func clearRepositories() {

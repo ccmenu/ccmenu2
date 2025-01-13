@@ -117,6 +117,31 @@ class GitHubAPI {
     }
 
 
+    // MARK: - send requests
+
+    static func sendRequest<T>(request: URLRequest) async -> (T?, String) where T: Decodable {
+        do {
+            let (data, response) = try await URLSession.feedSession.data(for: request)
+            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            if response.statusCode == 403 || response.statusCode == 429 {
+                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
+                    // HTTPURLResponse doesn't have a specific message for code 429
+                    return (nil, "too many requests")
+                } else {
+                    return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
+                }
+            }
+            if response.statusCode != 200 {
+                return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
+            }
+            return (try JSONDecoder().decode(T.self, from: data), "OK")
+        } catch {
+            return (nil, error.localizedDescription)
+        }
+    }
+
+
+
     // MARK: - helper functions
 
     private static func baseURL(forAPI: Bool) -> String {

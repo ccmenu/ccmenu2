@@ -30,17 +30,11 @@ class GitHubWorkflowList: ObservableObject {
     }
 
     private func fetchWorkflows(request: URLRequest) async -> [GitHubWorkflow] {
-        do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
-            guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
-            if response.statusCode != 200 {
-                return [GitHubWorkflow(message: HTTPURLResponse.localizedString(forStatusCode: response.statusCode))]
-            }
-            let workflowResponse = try JSONDecoder().decode(WorflowResponse.self, from: data)
-            return workflowResponse.workflows
-        } catch {
-            return [GitHubWorkflow(message: error.localizedDescription)]
+        let (workflowResponse, message): (WorflowResponse?, String) = await GitHubAPI.sendRequest(request: request)
+        guard let workflowResponse else {
+            return [GitHubWorkflow(message: message)]
         }
+        return workflowResponse.workflows
     }
 
     struct WorflowResponse: Decodable {
