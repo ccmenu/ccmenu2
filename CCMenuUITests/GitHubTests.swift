@@ -34,10 +34,10 @@ class GitHubTests: XCTestCase {
         // Find the status description field (there's only one because there's only one pipeline),
         // then wait for the update to show relevant information from the response. Make sure the
         // request headers are set.
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
-        let messageText = window.tables.staticTexts["Build message"]
+        let messageText = window.outlines.staticTexts["Build message"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Push'"), evaluatedWith: messageText)
         expectation(for: NSPredicate(format: "value CONTAINS 'Improved layout'"), evaluatedWith: messageText)
         waitForExpectations(timeout: 2)
@@ -63,7 +63,7 @@ class GitHubTests: XCTestCase {
         let window = app.windows["Pipelines"]
 
         // Make sure the update message shows that the limit was exceeded
-        let lastUpdatedText = window.tables.staticTexts["Last updated message"]
+        let lastUpdatedText = window.outlines.staticTexts["Last updated message"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
         waitForExpectations(timeout: 5)
 
@@ -74,7 +74,7 @@ class GitHubTests: XCTestCase {
         XCTAssertFalse(didReceiveRequest)
 
         // Make sure that polling resumes and updates the status and clears the update message
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         expectation(for: NSPredicate(format: "NOT value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
         waitForExpectations(timeout: 5)
@@ -121,9 +121,9 @@ class GitHubTests: XCTestCase {
         sheet.buttons["Apply"].click()
 
         // Make sure the pipeline is shown, and that its status is fetched immediately
-        let titleText = window.tables.staticTexts["Pipeline title"]
+        let titleText = window.outlines.staticTexts["Pipeline title"]
         expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
     }
@@ -166,9 +166,9 @@ class GitHubTests: XCTestCase {
         sheet.buttons["Apply"].click()
 
         // Make sure the pipeline is shown, and that its status is fetched immediately
-        let titleText = window.tables.staticTexts["Pipeline title"]
+        let titleText = window.outlines.staticTexts["Pipeline title"]
         expectation(for: NSPredicate(format: "value BEGINSWITH 'ccmenu2'"), evaluatedWith: titleText)
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
     }
@@ -213,7 +213,7 @@ class GitHubTests: XCTestCase {
         sheet.buttons["Apply"].click()
 
         // Make sure the status is fetched and the request uses the branch
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
         XCTAssertEqual("main", branchParam)

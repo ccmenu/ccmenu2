@@ -33,7 +33,7 @@ class CCTrayTests: XCTestCase {
 
         // Find the status description field (there's only one because there's only one pipeline), then
         // wait for the update to the build label to show the label return with the embedded server
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: build.888'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
 
@@ -78,9 +78,9 @@ class CCTrayTests: XCTestCase {
         sheet.buttons["Apply"].click()
 
         // Make sure the pipeline is shown, and that its status is fetched immediately
-        let titleText = window.tables.staticTexts["Pipeline title"]
+        let titleText = window.outlines.staticTexts["Pipeline title"]
         expectation(for: NSPredicate(format: "value == 'C4'"), evaluatedWith: titleText)
-        let descriptionText = window.tables.staticTexts["Status description"]
+        let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: build.888'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 2)
     }
@@ -147,7 +147,7 @@ class CCTrayTests: XCTestCase {
         let window = app.windows["Pipelines"]
         let sheet = window.sheets.firstMatch
 
-        window.tables.staticTexts["connectfour"].click()
+        window.outlines.staticTexts["connectfour"].click()
         window.toolbars.buttons["Edit pipeline"].click()
 
         let nameField = sheet.textFields["Name field"]
@@ -156,7 +156,7 @@ class CCTrayTests: XCTestCase {
         sheet.typeText("TEST-TEST-TEST")
         sheet.buttons["Apply"].click()
 
-        let titleText = window.tables.staticTexts["Pipeline title"]
+        let titleText = window.outlines.staticTexts["Pipeline title"]
         expectation(for: NSPredicate(format: "value == 'TEST-TEST-TEST'"), evaluatedWith: titleText)
         waitForExpectations(timeout: 2)
  }
