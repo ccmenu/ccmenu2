@@ -15,12 +15,12 @@ jobs:
     - name: Build
       run: xcodebuild build -scheme CCMenu -destination 'platform=macOS'
     - name: Run unit tests
-      run: xcodebuild test -scheme CCMenu -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -scheme CCMenu -destination 'platform=macOS' | xcbeautify && exit ${PIPESTATUS[0]}
   run-uitests:
     needs: build-and-run-unit-tests
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v3
     - name: Run UI tests
-      run: xcodebuild test -scheme CCMenu.UITests -destination 'platform=macOS' | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -scheme CCMenu.UITests -destination 'platform=macOS' | xcbeautify && exit ${PIPESTATUS[0]}
 
