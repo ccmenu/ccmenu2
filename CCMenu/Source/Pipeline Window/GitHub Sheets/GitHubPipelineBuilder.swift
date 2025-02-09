@@ -26,10 +26,10 @@ class GitHubPipelineBuilder: ObservableObject {
 
     var canMakePipeline: Bool {
         guard !name.isEmpty else { return false }
-        guard let owner else { return false }
-        guard let repository else { return false }
+        guard owner?.isEmpty == false else { return false }
+        guard repository?.isEmpty == false else { return false }
         guard let workflow, workflow.isValid else { return false }
-        guard let branch else { return false }
+        guard branch != nil else { return false }
         return true
     }
 

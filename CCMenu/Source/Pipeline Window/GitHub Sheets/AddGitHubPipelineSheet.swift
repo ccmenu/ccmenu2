@@ -109,7 +109,7 @@ struct AddGitHubPipelineSheet: View {
                 LabeledContent("Branch:") {
                     ComboBox(items: branchList.items.map({ $0.name }), text: $branch.input)
                         .accessibilityIdentifier("Branch combo box")
-                        .disabled(owner.text.isEmpty || repository.text.isEmpty || repository.text.starts(with: "("))
+                        .disabled(!workflowList.selected.isValid)
                         .onReceive(branch.$text) { t in
                             builder.branch = t
                         }
