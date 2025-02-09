@@ -15,6 +15,7 @@ struct AddGitHubPipelineSheet: View {
     @StateObject private var repository = DebouncedText()
     @StateObject private var repositoryList = GitHubRepositoryList()
     @StateObject private var workflowList = GitHubWorkflowList()
+    @StateObject private var branch = DebouncedText()
     @StateObject private var branchList = GitHubBranchList()
     @StateObject private var builder = GitHubPipelineBuilder()
 
@@ -105,15 +106,16 @@ struct AddGitHubPipelineSheet: View {
                     builder.workflow = workflowList.selected
                 }
 
-                Picker("Branch:", selection: $branchList.selected) {
-                    ForEach(branchList.items) { b in
-                        Text(b.name).tag(b)
-                    }
-                }
-                .accessibilityIdentifier("Branch picker")
-                .disabled(!branchList.selected.isValid)
-                .onChange(of: branchList.selected) { _ in
-                    builder.branch = branchList.selected
+                LabeledContent("Branch:") {
+                    ComboBox(items: branchList.items.map({ $0.name }), text: $branch.input)
+                        .accessibilityIdentifier("Branch combo box")
+                        .disabled(owner.text.isEmpty || repository.text.isEmpty || repository.text.starts(with: "("))
+                        .onReceive(branch.$text) { t in
+                            builder.branch = t
+                        }
+                        .onSubmit {
+                            branch.takeInput()
+                        }
                 }
                 .padding(.bottom)
 

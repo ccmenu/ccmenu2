@@ -203,13 +203,15 @@ class GitHubTests: XCTestCase {
         // Make sure that the repositories and branches are loaded
         let repositoryBox = sheet.comboBoxes["Repository combo box"]
         expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
-        let branchPicker = sheet.popUpButtons["Branch picker"]
-        expectation(for: NSPredicate(format: "value == 'all branches'"), evaluatedWith: branchPicker)
+        let branchBox = sheet.comboBoxes["Branch combo box"]
+        expectation(for: NSPredicate(format: "value == ''"), evaluatedWith: branchBox)
         waitForExpectations(timeout: 5)
 
-        // Open the branch picker, select the main branch, and close the sheet
-        branchPicker.click()
-        branchPicker.menuItems["main"].click()
+        // Open the branch combo box, select the main branch, and close the sheet
+        branchBox.descendants(matching: .button).firstMatch.click()
+        branchBox.textFields["main"].click()
+        expectation(for: NSPredicate(format: "value == 'main'"), evaluatedWith: branchBox)
+        waitForExpectations(timeout: 2)
         sheet.buttons["Apply"].click()
 
         // Make sure the status is fetched and the request uses the branch

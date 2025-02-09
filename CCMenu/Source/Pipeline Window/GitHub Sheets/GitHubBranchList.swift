@@ -22,7 +22,7 @@ class GitHubBranchList: ObservableObject {
         if branches.count > 0 && !branches[0].isValid {
             return branches
         }
-        branches.insert(GitHubBranch(name: "all branches"), at: 0)
+        branches.insert(GitHubBranch(name: ""), at: 0)
         return branches
     }
 

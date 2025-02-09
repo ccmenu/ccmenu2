@@ -11,7 +11,7 @@ class GitHubPipelineBuilder: ObservableObject {
     var owner: String?
     var repository: String? { didSet { setDefaultName() } }
     var workflow: GitHubWorkflow? { didSet { setDefaultName() } }
-    var branch: GitHubBranch? { didSet { setDefaultName() } }
+    var branch: String? { didSet { setDefaultName() } }
 
     func setDefaultName() {
         var newName = ""
@@ -29,7 +29,7 @@ class GitHubPipelineBuilder: ObservableObject {
         guard let owner else { return false }
         guard let repository else { return false }
         guard let workflow, workflow.isValid else { return false }
-        guard let branch, branch.isValid else { return false }
+        guard let branch else { return false }
         return true
     }
 
@@ -38,8 +38,8 @@ class GitHubPipelineBuilder: ObservableObject {
         guard let owner else { return nil }
         guard let repository else { return nil }
         guard let workflow, workflow.isValid else { return nil }
-        guard let branch, branch.isValid else { return nil }
-        let branchName = branch.isAllBranchPlaceholder ? nil : branch.name
+        guard let branch else { return nil }
+        let branchName = branch.isEmpty ? nil : branch
 
         var url: URL? = nil
         let workflowPathComponents = [ workflow.filename, String(workflow.id) ]
