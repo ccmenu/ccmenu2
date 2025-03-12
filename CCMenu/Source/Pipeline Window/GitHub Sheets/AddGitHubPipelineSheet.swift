@@ -136,7 +136,7 @@ struct AddGitHubPipelineSheet: View {
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     Task {
-                        if let p = await builder.makePipeline() {
+                        if let p = await builder.makePipeline(token: authenticator.token) {
                             config.setPipeline(p)
                             presentation.dismiss()
                         }

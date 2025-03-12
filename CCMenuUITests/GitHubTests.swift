@@ -59,7 +59,7 @@ class GitHubTests: XCTestCase {
             return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
         }
 
-        let app = TestHelper.launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
+        let app = TestHelper.launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false, token: "TEST-TOKEN")
         let window = app.windows["Pipelines"]
 
         // Make sure the update message shows that the limit was exceeded
@@ -127,6 +127,62 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
     }
+
+    func testAddsGitHubPrivatePipeline() throws {
+        webapp.router.get("/users/erikdoe") { _ in
+            try TestHelper.contentsOfFile("GitHubUserResponse.json")
+        }
+        webapp.router.get("/users/erikdoe/repos") { _ in
+            return "[]"
+        }
+        webapp.router.get("/user/repos") { _ in
+            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
+            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
+            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
+        }
+        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r -> String in
+            if r.headers["Authorization"].first != "Bearer TEST-TOKEN" {
+                r.response.status = .notFound
+                return "{ \"message\": \"Not found\" } "
+            }
+            return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false, token: "TEST-TOKEN")
+        let window = app.windows["Pipelines"]
+        let sheet = openAddGitHubPipelineSheet(app: app)
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("erikdoe" + "\n")
+
+        // Make sure that the repositories and workflows are loaded and the default display name is set
+        let repositoryBox = sheet.comboBoxes["Repository combo box"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
+        let workflowPicker = sheet.popUpButtons["Workflow picker"]
+        expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
+        let displayNameField = sheet.textFields["Display name field"]
+        expectation(for: NSPredicate(format: "value == 'ccmenu2 | Build and test'"), evaluatedWith: displayNameField)
+        waitForExpectations(timeout: 3)
+
+        // Set a custom display name, and close the sheet
+        displayNameField.click()
+        sheet.typeKey("a", modifierFlags: [ .command ])
+        sheet.typeText("CCMenu")
+        sheet.buttons["Apply"].click()
+
+        // Make sure the pipeline is shown, and that its status is fetched immediately
+        let titleText = window.outlines.staticTexts["Pipeline title"]
+        expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
+        let descriptionText = window.outlines.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+    }
+
 
     func testAddsGitHubPipelineByIdIfNeccessary() throws {
         webapp.router.get("/users/erikdoe") { _ in
@@ -220,6 +276,8 @@ class GitHubTests: XCTestCase {
         waitForExpectations(timeout: 5)
         XCTAssertEqual("main", branchParam)
     }
+
+    
 
     func testFindsPrivateReposForUser() throws {
         webapp.router.get("/users/erikdoe") { _ in

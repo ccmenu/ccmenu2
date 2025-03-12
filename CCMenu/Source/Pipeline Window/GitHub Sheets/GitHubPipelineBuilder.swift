@@ -33,7 +33,7 @@ class GitHubPipelineBuilder: ObservableObject {
         return true
     }
 
-    func makePipeline() async -> Pipeline? {
+    func makePipeline(token: String?) async -> Pipeline? {
         guard !name.isEmpty else { return nil }
         guard let owner else { return nil }
         guard let repository else { return nil }
@@ -45,7 +45,7 @@ class GitHubPipelineBuilder: ObservableObject {
         let workflowPathComponents = [ workflow.filename, String(workflow.id) ]
         for wfid in workflowPathComponents {
             url = GitHubAPI.feedUrl(owner: owner, repository: repository, workflow: wfid, branch: branchName)
-            if let url, let result = await fetchRuns(url: url), result == 200 {
+            if let url, let result = await fetchRuns(url: url, token: token), result == 200 {
                 break
             }
             url = nil
@@ -59,9 +59,9 @@ class GitHubPipelineBuilder: ObservableObject {
         return pipeline
     }
 
-    private func fetchRuns(url: URL) async -> Int? {
+    private func fetchRuns(url: URL, token: String?) async -> Int? {
         let feed = PipelineFeed(type: .github, url:url)
-        guard let request = GitHubAPI.requestForFeed(feed: feed, token: nil) else {
+        guard let request = GitHubAPI.requestForFeed(feed: feed, token: token) else {
             return nil
         }
         let result = await fetchRuns(request: request)

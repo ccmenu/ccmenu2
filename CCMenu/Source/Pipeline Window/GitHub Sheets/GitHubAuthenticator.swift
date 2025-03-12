@@ -137,6 +137,7 @@ class GitHubAuthenticator: ObservableObject {
 
     func storeTokenInKeychain() {
         guard let token else { return }
+        guard UserDefaults.active.string(forKey: "GitHubToken") == nil else { return } // slight hack so we don't store tokens from test
         do {
             try Keychain.standard.setToken(token, forService: "GitHub")
         } catch {
