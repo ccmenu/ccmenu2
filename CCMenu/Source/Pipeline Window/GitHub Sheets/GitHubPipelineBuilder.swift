@@ -70,7 +70,7 @@ class GitHubPipelineBuilder: ObservableObject {
 
     private func fetchRuns(request: URLRequest) async -> Int? {
         do {
-            let (data, response) = try await URLSession.feedSession.data(for: request)
+            let (_, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
             return response.statusCode
         } catch {

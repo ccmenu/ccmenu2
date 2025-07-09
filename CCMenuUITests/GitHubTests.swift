@@ -59,7 +59,7 @@ class GitHubTests: XCTestCase {
             return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
         }
 
-        let app = TestHelper.launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false, token: "TEST-TOKEN")
+        let app = TestHelper.launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
         let window = app.windows["Pipelines"]
 
         // Make sure the update message shows that the limit was exceeded
