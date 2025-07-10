@@ -44,10 +44,10 @@ class GitHubAuthenticator: ObservableObject {
 
     private func startDeviceFlowOnWebsite(response: GitHubDeviceCodeResponse) -> Bool {
         let alert = NSAlert()
-        alert.messageText = "Sign in at GitHub"
-        alert.informativeText = "The process will continue on the GitHub website in your default web browser. You will have to enter the code shown below.\n\n\(response.userCode)\n\nWhen you return to CCMenu please wait for a token to appear."
+        alert.messageText = response.userCode
+        alert.informativeText = "The process will continue on the GitHub website in your default web browser. You will have to enter the code shown above.\n\nWhen you return to CCMenu please wait for a token to appear."
         alert.alertStyle = .informational
-        alert.addButton(withTitle: "Copy code and continue")
+        alert.addButton(withTitle: "Copy Code and Continue")
         alert.addButton(withTitle: "Cancel")
         if alert.runModal() == .alertSecondButtonReturn {
             return false
