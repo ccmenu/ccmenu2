@@ -9,62 +9,67 @@ import Combine
 import os
 
 
-class GitHubAPI {
+class GitLabAPI {
 
+    // TODO: AI generated code - review
     static var clientId: String {
-        if let defaultsId = UserDefaults.active.string(forKey: "GitHubClientID") {
+        if let defaultsId = UserDefaults.active.string(forKey: "GitLabClientID") {
             return defaultsId
         }
-        return "4eafcf49451c588fbeac"
+        return "" // Default client ID should be configured
     }
 
-    // MARK: - user, repositories, workflows, and branches
+    // MARK: - user, projects, pipelines, and branches
 
-    static func requestForUser(user: String, token: String?) -> URLRequest {
-        let path = String(format: "/users/%@", user)
+    // TODO: AI generated code - review
+    static func requestForUser(token: String) -> URLRequest {
+        let path = "/user"
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, token: token)
     }
 
-    static func requestForAllPublicRepositories(user: String, token: String?) -> URLRequest {
-        let path = String(format: "/users/%@/repos", user)
+    // TODO: AI generated code - review
+   static func requestForAllProjects(token: String) -> URLRequest {
+        let path = "/projects"
         let queryParams = [
-            "type": "all",
-            "sort": "pushed",
+            "membership": "true",
+            "order_by": "last_activity_at",
             "per_page": "100",
         ];
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    static func requestForAllRepositories(org: String, token: String?) -> URLRequest {
-        let path = String(format: "/orgs/%@/repos", org)
+    // TODO: AI generated code - review
+    static func requestForGroupProjects(group: String, token: String) -> URLRequest {
+        let path = String(format: "/groups/%@/projects", group)
         let queryParams = [
-            "type": "all",
-            "sort": "pushed",
+            "order_by": "last_activity_at",
             "per_page": "100",
         ];
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    static func requestForAllPrivateRepositories(token: String) -> URLRequest {
-        let path = String(format: "/user/repos")
+    // TODO: AI generated code - review
+    static func requestForUserProjects(user: String, token: String) -> URLRequest {
+        let path = String(format: "/users/%@/projects", user)
         let queryParams = [
-            "type": "private",
-            "sort": "pushed",
+            "order_by": "last_activity_at",
             "per_page": "100",
         ];
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    static func requestForWorkflows(owner: String, repository: String, token: String?) -> URLRequest {
-        let path = String(format: "/repos/%@/%@/actions/workflows", owner, repository)
+    // TODO: AI generated code - review
+    static func requestForPipelines(projectId: String, token: String) -> URLRequest {
+        let path = String(format: "/projects/%@/pipelines", projectId)
         let queryParams = [
             "per_page": "100",
         ];
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    static func requestForBranches(owner: String, repository: String, token: String?) -> URLRequest {
-        let path = String(format: "/repos/%@/%@/branches", owner, repository)
+    // TODO: AI generated code - review
+    static func requestForBranches(projectId: String, token: String) -> URLRequest {
+        let path = String(format: "/projects/%@/repository/branches", projectId)
         let queryParams = [
             "per_page": "100",
         ];
@@ -74,39 +79,34 @@ class GitHubAPI {
 
     // MARK: - device flow and applications
 
-    static func requestForDeviceCode() -> URLRequest {
-        let path = "/login/device/code"
+    // TODO: AI generated code - review
+    static func requestForAccessToken(code: String, redirectUri: String) -> URLRequest {
+        let path = "/oauth/token"
         let queryParams = [
             "client_id": clientId,
-            "scope": "repo",
+            "client_secret": "", // Client secret should be configured
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": redirectUri
         ];
         return makeRequest(method: "POST", baseUrl: baseURL(forAPI: false), path: path, params: queryParams)
     }
 
-    static func requestForAccessToken(codeResponse: GitHubDeviceCodeResponse) -> URLRequest {
-        let path = "/login/oauth/access_token"
-        let queryParams = [
-            "client_id": clientId,
-            "device_code": codeResponse.deviceCode,
-            "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
-        ];
-        return makeRequest(method: "POST", baseUrl: baseURL(forAPI: false), path: path, params: queryParams)
-    }
-
+    // TODO: AI generated code - review
     static func applicationsUrl() -> URL {
-        URL(string: "\(baseURL(forAPI: false))/settings/connections/applications/\(GitHubAPI.clientId)")!
+        URL(string: "\(baseURL(forAPI: false))/profile/applications")!
     }
 
 
     // MARK: - feed
 
-    // TODO: fix path overwriting bug (see GitLab implementation)
-    static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {
-        // see https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
-        var components = URLComponents(string: baseURL(forAPI: true))!
-        components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+    static func feedUrl(projectId: String, branch: String?) -> URL {
+        var url = URL(string: baseURL(forAPI: true))!
+        url.append(path:"/projects/\(projectId)/pipelines")
+
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         if let branch {
-            components.appendQueryItem(URLQueryItem(name: "branch", value: branch))
+            components.appendQueryItem(URLQueryItem(name: "ref", value: branch))
         }
         return components.url!.absoluteURL
     }
@@ -125,8 +125,7 @@ class GitHubAPI {
             let (data, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
             if response.statusCode == 403 || response.statusCode == 429 {
-                if let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0  {
-                    // HTTPURLResponse doesn't have a specific message for code 429
+                if let v = response.value(forHTTPHeaderField: "RateLimit-Remaining"), Int(v) == 0  {
                     return (nil, "too many requests")
                 } else {
                     return (nil, HTTPURLResponse.localizedString(forStatusCode: response.statusCode))
@@ -145,27 +144,25 @@ class GitHubAPI {
 
     // MARK: - helper functions
 
-    private static func baseURL(forAPI: Bool) -> String {
-        let defaultsKey = forAPI ? "GitHubAPIBaseURL" : "GitHubBaseURL"
+    static func baseURL(forAPI: Bool) -> String {
+        let defaultsKey = forAPI ? "GitLabAPIBaseURL" : "GitLabBaseURL"
         if let defaultsBaseURL = UserDefaults.active.string(forKey: defaultsKey) {
             return defaultsBaseURL
         }
-        return forAPI ? "https://api.github.com" : "https://github.com"
+        return forAPI ? "https://gitlab.com/api/v4" : "https://github.com"
     }
 
     private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
         var components = URLComponents(string: baseUrl)!
         components.path = path // TODO: check for path overwriting issues
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
-        // TODO: Consider filtering token when the URL is overwritten via defaults
         return makeRequest(method: method, url: components.url!, token: token)
     }
 
     private static func makeRequest(method: String = "GET", url: URL, token: String?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.addValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
-        request.addValue("2022-11-28", forHTTPHeaderField: "X-GitHub-Api-Version")
+        // TODO: AI generated code - review
         if let token, !token.isEmpty {
             request.setValue(URLRequest.bearerAuthValue(token: token), forHTTPHeaderField: "Authorization")
         }

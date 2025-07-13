@@ -25,6 +25,9 @@
 		0322053F2B9E601D00205DC6 /* PipelineWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */; };
 		032205412B9E606600205DC6 /* CCTrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032205402B9E606600205DC6 /* CCTrayTests.swift */; };
 		032205432B9E615800205DC6 /* GitHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032205422B9E615800205DC6 /* GitHubTests.swift */; };
+		03278EA32E1FEE2300995F34 /* GitLabFeedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03278EA12E1FEE2300995F34 /* GitLabFeedReader.swift */; };
+		03278EA42E1FEE2300995F34 /* GitLabResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03278EA22E1FEE2300995F34 /* GitLabResponseParser.swift */; };
+		03278EA52E1FEE2300995F34 /* GitLabAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03278EA02E1FEE2300995F34 /* GitLabAPI.swift */; };
 		0329F89E25B0F0F10043FAB1 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */; };
 		0329F8E125B0F6880043FAB1 /* CCMenuApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */; };
 		0331F39F29A8155000245956 /* MenuExtraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0331F39E29A8155000245956 /* MenuExtraViewModel.swift */; };
@@ -151,6 +154,9 @@
 		0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineWindowTests.swift; sourceTree = "<group>"; };
 		032205402B9E606600205DC6 /* CCTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayTests.swift; sourceTree = "<group>"; };
 		032205422B9E615800205DC6 /* GitHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubTests.swift; sourceTree = "<group>"; };
+		03278EA02E1FEE2300995F34 /* GitLabAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabAPI.swift; sourceTree = "<group>"; };
+		03278EA12E1FEE2300995F34 /* GitLabFeedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabFeedReader.swift; sourceTree = "<group>"; };
+		03278EA22E1FEE2300995F34 /* GitLabResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabResponseParser.swift; sourceTree = "<group>"; };
 		0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0329F8E025B0F6880043FAB1 /* CCMenuApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCMenuApp.swift; sourceTree = "<group>"; };
 		0331F39E29A8155000245956 /* MenuExtraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraViewModel.swift; sourceTree = "<group>"; };
@@ -545,6 +551,9 @@
 				03D4BB02265EE5840023F4CB /* GitHubFeedReader.swift */,
 				03D4BB04265EE6B50023F4CB /* GitHubResponseParser.swift */,
 				03E6A9F62B2651C200284138 /* GitHubAPI.swift */,
+				03278EA12E1FEE2300995F34 /* GitLabFeedReader.swift */,
+				03278EA22E1FEE2300995F34 /* GitLabResponseParser.swift */,
+				03278EA02E1FEE2300995F34 /* GitLabAPI.swift */,
 			);
 			path = "Server Monitor";
 			sourceTree = "<group>";
@@ -791,6 +800,9 @@
 				03F9B88E297C5D5B00FA866E /* CompactRelativeFormatStyle.swift in Sources */,
 				03F9B896297D486C00FA866E /* Pipeline.Feed.swift in Sources */,
 				03CC11F2265467C200130833 /* CCTrayResponseParser.swift in Sources */,
+				03278EA32E1FEE2300995F34 /* GitLabFeedReader.swift in Sources */,
+				03278EA42E1FEE2300995F34 /* GitLabResponseParser.swift in Sources */,
+				03278EA52E1FEE2300995F34 /* GitLabAPI.swift in Sources */,
 				0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
 				03B263F82B51FF2100CA989A /* NotificationSender.swift in Sources */,

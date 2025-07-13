@@ -12,9 +12,11 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
-## Playgrounds
+## Playgrounds and other IDE files
 timeline.xctimeline
 playground.xcworkspace
+PROMPT.md
+.windsurfrc
 
 ## Command line builds
 build/

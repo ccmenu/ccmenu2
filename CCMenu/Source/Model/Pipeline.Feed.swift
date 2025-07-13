@@ -11,7 +11,8 @@ struct PipelineFeed: Codable, Equatable {
     enum FeedType: String, Codable {
         case
         cctray,
-        github
+        github,
+        gitlab
     }
 
     var type: FeedType

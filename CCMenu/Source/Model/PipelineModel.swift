@@ -37,7 +37,7 @@ final class PipelineModel: ObservableObject {
             timer = nil
         }
     }
-    
+
     @discardableResult
     func add(pipeline newPipeline: Pipeline) -> Bool {
         if pipelines.contains(where: { $0.id == newPipeline.id }) {
@@ -66,9 +66,15 @@ final class PipelineModel: ObservableObject {
             pipelines = references.compactMap({ Pipeline(legacyReference: $0) })
         }
         else {
+            // TODO: Change to use API class
             let url = URL(string: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main")!
             pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: PipelineFeed(type: .github, url: url)) ]
         }
+        #if DEBUG
+        // TODO: Remove when GitLab UI exists
+        let url = GitLabAPI.feedUrl(projectId: "66079563", branch: nil)
+        #endif
+        self.add(pipeline: Pipeline(name: "quvyn | build-and-test", feed: PipelineFeed(type: .gitlab, url: url)))
         // TODO: Remove before App Store release
         UserDefaults.active.removeObject(forKey: "GitHubToken")
     }
@@ -88,7 +94,7 @@ final class PipelineModel: ObservableObject {
             fatalError("Couldn't load pipelines from \(filename): \(error)")
         }
     }
-    
+
     func importPipelinesFromFile(url: URL) -> Error? {
         do {
             let document = try PipelineDocument(url: url)
@@ -99,7 +105,7 @@ final class PipelineModel: ObservableObject {
             return error
         }
     }
-    
+
     func exportPipelinesToDocument(selection: Set<String>) -> PipelineDocument {
         let pipelines = selection.isEmpty ? pipelines : pipelines.filter({ selection.contains($0.id )})
         return PipelineDocument(pipelines: pipelines)

@@ -63,6 +63,7 @@ class ServerMonitor {
         await withTaskGroup(of: Void.self) { taskGroup in
             self.updatePipelines_CCTray(pipelines.filter({ $0.feed.type == .cctray }), taskGroup: &taskGroup)
             self.updatePipelines_GitHub(pipelines.filter({ $0.feed.type == .github }), taskGroup: &taskGroup)
+            self.updatePipelines_GitLab(pipelines.filter({ $0.feed.type == .gitlab }), taskGroup: &taskGroup)
             await taskGroup.waitForAll()
         }
     }
@@ -113,6 +114,29 @@ class ServerMonitor {
         model.update(pipeline: reader.pipeline)
     }
 
+    
+    private func updatePipelines_GitLab(_ pipelines: [Pipeline], taskGroup: inout TaskGroup<Void>) {
+        for p in pipelines {
+            taskGroup.addTask { await self.updateGitLabPipeline(pipeline: p) }
+        }
+    }
+
+    private func updateGitLabPipeline(pipeline: Pipeline) async {
+        var pipeline = pipeline
+        if !networkMonitor.isConnected && pipelineIsRemote(pipeline) && pipelineHasSomeStatus(pipeline) {
+            return
+        }
+        if let pauseUntil = pipeline.feed.pauseUntil {
+            if Date().timeIntervalSince1970 <= Double(pauseUntil) {
+                return
+            }
+            pipeline.feed.clearPauseUntil()
+        }
+        let reader = GitLabFeedReader(for: pipeline)
+        await reader.updatePipelineStatus()
+        model.update(pipeline: reader.pipeline)
+    }
+    
     
     private func pipelineIsRemote(_ p: Pipeline) -> Bool {
         if p.feed.url.host() != "localhost" {
