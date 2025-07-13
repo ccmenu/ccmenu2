@@ -15,8 +15,7 @@ xcuserdata/
 ## Playgrounds and other IDE files
 timeline.xctimeline
 playground.xcworkspace
-PROMPT.md
-.windsurfrc
+.windsurf
 
 ## Command line builds
 build/
