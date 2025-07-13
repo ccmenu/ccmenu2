@@ -94,16 +94,15 @@ class GitLabAPI {
 
     // TODO: AI generated code - review
     static func applicationsUrl() -> URL {
-        URL(string: "\(baseURL(forAPI: false))/profile/applications")!
+        baseURL(forAPI: false).appending(path: "/profile/applications")
     }
 
 
     // MARK: - feed
 
     static func feedUrl(projectId: String, branch: String?) -> URL {
-        var url = URL(string: baseURL(forAPI: true))!
-        url.append(path:"/projects/\(projectId)/pipelines")
-
+        let url = baseURL(forAPI: true).appending(path: "/projects/\(projectId)/pipelines")
+        
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         if let branch {
             components.appendQueryItem(URLQueryItem(name: "ref", value: branch))
@@ -144,17 +143,19 @@ class GitLabAPI {
 
     // MARK: - helper functions
 
-    static func baseURL(forAPI: Bool) -> String {
+    private static func baseURL(forAPI: Bool) -> URL {
+        var urlString = forAPI ? "https://gitlab.com/api/v4" : "https://gitlab.com"
         let defaultsKey = forAPI ? "GitLabAPIBaseURL" : "GitLabBaseURL"
         if let defaultsBaseURL = UserDefaults.active.string(forKey: defaultsKey) {
-            return defaultsBaseURL
+            urlString = defaultsBaseURL
         }
-        return forAPI ? "https://gitlab.com/api/v4" : "https://github.com"
+        guard let url = URL(string: urlString) else { fatalError("Invalid base URL \(urlString)") }
+        return url
     }
 
-    private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
-        var components = URLComponents(string: baseUrl)!
-        components.path = path // TODO: check for path overwriting issues
+    private static func makeRequest(method: String = "GET", baseUrl: URL, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
+        let url = baseUrl.appending(path: path)
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
         return makeRequest(method: method, url: components.url!, token: token)
     }
