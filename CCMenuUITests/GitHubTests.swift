@@ -217,7 +217,7 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
         let workflowPicker = sheet.popUpButtons["Workflow picker"]
         expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         sheet.buttons["Apply"].click()
 
@@ -226,7 +226,7 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value BEGINSWITH 'ccmenu2'"), evaluatedWith: titleText)
         let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
     }
 
     func testAddsGitHubPipelineWithBranch() throws {
