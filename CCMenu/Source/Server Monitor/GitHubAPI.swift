@@ -94,7 +94,7 @@ class GitHubAPI {
     }
 
     static func applicationsUrl() -> URL {
-        URL(string: "\(baseURL(forAPI: false))/settings/connections/applications/\(GitHubAPI.clientId)")!
+        baseURL(forAPI: false).appending(path: "/settings/connections/applications/\(GitHubAPI.clientId)")
     }
 
 
