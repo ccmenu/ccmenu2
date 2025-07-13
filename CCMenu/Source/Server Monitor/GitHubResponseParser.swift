@@ -57,7 +57,7 @@ class GitHubResponseParser {
         var messageParts: [String] = []
         if let event = run["event"] as? String {
             let prettified = event.replacingOccurrences(of: "_", with: " ").capitalized
-            messageParts.append("\(prettified)")
+            messageParts.append(prettified)
         }
         if let displayTitle = run["display_title"] as? String {
             messageParts.append(displayTitle)

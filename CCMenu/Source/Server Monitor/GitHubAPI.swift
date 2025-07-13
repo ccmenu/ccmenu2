@@ -100,11 +100,10 @@ class GitHubAPI {
 
     // MARK: - feed
 
-    // TODO: fix path overwriting bug (see GitLab implementation)
     static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {
         // see https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
-        var components = URLComponents(string: baseURL(forAPI: true))!
-        components.path = String(format: "/repos/%@/%@/actions/workflows/%@/runs", owner, repository, workflow)
+        let url = baseURL(forAPI: true).appending(path: "/repos/\(owner)/\(repository)/actions/workflows/\(workflow)/runs")
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         if let branch {
             components.appendQueryItem(URLQueryItem(name: "branch", value: branch))
         }
@@ -145,17 +144,19 @@ class GitHubAPI {
 
     // MARK: - helper functions
 
-    private static func baseURL(forAPI: Bool) -> String {
+    private static func baseURL(forAPI: Bool) -> URL {
+        var urlString = forAPI ? "https://api.github.com" : "https://github.com"
         let defaultsKey = forAPI ? "GitHubAPIBaseURL" : "GitHubBaseURL"
         if let defaultsBaseURL = UserDefaults.active.string(forKey: defaultsKey) {
-            return defaultsBaseURL
+            urlString = defaultsBaseURL
         }
-        return forAPI ? "https://api.github.com" : "https://github.com"
+        guard let url = URL(string: urlString) else { fatalError("Invalid base URL \(urlString)") }
+        return url
     }
 
-    private static func makeRequest(method: String = "GET", baseUrl: String, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
-        var components = URLComponents(string: baseUrl)!
-        components.path = path // TODO: check for path overwriting issues
+    private static func makeRequest(method: String = "GET", baseUrl: URL, path: String, params: Dictionary<String, String> = [:], token: String? = nil) -> URLRequest {
+        let url = baseUrl.appending(path: path)
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         components.queryItems = params.map({ URLQueryItem(name: $0.key, value: $0.value) })
         // TODO: Consider filtering token when the URL is overwritten via defaults
         return makeRequest(method: method, url: components.url!, token: token)

@@ -84,6 +84,7 @@
 		03DA98DE2B44B7320073F5BB /* GitHubWorkflowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */; };
 		03DA98E02B44BF620073F5BB /* GitHubPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */; };
 		03DA98E22B44CE1A0073F5BB /* GitHubAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */; };
+		03DC9BBA2E240D170000E22E /* GitHubAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DC9BB92E240D030000E22E /* GitHubAPITests.swift */; };
 		03DD697C2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */; };
 		03DD697E2B646E3800D7AD9D /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */; };
 		03DF19072D025292007D1A64 /* ComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF19062D025292007D1A64 /* ComboBox.swift */; };
@@ -218,6 +219,7 @@
 		03DA98DD2B44B7320073F5BB /* GitHubWorkflowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubWorkflowList.swift; sourceTree = "<group>"; };
 		03DA98DF2B44BF620073F5BB /* GitHubPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPipelineBuilder.swift; sourceTree = "<group>"; };
 		03DA98E12B44CE1A0073F5BB /* GitHubAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAuthenticator.swift; sourceTree = "<group>"; };
+		03DC9BB92E240D030000E22E /* GitHubAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPITests.swift; sourceTree = "<group>"; };
 		03DD697B2B61A26900D7AD9D /* CCTrayPipelineBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayPipelineBuilder.swift; sourceTree = "<group>"; };
 		03DD697D2B646E3800D7AD9D /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
 		03DF19062D025292007D1A64 /* ComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBox.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				03F9B899297D930A00FA866E /* CCTrayFeedReaderTests.swift */,
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
 				2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */,
+				03DC9BB92E240D030000E22E /* GitHubAPITests.swift */,
 				0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */,
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				3CB911D82B78EB3F009DF781 /* URLRequestExtensionTests.swift */,
@@ -850,6 +853,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				037AB21C297B4D5F00C33589 /* PipelineModelTests.swift in Sources */,
+				03DC9BBA2E240D170000E22E /* GitHubAPITests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* NSImageExtensionTests.swift in Sources */,
 				03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,

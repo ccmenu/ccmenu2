@@ -66,8 +66,7 @@ final class PipelineModel: ObservableObject {
             pipelines = references.compactMap({ Pipeline(legacyReference: $0) })
         }
         else {
-            // TODO: Change to use API class
-            let url = URL(string: "https://api.github.com/repos/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml/runs?branch=main")!
+            let url = GitHubAPI.feedUrl(owner: "ccmenu", repository: "ccmenu2", workflow: "build-and-test.yaml", branch: "main")
             pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: PipelineFeed(type: .github, url: url)) ]
         }
         #if DEBUG
@@ -75,8 +74,6 @@ final class PipelineModel: ObservableObject {
         let url = GitLabAPI.feedUrl(projectId: "66079563", branch: nil)
         #endif
         self.add(pipeline: Pipeline(name: "quvyn | build-and-test", feed: PipelineFeed(type: .gitlab, url: url)))
-        // TODO: Remove before App Store release
-        UserDefaults.active.removeObject(forKey: "GitHubToken")
     }
 
     private func savePipelinesToUserDefaults() {
