@@ -79,4 +79,74 @@ class GitLabFeedReader {
         return parser.pipelineStatus(name: pipeline.name)
     }
 
+
+    func enrichPipelineCurrentBuild() async {
+        do {
+            let token = try Keychain.standard.getToken(forService: "GitLab")
+
+            if let pid = pipeline.status.currentBuild?.id {
+                guard let request = GitLabAPI.requestForDetail(feed: pipeline.feed, pipelineId: pid, token: token) else {
+                    throw GitLabFeedReaderError.invalidURLError
+                }
+                guard let currentBuild = try await fetchBuild(request: request) else {
+                    throw GitLabFeedReaderError.noStatusError
+                }
+                pipeline.status.currentBuild = currentBuild
+            }
+            pipeline.connectionError = nil
+        } catch {
+            if let error = error as? GitLabFeedReaderError, case .rateLimitError(let pauseUntil) = error {
+                pipeline.feed.setPauseUntil(pauseUntil, reason: error.localizedDescription)
+            } else {
+                pipeline.status = PipelineStatus(activity: .other)
+                pipeline.connectionError = error.localizedDescription
+            }
+        }
+    }
+
+    func enrichPipelineLastBuild() async {
+        do {
+            let token = try Keychain.standard.getToken(forService: "GitLab")
+
+            if let pid = pipeline.status.lastBuild?.id {
+                guard let request = GitLabAPI.requestForDetail(feed: pipeline.feed, pipelineId: pid, token: token) else {
+                    throw GitLabFeedReaderError.invalidURLError
+                }
+                guard let lastBuild = try await fetchBuild(request: request) else {
+                    throw GitLabFeedReaderError.noStatusError
+                }
+                pipeline.status.lastBuild = lastBuild
+            }
+            pipeline.connectionError = nil
+        } catch {
+            if let error = error as? GitLabFeedReaderError, case .rateLimitError(let pauseUntil) = error {
+                pipeline.feed.setPauseUntil(pauseUntil, reason: error.localizedDescription)
+            } else {
+                pipeline.status = PipelineStatus(activity: .other)
+                pipeline.connectionError = error.localizedDescription
+            }
+        }
+    }
+
+
+    private func fetchBuild(request: URLRequest) async throws -> Build? {
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        if response.statusCode == 403 || response.statusCode == 429 {
+            guard let v = response.value(forHTTPHeaderField: "RateLimit-Remaining"), Int(v) == 0 else {
+                throw GitLabFeedReaderError.httpError(response.statusCode)
+            }
+            guard let v = response.value(forHTTPHeaderField: "RateLimit-Reset"), let pauseUntil = Int(v) else {
+                throw GitLabFeedReaderError.httpError(response.statusCode)
+            }
+            throw GitLabFeedReaderError.rateLimitError(pauseUntil)
+        }
+        if response.statusCode != 200 {
+            throw GitLabFeedReaderError.httpError(response.statusCode)
+        }
+        let parser = GitLabDetailResponseParser()
+        try parser.parseResponse(data)
+        return parser.build()
+    }
+
 }

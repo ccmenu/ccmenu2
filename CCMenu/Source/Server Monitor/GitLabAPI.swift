@@ -116,6 +116,12 @@ class GitLabAPI {
         return makeRequest(url: components.url!.absoluteURL, token: token)
     }
 
+    static func requestForDetail(feed: PipelineFeed, pipelineId: String, token: String?) -> URLRequest? {
+        // TODO: double check that this works with query params (for branches)
+        let url = feed.url.appendingPathComponent(pipelineId)
+        return makeRequest(url: url, token: token)
+    }
+
 
     // MARK: - send requests
 

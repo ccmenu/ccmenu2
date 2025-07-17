@@ -16,6 +16,7 @@ enum BuildResult: String, Codable {
 
 struct Build: Codable {
     var result: BuildResult
+    var id: String?
     var label: String?
     var timestamp: Date?
     var duration: TimeInterval?

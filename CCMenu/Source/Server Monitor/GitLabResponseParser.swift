@@ -23,35 +23,39 @@ class GitLabResponseParser {
         var status = PipelineStatus(activity: .other)
         status.webUrl = latest["web_url"] as? String
         if let pipelineStatus = latest["status"] as? String {
-            status.activity = activityForString(pipelineStatus)
+            status.activity = GitLabResponseParser.activityForString(pipelineStatus)
         }
 
         if status.activity == .building {
-            status.currentBuild = build(pipeline: latest)
+            status.currentBuild = GitLabResponseParser.build(pipeline: latest)
             if let completed = pipelineList.first(where: isCompletedSuccessful(pipeline:)) ??
-                                pipelineList.first(where: isCompleted(pipeline:)) {
-                status.lastBuild = build(pipeline: completed)
+                pipelineList.first(where: GitLabResponseParser.isCompleted(pipeline:)) {
+                status.lastBuild = GitLabResponseParser.build(pipeline: completed)
             }
          } else {
-            status.lastBuild = build(pipeline: latest)
+             status.lastBuild = GitLabResponseParser.build(pipeline: latest)
         }
 
         return status
     }
 
-    private func build(pipeline: Dictionary<String, Any>) -> Build {
+    fileprivate static func build(pipeline: Dictionary<String, Any>) -> Build {
         let status = pipeline["status"] as? String
         var build = Build(result: resultForString(status))
 
-        if let pipelineId = pipeline["iid"] as? Int {
-            build.label = String(pipelineId)
+        if let pipelineId = pipeline["id"] as? Int {
+            build.id = String(pipelineId)
         }
 
-        // TODO: AI generated code - rework to get actual run start if possible
+        if let pipelineIid = pipeline["iid"] as? Int {
+            build.label = String(pipelineIid)
+        }
+
         if let createdAt = pipeline["created_at"] as? String, let createdAtDate = dateForString(createdAt) {
             build.timestamp = createdAtDate
-            if let updatedAt = pipeline["updated_at"] as? String, let updatedAtDate = dateForString(updatedAt) {
-                build.duration = updatedAtDate.timeIntervalSince(createdAtDate)
+            // This is only present when called with a response with the pipeline detail
+            if let duration = pipeline["duration"] as? Int {
+                build.duration = Double(duration)
             }
         }
 
@@ -68,22 +72,26 @@ class GitLabResponseParser {
             build.message = messageParts.joined(separator: " \u{22EE} ")
         }
 
-        // GitLab doesn't include user info directly in pipeline API response
-        // We would need to make an additional API call to get user details
-        // For now, we'll leave user and avatar empty
+        // This is only present when called with a response with the pipeline detail
+        if let user = pipeline["user"] as? Dictionary<String, Any> {
+            build.user = user["name"] as? String
+            if let avatar = user["avatar_url"] as? String {
+                build.avatar = URL(string: avatar)
+            }
+        }
 
         return build
     }
 
-    private func isCompleted(pipeline: Dictionary<String, Any>) -> Bool {
-        return activityForString(pipeline["status"] as? String) == .sleeping
+    private static func isCompleted(pipeline: Dictionary<String, Any>) -> Bool {
+        return GitLabResponseParser.activityForString(pipeline["status"] as? String) == .sleeping
     }
 
     private func isCompletedSuccessful(pipeline: Dictionary<String, Any>) -> Bool {
-        return resultForString(pipeline["status"] as? String) == .success
+        return GitLabResponseParser.resultForString(pipeline["status"] as? String) == .success
     }
 
-    func activityForString(_ string: String?) -> PipelineStatus.Activity {
+    static func activityForString(_ string: String?) -> PipelineStatus.Activity {
         switch string {
             case "running", "pending": return .building
             case "success", "failed", "canceled", "skipped", "manual", "scheduled": return .sleeping
@@ -91,7 +99,7 @@ class GitLabResponseParser {
         }
     }
 
-    func resultForString(_ string: String?) -> BuildResult {
+    static func resultForString(_ string: String?) -> BuildResult {
         switch string {
             case "success": return .success
             case "failed": return .failure
@@ -100,9 +108,28 @@ class GitLabResponseParser {
         }
     }
 
-    func dateForString(_ string: String) -> Date? {
+    static func dateForString(_ string: String) -> Date? {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.date(from: string)
     }
+}
+
+
+class GitLabDetailResponseParser {
+
+    var pipelineDetail: Dictionary<String, Any> = [:]
+
+    func parseResponse(_ data: Data) throws {
+        if let response = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> {
+            pipelineDetail = response
+        } else {
+            pipelineDetail = [:]
+        }
+    }
+
+    func build() -> Build {
+        GitLabResponseParser.build(pipeline: pipelineDetail)
+    }
+
 }

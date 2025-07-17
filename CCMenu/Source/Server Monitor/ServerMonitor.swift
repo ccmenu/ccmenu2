@@ -68,6 +68,7 @@ class ServerMonitor {
         }
     }
 
+
     // TODO: Consider moving the following methods to the reader, with a protocol and base class
     // TODO: Consider adding a limit to the number of parallel requests (see https://stackoverflow.com/questions/70976323/)
 
@@ -134,10 +135,31 @@ class ServerMonitor {
         }
         let reader = GitLabFeedReader(for: pipeline)
         await reader.updatePipelineStatus()
-        model.update(pipeline: reader.pipeline)
+        var newPipeline = reader.pipeline
+
+        if let idOld = pipeline.status.lastBuild?.id, let idNew = newPipeline.status.lastBuild?.id, idNew == idOld {
+            print("last build: matching build found, will copy")
+            newPipeline.status.lastBuild = pipeline.status.lastBuild
+        } else {
+            print("last build: seems new, will fetch details")
+            await reader.enrichPipelineLastBuild()
+            newPipeline = reader.pipeline
+        }
+
+        if let idOld = pipeline.status.currentBuild?.id, let idNew = newPipeline.status.currentBuild?.id, idNew == idOld {
+            print("current build: matching build found, will copy")
+            newPipeline.status.currentBuild = pipeline.status.currentBuild
+        } else if pipeline.status.currentBuild != nil {
+            print("current build: seems new, will fetch details")
+            await reader.enrichPipelineCurrentBuild()
+            newPipeline = reader.pipeline
+        } else {
+            print("current build: no build")
+        }
+
+        model.update(pipeline: newPipeline)
     }
-    
-    
+
     private func pipelineIsRemote(_ p: Pipeline) -> Bool {
         if p.feed.url.host() != "localhost" {
             return true
