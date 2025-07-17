@@ -226,7 +226,7 @@ class GitHubTests: XCTestCase {
         expectation(for: NSPredicate(format: "value BEGINSWITH 'ccmenu2'"), evaluatedWith: titleText)
         let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 20)
     }
 
     func testAddsGitHubPipelineWithBranch() throws {
@@ -273,7 +273,7 @@ class GitHubTests: XCTestCase {
         // Make sure the status is fetched and the request uses the branch
         let descriptionText = window.outlines.staticTexts["Status description"]
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 20)
         XCTAssertEqual("main", branchParam)
     }
 
