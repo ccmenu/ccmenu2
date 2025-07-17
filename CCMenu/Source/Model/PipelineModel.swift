@@ -69,11 +69,6 @@ final class PipelineModel: ObservableObject {
             let url = GitHubAPI.feedUrl(owner: "ccmenu", repository: "ccmenu2", workflow: "build-and-test.yaml", branch: "main")
             pipelines = [ Pipeline(name: "ccmenu2 | build-and-test", feed: PipelineFeed(type: .github, url: url)) ]
         }
-        #if DEBUG
-        // TODO: Remove when GitLab UI exists
-        let url = GitLabAPI.feedUrl(projectId: "66079563", branch: nil)
-        #endif
-        self.add(pipeline: Pipeline(name: "quvyn | build-and-test", feed: PipelineFeed(type: .gitlab, url: url)))
     }
 
     private func savePipelinesToUserDefaults() {
