@@ -48,6 +48,9 @@ struct PipelineListToolbar: ToolbarContent {
                 Button("Add GitHub Actions workflow...") {
                     viewState.addGitHubPipelineSheetConfig.isPresented = true
                 }
+                Button("Add GitLab pipeline...") {
+                    viewState.addGitLabPipelineSheetConfig.isPresented = true
+                }
             } label: {
                 Image(systemName: "plus")
             }

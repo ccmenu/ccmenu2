@@ -28,7 +28,7 @@ class GitLabAPI {
     }
 
     // TODO: AI generated code - review
-   static func requestForAllProjects(token: String) -> URLRequest {
+   static func requestForAllProjects(token: String?) -> URLRequest {
         let path = "/projects"
         let queryParams = [
             "membership": "true",
@@ -39,7 +39,7 @@ class GitLabAPI {
     }
 
     // TODO: AI generated code - review
-    static func requestForGroupProjects(group: String, token: String) -> URLRequest {
+    static func requestForGroupProjects(group: String, token: String?) -> URLRequest {
         let path = String(format: "/groups/%@/projects", group)
         let queryParams = [
             "order_by": "last_activity_at",
@@ -49,7 +49,7 @@ class GitLabAPI {
     }
 
     // TODO: AI generated code - review
-    static func requestForUserProjects(user: String, token: String) -> URLRequest {
+    static func requestForUserProjects(user: String, token: String?) -> URLRequest {
         let path = String(format: "/users/%@/projects", user)
         let queryParams = [
             "order_by": "last_activity_at",
@@ -59,7 +59,7 @@ class GitLabAPI {
     }
 
     // TODO: AI generated code - review
-    static func requestForPipelines(projectId: String, token: String) -> URLRequest {
+    static func requestForPipelines(projectId: String, token: String?) -> URLRequest {
         let path = String(format: "/projects/%@/pipelines", projectId)
         let queryParams = [
             "per_page": "100",
@@ -68,7 +68,7 @@ class GitLabAPI {
     }
 
     // TODO: AI generated code - review
-    static func requestForBranches(projectId: String, token: String) -> URLRequest {
+    static func requestForBranches(projectId: String, token: String?) -> URLRequest {
         let path = String(format: "/projects/%@/repository/branches", projectId)
         let queryParams = [
             "per_page": "100",

@@ -11,6 +11,7 @@ final class ListViewState: ObservableObject {
     @Published var selection: Set<String> = Set()
     @Published var addCCTrayPipelineSheetConfig = PipelineSheetConfig()
     @Published var addGitHubPipelineSheetConfig = PipelineSheetConfig()
+    @Published var addGitLabPipelineSheetConfig = PipelineSheetConfig()
     @Published var editPipelineSheetConfig = PipelineSheetConfig()
     @Published var signInAtGitHubSheetSheetConfig = PipelineSheetConfig()
     @Published var isShowingImporter: Bool = false
@@ -72,6 +73,13 @@ struct PipelineListView: View {
             }
         } content: {
             AddGitHubPipelineSheet(config: $viewState.addGitHubPipelineSheetConfig)
+        }
+        .sheet(isPresented: $viewState.addGitLabPipelineSheetConfig.isPresented) {
+            if let p = viewState.addGitLabPipelineSheetConfig.pipeline {
+                model.add(pipeline: p)
+            }
+        } content: {
+            AddGitLabPipelineSheet(config: $viewState.addGitLabPipelineSheetConfig)
         }
         .sheet(isPresented: $viewState.editPipelineSheetConfig.isPresented) {
             if let p = viewState.editPipelineSheetConfig.pipeline {
