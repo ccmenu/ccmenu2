@@ -53,7 +53,13 @@ struct PipelineListView: View {
                 .filter({ selection.contains($0.id) })
                 .forEach({ NSWorkspace.shared.openWebPage(pipeline: $0) })
         }
-       .sheet(isPresented: $viewState.addCCTrayPipelineSheetConfig.isPresented) {
+        .onDeleteCommand() {
+            // TODO: consider adding a confirmation dialog depending on the number of selected items
+            // TODO: the following lines are duplicated from the toolbar. Make that "send" an onDeleteCommand?
+            viewState.selection.forEach({ model.remove(pipelineId: $0) })
+            viewState.selection.removeAll()
+        }
+        .sheet(isPresented: $viewState.addCCTrayPipelineSheetConfig.isPresented) {
             if let p = viewState.addCCTrayPipelineSheetConfig.pipeline {
                 model.add(pipeline: p)
             }
