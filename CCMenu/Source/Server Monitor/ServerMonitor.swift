@@ -11,13 +11,18 @@ import Combine
 class ServerMonitor {
 
     private var model: PipelineModel
+    private var dynamicFeedSourceModel: DynamicFeedSourceModel
     private var networkMonitor: NetworkMonitor
+    private var dynamicFeedSyncService: DynamicFeedSyncService
     private var subscribers: [AnyCancellable] = []
     private var lastPoll = Date.distantPast
+    private var lastDynamicFeedSync = Date.distantPast
 
-    init(model: PipelineModel) {
+    init(model: PipelineModel, dynamicFeedSourceModel: DynamicFeedSourceModel = .shared) {
         self.model = model
+        self.dynamicFeedSourceModel = dynamicFeedSourceModel
         self.networkMonitor = NetworkMonitor()
+        self.dynamicFeedSyncService = DynamicFeedSyncService()
     }
     
     private var pollInterval: Double {
@@ -28,6 +33,12 @@ class ServerMonitor {
             let v = UserDefaults.active.integer(forKey: DefaultsKey.pollInterval.rawValue)
             return (v > 0) ? Double(v) : 10
         }
+    }
+    
+    // Dynamic feed sync interval (sync less frequently than status polling)
+    private var dynamicFeedSyncInterval: Double {
+        // Sync dynamic feeds every 5 minutes (or longer if poll interval is longer)
+        max(pollInterval * 10, 300)
     }
 
     func start() {
@@ -41,6 +52,22 @@ class ServerMonitor {
         model.$pipelines
             .sink(receiveValue: updateStatusIfPipelineWasAdded(pipelines:))
             .store(in: &subscribers)
+        
+        // Observe manual sync request notifications
+        NotificationCenter.default.addObserver(
+            forName: .dynamicFeedSyncRequested,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                await self?.syncDynamicFeeds()
+            }
+        }
+        
+        // Initial sync of dynamic feeds
+        Task {
+            await syncDynamicFeeds()
+        }
     }
 
     func updateStatusIfPollTimeHasBeenReached() async {
@@ -48,7 +75,30 @@ class ServerMonitor {
             return
         }
         lastPoll = Date()
+        
+        // Check if it's time to sync dynamic feeds
+        if Date().timeIntervalSince(lastDynamicFeedSync).rounded() >= dynamicFeedSyncInterval {
+            await syncDynamicFeeds()
+        }
+        
         await updateStatus(pipelines: model.pipelines)
+    }
+    
+    private func syncDynamicFeeds() async {
+        lastDynamicFeedSync = Date()
+        
+        for i in 0..<dynamicFeedSourceModel.sources.count {
+            var source = dynamicFeedSourceModel.sources[i]
+            guard source.isEnabled else { continue }
+            
+            await dynamicFeedSyncService.syncPipelines(
+                source: &source,
+                model: model
+            )
+            
+            // Update the source in the model with sync status
+            dynamicFeedSourceModel.update(source: source)
+        }
     }
 
     func updateStatusIfPipelineWasAdded(pipelines: [Pipeline]) {

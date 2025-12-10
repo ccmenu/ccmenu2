@@ -14,6 +14,7 @@ struct Pipeline: Identifiable, Decodable {
     var status: PipelineStatus
     var connectionError: String?
     var lastUpdated: Date?
+    var managedBySourceId: String?  // ID of the DynamicFeedSource that manages this pipeline
 
     init(name: String, feed: PipelineFeed) {
         self.name = name
@@ -77,14 +78,19 @@ extension Pipeline {
             return nil
         }
         self.init(name: name, feed: PipelineFeed(type: feedType, url: feedUrl, name: !feedName.isEmpty ? feedName : nil))
+        self.managedBySourceId = r["managedBySourceId"]
     }
     
     func reference() -> Dictionary<String, String> {
-        [ "name": self.name,
+        var dict = [ "name": self.name,
           "feedType": self.feed.type.rawValue,
           "feedUrl": self.feed.url.absoluteString,
           "feedName": self.feed.name ?? "",
         ]
+        if let sourceId = managedBySourceId {
+            dict["managedBySourceId"] = sourceId
+        }
+        return dict
     }
     
     init?(legacyReference r: Dictionary<String, String>) {

@@ -30,6 +30,7 @@ enum AppIconVisibility: String, CaseIterable, Identifiable {
 enum DefaultsKey: String {
     case
     pipelineList = "pipelines",
+    dynamicFeedSources = "DynamicFeedSources",
     pollInterval = "PollInterval",
     pollIntervalLowData = "PollIntervalLowData",
     acceptInvalidCerts = "AcceptInvalidCerts",

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DFEED0012E4A000100000001 /* DynamicFeedSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0012E4A000000000001 /* DynamicFeedSource.swift */; };
+		DFEED0022E4A000100000002 /* DynamicFeedSourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0022E4A000000000002 /* DynamicFeedSourceModel.swift */; };
+		DFEED0032E4A000100000003 /* DynamicFeedSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0032E4A000000000003 /* DynamicFeedSyncService.swift */; };
+		DFEED0042E4A000100000004 /* DynamicFeedSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0042E4A000000000004 /* DynamicFeedSourceTests.swift */; };
+		DFEED0052E4A000100000005 /* DynamicFeedSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0052E4A000000000005 /* DynamicFeedSyncServiceTests.swift */; };
+		DFEED0062E4A000100000006 /* DynamicFeedSourceModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0062E4A000000000006 /* DynamicFeedSourceModelTests.swift */; };
+		DFEED0072E4A000100000007 /* DynamicFeedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEED0072E4A000000000007 /* DynamicFeedSettings.swift */; };
 		031FC8CC2B7929B7005E7F26 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031FC8CB2B7929B7005E7F26 /* Keychain.swift */; };
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
@@ -144,6 +151,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DFEED0012E4A000000000001 /* DynamicFeedSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSource.swift; sourceTree = "<group>"; };
+		DFEED0022E4A000000000002 /* DynamicFeedSourceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSourceModel.swift; sourceTree = "<group>"; };
+		DFEED0032E4A000000000003 /* DynamicFeedSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSyncService.swift; sourceTree = "<group>"; };
+		DFEED0042E4A000000000004 /* DynamicFeedSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSourceTests.swift; sourceTree = "<group>"; };
+		DFEED0052E4A000000000005 /* DynamicFeedSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSyncServiceTests.swift; sourceTree = "<group>"; };
+		DFEED0062E4A000000000006 /* DynamicFeedSourceModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSourceModelTests.swift; sourceTree = "<group>"; };
+		DFEED0072E4A000000000007 /* DynamicFeedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicFeedSettings.swift; sourceTree = "<group>"; };
 		031FC8CB2B7929B7005E7F26 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
@@ -427,6 +441,9 @@
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				3CB911D82B78EB3F009DF781 /* URLRequestExtensionTests.swift */,
 				2FA28CB152CE8C0CFD6EE3A8 /* NSImageExtensionTests.swift */,
+				DFEED0042E4A000000000004 /* DynamicFeedSourceTests.swift */,
+				DFEED0052E4A000000000005 /* DynamicFeedSyncServiceTests.swift */,
+				DFEED0062E4A000000000006 /* DynamicFeedSourceModelTests.swift */,
 			);
 			path = CCMenuTests;
 			sourceTree = "<group>";
@@ -480,6 +497,8 @@
 				039B524529676D0700994910 /* Build.swift */,
 				03B263F12B50968800CA989A /* StatusChange.swift */,
 				3C3ADA2A2BC0DAA500AEEEA1 /* PipelineDocument.swift */,
+				DFEED0012E4A000000000001 /* DynamicFeedSource.swift */,
+				DFEED0022E4A000000000002 /* DynamicFeedSourceModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -518,6 +537,7 @@
 				03F31CF425B8D29E005299A8 /* SettingsView.swift */,
 				0329F89D25B0F0F10043FAB1 /* AppearanceSettings.swift */,
 				03F31CF925B8D52F005299A8 /* NotificationSettings.swift */,
+				DFEED0072E4A000000000007 /* DynamicFeedSettings.swift */,
 				03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */,
 			);
 			path = Settings;
@@ -568,6 +588,7 @@
 				03278EA12E1FEE2300995F34 /* GitLabFeedReader.swift */,
 				03278EA22E1FEE2300995F34 /* GitLabResponseParser.swift */,
 				03278EA02E1FEE2300995F34 /* GitLabAPI.swift */,
+				DFEED0032E4A000000000003 /* DynamicFeedSyncService.swift */,
 			);
 			path = "Server Monitor";
 			sourceTree = "<group>";
@@ -873,6 +894,10 @@
 				3CC483472BDE955C00E4730F /* PipelineSheetConfig.swift in Sources */,
 				0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */,
 				03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */,
+				DFEED0012E4A000100000001 /* DynamicFeedSource.swift in Sources */,
+				DFEED0022E4A000100000002 /* DynamicFeedSourceModel.swift in Sources */,
+				DFEED0032E4A000100000003 /* DynamicFeedSyncService.swift in Sources */,
+				DFEED0072E4A000100000007 /* DynamicFeedSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -893,6 +918,9 @@
 				0362EBEF2B5313120079DEFE /* NotificationFactoryTests.swift in Sources */,
 				03B1D7632A6085F1007BCB8A /* PipelineRowModelTests.swift in Sources */,
 				03F9B890297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift in Sources */,
+				DFEED0042E4A000100000004 /* DynamicFeedSourceTests.swift in Sources */,
+				DFEED0052E4A000100000005 /* DynamicFeedSyncServiceTests.swift in Sources */,
+				DFEED0062E4A000100000006 /* DynamicFeedSourceModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

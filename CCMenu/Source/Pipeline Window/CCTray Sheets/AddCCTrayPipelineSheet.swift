@@ -6,13 +6,21 @@
 
 import SwiftUI
 
+enum ImportMode: String, CaseIterable {
+    case singleProject = "Single Project"
+    case allProjects = "All Projects"
+}
+
 struct AddCCTrayPipelineSheet: View {
     @Binding var config: PipelineSheetConfig
     @Environment(\.presentationMode) @Binding var presentation
     @State var useBasicAuth = false
     @State var credential = HTTPCredential(user: "", password: "")
+    @State var importMode: ImportMode = .singleProject
+    @State var removeDeletedPipelines = true
     @StateObject private var projectList = CCTrayProjectList()
     @StateObject private var builder = CCTrayPipelineBuilder()
+    @ObservedObject private var dynamicFeedSourceModel = DynamicFeedSourceModel.shared
 
     var body: some View {
         VStack {
@@ -35,27 +43,51 @@ struct AddCCTrayPipelineSheet: View {
                             Task { await projectList.updateProjects(url: $builder.feedUrl, credential: credentialOptional) }
                         }
                     }
-
-                Picker("Project:", selection: $projectList.selected) {
-                    ForEach(projectList.items) { p in
-                        Text(p.name).tag(p)
+                
+                Picker("Import:", selection: $importMode) {
+                    ForEach(ImportMode.allCases, id: \.self) { mode in
+                        Text(mode.rawValue).tag(mode)
                     }
                 }
-                .accessibilityIdentifier("Project picker")
-                .disabled(!projectList.selected.isValid)
-                .onChange(of: projectList.selected) { _ in
-                    builder.project = projectList.selected
-                }
-                .padding(.bottom)
-
-                HStack {
-                    TextField("Display name:", text: $builder.name)
-                        .accessibilityIdentifier("Display name field")
-                    Button("Reset", systemImage: "arrowshape.turn.up.backward") {
-                        builder.setDefaultName()
+                .pickerStyle(.segmented)
+                .accessibilityIdentifier("Import mode picker")
+                .padding(.bottom, 4)
+                
+                if importMode == .singleProject {
+                    Picker("Project:", selection: $projectList.selected) {
+                        ForEach(projectList.items) { p in
+                            Text(p.name).tag(p)
+                        }
                     }
+                    .accessibilityIdentifier("Project picker")
+                    .disabled(!projectList.selected.isValid)
+                    .onChange(of: projectList.selected) { _ in
+                        builder.project = projectList.selected
+                    }
+                    .padding(.bottom)
+
+                    HStack {
+                        TextField("Display name:", text: $builder.name)
+                            .accessibilityIdentifier("Display name field")
+                        Button("Reset", systemImage: "arrowshape.turn.up.backward") {
+                            builder.setDefaultName()
+                        }
+                    }
+                    .padding(.bottom)
+                } else {
+                    Picker("On removal:", selection: $removeDeletedPipelines) {
+                        Text("Keep pipelines").tag(false)
+                        Text("Remove pipelines").tag(true)
+                    }
+                    .accessibilityIdentifier("Removal behavior picker")
+                    .padding(.bottom)
+                    
+                    Text("All projects will be imported and kept in sync. When projects are removed from the feed, pipelines will be kept or removed based on your selection above.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.bottom)
                 }
-                .padding(.bottom)
             }
 
             HStack {
@@ -64,21 +96,49 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
-                    let p = builder.makePipeline(credential: credentialOptional)
-                    config.setPipeline(p)
+                    if importMode == .allProjects {
+                        addDynamicFeedSource()
+                    } else {
+                        let p = builder.makePipeline(credential: credentialOptional)
+                        config.setPipeline(p)
+                    }
                     presentation.dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(!builder.canMakePipeline)
+                .disabled(importMode == .allProjects ? !canAddDynamicFeed : !builder.canMakePipeline)
             }
         }
-        .frame(minWidth: 400)
-        .frame(idealWidth: 450)
+        .frame(minWidth: 450)
+        .frame(idealWidth: 500)
         .padding()
     }
 
     private var credentialOptional: HTTPCredential? {
         (useBasicAuth && !credential.isEmpty) ? credential : nil
+    }
+    
+    private var canAddDynamicFeed: Bool {
+        guard !builder.feedUrl.isEmpty else { return false }
+        var urlString = builder.feedUrl
+        if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
+            urlString = "https://" + urlString
+        }
+        return URL(string: urlString) != nil
+    }
+    
+    private func addDynamicFeedSource() {
+        var urlString = builder.feedUrl
+        if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
+            urlString = "https://" + urlString
+        }
+        guard let url = URL(string: urlString) else { return }
+        
+        var source = DynamicFeedSource(url: url)
+        source.removeDeletedPipelines = removeDeletedPipelines
+        dynamicFeedSourceModel.add(source: source)
+        
+        // Trigger an immediate sync
+        NotificationCenter.default.post(name: .dynamicFeedSyncRequested, object: nil)
     }
     
 }

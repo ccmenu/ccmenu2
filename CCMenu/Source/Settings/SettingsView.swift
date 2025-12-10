@@ -12,10 +12,12 @@ struct SettingsView: View {
     private enum Tab: Hashable {
         case appearance
         case notifications
+        case dynamicFeeds
         case advanced
     }
 
     @State private var selectedTab: Tab = .appearance
+    @StateObject private var dynamicFeedSourceModel = DynamicFeedSourceModel.shared
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -31,6 +33,12 @@ struct SettingsView: View {
                 Image(systemName: "bell.badge")
                 Text("Notifications")
             }
+            DynamicFeedSettings(sourceModel: dynamicFeedSourceModel)
+            .tag(Tab.dynamicFeeds)
+            .tabItem {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                Text("Dynamic Feeds")
+            }
             AdvancedSettings()
             .tag(Tab.advanced)
             .tabItem {
@@ -38,6 +46,6 @@ struct SettingsView: View {
                 Text("Advanced")
             }
         }
-        .frame(width: 350)
+        .frame(width: 400)
     }
 }
