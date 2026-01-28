@@ -20,7 +20,9 @@ class TestHelper {
             "-OpenWindowAtLaunch", "true",
             "-GitHubBaseURL", "http://localhost:8086",
             "-GitHubAPIBaseURL", "http://localhost:8086",
-            "-GitHubToken", token ?? ""
+            "-GitHubToken", token ?? "",
+            "-GitLabBaseURL", "http://localhost:8086",
+            "-GitLabToken", token ?? ""
         ]
         app.launch()
         return app

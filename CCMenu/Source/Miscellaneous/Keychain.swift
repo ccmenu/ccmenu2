@@ -85,6 +85,10 @@ class Keychain {
         if service == "GitHub", let token = UserDefaults.active.string(forKey: "GitHubToken") {
             return token.isEmpty ? nil : token
         }
+        if service == "GitLab", let token = UserDefaults.active.string(forKey: "GitLabToken") {
+            return token.isEmpty ? nil : token
+        }
+
         if let token = cache[service] {
             return token
         }

@@ -11,6 +11,7 @@ enum GitLabFeedReaderError: LocalizedError {
     case httpError(Int)
     case rateLimitError(Int)
     case noStatusError
+    case noDetailsError
 
     var errorDescription: String? {
         switch self {
@@ -23,6 +24,8 @@ enum GitLabFeedReaderError: LocalizedError {
             return String(format: NSLocalizedString("Rate limit exceeded, next update at %@.", comment: ""), date)
         case .noStatusError:
             return "No status available for this pipeline."
+        case .noDetailsError:
+            return "No details available for a run of this pipeline."
         }
     }
 }
@@ -113,7 +116,7 @@ class GitLabFeedReader {
                     throw GitLabFeedReaderError.invalidURLError
                 }
                 guard let lastBuild = try await fetchBuild(request: request) else {
-                    throw GitLabFeedReaderError.noStatusError
+                    throw GitLabFeedReaderError.noDetailsError
                 }
                 pipeline.status.lastBuild = lastBuild
             }

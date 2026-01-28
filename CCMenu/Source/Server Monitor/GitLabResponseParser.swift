@@ -64,8 +64,8 @@ class GitLabResponseParser {
             let prettified = source.replacingOccurrences(of: "_", with: " ").capitalized
             messageParts.append(prettified)
         }
-        if let sha = pipeline["sha"] as? String, sha.count >= 7 {
-            let shortSha = String(sha.prefix(7))
+        if let sha = pipeline["sha"] as? String, sha.count >= 8 {
+            let shortSha = String(sha.prefix(8))
             messageParts.append("Commit \(shortSha)")
         }
         if messageParts.count > 0 {

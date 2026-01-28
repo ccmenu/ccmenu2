@@ -1,0 +1,10 @@
+[{   "name": "Quvyn",
+    "feed": {
+        "type": "gitlab",
+        "url": "http://localhost:8086/api/v4/projects/66079563/pipelines"
+    },
+    "status": {
+        "webUrl": "",
+        "activity": "other"
+    }
+}]
