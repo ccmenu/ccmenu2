@@ -48,88 +48,93 @@ class GitLabTests: XCTestCase {
         XCTAssertEqual("Bearer TEST-TOKEN", headers["Authorization"].first)
     }
 
-//    func testShowsMessageAndPausesPollingWhileRateLimitWasExceeded() throws {
-//        let limitResetTime = Date().addingTimeInterval(10)
-//        var didReceiveRequest = false
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r -> String in
-//            didReceiveRequest = true
-//            if Date() < limitResetTime {
-//                r.response.status = .forbidden
-//                r.response.headers.replaceOrAdd(name: "x-ratelimit-remaining", value: "0")
-//                r.response.headers.replaceOrAdd(name: "x-ratelimit-reset", value: String(Int(limitResetTime.timeIntervalSince1970)))
-//                return "{ \"message\": \"API rate limit exceeded for ...\" } "
-//            }
-//            return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
-//        }
-//
-//        let app = TestHelper.launchApp(pipelines: "GitHubPipelineLocalhost.json", pauseMonitor: false)
-//        let window = app.windows["Pipelines"]
-//
-//        // Make sure the update message shows that the limit was exceeded
-//        let lastUpdatedText = window.outlines.staticTexts["Last updated message"]
-//        expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
-//        waitForExpectations(timeout: 5)
-//
-//        // Make sure there are no requests until the reset time is reached. We subtract a second to avoid
-//        // a possible race condition
-//        didReceiveRequest = false
-//        Thread.sleep(until: limitResetTime.advanced(by: -1))
-//        XCTAssertFalse(didReceiveRequest)
-//
-//        // Make sure that polling resumes and updates the status and clears the update message
-//        let descriptionText = window.outlines.staticTexts["Status description"]
-//        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-//        expectation(for: NSPredicate(format: "NOT value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
-//        waitForExpectations(timeout: 5)
-//    }
-//
-//    func testAddsGitHubPipeline() throws {
-//        webapp.router.get("/users/erikdoe") { _ in
-//            try TestHelper.contentsOfFile("GitHubUserResponse.json")
-//        }
-//        webapp.router.get("/users/erikdoe/repos") { _ in
-//            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
-//            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
-//            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { _ in
-//            try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
-//        }
-//
-//        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
-//        let window = app.windows["Pipelines"]
-//        let sheet = openAddGitHubPipelineSheet(app: app)
-//
-//        // Enter owner
-//        sheet.textFields["Owner field"].click()
-//        sheet.typeText("erikdoe" + "\n")
-//
-//        // Make sure that the repositories and workflows are loaded and the default display name is set
-//        let repositoryBox = sheet.comboBoxes["Repository combo box"]
-//        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
-//        let workflowPicker = sheet.popUpButtons["Workflow picker"]
-//        expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
-//        let displayNameField = sheet.textFields["Display name field"]
-//        expectation(for: NSPredicate(format: "value == 'ccmenu2 | Build and test'"), evaluatedWith: displayNameField)
-//        waitForExpectations(timeout: 3)
-//
-//        // Set a custom display name, and close the sheet
-//        displayNameField.click()
-//        sheet.typeKey("a", modifierFlags: [ .command ])
-//        sheet.typeText("CCMenu")
-//        sheet.buttons["Apply"].click()
-//
-//        // Make sure the pipeline is shown, and that its status is fetched immediately
-//        let titleText = window.outlines.staticTexts["Pipeline title"]
-//        expectation(for: NSPredicate(format: "value == 'CCMenu'"), evaluatedWith: titleText)
-//        let descriptionText = window.outlines.staticTexts["Status description"]
-//        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-//        waitForExpectations(timeout: 5)
-//    }
+    func testShowsMessageAndPausesPollingWhileRateLimitWasExceeded() throws {
+        let limitResetTime = Date().addingTimeInterval(10)
+        var didReceiveRequest = false
+        webapp.router.get("/api/v4/projects/66079563/pipelines", options: .editResponse) { r -> String in
+            didReceiveRequest = true
+            if Date() < limitResetTime {
+                r.response.status = .tooManyRequests
+                r.response.headers.replaceOrAdd(name: "RateLimit-Remaining", value: "0")
+                r.response.headers.replaceOrAdd(name: "RateLimit-Reset", value: String(Int(limitResetTime.timeIntervalSince1970)))
+                return "{ \"message\": \"API rate limit exceeded for ...\" } "
+            }
+            return try TestHelper.contentsOfFile("GitLabPipelineRunsResponse.json")
+        }
+        webapp.router.get("/api/v4/projects/66079563/pipelines/1920856706") { r in
+            return try TestHelper.contentsOfFile("GitLabPipelineDetailsResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "GitLabPipelineLocalhost.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+
+        // Make sure the update message shows that the limit was exceeded
+        let lastUpdatedText = window.outlines.staticTexts["Last updated message"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
+        waitForExpectations(timeout: 5)
+
+        // Make sure there are no requests until the reset time is reached. We subtract a second to avoid
+        // a possible race condition
+        didReceiveRequest = false
+        Thread.sleep(until: limitResetTime.advanced(by: -1))
+        XCTAssertFalse(didReceiveRequest)
+
+        // Make sure that polling resumes and updates the status and clears the update message
+        let descriptionText = window.outlines.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 3'"), evaluatedWith: descriptionText)
+        expectation(for: NSPredicate(format: "NOT value CONTAINS 'Rate limit exceeded'"), evaluatedWith: lastUpdatedText)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testAddsGitLabPipeline() throws {
+        webapp.router.get("/v4/users/erikdoe/projects") { _ in
+            try TestHelper.contentsOfFile("GitLabPipelinesByUserResponse.json")
+        }
+        webapp.router.get("/v4/projects/66079563/repository/branches") { _ in
+            try TestHelper.contentsOfFile("GitLabBranchesResponse.json")
+        }
+        webapp.router.get("/api/v4/projects/66079563/pipelines") { r in
+            return try TestHelper.contentsOfFile("GitLabPipelineRunsResponse.json")
+        }
+        webapp.router.get("/api/v4/projects/66079563/pipelines/1920856706") { r in
+            return try TestHelper.contentsOfFile("GitLabPipelineDetailsResponse.json")
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let window = app.windows["Pipelines"]
+        let sheet = openAddGitLabPipelineSheet(app: app)
+
+        // Enter owner
+        sheet.textFields["Owner field"].click()
+        sheet.typeText("erikdoe" + "\n")
+
+        // Make sure that the projects and branches are loaded
+        let projectBox = sheet.comboBoxes["Project combo box"]
+        expectation(for: NSPredicate(format: "value == 'Quvyn'"), evaluatedWith: projectBox)
+        let branchBox = sheet.comboBoxes["Branch combo box"]
+        expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: branchBox)
+        waitForExpectations(timeout: 3)
+
+        // Open the branch combo box, select the main branch, verify display name
+        branchBox.descendants(matching: .button).firstMatch.click()
+        branchBox.textFields["main"].click()
+        let displayNameField = sheet.textFields["Display name field"]
+        expectation(for: NSPredicate(format: "value == 'Quvyn | main'"), evaluatedWith: displayNameField)
+        waitForExpectations(timeout: 3)
+
+        // Set a custom display name, and close the sheet
+        displayNameField.click()
+        sheet.typeKey("a", modifierFlags: [ .command ])
+        sheet.typeText("Quvyn (main)")
+        sheet.buttons["Apply"].click()
+
+        // Make sure the pipeline is shown, and that its status is fetched immediately
+        let titleText = window.outlines.staticTexts["Pipeline title"]
+        expectation(for: NSPredicate(format: "value == 'Quvyn (main)'"), evaluatedWith: titleText)
+        let descriptionText = window.outlines.staticTexts["Status description"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 3'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+    }
 //
 //    func testAddsGitHubPrivatePipeline() throws {
 //        webapp.router.get("/users/erikdoe") { _ in
@@ -187,101 +192,7 @@ class GitLabTests: XCTestCase {
 //    }
 //
 //
-//    func testAddsGitHubPipelineByIdIfNeccessary() throws {
-//        webapp.router.get("/users/erikdoe") { _ in
-//            try TestHelper.contentsOfFile("GitHubUserResponse.json")
-//        }
-//        webapp.router.get("/users/erikdoe/repos") { _ in
-//            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
-//            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
-//            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs", options: .editResponse) { r in
-//            r.response.status = .notFound
-//            return "{ } "
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/62921699/runs") { _ in
-//            try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
-//        }
-//
-//        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
-//        let window = app.windows["Pipelines"]
-//        let sheet = openAddGitHubPipelineSheet(app: app)
-//
-//        // Enter owner
-//        sheet.textFields["Owner field"].click()
-//        sheet.typeText("erikdoe" + "\n")
-//
-//        let repositoryBox = sheet.comboBoxes["Repository combo box"]
-//        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
-//        let workflowPicker = sheet.popUpButtons["Workflow picker"]
-//        expectation(for: NSPredicate(format: "value == 'Build and test'"), evaluatedWith: workflowPicker)
-//        waitForExpectations(timeout: 5)
-//
-//        sheet.buttons["Apply"].click()
-//
-//        // Make sure the pipeline is shown, and that its status is fetched immediately
-//        let titleText = window.outlines.staticTexts["Pipeline title"]
-//        expectation(for: NSPredicate(format: "value BEGINSWITH 'ccmenu2'"), evaluatedWith: titleText)
-//        let descriptionText = window.outlines.staticTexts["Status description"]
-//        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-//        waitForExpectations(timeout: 5)
-//    }
-//
-//    func testAddsGitHubPipelineWithBranch() throws {
-//        var branchParam: String?
-//        webapp.router.get("/users/erikdoe") { _ in
-//            try TestHelper.contentsOfFile("GitHubUserResponse.json")
-//        }
-//        webapp.router.get("/users/erikdoe/repos") { _ in
-//            try TestHelper.contentsOfFile("GitHubReposByUserCCM2OnlyResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows") { _ in
-//            try TestHelper.contentsOfFile("GitHubWorkflowsResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/branches") { _ in
-//            try TestHelper.contentsOfFile("GitHubBranchesResponse.json")
-//        }
-//        webapp.router.get("/repos/erikdoe/ccmenu2/actions/workflows/build-and-test.yaml/runs") { r in
-//            branchParam = r.uri.queryParameters.get("branch")
-//            return try TestHelper.contentsOfFile("GitHubWorkflowRunsResponse.json")
-//        }
-//
-//        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
-//        let window = app.windows["Pipelines"]
-//        let sheet = openAddGitHubPipelineSheet(app: app)
-//
-//        // Enter owner
-//        sheet.textFields["Owner field"].click()
-//        sheet.typeText("erikdoe" + "\n")
-//
-//        // Make sure that the repositories and branches are loaded
-//        let repositoryBox = sheet.comboBoxes["Repository combo box"]
-//        expectation(for: NSPredicate(format: "value == 'ccmenu2'"), evaluatedWith: repositoryBox)
-//        let branchBox = sheet.comboBoxes["Branch combo box"]
-//        expectation(for: NSPredicate(format: "value == ''"), evaluatedWith: branchBox)
-//        waitForExpectations(timeout: 5)
-//
-//        // Open the branch combo box, select the main branch, and close the sheet
-//        branchBox.descendants(matching: .button).firstMatch.click()
-//        branchBox.textFields["main"].click()
-//        expectation(for: NSPredicate(format: "value == 'main'"), evaluatedWith: branchBox)
-//        waitForExpectations(timeout: 2)
-//        sheet.buttons["Apply"].click()
-//
-//        // Make sure the status is fetched and the request uses the branch
-//        let descriptionText = window.outlines.staticTexts["Status description"]
-//        expectation(for: NSPredicate(format: "value CONTAINS 'Label: 42'"), evaluatedWith: descriptionText)
-//        waitForExpectations(timeout: 5)
-//        XCTAssertEqual("main", branchParam)
-//    }
-//
-//
-//
+
 //    func testFindsPrivateReposForUser() throws {
 //        webapp.router.get("/users/erikdoe") { _ in
 //            try TestHelper.contentsOfFile("GitHubUserResponse.json")
@@ -391,12 +302,12 @@ class GitLabTests: XCTestCase {
 //
 //    }
 //
-//    private func openAddGitHubPipelineSheet(app: XCUIApplication) -> XCUIElement {
-//        let window = app.windows["Pipelines"]
-//        let sheet = window.sheets.firstMatch
-//        window.toolbars.popUpButtons["Add pipeline menu"].click()
-//        window.toolbars.menuItems["Add GitHub Actions workflow..."].click()
-//        return sheet
-//    }
+    private func openAddGitLabPipelineSheet(app: XCUIApplication) -> XCUIElement {
+        let window = app.windows["Pipelines"]
+        let sheet = window.sheets.firstMatch
+        window.toolbars.popUpButtons["Add pipeline menu"].click()
+        window.toolbars.menuItems["Add GitLab pipeline..."].click()
+        return sheet
+    }
 
 }

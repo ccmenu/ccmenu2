@@ -1,0 +1,32 @@
+[
+    {
+        "name": "main",
+        "commit": {
+            "id": "b899694cab8f542f8f2f01cc698f72ad5b4ffd4a",
+            "short_id": "b899694c",
+            "created_at": "2025-07-11T13:06:06.000+02:00",
+            "parent_ids": [
+                "71e009d7b18d0c973d07f43b29c50020585e0784"
+            ],
+            "title": "Added another job, and defined stages.",
+            "message": "Added another job, and defined stages.\n",
+            "author_name": "Erik Doernenburg",
+            "author_email": "erik@doernenburg.com",
+            "authored_date": "2025-07-11T13:06:06.000+02:00",
+            "committer_name": "Erik Doernenburg",
+            "committer_email": "erik@doernenburg.com",
+            "committed_date": "2025-07-11T13:06:06.000+02:00",
+            "trailers": {},
+            "extended_trailers": {},
+            "web_url":
+                "https://gitlab.com/erikdoe/quvyn/-/commit/b899694cab8f542f8f2f01cc698f72ad5b4ffd4a"
+        },
+        "merged": false,
+        "protected": true,
+        "developers_can_push": false,
+        "developers_can_merge": false,
+        "can_push": false,
+        "default": true,
+        "web_url": "https://gitlab.com/erikdoe/quvyn/-/tree/main"
+    }
+]

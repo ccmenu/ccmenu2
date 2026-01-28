@@ -43,6 +43,8 @@
 		034ED9C92F2A604600C7793E /* GitLabPipelineRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */; };
 		034ED9CF2F2A646100C7793E /* GitLabPipelineDetailsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */; };
 		034ED9D12F2A77DB00C7793E /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9D02F2A77D200C7793E /* URLExtensions.swift */; };
+		034ED9D32F2A95AE00C7793E /* GitLabBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */; };
+		034ED9D52F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */; };
 		035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */; };
 		035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87012BB3829300AD1D68 /* PipelineListMenu.swift */; };
 		035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */; };
@@ -183,6 +185,8 @@
 		034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineRunsResponse.json; sourceTree = "<group>"; };
 		034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineDetailsResponse.json; sourceTree = "<group>"; };
 		034ED9D02F2A77D200C7793E /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
+		034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabBranchesResponse.json; sourceTree = "<group>"; };
+		034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelinesByUserResponse.json; sourceTree = "<group>"; };
 		035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAuthView.swift; sourceTree = "<group>"; };
 		035F87012BB3829300AD1D68 /* PipelineListMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListMenu.swift; sourceTree = "<group>"; };
 		035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAtGitHubSheet.swift; sourceTree = "<group>"; };
@@ -340,6 +344,8 @@
 				038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */,
 				034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */,
 				034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */,
+				034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */,
+				034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -778,10 +784,12 @@
 				038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */,
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
 				038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */,
+				034ED9D32F2A95AE00C7793E /* GitLabBranchesResponse.json in Resources */,
 				032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */,
 				032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */,
 				034ED9CF2F2A646100C7793E /* GitLabPipelineDetailsResponse.json in Resources */,
 				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
+				034ED9D52F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json in Resources */,
 				034ED9C72F2A602D00C7793E /* GitLabPipelineLocalhost.json in Resources */,
 				032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */,
 			);
