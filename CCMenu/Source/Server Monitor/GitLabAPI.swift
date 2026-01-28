@@ -175,7 +175,7 @@ class GitLabAPI {
         }
 
         let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
-        logger.trace("Request: \(method, privacy: .public) \(url.absoluteString, privacy: .public)")
+        logger.info("Request: \(method, privacy: .public) \(url.absoluteString, privacy: .public)")
 
         return request
     }

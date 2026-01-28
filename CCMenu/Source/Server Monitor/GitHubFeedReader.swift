@@ -59,20 +59,7 @@ class GitHubFeedReader {
 
 
     private func fetchStatus(request: URLRequest) async throws -> PipelineStatus? {
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
-        if response.statusCode == 403 || response.statusCode == 429 {
-            guard let v = response.value(forHTTPHeaderField: "x-ratelimit-remaining"), Int(v) == 0 else {
-                throw GithHubFeedReaderError.httpError(response.statusCode)
-            }
-            guard let v = response.value(forHTTPHeaderField: "x-ratelimit-reset"), let pauseUntil = Int(v) else {
-                throw GithHubFeedReaderError.httpError(response.statusCode)
-            }
-            throw GithHubFeedReaderError.rateLimitError(pauseUntil)
-        }
-        if response.statusCode != 200 {
-            throw GithHubFeedReaderError.httpError(response.statusCode)
-        }
+        let data = try await GitHubAPI.sendRequest(request: request)
         let parser = GitHubResponseParser()
         try parser.parseResponse(data)
         return parser.pipelineStatus(name: pipeline.name)
