@@ -37,6 +37,7 @@
 		03412ADF2B5DCC8A00EFDFCB /* CCTrayProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */; };
 		03412AE12B5DCD5100EFDFCB /* CCTrayAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */; };
 		03412AE32B5DCF4200EFDFCB /* CCTraySheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */; };
+		034ED9C32F2A595100C7793E /* GitLabAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9C22F2A595100C7793E /* GitLabAPITests.swift */; };
 		035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */; };
 		035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87012BB3829300AD1D68 /* PipelineListMenu.swift */; };
 		035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */; };
@@ -172,6 +173,7 @@
 		03412ADE2B5DCC8A00EFDFCB /* CCTrayProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayProjectList.swift; sourceTree = "<group>"; };
 		03412AE02B5DCD5100EFDFCB /* CCTrayAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAPI.swift; sourceTree = "<group>"; };
 		03412AE22B5DCF4200EFDFCB /* CCTraySheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTraySheetModel.swift; sourceTree = "<group>"; };
+		034ED9C22F2A595100C7793E /* GitLabAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabAPITests.swift; sourceTree = "<group>"; };
 		035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAuthView.swift; sourceTree = "<group>"; };
 		035F87012BB3829300AD1D68 /* PipelineListMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListMenu.swift; sourceTree = "<group>"; };
 		035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAtGitHubSheet.swift; sourceTree = "<group>"; };
@@ -423,6 +425,7 @@
 				2FA28075764358E9D929CECD /* CCTrayResponseParserTests.swift */,
 				2FA2833D541ABE8B0D2E7615 /* GitHubResponseParserTests.swift */,
 				03DC9BB92E240D030000E22E /* GitHubAPITests.swift */,
+				034ED9C22F2A595100C7793E /* GitLabAPITests.swift */,
 				0362EBEE2B5313120079DEFE /* NotificationFactoryTests.swift */,
 				03F9B88F297C6EEC00FA866E /* CompactRelativeFormatStyleTests.swift */,
 				3CB911D82B78EB3F009DF781 /* URLRequestExtensionTests.swift */,
@@ -883,6 +886,7 @@
 				037AB21C297B4D5F00C33589 /* PipelineModelTests.swift in Sources */,
 				03DC9BBA2E240D170000E22E /* GitHubAPITests.swift in Sources */,
 				2FA28FBCC0398D63EF2D2C16 /* NSImageExtensionTests.swift in Sources */,
+				034ED9C32F2A595100C7793E /* GitLabAPITests.swift in Sources */,
 				03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */,
 				2FA28718B9A6BD8E1C32FF55 /* CCTrayResponseParserTests.swift in Sources */,
 				2FA2827139B00E15C5CD2E7F /* GitHubResponseParserTests.swift in Sources */,
