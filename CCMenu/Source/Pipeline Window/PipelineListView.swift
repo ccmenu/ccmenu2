@@ -25,6 +25,7 @@ struct PipelineListView: View {
     @AppStorage(.pollInterval) var pollInterval = 10
     @StateObject var viewState = ListViewState()
     @StateObject private var ghAuthenticator = GitHubAuthenticator()
+    @StateObject private var glAuthenticator = GitLabAuthenticator()
 
     var body: some View {
         List(selection: $viewState.selection) {
@@ -113,6 +114,7 @@ struct PipelineListView: View {
             Text(viewState.errorMessage ?? "unknown error")
         }
         .environmentObject(ghAuthenticator)
+        .environmentObject(glAuthenticator)
     }
 
 }

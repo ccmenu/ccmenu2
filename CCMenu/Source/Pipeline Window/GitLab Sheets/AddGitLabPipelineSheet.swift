@@ -8,6 +8,7 @@ import SwiftUI
 
 struct AddGitLabPipelineSheet: View {
     @Binding var config: PipelineSheetConfig
+    @EnvironmentObject private var authenticator: GitLabAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
     @StateObject private var owner = DebouncedText()
     @StateObject private var project = DebouncedText()
@@ -16,16 +17,29 @@ struct AddGitLabPipelineSheet: View {
     @StateObject private var branchList = GitLabBranchList()
     @StateObject private var builder = GitLabPipelineBuilder()
     @State private var selectedProjectId: Int? = nil
+    @State private var tokenInput: String = ""
     
     var body: some View {
         VStack {
             Text("Add GitLab pipeline")
                 .font(.headline)
                 .padding(.bottom)
-            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown.\n\nAuthentication is not required for public projects.")
+            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown.\n\nCreate a Personal Access Token with read_api scope to access private projects.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
+                HStack {
+                    TextField("Authentication:", text: $tokenInput, prompt: Text("personal access token"))
+                        .accessibilityIdentifier("Token field")
+                        .onChange(of: tokenInput) { newValue in
+                            authenticator.setToken(newValue)
+                        }
+                    Button(authenticator.token == nil ? "Create token" : "Manage tokens") {
+                        authenticator.openTokenSettingsOnWebsite()
+                    }
+                }
+                .padding(.bottom)
+
                 TextField("User or Group:", text: $owner.input, prompt: Text("user or group name"))
                     .accessibilityIdentifier("Owner field")
                     .autocorrectionDisabled(true)
@@ -34,7 +48,7 @@ struct AddGitLabPipelineSheet: View {
                             projectList.clearProjects()
                         } else {
                             Task {
-                                await projectList.updateProjects(name: t, token: nil)
+                                await projectList.updateProjects(name: t, token: authenticator.token)
                             }
                         }
                     }
@@ -54,7 +68,7 @@ struct AddGitLabPipelineSheet: View {
                                 if selectedProject.isValid {
                                     selectedProjectId = selectedProject.id
                                     Task {
-                                        await branchList.updateBranches(projectId: String(selectedProject.id), token: nil)
+                                        await branchList.updateBranches(projectId: String(selectedProject.id), token: authenticator.token)
                                     }
                                 } else {
                                     selectedProjectId = nil
@@ -67,7 +81,7 @@ struct AddGitLabPipelineSheet: View {
                             if let selectedProject = projectList.items.first(where: { $0.displayName == project.text }) {
                                 if selectedProject.isValid {
                                     Task {
-                                        await branchList.updateBranches(projectId: String(selectedProject.id), token: nil)
+                                        await branchList.updateBranches(projectId: String(selectedProject.id), token: authenticator.token)
                                     }
                                 }
                             }
@@ -77,10 +91,10 @@ struct AddGitLabPipelineSheet: View {
                                 project.text = firstValidProject.displayName
                                 builder.project = firstValidProject
                                 builder.setDefaultName()
-                                
+
                                 // Load branches for the automatically selected project
                                 Task {
-                                    await branchList.updateBranches(projectId: String(firstValidProject.id), token: nil)
+                                    await branchList.updateBranches(projectId: String(firstValidProject.id), token: authenticator.token)
                                 }
                             }
                         }
@@ -124,7 +138,7 @@ struct AddGitLabPipelineSheet: View {
                 .keyboardShortcut(.cancelAction)
                 Button("Apply") {
                     Task {
-                        if let p = await builder.makePipeline(token: nil) {
+                        if let p = await builder.makePipeline(token: authenticator.token) {
                             config.setPipeline(p)
                             presentation.dismiss()
                         }
@@ -138,6 +152,13 @@ struct AddGitLabPipelineSheet: View {
         .frame(minWidth: 400)
         .frame(idealWidth: 450)
         .padding()
+        .onAppear() {
+            authenticator.fetchTokenFromKeychain()
+            tokenInput = authenticator.token ?? ""
+        }
+        .onDisappear() {
+            authenticator.storeTokenInKeychain()
+        }
     }
 }
 

@@ -10,14 +10,6 @@ import Combine
 
 class GitLabAPI {
 
-    // TODO: AI generated code - review
-    static var clientId: String {
-        if let defaultsId = UserDefaults.active.string(forKey: "GitLabClientID") {
-            return defaultsId
-        }
-        return "" // Default client ID should be configured
-    }
-
     // MARK: - user, projects, pipelines, and branches
 
     // TODO: AI generated code - review
@@ -76,24 +68,10 @@ class GitLabAPI {
     }
 
 
-    // MARK: - device flow and applications
+    // MARK: - token settings
 
-    // TODO: AI generated code - review
-    static func requestForAccessToken(code: String, redirectUri: String) -> URLRequest {
-        let path = "/oauth/token"
-        let queryParams = [
-            "client_id": clientId,
-            "client_secret": "", // Client secret should be configured
-            "code": code,
-            "grant_type": "authorization_code",
-            "redirect_uri": redirectUri
-        ];
-        return makeRequest(method: "POST", baseUrl: baseURL(forAPI: false), path: path, params: queryParams)
-    }
-
-    // TODO: AI generated code - review
-    static func applicationsUrl() -> URL {
-        baseURL(forAPI: false).appending(path: "/profile/applications")
+    static func tokenSettingsUrl() -> URL {
+        baseURL(forAPI: false).appending(path: "/-/user_settings/personal_access_tokens")
     }
 
 

@@ -89,6 +89,7 @@
 		03DF19072D025292007D1A64 /* ComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF19062D025292007D1A64 /* ComboBox.swift */; };
 		03E6A9F72B2651C200284138 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E6A9F62B2651C200284138 /* GitHubAPI.swift */; };
 		03E8B2A62F2AB5B10067646B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E8B2A52F2AB5AB0067646B /* Logging.swift */; };
+		03E8B2A82F2AC3330067646B /* GitLabAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E8B2A72F2AC3330067646B /* GitLabAuthenticator.swift */; };
 		03F31CF525B8D29E005299A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF425B8D29E005299A8 /* SettingsView.swift */; };
 		03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31CF925B8D52F005299A8 /* NotificationSettings.swift */; };
 		03F31D0225B8D5F0005299A8 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */; };
@@ -224,6 +225,7 @@
 		03DF19062D025292007D1A64 /* ComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBox.swift; sourceTree = "<group>"; };
 		03E6A9F62B2651C200284138 /* GitHubAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
 		03E8B2A52F2AB5AB0067646B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		03E8B2A72F2AC3330067646B /* GitLabAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabAuthenticator.swift; sourceTree = "<group>"; };
 		03F31CF425B8D29E005299A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03F31CF925B8D52F005299A8 /* NotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettings.swift; sourceTree = "<group>"; };
 		03F31D0125B8D5F0005299A8 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
@@ -568,10 +570,11 @@
 			isa = PBXGroup;
 			children = (
 				03DC9BD62E2ABB9F0000E22E /* AddGitLabPipelineSheet.swift */,
-				03DC9BD72E2ABB9F0000E22E /* GitLabBranchList.swift */,
-				03DC9BD82E2ABB9F0000E22E /* GitLabPipelineBuilder.swift */,
-				03DC9BD92E2ABB9F0000E22E /* GitLabProjectList.swift */,
 				03DC9BDA2E2ABB9F0000E22E /* GitLabSheetModel.swift */,
+				03DC9BD92E2ABB9F0000E22E /* GitLabProjectList.swift */,
+				03DC9BD72E2ABB9F0000E22E /* GitLabBranchList.swift */,
+				03E8B2A72F2AC3330067646B /* GitLabAuthenticator.swift */,
+				03DC9BD82E2ABB9F0000E22E /* GitLabPipelineBuilder.swift */,
 			);
 			path = "GitLab Sheets";
 			sourceTree = "<group>";
@@ -825,6 +828,7 @@
 				0362EBF52B548C1D0079DEFE /* NotificationReceiver.swift in Sources */,
 				03E8B2A62F2AB5B10067646B /* Logging.swift in Sources */,
 				03F6830B25C743F2005D56D9 /* PipelineListToolbar.swift in Sources */,
+				03E8B2A82F2AC3330067646B /* GitLabAuthenticator.swift in Sources */,
 				03B263F82B51FF2100CA989A /* NotificationSender.swift in Sources */,
 				03F31CFA25B8D52F005299A8 /* NotificationSettings.swift in Sources */,
 				0331F39F29A8155000245956 /* MenuExtraViewModel.swift in Sources */,
