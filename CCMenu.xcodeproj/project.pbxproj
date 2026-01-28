@@ -42,6 +42,7 @@
 		034ED9C72F2A602D00C7793E /* GitLabPipelineLocalhost.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9C62F2A602D00C7793E /* GitLabPipelineLocalhost.json */; };
 		034ED9C92F2A604600C7793E /* GitLabPipelineRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */; };
 		034ED9CF2F2A646100C7793E /* GitLabPipelineDetailsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */; };
+		034ED9D12F2A77DB00C7793E /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9D02F2A77D200C7793E /* URLExtensions.swift */; };
 		035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */; };
 		035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87012BB3829300AD1D68 /* PipelineListMenu.swift */; };
 		035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */; };
@@ -61,7 +62,6 @@
 		038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */; };
 		038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */; };
 		038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */; };
-		038FF7182BB631CB0017CD4C /* URLComponentsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03A3EF932D3459D400407A6F /* GitHubUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 03A3EF922D3459D400407A6F /* GitHubUserResponse.json */; };
 		03A3EF942D3459D400407A6F /* GitHubUserOrgResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 03A3EF912D3459D400407A6F /* GitHubUserOrgResponse.json */; };
@@ -182,6 +182,7 @@
 		034ED9C62F2A602D00C7793E /* GitLabPipelineLocalhost.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineLocalhost.json; sourceTree = "<group>"; };
 		034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineRunsResponse.json; sourceTree = "<group>"; };
 		034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineDetailsResponse.json; sourceTree = "<group>"; };
+		034ED9D02F2A77D200C7793E /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAuthView.swift; sourceTree = "<group>"; };
 		035F87012BB3829300AD1D68 /* PipelineListMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListMenu.swift; sourceTree = "<group>"; };
 		035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAtGitHubSheet.swift; sourceTree = "<group>"; };
@@ -201,7 +202,6 @@
 		038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBranchList.swift; sourceTree = "<group>"; };
 		038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubBranchesResponse.json; sourceTree = "<group>"; };
 		038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubReposByUserCCM2OnlyResponse.json; sourceTree = "<group>"; };
-		038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponentsExtension.swift; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03A3EF912D3459D400407A6F /* GitHubUserOrgResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubUserOrgResponse.json; sourceTree = "<group>"; };
 		03A3EF922D3459D400407A6F /* GitHubUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubUserResponse.json; sourceTree = "<group>"; };
@@ -547,7 +547,7 @@
 				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
 				03CC61D02BA783EE0008EE76 /* NetworkMonitor.swift */,
 				03CC61CE2BA757050008EE76 /* TrustManager.swift */,
-				038FF7172BB631CB0017CD4C /* URLComponentsExtension.swift */,
+				034ED9D02F2A77D200C7793E /* URLExtensions.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
 				037AB214297334EE00C33589 /* UserDefaultsExtension.swift */,
@@ -827,8 +827,8 @@
 				03DD697E2B646E3800D7AD9D /* NSColorExtensions.swift in Sources */,
 				03BD7EFA259A180C000F9495 /* NSImageExtension.swift in Sources */,
 				03825DFA259D0ACF00DEB003 /* PipelineListView.swift in Sources */,
-				038FF7182BB631CB0017CD4C /* URLComponentsExtension.swift in Sources */,
 				03825DF2259D01C600DEB003 /* PipelineRow.swift in Sources */,
+				034ED9D12F2A77DB00C7793E /* URLExtensions.swift in Sources */,
 				0362EBED2B521BD50079DEFE /* NotificationFactory.swift in Sources */,
 				03CC61D12BA783EE0008EE76 /* NetworkMonitor.swift in Sources */,
 				03825DE3259CFF0A00DEB003 /* Pipeline.swift in Sources */,

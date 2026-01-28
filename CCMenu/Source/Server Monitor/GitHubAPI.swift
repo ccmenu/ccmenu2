@@ -102,18 +102,16 @@ class GitHubAPI {
 
     static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {
         // see https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-workflow
-        let url = baseURL(forAPI: true).appending(path: "/repos/\(owner)/\(repository)/actions/workflows/\(workflow)/runs")
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+        var url = baseURL(forAPI: true).appending(path: "/repos/\(owner)/\(repository)/actions/workflows/\(workflow)/runs")
         if let branch {
-            components.appendQueryItem(URLQueryItem(name: "branch", value: branch))
+            url = url.appending(queryItems: [URLQueryItem(name: "branch", value: branch)])
         }
-        return components.url!.absoluteURL
+        return url
     }
 
     static func requestForFeed(feed: PipelineFeed, token: String?) -> URLRequest? {
-        guard var components = URLComponents(url: feed.url, resolvingAgainstBaseURL: true) else { return nil }
-        components.appendQueryItem(URLQueryItem(name: "per_page", value: "3"))
-        return makeRequest(url: components.url!.absoluteURL, token: token)
+        let url = feed.url.appending(queryItems: [URLQueryItem(name: "per_page", value: "3")])
+        return makeRequest(url: url, token: token)
     }
 
 

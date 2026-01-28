@@ -34,6 +34,7 @@ class GitHubAPITests: XCTestCase {
         UserDefaults.active = UserDefaults.transient
         UserDefaults.active.set("https://dev.some-enterprise.com/github", forKey: "GitHubAPIBaseURL")
         let request = GitHubAPI.requestForUser(user: "testuser", token: nil)
+        UserDefaults.active = UserDefaults.standard
 
         XCTAssertEqual("/github/users/testuser", request.url?.path())
     }

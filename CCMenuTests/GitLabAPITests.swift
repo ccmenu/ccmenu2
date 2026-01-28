@@ -10,14 +10,34 @@ import XCTest
 class GitLabAPITests: XCTestCase {
 
     func testConstructsRequestForFeed() throws {
-        let feed = PipelineFeed(type: .gitlab, url: URL(string: "https://example.com/api")!)
+        let feedUrl = GitLabAPI.feedUrl(projectId: "31415926", branch: nil)
+        let feed = PipelineFeed(type: .gitlab, url: feedUrl)
         let request = GitLabAPI.requestForFeed(feed: feed, token: nil)
 
         guard let request else { XCTFail(); return }
         XCTAssertEqual("GET", request.httpMethod)
+        let url = request.url?.absoluteString
+        XCTAssertEqual("https://gitlab.com/api/v4/projects/31415926/pipelines?per_page=3", url)
+    }
+
+    func testConstructsRequestForFeedWithBranch() throws {
+        let feedUrl = GitLabAPI.feedUrl(projectId: "31415926", branch: "main")
+        let feed = PipelineFeed(type: .gitlab, url: feedUrl)
+        let request = GitLabAPI.requestForFeed(feed: feed, token: nil)
+
+        guard let request else { XCTFail(); return }
         let url = request.url?.absoluteString ?? ""
-        XCTAssertTrue(url.hasPrefix("https://example.com/api"))
-        XCTAssertTrue(url.contains("per_page="))
+        XCTAssertTrue(url.contains("ref=main"))
+    }
+
+    func testConstructsRequestForPipelineDetailsAndDoesNotIncludeBranch() throws {
+        let feedUrl = GitLabAPI.feedUrl(projectId: "31415926", branch: "main")
+        let feed = PipelineFeed(type: .gitlab, url: feedUrl)
+        let request = GitLabAPI.requestForDetail(feed: feed, pipelineId: "12345", token: nil)
+
+        guard let request else { XCTFail(); return }
+        let url = request.url?.absoluteString
+        XCTAssertEqual("https://gitlab.com/api/v4/projects/31415926/pipelines/12345", url)
     }
 
     func testAddsAuthorizationHeaderWhenTokenIsGiven() throws {
@@ -32,6 +52,7 @@ class GitLabAPITests: XCTestCase {
         UserDefaults.active = UserDefaults.transient
         UserDefaults.active.set("https://dev.some-enterprise.com/gitlab/api/v4", forKey: "GitLabAPIBaseURL")
         let request = GitLabAPI.requestForUser(token: "TEST-TOKEN")
+        UserDefaults.active = UserDefaults.standard
 
         XCTAssertEqual("/gitlab/api/v4/user", request.url?.path())
     }

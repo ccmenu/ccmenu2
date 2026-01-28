@@ -101,24 +101,22 @@ class GitLabAPI {
     // MARK: - feed
 
     static func feedUrl(projectId: String, branch: String?) -> URL {
-        let url = baseURL(forAPI: true).appending(path: "/projects/\(projectId)/pipelines")
-        
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+        var url = baseURL(forAPI: true).appending(path: "/projects/\(projectId)/pipelines")
         if let branch {
-            components.appendQueryItem(URLQueryItem(name: "ref", value: branch))
+            url = url.appending(queryItems: [URLQueryItem(name: "ref", value: branch)])
         }
-        return components.url!.absoluteURL
+        return url
     }
 
     static func requestForFeed(feed: PipelineFeed, token: String?) -> URLRequest? {
-        guard var components = URLComponents(url: feed.url, resolvingAgainstBaseURL: true) else { return nil }
-        components.appendQueryItem(URLQueryItem(name: "per_page", value: "3"))
-        return makeRequest(url: components.url!.absoluteURL, token: token)
+        let url = feed.url.appending(queryItems: [URLQueryItem(name: "per_page", value: "3")])
+        return makeRequest(url: url, token: token)
     }
 
     static func requestForDetail(feed: PipelineFeed, pipelineId: String, token: String?) -> URLRequest? {
-        // TODO: double check that this works with query params (for branches)
-        let url = feed.url.appendingPathComponent(pipelineId)
+        var url = feed.url
+        url = url.removing(queryItem: "ref")
+        url = url.appending(path: "\(pipelineId)")
         return makeRequest(url: url, token: token)
     }
 
