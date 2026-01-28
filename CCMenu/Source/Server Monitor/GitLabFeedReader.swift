@@ -65,6 +65,7 @@ class GitLabFeedReader {
     private func fetchStatus(request: URLRequest) async throws -> PipelineStatus? {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        logRequest(request, response: response)
         if response.statusCode == 403 || response.statusCode == 429 {
             guard let v = response.value(forHTTPHeaderField: "RateLimit-Remaining"), Int(v) == 0 else {
                 throw GitLabFeedReaderError.httpError(response.statusCode)
@@ -135,6 +136,7 @@ class GitLabFeedReader {
     private func fetchBuild(request: URLRequest) async throws -> Build? {
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+        logRequest(request, response: response)
         if response.statusCode == 403 || response.statusCode == 429 {
             guard let v = response.value(forHTTPHeaderField: "RateLimit-Remaining"), Int(v) == 0 else {
                 throw GitLabFeedReaderError.httpError(response.statusCode)

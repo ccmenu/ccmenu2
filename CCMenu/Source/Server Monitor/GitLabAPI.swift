@@ -6,7 +6,6 @@
 
 import Foundation
 import Combine
-import os
 
 
 class GitLabAPI {
@@ -127,6 +126,7 @@ class GitLabAPI {
         do {
             let (data, response) = try await URLSession.feedSession.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw URLError(.unsupportedURL) }
+            logRequest(request, response: response)
             if response.statusCode == 403 || response.statusCode == 429 {
                 if let v = response.value(forHTTPHeaderField: "RateLimit-Remaining"), Int(v) == 0  {
                     return (nil, "too many requests")
@@ -171,10 +171,7 @@ class GitLabAPI {
         if let token, !token.isEmpty {
             request.setValue(URLRequest.bearerAuthValue(token: token), forHTTPHeaderField: "Authorization")
         }
-
-        let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
-        logger.info("Request: \(method, privacy: .public) \(url.absoluteString, privacy: .public)")
-
+        logRequest(request)
         return request
     }
 
