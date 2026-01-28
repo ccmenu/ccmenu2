@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,11 +11,7 @@
 		0320309B2B2D27AF00D132C0 /* GitHubSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */; };
 		0322051A2B8EA73100205DC6 /* Hummingbird in Frameworks */ = {isa = PBXBuildFile; productRef = 032205192B8EA73100205DC6 /* Hummingbird */; };
 		0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322051C2B8FF20300205DC6 /* EmptyPipelines.json */; };
-		032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */; };
-		032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */; };
-		032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */; };
 		032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205262B91C18600205DC6 /* CCTrayPipeline.json */; };
-		032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205282B96677200205DC6 /* GitHubUserReposResponse.json */; };
 		0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */; };
 		0322052E2B96769800205DC6 /* HummingbirdAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0322052D2B96769800205DC6 /* HummingbirdAuth */; };
 		032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205312B9BDDC300205DC6 /* ThreePipelines.json */; };
@@ -40,11 +36,7 @@
 		034ED9C32F2A595100C7793E /* GitLabAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9C22F2A595100C7793E /* GitLabAPITests.swift */; };
 		034ED9C52F2A601C00C7793E /* GitLabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9C42F2A601C00C7793E /* GitLabTests.swift */; };
 		034ED9C72F2A602D00C7793E /* GitLabPipelineLocalhost.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9C62F2A602D00C7793E /* GitLabPipelineLocalhost.json */; };
-		034ED9C92F2A604600C7793E /* GitLabPipelineRunsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */; };
-		034ED9CF2F2A646100C7793E /* GitLabPipelineDetailsResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */; };
 		034ED9D12F2A77DB00C7793E /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034ED9D02F2A77D200C7793E /* URLExtensions.swift */; };
-		034ED9D32F2A95AE00C7793E /* GitLabBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */; };
-		034ED9D52F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */; };
 		035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */; };
 		035F87022BB3829300AD1D68 /* PipelineListMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87012BB3829300AD1D68 /* PipelineListMenu.swift */; };
 		035F87062BB4D53600AD1D68 /* SignInAtGitHubSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */; };
@@ -62,12 +54,7 @@
 		03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* DefaultPipelines.json */; };
 		0386E93D2BD07C9F006F7988 /* DebouncedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0386E93C2BD07C9F006F7988 /* DebouncedText.swift */; };
 		038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */; };
-		038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */; };
-		038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
-		03A3EF932D3459D400407A6F /* GitHubUserResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 03A3EF922D3459D400407A6F /* GitHubUserResponse.json */; };
-		03A3EF942D3459D400407A6F /* GitHubUserOrgResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 03A3EF912D3459D400407A6F /* GitHubUserOrgResponse.json */; };
-		03A3EF982D34650300407A6F /* GitHubReposByOrgResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 03A3EF972D34650300407A6F /* GitHubReposByOrgResponse.json */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
 		03B1D7612A607DD0007BCB8A /* PipelineRowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */; };
@@ -155,11 +142,7 @@
 		0320309A2B2D27AF00D132C0 /* GitHubSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSheetModel.swift; sourceTree = "<group>"; };
 		0322051B2B8EAAE100205DC6 /* CCMenuUITests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CCMenuUITests.entitlements; sourceTree = "<group>"; };
 		0322051C2B8FF20300205DC6 /* EmptyPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyPipelines.json; sourceTree = "<group>"; };
-		032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowsResponse.json; sourceTree = "<group>"; };
-		032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubWorkflowRunsResponse.json; sourceTree = "<group>"; };
-		032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByUserResponse.json; sourceTree = "<group>"; };
 		032205262B91C18600205DC6 /* CCTrayPipeline.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CCTrayPipeline.json; sourceTree = "<group>"; };
-		032205282B96677200205DC6 /* GitHubUserReposResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubUserReposResponse.json; sourceTree = "<group>"; };
 		0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubPipelineLocalhost.json; sourceTree = "<group>"; };
 		032205312B9BDDC300205DC6 /* ThreePipelines.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ThreePipelines.json; sourceTree = "<group>"; };
 		0322053A2B9E5DBB00205DC6 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
@@ -182,11 +165,7 @@
 		034ED9C22F2A595100C7793E /* GitLabAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabAPITests.swift; sourceTree = "<group>"; };
 		034ED9C42F2A601C00C7793E /* GitLabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabTests.swift; sourceTree = "<group>"; };
 		034ED9C62F2A602D00C7793E /* GitLabPipelineLocalhost.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineLocalhost.json; sourceTree = "<group>"; };
-		034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineRunsResponse.json; sourceTree = "<group>"; };
-		034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelineDetailsResponse.json; sourceTree = "<group>"; };
 		034ED9D02F2A77D200C7793E /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
-		034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabBranchesResponse.json; sourceTree = "<group>"; };
-		034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitLabPipelinesByUserResponse.json; sourceTree = "<group>"; };
 		035F86FD2BB37A6600AD1D68 /* CCTrayAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTrayAuthView.swift; sourceTree = "<group>"; };
 		035F87012BB3829300AD1D68 /* PipelineListMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineListMenu.swift; sourceTree = "<group>"; };
 		035F87052BB4D53600AD1D68 /* SignInAtGitHubSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAtGitHubSheet.swift; sourceTree = "<group>"; };
@@ -204,12 +183,7 @@
 		03825E9D259FF64A00DEB003 /* DefaultPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultPipelines.json; sourceTree = "<group>"; };
 		0386E93C2BD07C9F006F7988 /* DebouncedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedText.swift; sourceTree = "<group>"; };
 		038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBranchList.swift; sourceTree = "<group>"; };
-		038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubBranchesResponse.json; sourceTree = "<group>"; };
-		038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GitHubReposByUserCCM2OnlyResponse.json; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
-		03A3EF912D3459D400407A6F /* GitHubUserOrgResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubUserOrgResponse.json; sourceTree = "<group>"; };
-		03A3EF922D3459D400407A6F /* GitHubUserResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubUserResponse.json; sourceTree = "<group>"; };
-		03A3EF972D34650300407A6F /* GitHubReposByOrgResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GitHubReposByOrgResponse.json; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
 		03B1D7602A607DD0007BCB8A /* PipelineRowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineRowViewModel.swift; sourceTree = "<group>"; };
@@ -274,6 +248,11 @@
 		3CC483462BDE955C00E4730F /* PipelineSheetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineSheetConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		034ED9D62F2AA18B00C7793E /* GitHub */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GitHub; sourceTree = "<group>"; };
+		034ED9D72F2AA19B00C7793E /* GitLab */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GitLab; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		03BD7E822598E578000F9495 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -321,11 +300,11 @@
 			isa = PBXGroup;
 			children = (
 				03825E9D259FF64A00DEB003 /* DefaultPipelines.json */,
+				0322051C2B8FF20300205DC6 /* EmptyPipelines.json */,
 				032205262B91C18600205DC6 /* CCTrayPipeline.json */,
 				032205312B9BDDC300205DC6 /* ThreePipelines.json */,
 				0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */,
 				034ED9C62F2A602D00C7793E /* GitLabPipelineLocalhost.json */,
-				0322051C2B8FF20300205DC6 /* EmptyPipelines.json */,
 			);
 			path = Pipelines;
 			sourceTree = "<group>";
@@ -333,19 +312,8 @@
 		0322051F2B913BC900205DC6 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
-				03A3EF922D3459D400407A6F /* GitHubUserResponse.json */,
-				03A3EF912D3459D400407A6F /* GitHubUserOrgResponse.json */,
-				032205222B913CC000205DC6 /* GitHubWorkflowRunsResponse.json */,
-				032205242B913D4000205DC6 /* GitHubReposByUserResponse.json */,
-				038FF7152BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json */,
-				03A3EF972D34650300407A6F /* GitHubReposByOrgResponse.json */,
-				032205282B96677200205DC6 /* GitHubUserReposResponse.json */,
-				032205202B913C4E00205DC6 /* GitHubWorkflowsResponse.json */,
-				038FF7132BB6212D0017CD4C /* GitHubBranchesResponse.json */,
-				034ED9C82F2A604600C7793E /* GitLabPipelineRunsResponse.json */,
-				034ED9CE2F2A646100C7793E /* GitLabPipelineDetailsResponse.json */,
-				034ED9D42F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json */,
-				034ED9D22F2A95AE00C7793E /* GitLabBranchesResponse.json */,
+				034ED9D62F2AA18B00C7793E /* GitHub */,
+				034ED9D72F2AA19B00C7793E /* GitLab */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -668,6 +636,10 @@
 			dependencies = (
 				03BD7EA72598E57A000F9495 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				034ED9D62F2AA18B00C7793E /* GitHub */,
+				034ED9D72F2AA19B00C7793E /* GitLab */,
+			);
 			name = CCMenuUITests;
 			packageProductDependencies = (
 				032205192B8EA73100205DC6 /* Hummingbird */,
@@ -773,23 +745,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				032205212B913C4E00205DC6 /* GitHubWorkflowsResponse.json in Resources */,
-				032205292B96677200205DC6 /* GitHubUserReposResponse.json in Resources */,
 				0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */,
-				03A3EF932D3459D400407A6F /* GitHubUserResponse.json in Resources */,
-				03A3EF942D3459D400407A6F /* GitHubUserOrgResponse.json in Resources */,
-				03A3EF982D34650300407A6F /* GitHubReposByOrgResponse.json in Resources */,
-				032205252B913D4000205DC6 /* GitHubReposByUserResponse.json in Resources */,
-				034ED9C92F2A604600C7793E /* GitLabPipelineRunsResponse.json in Resources */,
-				038FF7162BB62E6D0017CD4C /* GitHubReposByUserCCM2OnlyResponse.json in Resources */,
 				03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */,
-				038FF7142BB6212D0017CD4C /* GitHubBranchesResponse.json in Resources */,
-				034ED9D32F2A95AE00C7793E /* GitLabBranchesResponse.json in Resources */,
 				032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */,
-				032205232B913CC000205DC6 /* GitHubWorkflowRunsResponse.json in Resources */,
-				034ED9CF2F2A646100C7793E /* GitLabPipelineDetailsResponse.json in Resources */,
 				0322051D2B8FF20300205DC6 /* EmptyPipelines.json in Resources */,
-				034ED9D52F2A95BD00C7793E /* GitLabPipelinesByUserResponse.json in Resources */,
 				034ED9C72F2A602D00C7793E /* GitLabPipelineLocalhost.json in Resources */,
 				032205272B91C18600205DC6 /* CCTrayPipeline.json in Resources */,
 			);
