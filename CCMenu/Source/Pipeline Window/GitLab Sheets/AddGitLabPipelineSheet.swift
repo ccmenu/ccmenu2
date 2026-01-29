@@ -10,6 +10,7 @@ struct AddGitLabPipelineSheet: View {
     @Binding var config: PipelineSheetConfig
     @EnvironmentObject private var authenticator: GitLabAuthenticator
     @Environment(\.presentationMode) @Binding var presentation
+    @StateObject private var token = DebouncedText()
     @StateObject private var owner = DebouncedText()
     @StateObject private var project = DebouncedText()
     @StateObject private var projectList = GitLabProjectList()
@@ -17,30 +18,34 @@ struct AddGitLabPipelineSheet: View {
     @StateObject private var branchList = GitLabBranchList()
     @StateObject private var builder = GitLabPipelineBuilder()
     @State private var selectedProjectId: Int? = nil
-    @State private var tokenInput: String = ""
-    @FocusState private var istokenFieldFocused: Bool
 
     var body: some View {
         VStack {
             Text("Add GitLab pipeline")
                 .font(.headline)
                 .padding(.bottom)
-            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown. You can type any valid name, even if it's not shown.\n\nCreate a personal access token with `read_api` scope to access private projects.")
+            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown. You can still type any valid name.\n\nCreate a personal access token with `read_api` scope to access private projects. The token you set here will be used for all GitHub pipelines.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
                 HStack {
-                    SecureField("Authentication:", text: $tokenInput, prompt: Text("personal access token"))
+                    SecureField("Authentication:", text: $token.input, prompt: Text("personal access token"))
                         .accessibilityIdentifier("Token field")
-                        .focused($istokenFieldFocused)
-                        .onChange(of: istokenFieldFocused) { _, newValue in
-                            if newValue == false {
+                        .onReceive(token.$text) { t in
+                            if t == token.input { // TODO: Is there a better way to avoid initial flickering?
                                 Task {
-                                    await authenticator.setToken(tokenInput)
+                                    await authenticator.setToken(t)
+                                    if !owner.text.isEmpty {
+                                        // TODO: Is there a better way to update project for new token?
+                                        await projectList.updateProjects(name: owner.text, token: authenticator.token)
+                                    }
                                 }
                             }
                         }
-                    Button(authenticator.token == nil ? "Create token" : "Manage tokens") {
+                        .onSubmit {
+                            token.takeInput()
+                        }
+                    Button("Manage tokens") {
                         authenticator.openTokenSettingsOnWebsite()
                     }
                 }
@@ -51,7 +56,7 @@ struct AddGitLabPipelineSheet: View {
                             .font(.callout)
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
-                            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.5))
+                            .overlay(RoundedRectangle(cornerRadius: 2).stroke(Color.secondary, lineWidth: 0.5))
                     }
                 }
 
@@ -170,7 +175,7 @@ struct AddGitLabPipelineSheet: View {
         .padding()
         .onAppear() {
             authenticator.fetchTokenFromKeychain()
-            tokenInput = authenticator.token ?? ""
+            token.input = authenticator.token ?? ""
         }
         .onDisappear() {
             authenticator.storeTokenInKeychain()

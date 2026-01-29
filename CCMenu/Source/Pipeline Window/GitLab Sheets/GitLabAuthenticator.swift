@@ -20,10 +20,7 @@ class GitLabAuthenticator: ObservableObject {
         } else {
             token = trimmed
             let request = GitLabAPI.requestForTokenInfo(token: trimmed)
-            guard let pat = await fetchTokenInfo(request: request) else {
-                tokenDescription = "n/a"
-                return
-            }
+            let pat = await fetchTokenInfo(request: request)
             updateTokenDescription(pat: pat)
          }
     }
@@ -47,7 +44,11 @@ class GitLabAuthenticator: ObservableObject {
         }
     }
 
-    private func updateTokenDescription(pat: GitLabPersonalAccessToken) {
+    private func updateTokenDescription(pat: GitLabPersonalAccessToken?) {
+        guard let pat else {
+            tokenDescription = "\u{26A0}\u{FE0F} token is not valid"
+            return
+        }
         tokenDescription = String(format:"**%@**", pat.name)
         var errors: [String] = []
         if !pat.active {
@@ -58,7 +59,7 @@ class GitLabAuthenticator: ObservableObject {
         }
         if !errors.isEmpty {
             let errorText = errors.joined(separator: ", ")
-            tokenDescription.append(String(format: "\n%@", errorText))
+            tokenDescription.append(String(format: "\n\u{26A0}\u{FE0F} %@", errorText))
         } else if let expiryDate = pat.expiresAtDate {
             let formatter = RelativeDateTimeFormatter()
             let expiryText = formatter.localizedString(for: expiryDate, relativeTo: Date())
@@ -70,11 +71,6 @@ class GitLabAuthenticator: ObservableObject {
     func fetchTokenFromKeychain() {
         do {
             token = try Keychain.standard.getToken(forService: "GitLab")
-            if let token {
-                Task {
-                    await setToken(token)
-                }
-            }
         } catch {
             token = nil
             let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "application")
