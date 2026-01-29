@@ -12,10 +12,9 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
-## Playgrounds and other IDE files
+## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
-.windsurf
 
 ## Command line builds
 build/
@@ -45,3 +44,9 @@ Carthage/Build/
 #
 
 .DS_Store
+
+# Other IDE's
+
+.windsurf
+.claude
+CLAUDE.md
