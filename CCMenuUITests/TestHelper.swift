@@ -22,7 +22,9 @@ class TestHelper {
             "-GitHubAPIBaseURL", "http://localhost:8086",
             "-GitHubToken", token ?? "",
             "-GitLabBaseURL", "http://localhost:8086",
-            "-GitLabToken", token ?? ""
+            "-GitLabAPIBaseURL", "http://localhost:8086/api/v4",
+            "-GitLabToken", token ?? "",
+            "-ThreadPerformanceCheckerReporterEnabled NO"
         ]
         app.launch()
         return app

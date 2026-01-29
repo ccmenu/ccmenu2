@@ -87,10 +87,10 @@ class GitLabTests: XCTestCase {
     }
 
     func testAddsGitLabPipeline() throws {
-        webapp.router.get("/v4/users/erikdoe/projects") { _ in
+        webapp.router.get("/api/v4/users/erikdoe/projects") { _ in
             try TestHelper.contentsOfFile("GitLabPipelinesByUserResponse.json")
         }
-        webapp.router.get("/v4/projects/66079563/repository/branches") { _ in
+        webapp.router.get("/api/v4/projects/66079563/repository/branches") { _ in
             try TestHelper.contentsOfFile("GitLabBranchesResponse.json")
         }
         webapp.router.get("/api/v4/projects/66079563/pipelines") { r in
@@ -135,6 +135,66 @@ class GitLabTests: XCTestCase {
         expectation(for: NSPredicate(format: "value CONTAINS 'Label: 3'"), evaluatedWith: descriptionText)
         waitForExpectations(timeout: 5)
     }
+
+    func testShowsTokenDetails() throws {
+        webapp.router.get("/api/v4/personal_access_tokens/self") { r in
+            if r.headers["Authorization"].first != "Bearer TEST-TOKEN" {
+                r.response.status = .unauthorized
+                return "{ \"message\": \"Unauthorized\" } "
+            }
+            return """
+                {   "id": 19127271,
+                    "name": "Test token",
+                    "scopes": ["read_api"],
+                    "active": true,
+                    "expiresAt": "2026-02-27" 
+                }
+            """
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let sheet = openAddGitLabPipelineSheet(app: app)
+
+        // Enter token
+        sheet.secureTextFields["Token field"].click()
+        sheet.typeText("TEST-TOKEN" + "\n")
+        sheet.textFields["Owner field"].click()
+
+        // Wait for token info and check
+        let descriptionText = sheet.staticTexts["Token description field"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'Test token'"), evaluatedWith: descriptionText)
+        expectation(for: NSPredicate(format: "value CONTAINS 'Expires: '"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testShowsTokenDetailsWithErrors() throws {
+        webapp.router.get("/api/v4/personal_access_tokens/self") { r in
+            return """
+                {   "id": 19127271,
+                    "name": "Test token",
+                    "scopes": ["read_user"],
+                    "active": false,
+                    "expiresAt": "2026-02-27" 
+                }
+            """
+        }
+
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json", pauseMonitor: false)
+        let sheet = openAddGitLabPipelineSheet(app: app)
+
+        // Enter token
+        sheet.secureTextFields["Token field"].click()
+        sheet.typeText("TEST-TOKEN" + "\n")
+        sheet.textFields["Owner field"].click()
+
+        // Wait for token info and check
+        let descriptionText = sheet.staticTexts["Token description field"]
+        expectation(for: NSPredicate(format: "value CONTAINS 'not active'"), evaluatedWith: descriptionText)
+        expectation(for: NSPredicate(format: "value CONTAINS 'missing read_api scope'"), evaluatedWith: descriptionText)
+        waitForExpectations(timeout: 5)
+    }
+
+
 //
 //    func testAddsGitHubPrivatePipeline() throws {
 //        webapp.router.get("/users/erikdoe") { _ in

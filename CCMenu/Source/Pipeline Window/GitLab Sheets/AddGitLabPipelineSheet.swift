@@ -18,31 +18,47 @@ struct AddGitLabPipelineSheet: View {
     @StateObject private var builder = GitLabPipelineBuilder()
     @State private var selectedProjectId: Int? = nil
     @State private var tokenInput: String = ""
-    
+    @FocusState private var istokenFieldFocused: Bool
+
     var body: some View {
         VStack {
             Text("Add GitLab pipeline")
                 .font(.headline)
                 .padding(.bottom)
-            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown.\n\nCreate a Personal Access Token with read_api scope to access private projects.")
+            Text("Enter a GitLab user or group name to fetch projects. If there are many projects only the most recently updated will be shown. You can type any valid name, even if it's not shown.\n\nCreate a personal access token with `read_api` scope to access private projects.")
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom)
             Form {
                 HStack {
-                    TextField("Authentication:", text: $tokenInput, prompt: Text("personal access token"))
+                    SecureField("Authentication:", text: $tokenInput, prompt: Text("personal access token"))
                         .accessibilityIdentifier("Token field")
-                        .onChange(of: tokenInput) { newValue in
-                            authenticator.setToken(newValue)
+                        .focused($istokenFieldFocused)
+                        .onChange(of: istokenFieldFocused) { _, newValue in
+                            if newValue == false {
+                                Task {
+                                    await authenticator.setToken(tokenInput)
+                                }
+                            }
                         }
                     Button(authenticator.token == nil ? "Create token" : "Manage tokens") {
                         authenticator.openTokenSettingsOnWebsite()
                     }
                 }
-                .padding(.bottom)
+                if !authenticator.tokenDescription.isEmpty {
+                    HStack {
+                        Text(LocalizedStringKey(authenticator.tokenDescription))
+                            .accessibilityIdentifier("Token description field")
+                            .font(.callout)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8)
+                            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.5))
+                    }
+                }
 
                 TextField("User or Group:", text: $owner.input, prompt: Text("user or group name"))
                     .accessibilityIdentifier("Owner field")
                     .autocorrectionDisabled(true)
+                    .padding(.top)
                     .onReceive(owner.$text) { t in
                         if t.isEmpty {
                             projectList.clearProjects()

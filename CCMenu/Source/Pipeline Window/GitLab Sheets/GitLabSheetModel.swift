@@ -73,3 +73,30 @@ struct GitLabBranch: Identifiable, Hashable, Decodable {
         return !name.isEmpty && !name.starts(with: "(")
     }
 }
+
+struct GitLabPersonalAccessToken: Identifiable, Hashable, Decodable {
+    var id: Int
+    var name: String
+    var scopes: [String]
+    var active: Bool
+    var expiresAt: String
+
+    init() {
+        self.id = 0
+        self.name = ""
+        self.scopes = []
+        self.active = false
+        self.expiresAt = ""
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    var expiresAtDate: Date? {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
+        return formatter.date(from: expiresAt)
+    }
+
+}

@@ -68,7 +68,12 @@ class GitLabAPI {
     }
 
 
-    // MARK: - token settings
+    // MARK: - personal access tokens
+
+    static func requestForTokenInfo(token: String) -> URLRequest {
+        let path = String(format: "/personal_access_tokens/self")
+        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, token: token)
+    }
 
     static func tokenSettingsUrl() -> URL {
         baseURL(forAPI: false).appending(path: "/-/user_settings/personal_access_tokens")
