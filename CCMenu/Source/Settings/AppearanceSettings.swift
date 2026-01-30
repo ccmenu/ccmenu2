@@ -33,7 +33,7 @@ struct AppearanceSettings: View {
                 Toggle(isOn: $useColorInMenuBar) {
                     Text("Use colored icons in menu bar")
                 }
-                .onChange(of: useColorInMenuBar) { newValue in
+                .onChange(of: useColorInMenuBar) { _, newValue in
                     if newValue == false {
                         useColorInMenuBarFailedOnly = false
                     }

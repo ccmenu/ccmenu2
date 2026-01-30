@@ -72,7 +72,7 @@ struct AdvancedSettings: View {
                 }
                 .frame(maxWidth: 150)
                 .padding(.bottom, 4)
-                .onChange(of: showAppIcon) { _ in
+                .onChange(of: showAppIcon) {
                     NSApp.hideApplicationIcon(showAppIcon != .always)
                     NSApp.activateThisApp()
                 }

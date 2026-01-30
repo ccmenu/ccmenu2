@@ -102,7 +102,7 @@ struct AddGitHubPipelineSheet: View {
                 }
                 .accessibilityIdentifier("Workflow picker")
                 .disabled(!workflowList.selected.isValid)
-                .onChange(of: workflowList.selected) { _ in
+                .onChange(of: workflowList.selected) {
                     builder.workflow = workflowList.selected
                 }
 

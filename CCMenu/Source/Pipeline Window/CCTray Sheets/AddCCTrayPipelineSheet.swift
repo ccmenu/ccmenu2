@@ -43,7 +43,7 @@ struct AddCCTrayPipelineSheet: View {
                 }
                 .accessibilityIdentifier("Project picker")
                 .disabled(!projectList.selected.isValid)
-                .onChange(of: projectList.selected) { _ in
+                .onChange(of: projectList.selected) {
                     builder.project = projectList.selected
                 }
                 .padding(.bottom)
