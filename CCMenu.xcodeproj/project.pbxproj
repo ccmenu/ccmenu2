@@ -15,7 +15,6 @@
 		0322052B2B96708200205DC6 /* GitHubPipelineLocalhost.json in Resources */ = {isa = PBXBuildFile; fileRef = 0322052A2B96708200205DC6 /* GitHubPipelineLocalhost.json */; };
 		0322052E2B96769800205DC6 /* HummingbirdAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0322052D2B96769800205DC6 /* HummingbirdAuth */; };
 		032205322B9BDDC300205DC6 /* ThreePipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 032205312B9BDDC300205DC6 /* ThreePipelines.json */; };
-		032205392B9D29DB00205DC6 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 032205382B9D29DB00205DC6 /* SettingsAccess */; };
 		0322053B2B9E5DBB00205DC6 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053A2B9E5DBB00205DC6 /* TestHelper.swift */; };
 		0322053D2B9E5F9A00205DC6 /* MenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053C2B9E5F9A00205DC6 /* MenuTests.swift */; };
 		0322053F2B9E601D00205DC6 /* PipelineWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322053E2B9E601D00205DC6 /* PipelineWindowTests.swift */; };
@@ -262,7 +261,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				032205392B9D29DB00205DC6 /* SettingsAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +603,6 @@
 			);
 			name = CCMenu;
 			packageProductDependencies = (
-				032205382B9D29DB00205DC6 /* SettingsAccess */,
 			);
 			productName = CCMenu;
 			productReference = 03BD7E852598E578000F9495 /* CCMenu.app */;
@@ -714,7 +711,6 @@
 			packageReferences = (
 				032205152B8EA60900205DC6 /* XCRemoteSwiftPackageReference "hummingbird" */,
 				0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */,
-				032205372B9D29DB00205DC6 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			productRefGroup = 03BD7E862598E578000F9495 /* Products */;
 			projectDirPath = "";
@@ -1533,14 +1529,6 @@
 				minimumVersion = 1.3.0;
 			};
 		};
-		032205372B9D29DB00205DC6 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/SettingsAccess";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1553,11 +1541,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0322052C2B96769800205DC6 /* XCRemoteSwiftPackageReference "hummingbird-auth" */;
 			productName = HummingbirdAuth;
-		};
-		032205382B9D29DB00205DC6 /* SettingsAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 032205372B9D29DB00205DC6 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
-			productName = SettingsAccess;
 		};
 		3C95D3572BAC651A007AED1E /* Hummingbird */ = {
 			isa = XCSwiftPackageProductDependency;

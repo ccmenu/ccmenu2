@@ -5,7 +5,6 @@
  */
 
 import SwiftUI
-import SettingsAccess
 
 
 struct MenuBarExtraMenu: View {
@@ -15,6 +14,7 @@ struct MenuBarExtraMenu: View {
     @AppStorage(.showBuildLabelsInMenu) private var showBuildLabelsInMenu = false
     @AppStorage(.hideSuccessfulBuildsInMenu) private var hideSuccessfulBuildsInMenu = false
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         let filteredPipelines = filteredAndSortedPipelines(model.pipelines)
@@ -43,10 +43,9 @@ struct MenuBarExtraMenu: View {
             NSApp.activateThisApp()
             NSApp.sendAction(#selector(AppDelegate.orderFrontAboutPanelWithSourceVersion(_:)), to: nil, from: self)
         }
-        SettingsLink {
-            Text("Settings...")
-        } preAction: { NSApp.activateThisApp()
-        } postAction: { }
+        Button("Settings...") {
+            openSettings()
+        }
         Divider()
         Button("Quit CCMenu") {
             NSApplication.shared.terminate(nil)
