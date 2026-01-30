@@ -12,24 +12,6 @@ class GitLabAPI {
 
     // MARK: - user, projects, pipelines, and branches
 
-    // TODO: AI generated code - review
-    static func requestForUser(token: String) -> URLRequest {
-        let path = "/user"
-        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, token: token)
-    }
-
-    // TODO: AI generated code - review
-   static func requestForAllProjects(token: String?) -> URLRequest {
-        let path = "/projects"
-        let queryParams = [
-            "membership": "true",
-            "order_by": "last_activity_at",
-            "per_page": "100",
-        ];
-        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
-    }
-
-    // TODO: AI generated code - review
     static func requestForGroupProjects(group: String, token: String?) -> URLRequest {
         let path = String(format: "/groups/%@/projects", group)
         let queryParams = [
@@ -39,7 +21,6 @@ class GitLabAPI {
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    // TODO: AI generated code - review
     static func requestForUserProjects(user: String, token: String?) -> URLRequest {
         let path = String(format: "/users/%@/projects", user)
         let queryParams = [
@@ -49,16 +30,6 @@ class GitLabAPI {
         return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
     }
 
-    // TODO: AI generated code - review
-    static func requestForPipelines(projectId: String, token: String?) -> URLRequest {
-        let path = String(format: "/projects/%@/pipelines", projectId)
-        let queryParams = [
-            "per_page": "100",
-        ];
-        return makeRequest(baseUrl: baseURL(forAPI: true), path: path, params: queryParams, token: token)
-    }
-
-    // TODO: AI generated code - review
     static func requestForBranches(projectId: String, token: String?) -> URLRequest {
         let path = String(format: "/projects/%@/repository/branches", projectId)
         let queryParams = [

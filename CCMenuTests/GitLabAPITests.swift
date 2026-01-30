@@ -51,10 +51,10 @@ class GitLabAPITests: XCTestCase {
     func testConstructsCorrectRequestPathWhenBaseURLContainsPath() throws {
         UserDefaults.active = UserDefaults.transient
         UserDefaults.active.set("https://dev.some-enterprise.com/gitlab/api/v4", forKey: "GitLabAPIBaseURL")
-        let request = GitLabAPI.requestForUser(token: "TEST-TOKEN")
+        let request = GitLabAPI.requestForUserProjects(user: "testuser", token: nil)
         UserDefaults.active = UserDefaults.standard
 
-        XCTAssertEqual("/gitlab/api/v4/user", request.url?.path())
+        XCTAssertEqual("/gitlab/api/v4/users/testuser/projects", request.url?.path())
     }
 
 }
