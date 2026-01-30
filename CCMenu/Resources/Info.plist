@@ -29,7 +29,7 @@
 			<string>ccmenu</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>ccmenu-oauth</string>
+				<string>ccmenu</string>
 			</array>
 		</dict>
 	</array>
