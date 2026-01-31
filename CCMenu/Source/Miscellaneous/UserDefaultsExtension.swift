@@ -10,9 +10,9 @@ enum MenuSortOrder: Int, CaseIterable, Identifiable {
     case // Int raw values for compatibility with legacy defaults
     asArranged,
     sortedAlphabetically,
-    sortedByBuildTime
+    sortedByBuildTime,
+    sortedByBuildResult
 
-    // TODO: Wasn't there a way to do without this?
     var id: Self { self }
 }
 
@@ -22,7 +22,6 @@ enum AppIconVisibility: String, CaseIterable, Identifiable {
     sometimes,
     always
 
-    // TODO: Wasn't there a way to do without this?
     var id: Self { self }
 }
 
@@ -81,8 +80,6 @@ extension AppStorage {
     init(wrappedValue: Value, _ key: DefaultsKey) where Value == String {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)
     }
-
-    // TODO: Find out how to combine the following cases, which are all RawRepresentable
 
     init(wrappedValue: Value, _ key: DefaultsKey) where Value == MenuSortOrder {
         self.init(wrappedValue: wrappedValue, key.rawValue, store: UserDefaults.active)

@@ -69,6 +69,16 @@ class MenuTests: XCTestCase {
         XCTAssertEqual("connectfour", menu.menuItems.element(boundBy: 1).title)
         XCTAssertEqual("ccmenu", menu.menuItems.element(boundBy: 2).title)
 
+        // Open settings and set order to last build result
+        menu.menuItems["Settings..."].click()
+        window.radioButtons["Order last build result"].click()
+
+        // Make sure the pipelines are shown in desired order
+        TestHelper.openMenu(app: app)
+        XCTAssertEqual("connectfour", menu.menuItems.element(boundBy: 0).title)
+        XCTAssertEqual("ccmenu2 | Build and test", menu.menuItems.element(boundBy: 1).title)
+        XCTAssertEqual("ccmenu", menu.menuItems.element(boundBy: 2).title)
+
         // Chose to hide pipelines with successful builds
         menu.menuItems["Settings..."].click()
         XCTAssert(window.checkBoxes["Hide successful builds"].isSelected == false)

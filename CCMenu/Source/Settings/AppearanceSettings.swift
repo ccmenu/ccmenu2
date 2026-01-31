@@ -55,6 +55,8 @@ struct AppearanceSettings: View {
                         .accessibilityIdentifier("Order alphabetically")
                     Text("ordered by last build time").tag(MenuSortOrder.sortedByBuildTime)
                         .accessibilityIdentifier("Order last build time")
+                    Text("ordered by last build result").tag(MenuSortOrder.sortedByBuildResult)
+                        .accessibilityIdentifier("Order last build result")
                 }
                 .pickerStyle(.radioGroup)
                 .labelsHidden()
