@@ -18,6 +18,7 @@ struct AddGitHubPipelineSheet: View {
     @StateObject private var branch = DebouncedText()
     @StateObject private var branchList = GitHubBranchList()
     @StateObject private var builder = GitHubPipelineBuilder()
+    @State private var isShowingTokenAlert = false
 
     var body: some View {
         VStack {
@@ -38,20 +39,41 @@ struct AddGitHubPipelineSheet: View {
                             authenticator.cancelSignIn()
                         }
                     } else {
-                        Button(authenticator.token == nil ? "Sign in" : "Refresh") {
-                            Task {
-                                if await authenticator.signInAtGitHub() {
-                                    await authenticator.waitForToken()
+                        Menu {
+                            Button("Get OAuth token...") {
+                                Task {
+                                    if await authenticator.signInAtGitHub() {
+                                        await authenticator.waitForToken()
+                                    }
                                 }
                             }
+                            Button("Review OAuth apps") {
+                                authenticator.openApplicationsOnWebsite()
+                            }
+                            Divider()
+                            Button("Get personal access token") {
+                                authenticator.openPersonalAccessTokensOnWebsite()
+                            }
+                            Button("Enter personal access token...") {
+                                isShowingTokenAlert = true
+                            }
+                        } label: {
+                            Text("Token")
                         }
-                    }
-                    Button("Review") {
-                        authenticator.openApplicationsOnWebsite()
+                        .accessibilityIdentifier("Token menu")
+                        .frame(width: 80)
                     }
                 }
                 .padding(.bottom)
-
+                .alert("Token input", isPresented: $isShowingTokenAlert) {
+                    TextField("personal access token", text: $authenticator.tokenInput)
+                        .accessibilityIdentifier("Token input field")
+                    Button("OK") { authenticator.takenTokenFromInput() }
+                    Button("Cancel", role: .cancel) { }
+                }
+                message: {
+                    Text("Enter the fine-grained personal token you created on the GitHub website. The token must be a repository token and must have `Actions` and `Contents` permissions. Read-only is sufficient.")
+                }
                 TextField("Owner:", text: $owner.input, prompt: Text("user or organisation"))
                 .accessibilityIdentifier("Owner field")
                 // TODO: figure out why .prefersDefaultFocus(in:) doesn't work

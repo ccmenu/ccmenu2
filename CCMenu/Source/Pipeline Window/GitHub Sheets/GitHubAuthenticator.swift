@@ -11,6 +11,7 @@ import os
 class GitHubAuthenticator: ObservableObject {
     @Published var token: String?
     @Published var tokenDescription: String = ""
+    @Published var tokenInput: String = ""
     @Published private(set) var isWaitingForToken: Bool = false
     private var codeResponse: GitHubDeviceCodeResponse? = nil
 
@@ -119,9 +120,12 @@ class GitHubAuthenticator: ObservableObject {
         tokenDescription = token ?? ""
     }
 
-    func openApplicationsOnWebsite() {
-        NSWorkspace.shared.open(GitHubAPI.applicationsUrl())
+
+    func takenTokenFromInput() {
+        token = tokenInput.cleanedUpUserInput()
+        tokenDescription = token ?? ""
     }
+
 
     func fetchTokenFromKeychain() {
         do {
@@ -145,5 +149,14 @@ class GitHubAuthenticator: ObservableObject {
             logger.error("Error when storing token in keychain: \(error.localizedDescription, privacy: .public)")
         }
     }
+
+    func openApplicationsOnWebsite() {
+        NSWorkspace.shared.open(GitHubAPI.applicationsUrl())
+    }
+
+    func openPersonalAccessTokensOnWebsite() {
+        NSWorkspace.shared.open(GitHubAPI.personalAccessTokensUrl())
+    }
+
 
 }

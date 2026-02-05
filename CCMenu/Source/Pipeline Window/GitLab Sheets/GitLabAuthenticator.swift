@@ -13,16 +13,14 @@ class GitLabAuthenticator: ObservableObject {
     @Published var tokenDescription: String = ""
 
     func setToken(_ newToken: String) async {
-        let trimmed = newToken.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty {
-            token = nil
-            tokenDescription = ""
-        } else {
-            token = trimmed
-            let request = GitLabAPI.requestForTokenInfo(token: trimmed)
+        token = newToken.cleanedUpUserInput()
+        if let token {
+            let request = GitLabAPI.requestForTokenInfo(token: token)
             let pat = await fetchTokenInfo(request: request)
             updateTokenDescription(pat: pat)
-         }
+        } else {
+            tokenDescription = ""
+        }
     }
 
     private func fetchTokenInfo(request: URLRequest) async -> GitLabPersonalAccessToken? {

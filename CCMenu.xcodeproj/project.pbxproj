@@ -53,6 +53,7 @@
 		03825EA5259FFD1500DEB003 /* DefaultPipelines.json in Resources */ = {isa = PBXBuildFile; fileRef = 03825E9D259FF64A00DEB003 /* DefaultPipelines.json */; };
 		0386E93D2BD07C9F006F7988 /* DebouncedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0386E93C2BD07C9F006F7988 /* DebouncedText.swift */; };
 		038FF7122BB6130C0017CD4C /* GitHubBranchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */; };
+		03938E712F3537140010C375 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03938E702F35370A0010C375 /* StringExtensions.swift */; };
 		039B524629676D0700994910 /* Build.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B524529676D0700994910 /* Build.swift */; };
 		03B021252A5D9F9D00B889BE /* MenuExtraModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */; };
 		03B1D75F2A6079CD007BCB8A /* MenuItemModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */; };
@@ -184,6 +185,7 @@
 		03825E9D259FF64A00DEB003 /* DefaultPipelines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultPipelines.json; sourceTree = "<group>"; };
 		0386E93C2BD07C9F006F7988 /* DebouncedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedText.swift; sourceTree = "<group>"; };
 		038FF7112BB6130C0017CD4C /* GitHubBranchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBranchList.swift; sourceTree = "<group>"; };
+		03938E702F35370A0010C375 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		039B524529676D0700994910 /* Build.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Build.swift; sourceTree = "<group>"; };
 		03B021242A5D9F9D00B889BE /* MenuExtraModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuExtraModelTests.swift; sourceTree = "<group>"; };
 		03B1D75E2A6079CD007BCB8A /* MenuItemModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemModelTests.swift; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 				031FC8CB2B7929B7005E7F26 /* Keychain.swift */,
 				03CC61D02BA783EE0008EE76 /* NetworkMonitor.swift */,
 				03CC61CE2BA757050008EE76 /* TrustManager.swift */,
+				03938E702F35370A0010C375 /* StringExtensions.swift */,
 				034ED9D02F2A77D200C7793E /* URLExtensions.swift */,
 				3CB911D62B78E891009DF781 /* URLRequestExtension.swift */,
 				3CB911D42B7142A0009DF781 /* URLSessionExtension.swift */,
@@ -839,6 +842,7 @@
 				03CC11EA2652F49100130833 /* ServerMonitor.swift in Sources */,
 				03B263F22B50968800CA989A /* StatusChange.swift in Sources */,
 				03F682FD25C73584005D56D9 /* EditPipelineSheet.swift in Sources */,
+				03938E712F3537140010C375 /* StringExtensions.swift in Sources */,
 				03DF19072D025292007D1A64 /* ComboBox.swift in Sources */,
 				3C9E0E532B9F143A00327CB9 /* NSApplicationExtension.swift in Sources */,
 				035F86FE2BB37A6600AD1D68 /* CCTrayAuthView.swift in Sources */,

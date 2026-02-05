@@ -98,6 +98,13 @@ class GitHubAPI {
     }
 
 
+    // MARK: - personal access tokens
+
+    static func personalAccessTokensUrl() -> URL {
+        baseURL(forAPI: false).appending(path: "/settings/personal-access-tokens")
+    }
+
+
     // MARK: - feed
 
     static func feedUrl(owner: String, repository: String, workflow: String, branch: String?) -> URL {

@@ -388,6 +388,25 @@ class GitHubTests: XCTestCase {
 
     }
 
+    func testCopiesEnteredPersonalAccessTokenToTokenField() throws {
+        let app = TestHelper.launchApp(pipelines: "EmptyPipelines.json")
+        let sheet = openAddGitHubPipelineSheet(app: app)
+
+        let menu = sheet.popUpButtons["Token menu"]
+        menu.click()
+        menu.menuItems["Enter personal access token..."].click()
+
+        // using the accessibility identifier doesn't seem to work
+        sheet.textFields["personal access token"].click()
+        sheet.typeText(" TEST-TOKEN ")
+        sheet.buttons["OK"].click()
+
+        let tokenField = sheet.textFields["Token field"]
+        expectation(for: NSPredicate(format: "value == 'TEST-TOKEN'"), evaluatedWith: tokenField)
+        waitForExpectations(timeout: 3)
+
+    }
+
     private func openAddGitHubPipelineSheet(app: XCUIApplication) -> XCUIElement {
         let window = app.windows["Pipelines"]
         let sheet = window.sheets.firstMatch
