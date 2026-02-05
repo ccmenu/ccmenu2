@@ -18,6 +18,7 @@ struct AddGitHubPipelineSheet: View {
     @StateObject private var branch = DebouncedText()
     @StateObject private var branchList = GitHubBranchList()
     @StateObject private var builder = GitHubPipelineBuilder()
+    @State private var tokenInput: String = ""
 
     var body: some View {
         VStack {
@@ -29,10 +30,15 @@ struct AddGitHubPipelineSheet: View {
                 .padding(.bottom)
             Form {
                 HStack {
-                    TextField("Authentication:", text: $authenticator.tokenDescription)
+                    TextField("Authentication:", text: $tokenInput, prompt: Text("paste token or sign in"))
                         .accessibilityIdentifier("Token field")
                         .truncationMode(.tail)
-                        .disabled(true)
+                        .onChange(of: tokenInput) {
+                            authenticator.setToken(tokenInput)
+                        }
+                        .onSubmit {
+                            authenticator.setToken(tokenInput)
+                        }
                     if authenticator.isWaitingForToken {
                         Button("Cancel") {
                             authenticator.cancelSignIn()
@@ -42,6 +48,7 @@ struct AddGitHubPipelineSheet: View {
                             Task {
                                 if await authenticator.signInAtGitHub() {
                                     await authenticator.waitForToken()
+                                    tokenInput = authenticator.token ?? ""
                                 }
                             }
                         }
@@ -152,6 +159,7 @@ struct AddGitHubPipelineSheet: View {
         .padding()
         .onAppear() {
             authenticator.fetchTokenFromKeychain()
+            tokenInput = authenticator.token ?? ""
         }
         .onDisappear() {
             authenticator.storeTokenInKeychain()

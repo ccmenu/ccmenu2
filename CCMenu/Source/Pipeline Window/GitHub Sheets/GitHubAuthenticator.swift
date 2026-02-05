@@ -119,6 +119,12 @@ class GitHubAuthenticator: ObservableObject {
         tokenDescription = token ?? ""
     }
 
+    func setToken(_ newToken: String) {
+        let trimmed = newToken.trimmingCharacters(in: .whitespacesAndNewlines)
+        token = trimmed.isEmpty ? nil : trimmed
+        tokenDescription = token ?? ""
+    }
+
     func openApplicationsOnWebsite() {
         NSWorkspace.shared.open(GitHubAPI.applicationsUrl())
     }
