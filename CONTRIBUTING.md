@@ -22,6 +22,8 @@ This project adheres to the [Contributor Covenant 2.0](https://github.com/ccmenu
 
 * Limit each pull request to one feature. If you have made several changes, please submit multiple pull requests. Do not include seemingly trival changes, e.g. upgrading the Xcode version, in a pull request for a feature or bugfix.
 
+* If you're interested in a new feature but you don't know Swift DON'T implement the feature through extensive use of an AI coding assistant. Don't open a PR with such code. Write a feature request instead.
+
 * If you add a new feature, provide corresponding tests. If you have to remove an existing test because it fails in the presence of newly introduced code, please explain the rationale in the pull request.
 
 * After you have created the pull request, please wait for the automated build to run. This no longer happens automatically – a mainatainer has to approve the run. Normally, this should happen within a day or two. Please verify that the build was successful on the [actions page](https://github.com/ccmenu/ccmenu2/actions/workflows/build-and-test.yaml). **Pull requests with failing builds are ignored and will be closed within a few weeks if they are not fixed.**
