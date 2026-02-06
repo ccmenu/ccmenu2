@@ -13,25 +13,27 @@ Please visit [ccmenu.org](https://ccmenu.org) for a detailed description of CCMe
 
 The recommended download is [CCMenu on the App Store](https://apps.apple.com/de/app/ccmenu/id603117688).
 
-You can also download all versions of CCMenu from the respective GitHub release. Please bear in mind, though, that CCMenu doesn't have an update check built in. If you download CCMenu from GitHub you have to check for updates manually.
+You can also download all versions of CCMenu from the respective GitHub release. Please bear in mind, though, that CCMenu doesn't have an update check built in, and relies on the App Store for that.
 
-The "classic" versions of CCMenu (versions below 20) are available from the [release list of the original repository](https://github.com/ccmenu/ccmenu/releases). All versions based on the code in this repository are available from the [release list of this repository](https://github.com/ccmenu/ccmenu2/releases).
+All releases based on the code in this repository are available from the [release list of this repository](https://github.com/ccmenu/ccmenu2/releases). The "classic" versions of CCMenu (versions below 20) are available from the [release list of the original repository](https://github.com/ccmenu/ccmenu/releases). 
 
 
 ## Bugs / Contributing / Help
 
 You can ask for help or contribute to the future development of CCMenu by discussing or suggesting features in the GitHub [discussions](https://github.com/ccmenu/ccmenu2/discussions).
 
-If you suspect that you have found a bug, please open an [issue](https://github.com/ccmenu/ccmenu2/issues). For now there is no template, but please try to include as much information as possible. The easier it is to reproduce the bug, the more likely it is to be fixed.
+If you suspect that you have found a bug, please open an [issue](https://github.com/ccmenu/ccmenu2/issues). For now there's no template, but please try to include as much information as possible. The easier it is to reproduce the bug, the more likely it is to be fixed.
 
-Pull requests that fix known bugs are welcome. Please try to add a unit test that demonstrates that the bug was fixed. Of course, you can also open a PR with a new feature, but please keep in mind that adding new features may need some discussion. In such cases, new unit tests as well as integration and UI tests (where applicable) should be added.
+Pull requests that fix known bugs are welcome. Please try to add a unit test that demonstrates that the bug was fixed. Of course, you can also open a PR with a new feature, but please keep in mind that adding new features will likely need some discussion. In either case, any PR must pass the existing tests, including the UI tests, which are in a separate build target. 
+
+If you are interested in a new feature but you don't know Swift *DON'T* implement the feature through extensive use of an AI coding assistant. Write a feature request instead.
 
 
 ## Feature ideas
 
 Below are some ideas for future features. There's no roadmap for their implementation, and some are probably never going to be implemented. 
 
-- Sounds (was a feature in the class CCMenu)
+- Sounds (was a feature in the classic CCMenu)
 - Workflow-specific GitHub tokens
 - Support for updating passwords of cctray pipelines
 - Improved accessibility
